@@ -1,0 +1,11 @@
+.cardAnalitic {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    font-size: 30px;
+}
+
+.addButton{
+    margin-top: 15px;
+}

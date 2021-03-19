@@ -11,7 +11,7 @@ export default (props) => {
         <Nav className="mr-auto">
           <Nav.Link href="#debts">Cartões</Nav.Link>
         </Nav>
-      </Navbar
+      </Navbar>
     </div>
   );
 };
