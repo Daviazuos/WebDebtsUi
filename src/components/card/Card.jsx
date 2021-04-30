@@ -1,35 +1,87 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Card } from "react-bootstrap";
+import { Card, Table, Button } from "react-bootstrap";
+
+function SetStatus(id, status){
+  axios.put(`https://localhost:5001/Debts/InstallmentsStatus?Id=${id}&InstallmentsStatus=${status}`)
+  refreshPage() 
+  return(
+    <>
+      Status Trocado!
+    </>
+  )
+
+}
+
+
+function refreshPage(){ 
+  window.location.reload(); 
+}
 
 export default class PersonList extends React.Component {
   state = {
-    persons: []
+    installments: [],
+    status:""
   }
 
   componentDidMount() {
-    axios.get(`https://localhost:5001/Debts/FilterDebt`)
+    axios.get(`https://localhost:5001/Debts/FilterInstallments?Month=${3}&Year=${2021}`)
       .then(res => {
-        const persons = res.data;
-        this.setState({ persons }); 
+        const installments = res.data;
+        this.setState({ installments });
       })
   }
 
   render() {
 
-    const lis =this.state.persons.map(item => {
-      return <tr><td>{item.name}</td> <td>{item.value}</td> <td>{item.debtType}</td></tr>
+    const lis = this.state.installments.map(item => {
+      return (
+        <tr>
+          <td>{item.value}</td>
+          <td>{item.date}</td>
+          <td>{item.status}</td>
+          <td className="buttonPaid">
+            <Button className="btn btn-success" onClick={() => SetStatus(item.id, "Paid")}>
+              Pago <i className="fas fa-check"></i>
+            </Button>
+            <Button className="btn btn-danger" onClick={() => SetStatus(item.id, "NotPaid")}>
+              A pagar <i className="fas fa-times"></i>
+            </Button>
+          </td>
+          <td>{item.paymentDate}</td>
+        </tr>
+      )
     })
+
+    const valueTotal = this.state.installments.reduce(function(prev, cur) {
+      return prev + cur.value;
+    }, 0);
 
     return (
       <>
         <Card>
           <Card.Header>Total Mês</Card.Header>
-          <Card.Body className='cardAnalitic'>
-            R$ 15000,00
+          <Card.Body className='cardTotal'>
+            R$ {valueTotal}
           </Card.Body>
-        </Card>  
-    </>
+          <Card.Body className='cardAnalitic'>
+            <Table striped bordered hover variant="white" className="table">
+              <thead>
+                <tr>
+                  <th>Valor</th>
+                  <th>Data de vencimento</th>
+                  <th>Status</th>
+                  <th>Ação</th>
+                  <th>Data de pagamento</th>
+                </tr>
+              </thead>
+              <tbody>
+                {lis}
+              </tbody>
+            </Table>
+          </Card.Body>
+        </Card>
+      </>
     )
   }
 }

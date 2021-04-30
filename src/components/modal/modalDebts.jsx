@@ -4,9 +4,6 @@ import { Modal, Card } from "react-bootstrap";
 import Form from "../form/form"
 
 export default function ModalAddDebts(props) {
-
-  console.log({...props})
-
   return (
     <Modal
       {...props}

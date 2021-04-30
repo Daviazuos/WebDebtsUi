@@ -1,8 +1,41 @@
 import React, { useState, useEffect } from "react";
-import { Button } from "react-bootstrap";
-import BootstrapTreeTable from 'bootstrap-react-treetable';
+import { Button, Table, Modal, Card } from "react-bootstrap";
 import axios from "axios";
 import "./Table.css";
+import ModalInstallments from "../installments/Installments"
+
+function SetModal(props) {
+  const [modalShow, setModalShow] = React.useState(false);
+  const debtName = `Lista de Parcelas do ${props.name}`;
+  return (
+    <>
+      <Button className='modalButton' variant='dark' onClick={() => setModalShow(true)}>
+        <i className={props.simbol}></i> {props.modalName}
+      </Button>
+      <ModalInstallments
+        value = {props.value}
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+        head={debtName}
+      />
+    </>
+  );
+}
+
+function refreshPage(){ 
+  window.location.reload(); 
+}
+
+function Delete(id){
+  axios.delete(`https://localhost:5001/Debts/Delete?Id=${id}`)
+  refreshPage()
+  return(
+    <>
+      deletado!
+    </>
+  )
+}
+
 
 export default class DebtList extends React.Component {
   state = {
@@ -11,9 +44,7 @@ export default class DebtList extends React.Component {
 
   componentDidMount() {
 
-    const [finishDate, startDate] = ["2021-03-01", "2021-04-01"]
-
-    axios.get(`https://localhost:5001/Debts/FilterDebt?DebtInstallmentType=${this.props.type}&StartDate=${finishDate}&FInishDate=${startDate}`)
+    axios.get(`https://localhost:5001/Debts/FilterDebt`)
       .then(res => {
         const debts = res.data;
         this.setState({ debts });
@@ -21,131 +52,42 @@ export default class DebtList extends React.Component {
   }
 
   render() {
-
     const lis = this.state.debts.map(item => {
-      console.log(item)
-      return ( 
-            <tr key={item.id}>
-              <td>{item.name}</td> 
-              <td>R$ {item.value}</td> 
-              <td>{item.debtInstallmentType}</td>  
-              <td className='tdd'><Button className="btn btn-dark"><i className="fas fa-edit"></i></Button> <Button className="btn btn-dark"><i className="fa fa-trash" aria-hidden="true"></i></Button></td>
-            </tr>)
+      if (item.debtInstallmentType == this.props.type) {
+        return (
+          <tr key={item.id}>
+            <td>{item.name}</td>
+            <td>
+              R$ {item.value}
+            </td>
+            <td>{item.debtInstallmentType}</td>
+            <td className='tdd'>
+              <Button className="btn btn-primary">
+                <i className="fas fa-edit"></i>
+              </Button>
+              <Button className="btn btn-danger" onClick={() => Delete(item.id)}>
+                <i className="fa fa-trash" aria-hidden="true"></i>
+              </Button>
+              {<SetModal value={item.id} name={item.name} modalName="Parcelas" simbol="fas fa-align-justify"></SetModal>}{" "}
+            </td>
+          </tr>
+        )
+      }
     })
-
-    const data = [
-      {
-          data: {
-              name: "name0",
-              dataType: "string0",
-              example: "ex0",
-              description: "desc0"
-          },
-          children: [
-              {
-                  data: {
-                      name: "name0-0",
-                      dataType: "string0-0",
-                      example: "ex0-0",
-                      description: "desc0-0"
-                  },
-                  children: []
-              }, {
-                  data: {
-                      name: "name0-1",
-                      dataType: "string0-1",
-                      example: "ex0-1",
-                      description: "desc0-1"
-                  },
-                  children: []
-              }, {
-                  data: {
-                      name: "name0-2",
-                      dataType: "string0-2",
-                      example: "ex0-2",
-                      description: "desc0-2"
-                  },
-                  children: [
-                      {
-                          data: {
-                              name: "name0-2-1",
-                              dataType: "string0-2-1",
-                              example: "ex0-2-1",
-                              description: "desc0-2-1"
-                          },
-                          children: []
-                      }
-                  ]
-              }
-          ]
-      },
-      {
-          data: {
-              name: "name1",
-              dataType: "string1",
-              example: "ex1",
-              description: "desc1 &euro; &euro;"
-          },
-          children: []
-      },
-      {
-          data: {
-              name: "name2",
-              dataType: "string2",
-              example: "ex2",
-              description: "desc2 &euro; &euro; &euro; &euro;"
-          },
-          children: []
-      }
-  ]
-
-    const treeColumns = [
-      {
-        "dataField": "name",
-        "heading": "Nome",
-        "filterable": true
-      },
-      {
-        "dataField": "population",
-        "heading": "Valor",
-        "sortOrder": "desc"
-      },
-      {
-        "dataField": "bill",
-        "heading": "Tipo"
-      },
-      {
-        "dataField": "fred",
-        "heading": "Ação"
-      }
-    ]
-
-    const treeControls = {
-      "visibleRows": 1,
-      "allowSorting": false,
-      "showPagination": false,
-      "initialRowsPerPage": 10,
-      "allowFiltering": false,
-      "showExpandCollapseButton": false
-    }
-
     return (
-      <>
-        {/* <Table striped bordered hover variant="white">
-          <thead>
-            <tr>
-              <th>Nome</th>
-              <th>Valor</th>
-              <th>Tipo</th>
-              <th>Ação</th>
-            </tr>
-          </thead>
-          <tbody>
-            {lis}
-          </tbody>
-        </Table> */}
-        <BootstrapTreeTable columns={treeColumns} tableData={data} control={treeControls}/>
-      </>
+      <Table striped bordered hover variant="white" className="table">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Valor</th>
+            <th>Tipo</th>
+            <th>Ação</th>
+          </tr>
+        </thead>
+        <tbody>
+          {lis}
+        </tbody>
+      </Table>
     )
   }
 }

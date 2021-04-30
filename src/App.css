@@ -1,4 +1,4 @@
-.cardAnalitic {
+.cardTotal {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -8,4 +8,11 @@
 
 .addButton{
     margin-top: 15px;
+}
+
+.buttonPaid {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;   
 }
