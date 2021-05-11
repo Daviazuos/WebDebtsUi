@@ -4,7 +4,7 @@ import { Button } from "react-bootstrap";
 import Page from "./components/page/Page";
 import Jumbotron from "./components/jumbotron/Jumbotron";
 import ModalAddDebts from "./components/modal/modalDebts";
-import Table from "./components/table/Table";
+import Table from "./components/table/Table"
 import Card from "./components/card/Card"
 import "./App.css";
 
