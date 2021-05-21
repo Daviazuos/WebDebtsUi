@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Button, Table, Modal, Card } from "react-bootstrap";
+import React from "react";
+import { Button, Table } from "react-bootstrap";
 import axios from "axios";
 import "./Table.css";
 import ModalInstallments from "../installments/Installments"
