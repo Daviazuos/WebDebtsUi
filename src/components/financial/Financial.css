@@ -1,0 +1,9 @@
+.financial{
+    display: flex;
+    flex-flow: column;
+    margin-left: 350px;
+}
+
+.addButton{
+    margin-left: 10px;
+}

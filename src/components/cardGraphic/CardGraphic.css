@@ -1,0 +1,16 @@
+.graphicCard{
+    margin-right: 155px;
+    margin-top: 7px;
+    margin-left: 10px;
+    max-width: 614px;
+    box-shadow: 1px 3px 1px #9E9E9E;
+}
+
+.graphicName{
+    margin: 10px;
+    font-size: 120%;
+}
+
+.graphic{
+    margin: 20px;
+}

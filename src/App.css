@@ -1,13 +1,31 @@
-.cardTotal {
+.appPage{
     display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    align-items: center;
-    font-size: 30px;
+    flex-flow: column;
+    margin-left: 350px;
 }
 
-.addButton{
-    margin-top: 15px;
+.containerUpPage{
+    display: flex;
+    flex-flow: row;
+}
+
+.allValue{
+    display: flex;
+    flex-flow: row wrap;
+    max-width: 700px;
+    height: auto;
+}
+
+.maxDebts{
+}
+
+.graphicPage{
+    margin: auto;
+}
+
+
+.analiticPage{
+    flex-direction: row;
 }
 
 .buttonPaid {

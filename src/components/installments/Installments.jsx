@@ -1,6 +1,7 @@
 import React from "react";
 import { Table, Card, Modal } from "react-bootstrap";
 import axios from "axios";
+import "./installments.css"
 
 export default class ModalInstallments extends React.Component {
     state = {
@@ -23,37 +24,34 @@ export default class ModalInstallments extends React.Component {
                         R$ {item.value}
                     </td>
                     <td>{item.date}</td>
+                    <td>{item.status}</td>
                 </tr>
             )
         })
         return (
             <Modal
                 {...this.props}
-                size="lg"
-                aria-labelledby="contained-modal-title-vcenter"
-                centered
             >
-                <Card>
-                    <Modal.Header closeButton>
-                        <Modal.Title id="contained-modal-title-vcenter">
-                            {this.props.head}
-                        </Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <Table striped bordered hover variant="white" className="table">
-                            <thead>
-                                <tr>
-                                    <th>Parcela</th>
-                                    <th>Valor</th>
-                                    <th>Data</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {lis}
-                            </tbody>
-                        </Table>
-                    </Modal.Body>
-                </Card>
+                <Modal.Header closeButton>
+                    <Modal.Title id="contained-modal-title-vcenter">
+                        {this.props.head}
+                    </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Table striped bordered hover variant="white" className="installmentsTable">
+                        <thead>
+                            <tr className="trr">
+                                <th>Parcela</th>
+                                <th>Valor</th>
+                                <th>Data</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {lis}
+                        </tbody>
+                    </Table>
+                </Modal.Body>
             </Modal>
         )
     }

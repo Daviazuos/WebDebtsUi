@@ -1,0 +1,14 @@
+.debts{
+    display: flex;
+    flex-flow: column;
+    margin-left: 350px;
+}
+
+.debts .cardTable{
+    margin:10px;
+}
+
+.debts .cardName{
+    margin: 10px;
+    font-size: 100%;
+}

@@ -6,32 +6,30 @@ import ModalInstallments from "../installments/Installments"
 
 function SetModal(props) {
   const [modalShow, setModalShow] = React.useState(false);
-  const debtName = `Lista de Parcelas do ${props.name}`;
   return (
     <>
       <Button className='modalButton' variant='dark' onClick={() => setModalShow(true)}>
         <i className={props.simbol}></i> {props.modalName}
       </Button>
       <ModalInstallments
-        value = {props.value}
+        value={props.value}
         show={modalShow}
         onHide={() => setModalShow(false)}
-        head={debtName}
+        head={props.name}
       />
     </>
   );
 }
 
-function refreshPage(){ 
-  window.location.reload(); 
+function refreshPage() {
+  window.location.reload();
 }
 
-function Delete(id){
+function Delete(id) {
   axios.delete(`https://localhost:5001/Debts/Delete?Id=${id}`)
   refreshPage()
-  return(
+  return (
     <>
-      deletado!
     </>
   )
 }
@@ -53,7 +51,7 @@ export default class DebtList extends React.Component {
 
   render() {
     const lis = this.state.debts.map(item => {
-      if (item.debtInstallmentType == this.props.type) {
+      {
         return (
           <tr key={item.id}>
             <td>{item.name}</td>

@@ -1,7 +1,5 @@
 import React from "react";
-import "./Page.css";
-import MyVerticallyCenteredModal from "../modal/modalDebts";
-import { Button } from "react-bootstrap";
+import "./CustomCard.css";
 import { Card } from "react-bootstrap";
 
 export default (props) => {
@@ -11,7 +9,7 @@ export default (props) => {
   };
 
   return (
-    <div className="page">
+    <div className="card">
       <Card style={style}>
         <Card.Header>{props.title}</Card.Header>
         <Card.Body>{props.children}</Card.Body>

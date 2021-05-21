@@ -1,12 +1,19 @@
 import React from "react";
-import { Modal, Card } from "react-bootstrap";
+import { Modal, Card, Button } from "react-bootstrap";
 
 import Form from "../form/form"
 
+
+function refreshPage(){ 
+  window.location.reload(); 
+}
+
 export default function ModalAddDebts(props) {
+  const [modalShow, setModalShow] = React.useState(null);
   return (
     <Modal
-      {...props}
+      show={modalShow ? modalShow : props.show}
+      onHide={props.onHide ? props.onHide : () => setModalShow(false)}
       size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered

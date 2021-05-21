@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Card, Table, Button } from "react-bootstrap";
+import "./CardAnaliticValue.css"
 
 function SetStatus(id, status){
   axios.put(`https://localhost:5001/Debts/InstallmentsStatus?Id=${id}&InstallmentsStatus=${status}`)
@@ -25,7 +26,7 @@ export default class PersonList extends React.Component {
   }
 
   componentDidMount() {
-    axios.get(`https://localhost:5001/Debts/FilterInstallments?Month=${3}&Year=${2021}`)
+    axios.get(`https://localhost:5001/Debts/FilterInstallments?Month=${5}&Year=${2021}`)
       .then(res => {
         const installments = res.data;
         this.setState({ installments });
@@ -59,12 +60,7 @@ export default class PersonList extends React.Component {
 
     return (
       <>
-        <Card>
-          <Card.Header>Total Mês</Card.Header>
-          <Card.Body className='cardTotal'>
-            R$ {valueTotal}
-          </Card.Body>
-          <Card.Body className='cardAnalitic'>
+        <Card className=" cardAnalitic">
             <Table striped bordered hover variant="white" className="table">
               <thead>
                 <tr>
@@ -79,7 +75,6 @@ export default class PersonList extends React.Component {
                 {lis}
               </tbody>
             </Table>
-          </Card.Body>
         </Card>
       </>
     )

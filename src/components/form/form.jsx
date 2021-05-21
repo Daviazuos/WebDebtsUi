@@ -39,8 +39,6 @@ export default class DebtList extends React.Component {
       debtInstallmentType: this.state.debtInstallmentType
     };
 
-    console.log({addDebts})
-
     axios.post(`https://localhost:5001/Debts/Create`, addDebts)
  }
 
@@ -78,8 +76,7 @@ export default class DebtList extends React.Component {
             </Form.Control>
           </Form.Group> 
 
-          <Button variant="dark" type="submit" > Adicionar </Button>
-
+          <Button variant="dark" type="submit"> Adicionar </Button>
         </Form>
       </>
     );

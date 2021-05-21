@@ -1,0 +1,20 @@
+.cardTotal {
+    box-shadow: 1px 3px 1px #9E9E9E;
+    max-height:120px;
+    width: 30%;
+    margin: 10px;
+}
+
+.cardTotal .value {
+    font-size: 150%;
+    margin: auto;
+    margin-bottom: 20px;
+}
+
+.cardTotal .fa-file-invoice-dollar {
+    size: 3px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 20px;
+    color: rgb(247, 67, 67)
+}
