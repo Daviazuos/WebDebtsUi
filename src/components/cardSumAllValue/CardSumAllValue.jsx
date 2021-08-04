@@ -10,7 +10,7 @@ export default class SumAllValue extends React.Component {
 
   componentDidMount() {
     const today = new Date();
-    const mm = String(today.getMonth() + 1).padStart(2, '0')
+    const mm = String(today.getMonth() + 2).padStart(2, '0')
     const yyyy = today.getFullYear()
     axios.get(`https://localhost:5001/Debts/FilterInstallments?Month=${mm}&Year=${yyyy}&StatusApp=NotPaid`)
       .then(res => {
