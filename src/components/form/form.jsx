@@ -1,7 +1,9 @@
 import React from "react";
 import axios from 'axios';
+import { Endpoints } from '../../api/endpoints';
 
 import { Form, Button } from 'react-bootstrap';
+import { axiosInstance } from "../../api";
 
 export default class DebtList extends React.Component {
   state = {
@@ -39,7 +41,7 @@ export default class DebtList extends React.Component {
       debtInstallmentType: this.state.debtInstallmentType
     };
 
-    axios.post(`https://localhost:5001/Debts/Create`, addDebts)
+    axiosInstance.post(Endpoints.debt.add(), addDebts)
  }
 
   render() {

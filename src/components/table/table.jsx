@@ -41,7 +41,7 @@ export default class DebtList extends React.Component {
   }
 
   componentDidMount() {
-
+  
     axios.get(`https://localhost:5001/Debts/FilterDebt`)
       .then(res => {
         const debts = res.data;
