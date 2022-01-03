@@ -1,7 +1,9 @@
 import React from "react";
-import axios from "axios";
+import { axiosInstance } from "../../api";
 import { Card } from "react-bootstrap";
 import "./CardSumValue.css"
+import { Endpoints } from '../../api/endpoints';
+
 
 export default class SumAllValue extends React.Component {
   state = {
@@ -12,7 +14,7 @@ export default class SumAllValue extends React.Component {
     const today = new Date();
     const mm = String(today.getMonth() + 1).padStart(2, '0')
     const yyyy = today.getFullYear()
-    axios.get(`https://localhost:5001/Debts/FilterInstallments?Month=${mm}&Year=${yyyy}&DebtInstallmentType=Simple&StatusApp=NotPaid`)
+    axiosInstance.get(Endpoints.debt.filterInstallments('', mm, yyyy, 'Simple', 'NotPaid'))
       .then(res => {
         const installments = res.data;
         this.setState({ installments });

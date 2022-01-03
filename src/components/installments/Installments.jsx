@@ -1,6 +1,8 @@
 import React from "react";
 import { Table, Card, Modal } from "react-bootstrap";
-import axios from "axios";
+import { axiosInstance } from "../../api";
+import { Endpoints } from '../../api/endpoints';
+
 import "./installments.css"
 
 export default class ModalInstallments extends React.Component {
@@ -8,7 +10,7 @@ export default class ModalInstallments extends React.Component {
         installments: []
     }
     componentDidMount() {
-        axios.get(`https://localhost:5001/Debts/FilterInstallments?DebtId=${this.props.value}`)
+        axiosInstance.get(Endpoints.debt.filterInstallments(this.props.value, '','','',''))
             .then(res => {
                 const installments = res.data;
                 this.setState({ installments });

@@ -9,14 +9,22 @@ export class DebtsEndpoints extends AbstractEndpoints {
   }
 
   getById() {
-    return `${this.getURL()}/GetCardById`;
+    return `${this.getURL()}/GetDebtById`;
   }
 
-  addValues() {
-    return `${this.getURL()}/AddValues`;
+  filter() {
+    return `${this.getURL()}/FilterDebt`;
   }
 
-  getCardValuesById() {
-    return `${this.getURL()}/GetCardValuesById`;
+  filterInstallments(id: string, month: string, year: string, type: string, statusApp: string) {
+    return `${this.getURL()}/FilterInstallments?DebtId=${id}&Month=${month}&Year=${year}&DebtInstallmentType=${type}&StatusApp=${statusApp}`;
+  }
+
+  deleteById(id: string) {
+    return `${this.getURL()}/Delete?Id=${id}`;
+  }
+
+  put(id: string, status: string) {
+    return `${this.getURL()}/InstallmentsStatus?Id=${id}&InstallmentsStatus=${status}`;
   }
 }

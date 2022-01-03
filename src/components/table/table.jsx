@@ -1,6 +1,8 @@
 import React from "react";
 import { Button, Table } from "react-bootstrap";
-import axios from "axios";
+import { Endpoints } from '../../api/endpoints';
+import { axiosInstance } from "../../api";
+
 import "./Table.css";
 import ModalInstallments from "../installments/Installments"
 
@@ -26,7 +28,7 @@ function refreshPage() {
 }
 
 function Delete(id) {
-  axios.delete(`https://localhost:5001/Debts/Delete?Id=${id}`)
+  axiosInstance.delete(Endpoints.debt.deleteById(id))
   refreshPage()
   return (
     <>
@@ -41,8 +43,7 @@ export default class DebtList extends React.Component {
   }
 
   componentDidMount() {
-  
-    axios.get(`https://localhost:5001/Debts/FilterDebt`)
+    axiosInstance.get(Endpoints.debt.filter())
       .then(res => {
         const debts = res.data;
         this.setState({ debts });

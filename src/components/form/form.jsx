@@ -1,5 +1,4 @@
 import React from "react";
-import axios from 'axios';
 import { Endpoints } from '../../api/endpoints';
 
 import { Form, Button } from 'react-bootstrap';

@@ -2,9 +2,11 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Card, Table, Button } from "react-bootstrap";
 import "./CardAnaliticValue.css"
+import { axiosInstance } from "../../api";
+import { Endpoints } from "../../api/endpoints";
 
 function SetStatus(id, status){
-  axios.put(`https://localhost:5001/Debts/InstallmentsStatus?Id=${id}&InstallmentsStatus=${status}`)
+  axiosInstance.put(Endpoints.debt.put(id, status))
   refreshPage() 
   return(
     <>
@@ -26,7 +28,10 @@ export default class PersonList extends React.Component {
   }
 
   componentDidMount() {
-    axios.get(`https://localhost:5001/Debts/FilterInstallments?Month=${5}&Year=${2021}`)
+    const today = new Date();
+    const mm = String(today.getMonth() + 2).padStart(2, '0')
+    const yyyy = today.getFullYear()
+    axiosInstance.get(Endpoints.debt.filterInstallments('', mm, yyyy, '', ''))
       .then(res => {
         const installments = res.data;
         this.setState({ installments });

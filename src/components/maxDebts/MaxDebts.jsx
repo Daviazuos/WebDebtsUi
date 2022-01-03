@@ -1,7 +1,8 @@
 import React from "react";
-import axios from "axios";
 import { Card, Table } from "react-bootstrap";
 import "./MaxDebts.css"
+import { axiosInstance } from "../../api";
+import { Endpoints } from "../../api/endpoints";
 
 export default class MaxDebts extends React.Component {
     state = {
@@ -12,7 +13,7 @@ export default class MaxDebts extends React.Component {
         const today = new Date();
         const mm = String(today.getMonth() + 1).padStart(2, '0')
         const yyyy = today.getFullYear()
-        axios.get(`https://localhost:5001/Debts/FilterInstallments?Month=${mm}&Year=${yyyy}&DebtInstallmentType=Fixed`)
+        axiosInstance.get(Endpoints.debt.filterInstallments('', mm, yyyy, 'Fixed', ''))
             .then(res => {
                 const installments = res.data;
                 this.setState({ installments });
