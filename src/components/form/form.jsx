@@ -4,6 +4,11 @@ import { Endpoints } from '../../api/endpoints';
 import { Form, Button } from 'react-bootstrap';
 import { axiosInstance } from "../../api";
 
+
+function refreshPage() {
+  window.location.reload();
+} 
+
 export default class DebtList extends React.Component {
   state = {
     name: '',
@@ -40,7 +45,10 @@ export default class DebtList extends React.Component {
       debtInstallmentType: this.state.debtInstallmentType
     };
 
-    axiosInstance.post(Endpoints.debt.add(), addDebts)
+    axiosInstance.post(Endpoints.debt.add(), addDebts).then(response => {
+      const id = response.data.Body;
+      refreshPage()
+    })
  }
 
   render() {

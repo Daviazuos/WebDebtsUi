@@ -3,6 +3,7 @@ import { Card, Button } from "react-bootstrap";
 import "./CardSumValue.css"
 import { axiosInstance } from "../../api";
 import { Endpoints } from "../../api/endpoints";
+import { decimalAdjust } from "../../utils/valuesFormater";
 
 export default class SumAllValue extends React.Component {
   state = {
@@ -29,7 +30,7 @@ export default class SumAllValue extends React.Component {
     return (
       <Card className='cardTotal'>
         <span className="totalValue"><i className="fas fa-file-invoice-dollar"></i>Dívidas fixas</span>
-        <span className="value"> R$ {Math.round(valueTotal * 100) / 100} </span>
+        <span className="value"> R$ {decimalAdjust(valueTotal)} </span>
       </Card>
     )
   }

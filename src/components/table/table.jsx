@@ -5,6 +5,7 @@ import { axiosInstance } from "../../api";
 
 import "./Table.css";
 import ModalInstallments from "../installments/Installments"
+import { decimalAdjust } from "../../utils/valuesFormater";
 
 function SetModal(props) {
   const [modalShow, setModalShow] = React.useState(false);
@@ -57,7 +58,7 @@ export default class DebtList extends React.Component {
           <tr key={item.id}>
             <td>{item.name}</td>
             <td>
-              R$ {item.value}
+              R$ {decimalAdjust(item.value)}
             </td>
             <td>{item.debtInstallmentType}</td>
             <td className='tdd'>

@@ -4,6 +4,8 @@ import { Card, Table, Button } from "react-bootstrap";
 import "./CardAnaliticValue.css"
 import { axiosInstance } from "../../api";
 import { Endpoints } from "../../api/endpoints";
+import { decimalAdjust } from "../../utils/valuesFormater";
+import { dateAdjust } from "../../utils/dateFormater";
 
 function SetStatus(id, status){
   axiosInstance.put(Endpoints.debt.put(id, status))
@@ -29,7 +31,7 @@ export default class PersonList extends React.Component {
 
   componentDidMount() {
     const today = new Date();
-    const mm = String(today.getMonth() + 2).padStart(2, '0')
+    const mm = String(today.getMonth()+1).padStart(2, '0')
     const yyyy = today.getFullYear()
     axiosInstance.get(Endpoints.debt.filterInstallments('', mm, yyyy, '', ''))
       .then(res => {
@@ -43,8 +45,8 @@ export default class PersonList extends React.Component {
     const lis = this.state.installments.map(item => {
       return (
         <tr>
-          <td>{item.value}</td>
-          <td>{item.date}</td>
+          <td>R$ {decimalAdjust(item.value)}</td>
+          <td>{dateAdjust(item.date)}</td>
           <td>{item.status}</td>
           <td className="buttonPaid">
             <Button className="btn btn-success" onClick={() => SetStatus(item.id, "Paid")}>
@@ -54,7 +56,7 @@ export default class PersonList extends React.Component {
               A pagar <i className="fas fa-times"></i>
             </Button>
           </td>
-          <td>{item.paymentDate}</td>
+          <td>{dateAdjust(item.paymentDate)}</td>
         </tr>
       )
     })

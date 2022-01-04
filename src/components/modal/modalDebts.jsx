@@ -4,10 +4,6 @@ import { Modal, Card, Button } from "react-bootstrap";
 import Form from "../form/form"
 
 
-function refreshPage(){ 
-  window.location.reload(); 
-}
-
 export default function ModalAddDebts(props) {
   const [modalShow, setModalShow] = React.useState(null);
   return (
