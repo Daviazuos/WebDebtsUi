@@ -10,6 +10,7 @@ import "./WalletModal.css"
 function refreshPage() {
     window.location.reload();
   }
+  
 
 export default class ModalInstallments extends React.Component {
     state = {
@@ -18,6 +19,14 @@ export default class ModalInstallments extends React.Component {
         value: '',
         walletStatus: '',
     }
+
+    componentDidMount(){
+        axiosInstance.get(Endpoints.wallet.getById(this.props.value))
+        .then(res => {
+            const wallet = res.data
+            this.setState({ wallet })
+        })
+    }    
     
       nameChange = event => {
         this.setState({ name: event.target.value});
@@ -37,22 +46,24 @@ export default class ModalInstallments extends React.Component {
             value: this.state.value ||  this.state.wallet.value,
             walletStatus: this.state.walletStatus || this.state.wallet.walletStatus
           };
-    
-        axiosInstance.post(Endpoints.wallet.add(), editWallet).then(response => {
-            const id = response.data.Body;
-            refreshPage()
-          })
+        
+        if(this.props.value){
+            axiosInstance.put(Endpoints.wallet.put(this.props.value), editWallet).then(response => {
+                const id = response.data.Body;
+                refreshPage()
+              })
+        }
+        else {
+            editWallet.walletStatus = 'enable'
+            axiosInstance.post(Endpoints.wallet.add(), editWallet).then(response => {
+                const id = response.data.Body;
+                refreshPage()
+              })
+        }
+        
     }
 
-    componentDidMount() {
-        axiosInstance.get(Endpoints.wallet.getEnable())
-            .then(res => {
-                const wallet = res.data;
-                this.setState({ wallet });
-            })
-    }
-
-    render() {
+    render() {            
         return (
             <Modal
                 {...this.props}
@@ -65,18 +76,14 @@ export default class ModalInstallments extends React.Component {
                 <Modal.Body>
                 <Form onSubmit={this.handleSubmit}>
                     <Form.Group>
-                        <Form.Label>Valor</Form.Label>
-                        <Form.Control name="value" onChange={this.valueChange} placeholder="Entre com o novo valor" defaultValue={ decimalAdjust(this.state.wallet.value)}  />
-                    </Form.Group>
-                    <Form.Group>
                         <Form.Label>Nome</Form.Label>
-                        <Form.Control name="name" onChange={this.nameChange} placeholder="Entre com o novo nome" defaultValue={this.state.wallet.name}  />
+                        <Form.Control name="name" onChange={this.nameChange} placeholder="Nome" defaultValue={this.state.wallet?.name}  />
                     </Form.Group>
                     <Form.Group>
-                        <Form.Label>Status</Form.Label>
-                        <Form.Control name="walletStatus" onChange={this.walletStatus} placeholder="Entre com o novo status" value={this.state.wallet.walletStatus}  />
+                        <Form.Label>Valor</Form.Label>
+                        <Form.Control name="value" onChange={this.valueChange} placeholder="Valor" defaultValue={ decimalAdjust(this.state.wallet?.value)}  />
                     </Form.Group>
-                    <Button variant="dark" type="submit"> Atualizar </Button>
+                    <Button variant="dark" type="submit"> {this.props.value ? 'Atualizar' : 'Adicionar'} </Button>
                 </Form>
                 </Modal.Body>
             </Modal>

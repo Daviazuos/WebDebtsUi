@@ -1,6 +1,5 @@
 import React from "react";
-import { Button, Card, Container } from "react-bootstrap";
-import Table from "../table/table"
+import { Button, Card, Container, Table } from "react-bootstrap";
 import { axiosInstance } from "../../api";
 import { Endpoints } from "../../api/endpoints";
 import { decimalAdjust } from "../../utils/valuesFormater";
@@ -9,6 +8,28 @@ import WalletModal from "./WalletModal"
 
 import "./Wallet.css";
 
+function Delete(wallet) {
+  const editWallet = {
+    name: wallet.name,
+    value: wallet.value,
+    walletStatus: 'disable'
+  };
+
+  console.log(editWallet)
+  axiosInstance.put(Endpoints.wallet.put(wallet.id), editWallet).then(response => {
+    const id = response.data.Body;
+    refreshPage()
+  })
+  return (
+    <>
+    </>
+  )
+}
+
+
+function refreshPage() {
+  window.location.reload();
+}
 
 
 function SetModal(props) {
@@ -30,13 +51,10 @@ function SetModal(props) {
 
 export default class Wallet extends React.Component {
     state = {
-        wallet: "",
+        wallet: [],
     }
   
     componentDidMount() {
-      const today = new Date();
-      const mm = String(today.getMonth() + 2).padStart(2, '0')
-      const yyyy = today.getFullYear()
       axiosInstance.get(Endpoints.wallet.getEnable())
         .then(res => {
           const wallet = res.data;
@@ -45,15 +63,46 @@ export default class Wallet extends React.Component {
     }
   
     render() { 
-        console.log(this.state.wallet)
-      return (
+      const valueTotal = this.state.wallet.reduce(function (prev, cur) {
+        return prev + cur.value;
+      }, 0);
+      const lis = this.state.wallet.map(item => {
+        {
+          return (
+            <tr key={item.id}>
+              <td>{item.name}</td>
+              <td>
+                R$ {decimalAdjust(item.value)}
+              </td>
+              <td className='tdd'>
+                {<SetModal value={item.id} name={item.name} modalName="" simbol="fas fa-edit"></SetModal>}{" "}
+                <Button className="btn btn-danger" onClick={() => Delete(item)}>
+                  <i className="fa fa-trash" aria-hidden="true"></i>
+                </Button>
+              </td>
+            </tr>
+          )
+        }
+      })
+      return (  
         <Container className="containerWallet">
         <Card className="cardWallet">
-              <span className="totalAllValue"><i className="fas fa-wallet"></i> Valor por mês</span>
-              <span className="allValue"> R$ {decimalAdjust(this.state.wallet.value)} </span>
-              {<SetModal value={this.state.wallet.id} name={this.state.wallet.name} modalName="Ajustar Valor" simbol="fas fa-align-justify"></SetModal>}{" "}
+              <span className="totalAllValue"><i className="fas fa-wallet"></i> Total do mês</span>
+              <span className="allValue"> R$ {decimalAdjust(valueTotal)} </span>
         </Card>
-      </Container>
+        <Table striped bordered hover variant="white" className="table">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Valor</th>
+              <th>Ação</th>
+            </tr>
+          </thead>
+          <tbody>
+            {lis}
+          </tbody>
+        </Table>
+        {<SetModal name={'Adicionar novo valor'} modalName="" simbol="fas fa-plus"></SetModal>}{" "}
+        </Container>
       )
-    }
-  }
+    }}

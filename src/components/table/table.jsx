@@ -29,8 +29,10 @@ function refreshPage() {
 }
 
 function Delete(id) {
-  axiosInstance.delete(Endpoints.debt.deleteById(id))
-  refreshPage()
+  axiosInstance.delete(Endpoints.debt.deleteById(id)).then(response => {
+    const id = response.data.Body;
+    refreshPage()
+  })
   return (
     <>
     </>

@@ -8,12 +8,12 @@ export class WalletsEndpoinst extends AbstractEndpoints {
     return `${this.getURL()}/Create`;
   }
 
-  getById() {
-    return `${this.getURL()}/GetWalletById`;
+  getById(id: string) {
+    return `${this.getURL()}/GetWalletById?walletId=${id}`;
   }
 
   getEnable() {
-    return `${this.getURL()}/GetEnableWallet`;
+    return `${this.getURL()}/GetEnableWallets`;
   }
 
   put(id: string) {

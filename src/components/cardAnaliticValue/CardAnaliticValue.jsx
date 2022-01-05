@@ -8,8 +8,10 @@ import { decimalAdjust } from "../../utils/valuesFormater";
 import { dateAdjust } from "../../utils/dateFormater";
 
 function SetStatus(id, status){
-  axiosInstance.put(Endpoints.debt.put(id, status))
-  refreshPage() 
+  axiosInstance.put(Endpoints.debt.put(id, status)).then(response => {
+    const id = response.data.Body;
+    refreshPage()
+  })
   return(
     <>
       Status Trocado!
