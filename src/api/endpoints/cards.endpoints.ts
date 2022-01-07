@@ -1,7 +1,7 @@
 import { AbstractEndpoints } from './abstract.endpoints';
 
 export class CardsEndpoints extends AbstractEndpoints {
-  baseURL = 'https://web-debts.herokuapp.com/';
+  baseURL = 'Cards';
   version = '';
 
   add() {
