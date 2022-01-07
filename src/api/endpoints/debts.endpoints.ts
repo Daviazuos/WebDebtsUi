@@ -20,6 +20,10 @@ export class DebtsEndpoints extends AbstractEndpoints {
     return `${this.getURL()}/FilterInstallments?DebtId=${id}&Month=${month}&Year=${year}&DebtInstallmentType=${type}&StatusApp=${statusApp}`;
   }
 
+  getDebtByMonth(month: string, year: string) {
+    return `${this.getURL()}/GetSumByMonth?Month=${month}&Year=${year}`;
+  }
+
   deleteById(id: string) {
     return `${this.getURL()}/Delete?Id=${id}`;
   }

@@ -1,3 +1,9 @@
 .cardAnalitic{
     margin: 10px;
 }
+
+.cardAnalitic .month {
+    margin: 10px; 
+    font-size: x-large;
+    font-family: sans-serif;
+}

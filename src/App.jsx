@@ -5,6 +5,7 @@ import CardSumAllValue from "./components/cardSumAllValue/CardSumAllValue"
 import CardSumFixedValue from "./components/cardSumValue/CardSumFixedValue"
 import CardSumSimpleValue from "./components/cardSumValue/CardSumSimpleValue"
 import CardSumInstallmentValue from "./components/cardSumValue/CardSumInstallmentValue"
+import CardAnaliticAllValue from "./components/cardAnaliticAllValue/CardAnaliticAllValue"
 import CardGraphic from "./components/cardGraphic/CardGraphic"
 import MaxDebts from "./components/maxDebts/MaxDebts"
 import "./App.css";
@@ -19,6 +20,7 @@ export default () => {
             <CardSumFixedValue></CardSumFixedValue>
             <CardSumSimpleValue></CardSumSimpleValue>
             <CardSumInstallmentValue></CardSumInstallmentValue>
+            
           </div>
           <div className='maxDebts'>
             <MaxDebts></MaxDebts>

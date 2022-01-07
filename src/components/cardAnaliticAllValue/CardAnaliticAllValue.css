@@ -1,0 +1,32 @@
+.cardAllTotal {
+    box-shadow: 1px 3px 1px #9E9E9E;
+    width: 96%;
+    margin: 10px;
+    display: flex;
+    flex-flow: column;
+}
+
+.cardAllTotal .allValue {
+    font-size: 200%;
+    margin: auto;
+    margin-bottom: 30px;
+}
+
+.cardAllTotal .totalAllValue {
+    margin-left: 20px;
+    font-size: 125%;
+}
+.cardAllTotal .fa-file-invoice-dollar {
+    size: 3px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 20px;
+    color: rgb(247, 67, 67)
+}
+
+.cardAllTotal .input {
+    box-shadow: 1px 3px 1px #9E9E9E;
+    max-height:120px;
+    width: 30%;
+    margin: 10px;
+}

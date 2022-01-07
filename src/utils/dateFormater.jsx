@@ -11,3 +11,21 @@ export function dateAdjust(t) {
         return `${date}/${month}/${year}`;
     }
   }
+
+export function monthByNumber(number) {
+    const meses = [
+        "Janeiro",
+        "Fevereiro",
+        "Março",
+        "Abril",
+        "Maio",
+        "Junho",
+        "Julho",
+        "Agosto",
+        "Setembro",
+        "Outubro",
+        "Novembro",
+        "Dezembro"
+      ];
+    return meses[parseInt(number-1)]
+}

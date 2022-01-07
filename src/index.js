@@ -6,9 +6,10 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Navbar from './components/navbar/Navbar'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Debts from "./components/debts/Debts";
-import Financial from "./components/financial/Financial"
-import Wallet from "./components/financial/Wallet";
+import Debts from "./pages/debts/Debts";
+import Financial from "./pages/financial/Financial";
+import Wallet from "./pages/wallet/Wallet";
+
 
 ReactDOM.render(
   <React.StrictMode>

@@ -1,7 +1,8 @@
 import React from "react";
-import { Table, Card, Modal } from "react-bootstrap";
+import { Table, Button, Modal } from "react-bootstrap";
 import { axiosInstance } from "../../api";
 import { Endpoints } from '../../api/endpoints';
+import { decimalAdjust } from "../../utils/valuesFormater";
 
 import "./installments.css"
 
@@ -21,9 +22,9 @@ export default class ModalInstallments extends React.Component {
         const lis = this.state.installments.map(item => {
             return (
                 <tr key={item.id}>
-                    <td>{item.installmentNumber}</td>
+                    <td>{item.installmentNumber == 0? "" : item.installmentNumber}</td>
                     <td>
-                        R$ {item.value}
+                        R$ {decimalAdjust(item.value)}
                     </td>
                     <td>{item.date}</td>
                     <td>{item.status}</td>

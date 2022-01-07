@@ -1,8 +1,6 @@
-import React from "react";
-import { Button, Card, Container } from "react-bootstrap";
+import { Card, Container } from "react-bootstrap";
 
-import ModalAddDebts from "../modal/modalDebts";
-import Table from "../table/table"
+import Table from "../../components/table/table"
 
 import "./Debts.css";
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { Container, Button } from "react-bootstrap";
-import CardAnaliticValue from "../cardAnaliticValue/CardAnaliticValue"
-import ModalAddDebts from "../modal/modalDebts";
+import ModalAddDebts from "../../components/modal/modalDebts";
+import CardAnaliticValue from "../../components/cardAnaliticValue/CardAnaliticValue"
 import "./Financial.css"
 
 function SetModal(props) {

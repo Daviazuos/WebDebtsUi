@@ -5,7 +5,7 @@ import "./CardAnaliticValue.css"
 import { axiosInstance } from "../../api";
 import { Endpoints } from "../../api/endpoints";
 import { decimalAdjust } from "../../utils/valuesFormater";
-import { dateAdjust } from "../../utils/dateFormater";
+import { dateAdjust, monthByNumber } from "../../utils/dateFormater";
 
 function SetStatus(id, status){
   axiosInstance.put(Endpoints.debt.put(id, status)).then(response => {
@@ -20,6 +20,9 @@ function SetStatus(id, status){
 
 }
 
+const today = new Date();
+const mm = String(today.getMonth()+1).padStart(2, '0')
+const yyyy = today.getFullYear()
 
 function refreshPage(){ 
   window.location.reload(); 
@@ -32,9 +35,6 @@ export default class PersonList extends React.Component {
   }
 
   componentDidMount() {
-    const today = new Date();
-    const mm = String(today.getMonth()+1).padStart(2, '0')
-    const yyyy = today.getFullYear()
     axiosInstance.get(Endpoints.debt.filterInstallments('', mm, yyyy, '', ''))
       .then(res => {
         const installments = res.data;
@@ -47,6 +47,7 @@ export default class PersonList extends React.Component {
     const lis = this.state.installments.map(item => {
       return (
         <tr>
+          <td>{item.name}</td>
           <td>R$ {decimalAdjust(item.value)}</td>
           <td>{dateAdjust(item.date)}</td>
           <td>{item.status}</td>
@@ -63,16 +64,14 @@ export default class PersonList extends React.Component {
       )
     })
 
-    const valueTotal = this.state.installments.reduce(function(prev, cur) {
-      return prev + cur.value;
-    }, 0);
-
     return (
       <>
-        <Card className=" cardAnalitic">
+        <Card className="cardAnalitic">
+            <span className="month">{monthByNumber(mm)}</span>
             <Table striped bordered hover variant="white" className="table">
               <thead>
                 <tr>
+                  <th>Nome</th>
                   <th>Valor</th>
                   <th>Data de vencimento</th>
                   <th>Status</th>
