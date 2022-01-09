@@ -1,7 +1,6 @@
 .appPage{
     display: flex;
     flex-flow: column;
-    margin-left: 350px;
 }
 
 .containerUpPage{
@@ -12,7 +11,6 @@
 .allValue{
     display: flex;
     flex-flow: row wrap;
-    max-width: 700px;
     height: auto;
 }
 
