@@ -1,6 +1,6 @@
 import React from "react";
 import { Card, Container } from "react-bootstrap";
-import "./CardAnaliticAllValue.css"
+/*import "./CardAnaliticAllValue.css"*/
 import { axiosInstance } from "../../api";
 import { Endpoints } from "../../api/endpoints";
 import { decimalAdjust } from "../../utils/valuesFormater";
