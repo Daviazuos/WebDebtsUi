@@ -19,11 +19,7 @@ export default () => {
             <CardSumAllValue></CardSumAllValue>
             <CardSumFixedValue></CardSumFixedValue>
             <CardSumSimpleValue></CardSumSimpleValue>
-            <CardSumInstallmentValue></CardSumInstallmentValue>
-            
-          </div>
-          <div className='maxDebts'>
-            <MaxDebts></MaxDebts>
+            <CardSumInstallmentValue></CardSumInstallmentValue>  
           </div>
         </Container>
         <Container>
