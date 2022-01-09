@@ -1,7 +1,6 @@
 .financial{
     display: flex;
     flex-flow: column;
-    margin-left: 350px;
 }
 
 .addButton{
