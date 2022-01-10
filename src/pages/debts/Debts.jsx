@@ -31,7 +31,7 @@ export default () => {
         <Card className="cardTable">
           <Table></Table>
         </Card>
-        {<SetModal modalName="Débitos"></SetModal>}{" "}
+        {<SetModal modalName=""></SetModal>}{" "}
       </Container>
     </div>);
 };

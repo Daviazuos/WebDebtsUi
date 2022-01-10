@@ -90,7 +90,7 @@ export default class CardGraphic extends React.Component {
             };
 
         return (
-            <Card className='graphicCard'>
+            <Card className='cardDash'>
                 <h3 className="graphicName">Movimentação por mês</h3>
                 <Line className="graphic" data={options} width={100} height={30} options={{ responsive: true }} />
             </Card>

@@ -3,6 +3,12 @@
     flex-flow: column;
 }
 
-.addButton{
-    margin-left: 10px;
+.financial .cardTable{
+    margin:10px;
+}
+
+.financial .cardTable .month{
+    margin:10px;
+    font-size: 30px;
+    font-family: sans-serif;
 }

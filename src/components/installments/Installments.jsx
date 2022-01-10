@@ -3,6 +3,8 @@ import { Table, Button, Modal } from "react-bootstrap";
 import { axiosInstance } from "../../api";
 import { Endpoints } from '../../api/endpoints';
 import { decimalAdjust } from "../../utils/valuesFormater";
+import { statusTransform } from "../../utils/enumFormatter";
+
 
 import "./installments.css"
 
@@ -27,7 +29,7 @@ export default class ModalInstallments extends React.Component {
                         R$ {decimalAdjust(item.value)}
                     </td>
                     <td>{item.date}</td>
-                    <td>{item.status}</td>
+                    <td>{statusTransform(item.status)}</td>
                 </tr>
             )
         })

@@ -1,0 +1,46 @@
+.dashPage{
+    display: flex;
+    flex-flow: column;
+}
+
+.dashPage .containerUpPage{
+    flex-flow: row wrap;
+    margin: auto;
+    width: 40%;
+}
+
+.cardDash{
+    height: auto;
+    box-shadow: 1px 3px 1px #9E9E9E;
+}
+
+.dashPage .graphicPage{
+    width: 100%;
+    margin: auto;
+}
+
+
+.analiticPage{
+    flex-direction: row;
+}
+
+.buttonPaid {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;   
+}
+
+.cardDash .value {
+    font-size: 150%;
+    margin: auto;
+    margin-bottom: 20px;
+}
+
+.cardDash .fa-file-invoice-dollar {
+    size: 3px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 20px;
+    color: rgb(247, 67, 67)
+}

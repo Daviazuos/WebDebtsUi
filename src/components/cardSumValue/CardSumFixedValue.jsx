@@ -1,6 +1,5 @@
 import React from "react";
 import { Card, Button } from "react-bootstrap";
-import "./CardSumValue.css"
 import { axiosInstance } from "../../api";
 import { Endpoints } from "../../api/endpoints";
 import { decimalAdjust } from "../../utils/valuesFormater";
@@ -28,8 +27,8 @@ export default class SumAllValue extends React.Component {
     }, 0);
 
     return (
-      <Card className='cardTotal'>
-        <span className="totalValue"><i className="fas fa-file-invoice-dollar"></i>Dívidas fixas</span>
+      <Card className='cardDash'>
+        <span className="totalValue"><i className="fas fa-file-invoice-dollar"></i>Fixas</span>
         <span className="value"> R$ {decimalAdjust(valueTotal)} </span>
       </Card>
     )
