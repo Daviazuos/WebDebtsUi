@@ -1,6 +1,5 @@
 .cardWallet {
     box-shadow: 1px 3px 1px #9E9E9E;
-    width: 96%;
     margin: 10px;
 }
 
@@ -23,7 +22,5 @@
 }
 
 .containerWallet {
-    margin: 10px;
     margin-left: auto;
-    max-width: 1070px;
 }

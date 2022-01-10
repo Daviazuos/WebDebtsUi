@@ -22,10 +22,7 @@ export default () => {
             <CardSumInstallmentValue></CardSumInstallmentValue>
             
           </div>
-          <div className='maxDebts'>
-            <MaxDebts></MaxDebts>
-          </div>
-        </Container>
+          </Container>
         <Container>
           <div className='graphicPage'>
             <CardGraphic></CardGraphic>
