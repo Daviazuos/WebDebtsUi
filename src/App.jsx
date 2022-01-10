@@ -19,10 +19,9 @@ export default () => {
             <CardSumAllValue></CardSumAllValue>
             <CardSumFixedValue></CardSumFixedValue>
             <CardSumSimpleValue></CardSumSimpleValue>
-            <CardSumInstallmentValue></CardSumInstallmentValue>
-            
+            <CardSumInstallmentValue></CardSumInstallmentValue>  
           </div>
-          </Container>
+        </Container>
         <Container>
           <div className='graphicPage'>
             <CardGraphic></CardGraphic>
