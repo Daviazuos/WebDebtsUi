@@ -14,7 +14,7 @@ import Wallet from "./pages/wallet/Wallet";
 ReactDOM.render(
   <React.StrictMode>
        <Router>
-       <Navbar home="Web Debts" link1="Dívidas" link2="Cartões" link3="Finanças" link4="Carteira"></Navbar>
+       <Navbar home="Web Debts" link1="Dívidas" link3="Finanças" link4="Carteira"></Navbar>
       <Switch>
         <Route exact path="/" component={App} />
         <Route path="/Debts" component={Debts} />

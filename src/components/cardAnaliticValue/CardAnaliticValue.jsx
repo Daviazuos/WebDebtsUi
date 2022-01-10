@@ -47,7 +47,7 @@ export default class PersonList extends React.Component {
     const lis = this.state.installments.map(item => {
       return (
         <tr>
-          <td>{item.name}</td>
+          <td>{item.debtName}</td>
           <td>R$ {decimalAdjust(item.value)}</td>
           <td>{dateAdjust(item.date)}</td>
           <td>{item.status}</td>
