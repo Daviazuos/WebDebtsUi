@@ -2,7 +2,13 @@ import React from "react";
 import { Card } from "react-bootstrap";
 import { axiosInstance } from "../../api";
 import { Endpoints } from "../../api/endpoints";
+import { monthByNumber } from "../../utils/dateFormater";
 import { decimalAdjust } from "../../utils/valuesFormater";
+import CustomCard from "../customCard/CustomCard";
+
+const today = new Date();
+const mm = String(today.getMonth() + 2).padStart(2, '0')
+const yyyy = today.getFullYear()
 
 export default class SumAllValue extends React.Component {
   state = {
@@ -10,9 +16,6 @@ export default class SumAllValue extends React.Component {
   }
 
   componentDidMount() {
-    const today = new Date();
-    const mm = String(today.getMonth() + 2).padStart(2, '0')
-    const yyyy = today.getFullYear()
     axiosInstance.get(Endpoints.debt.filterInstallments('', mm, yyyy, '', 'NotPaid'))
       .then(res => {
         const installments = res.data;
@@ -28,10 +31,13 @@ export default class SumAllValue extends React.Component {
 
     return (
       <>
-        <Card className='cardDash'>
-          <span className="totalAllValue"><i className="fas fa-file-invoice-dollar"></i>Total do mês</span>
-          <span className="value"> R$ {decimalAdjust(valueTotal)} </span>
-        </Card>
+        <CustomCard
+          title="Total do mês"
+          subTitle={monthByNumber(mm-1)+"/"+yyyy}
+          children={decimalAdjust(valueTotal)}
+          icon="fas fa-hand-holding-usd red font-large-2"
+          >
+        </CustomCard>
       </>
     )
   }

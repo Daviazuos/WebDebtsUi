@@ -65,7 +65,7 @@ export default class PersonList extends React.Component {
       <>
         <Card className='cardTable'>
             <span className="month">{monthByNumber(mm)}/{yyyy}</span>
-            <Table striped bordered hover variant="white" className="table">
+            <Table responsive striped bordered hover variant="white" className="table">
               <thead>
                 <tr>
                   <th>Nome</th>

@@ -7,6 +7,7 @@ import WalletModal from "./WalletModal"
 
 
 import "./Wallet.css";
+import CustomCard from "../../components/customCard/CustomCard";
 
 function Delete(wallet) {
   const editWallet = {
@@ -36,7 +37,7 @@ function SetModal(props) {
   const [modalShow, setModalShow] = React.useState(false);
   return (
     <>
-      <Button className='modalButton' variant='dark' onClick={() => setModalShow(true)}>
+      <Button className={props.className} variant='dark' onClick={() => setModalShow(true)}>
         <i className={props.simbol}></i> {props.modalName}
       </Button>
       <WalletModal
@@ -75,9 +76,9 @@ export default class Wallet extends React.Component {
               R$ {decimalAdjust(item.value)}
             </td>
             <td className='tdd'>
-              {<SetModal value={item.id} name={item.name} modalName="" simbol="fas fa-edit"></SetModal>}{" "}
+              {<SetModal value={item.id} name={item.name} modalName="Editar" simbol="fas fa-edit" className='btn btn-primary'></SetModal>}{" "}
               <Button className="btn btn-danger" onClick={() => Delete(item)}>
-                <i className="fa fa-trash" aria-hidden="true"></i>
+                <i className="fa fa-trash" aria-hidden="true"></i> Apagar
               </Button>
             </td>
           </tr>
@@ -86,12 +87,15 @@ export default class Wallet extends React.Component {
     })
     return (
       <Container className="containerWallet">
-        <Card className="cardWallet">
-          <span className="totalAllValue"><i className="fas fa-wallet"></i> Total do mês</span>
-          <span className="allValue"> R$ {decimalAdjust(valueTotal)} </span>
-        </Card>
+        <CustomCard
+          title="Total do mês"
+          children={decimalAdjust(valueTotal)}
+          icon="fas fa-wallet success font-large-2"
+        >
+        </CustomCard>
+        
         <Card className="cardAnalitic">
-          <Table striped bordered hover variant="white" className="table">
+          <Table responsive striped bordered hover variant="white" className="table">
             <thead>
               <tr>
                 <th>Nome</th>
@@ -104,7 +108,7 @@ export default class Wallet extends React.Component {
             </tbody>
           </Table>
         </Card>
-        {<SetModal name={'Adicionar novo valor'} modalName="" simbol="fas fa-plus"></SetModal>}{" "}
+        {<SetModal name={'Adicionar novo valor'} modalName="Adicionar" simbol="fas fa-plus" className="modalButton"></SetModal>}{" "}
       </Container>
     )
   }

@@ -6,12 +6,13 @@ import { axiosInstance } from "../../api";
 import "./Table.css";
 import ModalInstallments from "../installments/Installments"
 import { decimalAdjust } from "../../utils/valuesFormater";
+import { debtInstallmentTransform } from "../../utils/enumFormatter";
 
 function SetModal(props) {
   const [modalShow, setModalShow] = React.useState(false);
   return (
     <>
-      <Button className='modalButton' variant='dark' onClick={() => setModalShow(true)}>
+      <Button className='btn btn-secondary' variant='dark' onClick={() => setModalShow(true)}>
         <i className={props.simbol}></i> {props.modalName}
       </Button>
       <ModalInstallments
@@ -62,13 +63,13 @@ export default class DebtList extends React.Component {
             <td>
               R$ {decimalAdjust(item.value)}
             </td>
-            <td>{item.debtInstallmentType}</td>
+            <td>{debtInstallmentTransform(item.debtInstallmentType)}</td>
             <td className='tdd'>
               <Button className="btn btn-primary">
-                <i className="fas fa-edit"></i>
+                <i className="fas fa-edit"></i> Editar
               </Button>
               <Button className="btn btn-danger" onClick={() => Delete(item.id)}>
-                <i className="fa fa-trash" aria-hidden="true"></i>
+                <i className="fa fa-trash" aria-hidden="true"></i> Apagar
               </Button>
               {<SetModal value={item.id} name={item.name} modalName="Parcelas" simbol="fas fa-align-justify"></SetModal>}{" "}
             </td>
@@ -77,7 +78,7 @@ export default class DebtList extends React.Component {
       }
     })
     return (
-      <Table striped bordered hover variant="white" className="table">
+      <Table responsive striped bordered hover variant="white" className="table">
         <thead>
           <tr>
             <th>Nome</th>

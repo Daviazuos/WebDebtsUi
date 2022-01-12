@@ -1,28 +1,7 @@
-.dashPage{
-    background:linear-gradient(rgba(0, 0, 0, 0.2),transparent);
-    background-color:grey /*this your primary color*/
-}
-
 .dashPage .containerUpPage{
     display: flex;
-    flex-flow: column wrap;
-
+    flex-flow: row wrap;
 }
-
-.dashPage .containerUpPage .allValue {
-
-}
-
-.cardDash{
-    height: auto;
-    box-shadow: 1px 3px 1px #9E9E9E;
-}
-
-.dashPage .graphicPage{
-    width: 100%;
-    margin: auto;
-}
-
 
 .analiticPage{
     flex-direction: row;
@@ -33,18 +12,4 @@
     flex-direction: row;
     justify-content: space-evenly;
     align-items: center;   
-}
-
-.cardDash .value {
-    font-size: 150%;
-    margin: auto;
-    margin-bottom: 20px;
-}
-
-.cardDash .fa-file-invoice-dollar {
-    size: 3px;
-    margin-left: 10px;
-    margin-right: 10px;
-    margin-top: 20px;
-    color: rgb(247, 67, 67)
 }

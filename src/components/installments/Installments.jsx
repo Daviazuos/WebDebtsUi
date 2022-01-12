@@ -43,7 +43,7 @@ export default class ModalInstallments extends React.Component {
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Table striped bordered hover variant="white" className="installmentsTable">
+                    <Table responsive striped bordered hover variant="white" className="installmentsTable">
                         <thead>
                             <tr className="trr">
                                 <th>Parcela</th>

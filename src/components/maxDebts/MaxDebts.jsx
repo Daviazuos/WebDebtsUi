@@ -29,7 +29,7 @@ export default class MaxDebts extends React.Component {
         return (
             <Card className='cardMaxDebts'>
                 <h3 className='maxName'>Maiores despesas do mês</h3>
-                <Table className='tableMaxDebts' striped bordered hover>
+                <Table responsive className='tableMaxDebts' striped bordered hover>
                     <tbody>
                         <tr>
                             <td>Comida</td>

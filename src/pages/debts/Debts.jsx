@@ -11,7 +11,7 @@ function SetModal(props) {
   return (
     <>
       <Button className='addButton' variant='dark' onClick={() => setModalShow(true)}>
-       <i className="fas fa-plus"></i> {props.modalName}
+       <i className="fas fa-plus"></i> {props.modalName} Adicionar 
       </Button>
 
       <ModalAddDebts

@@ -1,8 +1,8 @@
 import React from "react";
-import { Card, Button } from "react-bootstrap";
 import { axiosInstance } from "../../api";
 import { Endpoints } from "../../api/endpoints";
 import { decimalAdjust } from "../../utils/valuesFormater";
+import CustomCard from "../customCard/CustomCard";
 
 export default class SumAllValue extends React.Component {
   state = {
@@ -27,10 +27,12 @@ export default class SumAllValue extends React.Component {
     }, 0);
 
     return (
-      <Card className='cardDash'>
-        <span className="totalValue"><i className="fas fa-file-invoice-dollar"></i>Fixas</span>
-        <span className="value"> R$ {decimalAdjust(valueTotal)} </span>
-      </Card>
+      <CustomCard
+        title="Fixas"
+        children={decimalAdjust(valueTotal)}
+        icon="far fa-calendar red font-large-2"
+      >
+      </CustomCard>
     )
   }
 }
