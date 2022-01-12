@@ -1,12 +1,16 @@
 .dashPage{
-    display: flex;
-    flex-flow: column;
+    background:linear-gradient(rgba(0, 0, 0, 0.2),transparent);
+    background-color:grey /*this your primary color*/
 }
 
 .dashPage .containerUpPage{
-    flex-flow: row wrap;
-    margin: auto;
-    width: 40%;
+    display: flex;
+    flex-flow: column wrap;
+
+}
+
+.dashPage .containerUpPage .allValue {
+
 }
 
 .cardDash{
