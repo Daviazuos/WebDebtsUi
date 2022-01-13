@@ -32,7 +32,7 @@ export default class SumAllValue extends React.Component {
       <>
         <CustomCard
           title="Total do mês"
-          subTitle={monthByNumber(mm-1)+"/"+yyyy}
+          subTitle={monthByNumber(mm)+"/"+yyyy}
           children={decimalAdjust(valueTotal)}
           icon="fas fa-hand-holding-usd red font-large-2"
           >

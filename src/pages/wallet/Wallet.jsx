@@ -96,7 +96,7 @@ export default class Wallet extends React.Component {
           title="Total do mês"
           subTitle={monthByNumber(mm-1)+"/"+yyyy}
           children={decimalAdjust(valueTotal)}
-          icon="fas fa-wallet success font-large-2"
+          icon="fas fa-wallet red font-large-2"
         >
         </CustomCard>
         
