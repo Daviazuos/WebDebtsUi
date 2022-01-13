@@ -1,4 +1,3 @@
-import React from "react";
 import "./Navbar.css";
 
 import { Navbar, Nav } from "react-bootstrap";
@@ -12,6 +11,7 @@ const Header = (props) => {
         <Nav className="mr-auto">
           <Nav.Link href="/financial">{props.link3}</Nav.Link>
           <Nav.Link href="/debts">{props.link1}</Nav.Link>
+          <Nav.Link href="/cards">{props.link2}</Nav.Link>
           <Nav.Link href="/wallet">{props.link4}</Nav.Link>
         </Nav>
       </Navbar.Collapse>

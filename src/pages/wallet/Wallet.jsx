@@ -8,6 +8,11 @@ import WalletModal from "./WalletModal"
 
 import "./Wallet.css";
 import CustomCard from "../../components/customCard/CustomCard";
+import { monthByNumber } from "../../utils/dateFormater";
+
+const today = new Date();
+const mm = String(today.getMonth() + 2).padStart(2, '0')
+const yyyy = today.getFullYear()
 
 function Delete(wallet) {
   const editWallet = {
@@ -89,6 +94,7 @@ export default class Wallet extends React.Component {
       <Container className="containerWallet">
         <CustomCard
           title="Total do mês"
+          subTitle={monthByNumber(mm-1)+"/"+yyyy}
           children={decimalAdjust(valueTotal)}
           icon="fas fa-wallet success font-large-2"
         >

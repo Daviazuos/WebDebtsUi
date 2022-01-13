@@ -34,7 +34,7 @@ export default class PersonList extends React.Component {
   }
 
   componentDidMount() {
-    axiosInstance.get(Endpoints.debt.filterInstallments('', mm, yyyy, '', ''))
+    axiosInstance.get(Endpoints.debt.filterInstallments(1, '', mm, yyyy, '', ''))
       .then(res => {
         const installments = res.data;
         this.setState({ installments });
@@ -43,7 +43,7 @@ export default class PersonList extends React.Component {
 
   render() {
 
-    const lis = this.state.installments.map(item => {
+    const lis = this.state.installments.items?.map(item => {
       return (
         <tr>
           <td>{item.debtName}</td>

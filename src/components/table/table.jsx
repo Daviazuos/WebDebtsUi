@@ -5,10 +5,12 @@ import { axiosInstance } from "../../api";
 
 import "./Table.css";
 import ModalInstallments from "../installments/Installments"
+import ModalAddDebts from "../../components/modal/modalDebts";
+
 import { decimalAdjust } from "../../utils/valuesFormater";
 import { debtInstallmentTransform } from "../../utils/enumFormatter";
 
-function SetModal(props) {
+function SetModalInstallments(props) {
   const [modalShow, setModalShow] = React.useState(false);
   return (
     <>
@@ -17,6 +19,23 @@ function SetModal(props) {
       </Button>
       <ModalInstallments
         value={props.value}
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+        head={props.name}
+      />
+    </>
+  );
+}
+
+function SetModalEdit(props) {
+  const [modalShow, setModalShow] = React.useState(false);
+  return (
+    <>
+      <Button className={props.className} variant='dark' onClick={() => setModalShow(true)}>
+       <i className="fas fa-plus"></i> {props.modalName} 
+      </Button>
+
+      <ModalAddDebts
         show={modalShow}
         onHide={() => setModalShow(false)}
         head={props.name}
@@ -47,7 +66,7 @@ export default class DebtList extends React.Component {
   }
 
   componentDidMount() {
-    axiosInstance.get(Endpoints.debt.filter())
+    axiosInstance.get(Endpoints.debt.filter(1))
       .then(res => {
         const debts = res.data;
         this.setState({ debts });
@@ -55,7 +74,7 @@ export default class DebtList extends React.Component {
   }
 
   render() {
-    const lis = this.state.debts.map(item => {
+    const lis = this.state.debts.items?.map(item => {
       {
         return (
           <tr key={item.id}>
@@ -65,13 +84,11 @@ export default class DebtList extends React.Component {
             </td>
             <td>{debtInstallmentTransform(item.debtInstallmentType)}</td>
             <td className='tdd'>
-              <Button className="btn btn-primary">
-                <i className="fas fa-edit"></i> Editar
-              </Button>
+              {<SetModalEdit value={item.id} name={item.name} modalName="Editar" simbol="fas fa-edit" className='btn btn-primary'></SetModalEdit>}{" "}
               <Button className="btn btn-danger" onClick={() => Delete(item.id)}>
                 <i className="fa fa-trash" aria-hidden="true"></i> Apagar
               </Button>
-              {<SetModal value={item.id} name={item.name} modalName="Parcelas" simbol="fas fa-align-justify"></SetModal>}{" "}
+              {<SetModalInstallments value={item.id} name={item.name} modalName="Parcelas" simbol="fas fa-align-justify"></SetModalInstallments>}{" "}
             </td>
           </tr>
         )

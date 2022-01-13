@@ -7,13 +7,14 @@ import { statusTransform } from "../../utils/enumFormatter";
 
 
 import "./installments.css"
+import { dateAdjust } from "../../utils/dateFormater";
 
 export default class ModalInstallments extends React.Component {
     state = {
         installments: []
     }
     componentDidMount() {
-        axiosInstance.get(Endpoints.debt.filterInstallments(this.props.value, '','','',''))
+        axiosInstance.get(Endpoints.debt.filterInstallments(1, this.props.value, '','','',''))
             .then(res => {
                 const installments = res.data;
                 this.setState({ installments });
@@ -21,14 +22,14 @@ export default class ModalInstallments extends React.Component {
     }
 
     render() {
-        const lis = this.state.installments.map(item => {
+        const lis = this.state.installments.items?.map(item => {
             return (
                 <tr key={item.id}>
                     <td>{item.installmentNumber == 0? "" : item.installmentNumber}</td>
                     <td>
                         R$ {decimalAdjust(item.value)}
                     </td>
-                    <td>{item.date}</td>
+                    <td>{dateAdjust(item.date)}</td>
                     <td>{statusTransform(item.status)}</td>
                 </tr>
             )

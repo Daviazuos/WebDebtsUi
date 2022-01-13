@@ -35,7 +35,6 @@ export default class CardGraphic extends React.Component {
             this.setState({ labels: labels });
             this.setState({ dataDebts: dataDebts  });
             this.setState({ dataWallet: dataWallet });
-            console.log(labels)
           })
       }
     

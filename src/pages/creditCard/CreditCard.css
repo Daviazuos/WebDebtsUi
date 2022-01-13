@@ -1,0 +1,37 @@
+
+.cardCredit{
+    display: flex;
+    flex-flow: column;
+    box-shadow: 3px 3px 5px #1b1b1ba2;
+    margin: auto
+}
+
+.cardCredit .debit-card {
+    max-width: 400px;
+    height: 180px;
+    padding: 20px;
+    background-color: #0093E9;
+    background-image: linear-gradient(160deg, #0093E9 0%, #80D0C7 100%);
+    position: relative;
+    border-radius: 5px;
+    box-shadow: 3px 3px 5px #0000001a;
+    transition: all 0.3s ease-in;
+    cursor: pointer
+}
+
+.cardCredit .debit-card:hover {
+    box-shadow: 5px 3px 5px #000000a2
+}
+
+.cardCredit .card-2 {
+    background-color: #21D4FD;
+    background-image: linear-gradient(116deg, #21D4FD 0%, #B721FF 100%)
+}
+
+.cardCredit .text-muted {
+    font-size: 0.8rem
+}
+
+.cardCredit .text-white {
+    font-size: 14px
+}
