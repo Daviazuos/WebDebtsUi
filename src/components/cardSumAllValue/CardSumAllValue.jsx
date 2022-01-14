@@ -1,5 +1,4 @@
 import React from "react";
-import { Card } from "react-bootstrap";
 import { axiosInstance } from "../../api";
 import { Endpoints } from "../../api/endpoints";
 import { monthByNumber } from "../../utils/dateFormater";

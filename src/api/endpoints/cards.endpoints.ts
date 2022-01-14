@@ -1,22 +1,22 @@
 import { AbstractEndpoints } from './abstract.endpoints';
 
 export class CardsEndpoints extends AbstractEndpoints {
-  baseURL = 'Cards';
+  baseURL = 'Card';
   version = '';
 
   add() {
-    return `${this.getURL()}/Card/Create`;
+    return `${this.getURL()}/Create`;
   }
 
   getById() {
-    return `${this.getURL()}/Card/GetCardById`;
+    return `${this.getURL()}/GetCardById`;
   }
 
   addValues() {
-    return `${this.getURL()}/Card/AddValues`;
+    return `${this.getURL()}/AddValues`;
   }
 
-  getCardValuesById() {
-    return `${this.getURL()}/Card/GetCardValuesById`;
+  filterCards(month: string, year: string) {
+    return `${this.getURL()}/FilterCards?Month=${month}&Year=${year}`;
   }
 }

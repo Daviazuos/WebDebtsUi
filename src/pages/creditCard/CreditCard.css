@@ -7,8 +7,9 @@
 }
 
 .cardCredit .debit-card {
-    max-width: 400px;
-    height: 180px;
+    margin: 10px;
+    max-width: 350px;
+    height: 195px;
     padding: 20px;
     background-color: #0093E9;
     background-image: linear-gradient(160deg, #0093E9 0%, #80D0C7 100%);
@@ -25,7 +26,7 @@
 
 .cardCredit .card-2 {
     background-color: #21D4FD;
-    background-image: linear-gradient(116deg, #21D4FD 0%, #B721FF 100%)
+    background-image: linear-gradient(116deg, #21D4FD 0%, #B721FF 100%);
 }
 
 .cardCredit .text-muted {
@@ -33,5 +34,14 @@
 }
 
 .cardCredit .text-white {
-    font-size: 14px
+    font-size: 30px
+}
+
+.cardCredit .m-0 {
+    color: white;
+}
+
+.cardCredit .creditBody {
+    font-size: 12px;    
+
 }
