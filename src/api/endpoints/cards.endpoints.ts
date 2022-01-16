@@ -16,7 +16,13 @@ export class CardsEndpoints extends AbstractEndpoints {
     return `${this.getURL()}/AddValues`;
   }
 
-  filterCards(month: string, year: string) {
-    return `${this.getURL()}/FilterCards?Month=${month}&Year=${year}`;
+  filterCards(id: string, month: string, year: string) {
+    if (id != null){
+      return `${this.getURL()}/FilterCards?Id=${id}&Month=${month}&Year=${year}`;
+    }
+    else {
+      return `${this.getURL()}/FilterCards?Month=${month}&Year=${year}`;
+    }
+    
   }
 }

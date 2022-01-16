@@ -6,7 +6,7 @@ import { decimalAdjust } from "../../utils/valuesFormater";
 import { Button, Card, Container } from "react-bootstrap";
 import ModalAddDebts from "../../components/modal/modalDebts";
 import ModalInstallments from "../../components/installments/Installments"
-import CardAnaliticValue from "../../components/cardAnaliticValue/CardAnaliticValue"
+import CustomModal from "../../components/customModal/CustomModal";
 
 
 
@@ -32,15 +32,17 @@ function SetModal(props) {
     );
 }
 
-function SetModalInstallments(props) {
+function SetModalCredDebts(props) {
     const [modalShow, setModalShow] = React.useState(false);
     return (
         <>
             <Button className='btn btn-blue' variant='dark' onClick={() => setModalShow(true)}>
                 <i className={props.simbol}></i> {props.modalName}
             </Button>
-            <ModalInstallments
-                value={props.value}
+            <CustomModal
+                id={props.value}
+                month={mm}
+                year={yyyy}
                 show={modalShow}
                 onHide={() => setModalShow(false)}
                 head={props.name}
@@ -55,7 +57,7 @@ export default class CardCredit extends React.Component {
     }
 
     componentDidMount() {
-        axiosInstance.get(Endpoints.card.filterCards(2, yyyy))
+        axiosInstance.get(Endpoints.card.filterCards(null, 2, yyyy))
             .then(res => {
                 const cards = res.data;
                 this.setState({ cards });
@@ -82,7 +84,7 @@ export default class CardCredit extends React.Component {
                                 <div class="input"></div>
                             </div>
                             {<SetModal modalName=""></SetModal>}{" "}
-                            {<SetModalInstallments value={item.id} name={item.name} modalName="" simbol="fas fa-align-justify"></SetModalInstallments>}{" "}
+                            {<SetModalCredDebts value={item.id} name={item.name} modalName="" simbol="fas fa-search"></SetModalCredDebts>}{" "}
                         </label>
                             <div class="mt-auto fw-bold d-flex align-items-center justify-content-between">
                                 <div className="creditBody">
@@ -98,11 +100,10 @@ export default class CardCredit extends React.Component {
         })
 
         return (<Container className="containerCardPage">
-            <div class="cardCredit">
-                <div class="card px-4">
+                <div class="cardCredit card px-4">
                     {lis}
                 </div>
-            </div>
+            
         </Container>)
     }
 };

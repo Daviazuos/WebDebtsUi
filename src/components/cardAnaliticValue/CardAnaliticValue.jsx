@@ -5,6 +5,7 @@ import { Endpoints } from "../../api/endpoints";
 import { decimalAdjust } from "../../utils/valuesFormater";
 import { dateAdjust, monthByNumber } from "../../utils/dateFormater";
 import { statusTransform } from "../../utils/enumFormatter";
+import ModalPaid from "../Modals/ModalPaid";
 
 function SetStatus(id, status) {
   axiosInstance.put(Endpoints.debt.put(id, status)).then(response => {
@@ -16,7 +17,23 @@ function SetStatus(id, status) {
       Status Trocado!
     </>
   )
+}
 
+function SetModalPaid(props) {
+  const [modalShow, setModalShow] = React.useState(false);
+  return (
+    <>
+      <Button className='btn btn-green' onClick={() => setModalShow(true)}>
+        <i className={props.simbol}></i> {props.modalName}
+      </Button>
+      <ModalPaid
+        value={props.value}
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+        head={props.name}
+      />
+    </>
+  );
 }
 
 const today = new Date();
@@ -51,8 +68,7 @@ export default class PersonList extends React.Component {
           <td>{dateAdjust(item.date)}</td>
           <td>{statusTransform(item.status)}</td>
           <td className="buttonPaid">
-            <Button className="btn btn-success" onClick={() => SetStatus(item.id, "Paid")}>Pago <i className="fas fa-check"></i>
-            </Button>
+            <SetModalPaid modalName="Pagar" value={item.id}></SetModalPaid>
             <Button className="btn btn-danger" onClick={() => SetStatus(item.id, "NotPaid")}>Pendente <i className="fas fa-times"></i>
             </Button>
           </td>
