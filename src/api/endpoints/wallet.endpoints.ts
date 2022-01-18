@@ -12,8 +12,8 @@ export class WalletsEndpoinst extends AbstractEndpoints {
     return `${this.getURL()}/GetWalletById?walletId=${id}`;
   }
 
-  getEnable() {
-    return `${this.getURL()}/GetEnableWallets`;
+  getEnable(status: string) {
+    return `${this.getURL()}/GetWallets?walletStatus=${status}`;
   }
 
   put(id: string) {

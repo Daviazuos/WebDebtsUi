@@ -3,9 +3,8 @@ import { Endpoints } from '../../api/endpoints';
 import { axiosInstance } from "../../api";
 import "./CreditCard.css"
 import { decimalAdjust } from "../../utils/valuesFormater";
-import { Button, Card, Container } from "react-bootstrap";
+import { Button, Container } from "react-bootstrap";
 import ModalAddDebts from "../../components/modal/modalDebts";
-import ModalInstallments from "../../components/installments/Installments"
 import CustomModal from "../../components/customModal/CustomModal";
 
 

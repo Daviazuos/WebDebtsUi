@@ -32,3 +32,7 @@
 .containerWallet {
     margin-left: auto;
 }
+
+.containerWallet .walletCards {
+    display: flex;
+}

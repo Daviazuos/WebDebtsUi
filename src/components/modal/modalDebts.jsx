@@ -1,7 +1,8 @@
 import React from "react";
-import { Modal, Card, Button } from "react-bootstrap";
+import { Modal, Card } from "react-bootstrap";
 
 import Form from "../form/form"
+import "./modalDebts.css"
 
 
 export default function ModalAddDebts(props) {
@@ -14,7 +15,7 @@ export default function ModalAddDebts(props) {
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >
-      <Card>
+      <Card className="modalAddDebts">
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
             {props.head}

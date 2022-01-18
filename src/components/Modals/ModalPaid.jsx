@@ -2,10 +2,7 @@ import React from "react";
 import { Form, Button, Modal } from "react-bootstrap";
 import { axiosInstance } from "../../api";
 import { Endpoints } from '../../api/endpoints';
-import { decimalAdjust } from "../../utils/valuesFormater";
-import { statusTransform } from "../../utils/enumFormatter";
 
-import { dateAdjust } from "../../utils/dateFormater";
 
 function SetStatus(id, status) {
     axiosInstance.put(Endpoints.debt.put(id, status)).then(response => {
@@ -21,13 +18,25 @@ function SetStatus(id, status) {
 
 function refreshPage() {
     window.location.reload();
-  }
-  
+}
+
 
 export default class ModalPaid extends React.Component {
     state = {
-        installments: []
+        installments: [],
+        wallet: [],
+        date: '',
+        walletId: ''
     }
+
+    dateChange = event => {
+        this.setState({ date: event.target.value });
+    }
+    walletIdChange = event => {
+        console.log(event.target.value)
+        this.setState({ walletId: event.target.value });
+    }
+
     componentDidMount() {
         axiosInstance.get(Endpoints.debt.filterInstallments(1, this.props.value, '', '', '', ''))
             .then(res => {
@@ -36,21 +45,30 @@ export default class ModalPaid extends React.Component {
             })
     }
 
+    componentDidMount() {
+        axiosInstance.get(Endpoints.wallet.getEnable('Enable'))
+            .then(res => {
+                const wallet = res.data;
+                this.setState({ wallet });
+            })
+    }
+
+    handleSubmit = event => {
+        event.preventDefault();
+        axiosInstance.put(Endpoints.debt.put(this.props.value,  "Paid", this.state.date, this.state.walletId)).then(response => {
+            const id = response.data.Body;
+            refreshPage()
+        })
+    }
+
     render() {
-        const lis = this.state.installments.items?.map(item => {
+        const lis = this.state.wallet.map(item => {
             return (
-                <tr key={item.id}>
-                    <td>{item.installmentNumber == 0 ? "" : item.installmentNumber}</td>
-                    <td>
-                        R$ {decimalAdjust(item.value)}
-                    </td>
-                    <td>{dateAdjust(item.date)}</td>
-                    <td>{statusTransform(item.status)}</td>
-                </tr>
+                <option value={item.id}>{item.name}</option>
             )
         })
-        console.log(this.props)
-        return (            
+        lis.unshift(<option>Escolha uma carteira</option>)
+        return (
             <Modal
                 {...this.props}
             >
@@ -67,13 +85,11 @@ export default class ModalPaid extends React.Component {
                         </Form.Group>
                         <Form.Group>
                             <Form.Label>Carteira</Form.Label>
-                            <Form.Control as="select" name='debtInstallmentType' onChange={this.typeChange}>
-                                <option value="0">Salário</option>
-                                <option value="1">Piscina</option>
-                                <option value="2">Bolsa</option>
+                            <Form.Control as="select" name='debtInstallmentType' onChange={this.walletIdChange}>
+                                {lis}
                             </Form.Control>
                         </Form.Group>
-                        <Button className="btn btn-success" onClick={() => SetStatus(this.props.value, "Paid")}>Pago <i className="fas fa-check"></i></Button>
+                        <Button className="btn btn-success" type="submit">Pago <i className="fas fa-check"></i></Button>
                     </Form>
                 </Modal.Body>
             </Modal>

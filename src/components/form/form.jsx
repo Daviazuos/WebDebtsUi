@@ -7,14 +7,14 @@ import { axiosInstance } from "../../api";
 
 function refreshPage() {
   window.location.reload();
-} 
+}
 
 export default class DebtList extends React.Component {
   state = {
     name: '',
     value: '',
     date: '',
-    numberOfInstallments: '',
+    numberOfInstallments: '0',
     debtInstallmentType: '',
   }
 
@@ -49,7 +49,7 @@ export default class DebtList extends React.Component {
       const id = response.data.Body;
       refreshPage()
     })
- }
+  }
 
   render() {
     return (
@@ -69,22 +69,20 @@ export default class DebtList extends React.Component {
             <Form.Label>Data</Form.Label>
             <Form.Control name='date' type="date" onChange={this.dateChange} placeholder="Entre com o data" />
           </Form.Group>
-
           <Form.Group>
-            <Form.Label>Quantidade de Parcelas</Form.Label>
-            <Form.Control name='numberOfInstallments' type="number" onChange={this.installmentsChange} placeholder="Entre com o quantidade de parcelas" />
-          </Form.Group>
-
-          <Form.Group>
-          <Form.Label>Tipo de débito</Form.Label>
+            <Form.Label>Tipo de débito</Form.Label>
             <Form.Control as="select" name='debtInstallmentType' onChange={this.typeChange}>
-              <option></option>
+              <option>Selecione o Tipo de debito</option>
               <option value="0">Parcelado</option>
               <option value="1">Fixo</option>
               <option value="2">Simples</option>
             </Form.Control>
-          </Form.Group> 
-
+          </Form.Group>
+          {this.state.debtInstallmentType === "0"?
+          <Form.Group>
+            <Form.Label>Quantidade de Parcelas</Form.Label>
+            <Form.Control name='numberOfInstallments' type="number" onChange={this.installmentsChange} placeholder="Entre com o quantidade de parcelas" />
+          </Form.Group>: ""}
           <Button variant="dark" type="submit"> Adicionar </Button>
         </Form>
       </>

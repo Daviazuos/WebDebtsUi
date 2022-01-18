@@ -8,7 +8,7 @@ import { statusTransform } from "../../utils/enumFormatter";
 import ModalPaid from "../Modals/ModalPaid";
 
 function SetStatus(id, status) {
-  axiosInstance.put(Endpoints.debt.put(id, status)).then(response => {
+  axiosInstance.put(Endpoints.debt.put(id, status, "", "")).then(response => {
     const id = response.data.Body;
     refreshPage()
   })

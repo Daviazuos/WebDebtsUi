@@ -21,7 +21,6 @@ function Delete(wallet) {
     walletStatus: 'disable'
   };
 
-  console.log(editWallet)
   axiosInstance.put(Endpoints.wallet.put(wallet.id), editWallet).then(response => {
     const id = response.data.Body;
     refreshPage()
@@ -61,7 +60,7 @@ export default class Wallet extends React.Component {
   }
 
   componentDidMount() {
-    axiosInstance.get(Endpoints.wallet.getEnable())
+    axiosInstance.get(Endpoints.wallet.getEnable('Enable'))
       .then(res => {
         const wallet = res.data;
         this.setState({ wallet });
@@ -72,6 +71,9 @@ export default class Wallet extends React.Component {
     const valueTotal = this.state.wallet.reduce(function (prev, cur) {
       return prev + cur.value;
     }, 0);
+    const saldoTotal = this.state.wallet.reduce(function (prev, cur) {
+      return prev + (cur.updatedValue === 0 ? cur.value : cur.updatedValue);
+    }, 0);
     const lis = this.state.wallet.map(item => {
       {
         return (
@@ -79,6 +81,9 @@ export default class Wallet extends React.Component {
             <td>{item.name}</td>
             <td>
               R$ {decimalAdjust(item.value)}
+            </td>
+            <td>
+              R$ {item.updatedValue === 0 ? decimalAdjust(item.value) : decimalAdjust(item.updatedValue)}
             </td>
             <td className='tdd'>
               {<SetModal value={item.id} name={item.name} modalName="Editar" simbol="fas fa-edit" className='btn btn-primary'></SetModal>}{" "}
@@ -92,20 +97,30 @@ export default class Wallet extends React.Component {
     })
     return (
       <Container className="containerWallet">
+        <div className="walletCards">
         <CustomCard
-          title="Total do mês"
-          subTitle={monthByNumber(mm-1)+"/"+yyyy}
+          title="Total"
+          subTitle={monthByNumber(mm - 1) + "/" + yyyy}
           children={decimalAdjust(valueTotal)}
           icon="fas fa-wallet red font-large-2"
         >
         </CustomCard>
-        
+        <CustomCard
+          title="Saldo"
+          subTitle={monthByNumber(mm - 1) + "/" + yyyy}
+          children={saldoTotal === 0 ? decimalAdjust(valueTotal) : decimalAdjust(saldoTotal)}
+          icon="fas fa-wallet red font-large-2"
+        >
+        </CustomCard>
+        </div>
+
         <Card className="cardAnalitic">
           <Table responsive striped bordered hover variant="white" className="table">
             <thead>
               <tr>
                 <th>Nome</th>
                 <th>Valor</th>
+                <th>Saldo</th>
                 <th>Ação</th>
               </tr>
             </thead>
