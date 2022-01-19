@@ -1,7 +1,7 @@
 .card {
     box-shadow: 1px 3px 1px #9E9E9E;
     margin: 10px;
-    background-image: linear-gradient(160deg, #a7d3ee 0%, #9beee4 100%);
+    background-image: linear-gradient(160deg, #bedef1 0%, #b3f1ea 100%);
 }
 
 #customCard {

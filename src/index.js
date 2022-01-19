@@ -16,14 +16,16 @@ import CreditCard from "./pages/creditCard/CreditCard";
 ReactDOM.render(
   <React.StrictMode>
     <Router>
-      <Navbar home="Web Debts" link1="Dívidas" link2="Cartões" link3="Finanças" link4="Carteira"></Navbar>
       <Switch>
-        <Route exact path="/" component={App} /> 
         <Route path="/sign-in" component={Login} />
-        <Route path="/Debts" component={Debts} />
-        <Route path="/Cards" component={CreditCard} />
-        <Route path="/Financial" component={Financial} />
-        <Route path="/Wallet" component={Wallet} />
+        <div>
+          <Navbar home="Web Debts" link1="Dívidas" link2="Cartões" link3="Finanças" link4="Carteira"></Navbar>
+          <Route exact path="/dash" component={App} />
+          <Route path="/Debts" component={Debts} />
+          <Route path="/Cards" component={CreditCard} />
+          <Route path="/Financial" component={Financial} />
+          <Route path="/Wallet" component={Wallet} />
+        </div>
       </Switch>
     </Router>
   </React.StrictMode>,

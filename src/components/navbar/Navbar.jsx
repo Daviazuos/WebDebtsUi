@@ -5,7 +5,7 @@ import { Navbar, Nav } from "react-bootstrap";
 const Header = (props) => {
   return (
     <Navbar bg="dark" variant="dark" expand="lg">
-      <Navbar.Brand href="/">{props.home}</Navbar.Brand>
+      <Navbar.Brand href="/dash">{props.home}</Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="mr-auto">
