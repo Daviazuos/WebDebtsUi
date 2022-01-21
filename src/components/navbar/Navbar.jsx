@@ -2,6 +2,10 @@ import "./Navbar.css";
 
 import { Navbar, Nav } from "react-bootstrap";
 
+export function logout() {
+  localStorage.removeItem("user");
+}
+
 const Header = (props) => {
   return (
     <Navbar bg="dark" variant="dark" expand="lg">
@@ -15,6 +19,12 @@ const Header = (props) => {
           <Nav.Link href="/wallet">{props.link4}</Nav.Link>
         </Nav>
       </Navbar.Collapse>
+      <Navbar.Collapse className="justify-content-end">
+      <Navbar.Text>
+        {props.name}
+      </Navbar.Text>
+      <Nav.Link className="logout" onClick={logout} href="/sign-in">{props.link5}</Nav.Link>
+    </Navbar.Collapse>
     </Navbar>
   );
 };
