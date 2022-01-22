@@ -44,11 +44,13 @@ export default class DebtList extends React.Component {
       numberOfInstallments: this.state.numberOfInstallments,
       debtInstallmentType: this.state.debtInstallmentType
     };
-
-    axiosInstance.post(Endpoints.debt.add(), addDebts).then(response => {
+    this.props.cardId === null ? axiosInstance.post(Endpoints.debt.add(), addDebts).then(response => {
       const id = response.data.Body;
       refreshPage()
-    })
+    }) : axiosInstance.post(Endpoints.card.addValues(this.props.cardId), addDebts).then(response => {
+      const id = response.data.Body;
+      refreshPage()
+    }) 
   }
 
   render() {

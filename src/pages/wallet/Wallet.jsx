@@ -71,6 +71,7 @@ export default class Wallet extends React.Component {
     const valueTotal = this.state.wallet.reduce(function (prev, cur) {
       return prev + cur.value;
     }, 0);
+
     const saldoTotal = this.state.wallet.reduce(function (prev, cur) {
       return prev + (cur.updatedValue === 0 ? cur.value : cur.updatedValue);
     }, 0);

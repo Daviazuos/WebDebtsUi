@@ -3,9 +3,13 @@
     flex-direction: row;
     justify-content: space-evenly;
     align-items: center;
+    max-width: 300px;
+}
+
+.td1, .td2, .td3 {
+    width: 150px;
 }
 
 .table {
-    margin: 10px;
-    max-width: 1070px;
+    max-width: 750px;
 }

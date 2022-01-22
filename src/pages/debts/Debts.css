@@ -1,10 +1,18 @@
+.containerDebtpage {
+    display: flex;
+    flex-flow: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+}
+
 .debts{
     display: flex;
     flex-flow: column;
 }
 
 .debts .cardTable{
-    margin:10px;
+    padding: 5px;
 }
 
 .debts .cardName{

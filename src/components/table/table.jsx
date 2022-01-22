@@ -32,7 +32,7 @@ function SetModalEdit(props) {
   return (
     <>
       <Button className={props.className} variant='dark' onClick={() => setModalShow(true)}>
-       <i className="fas fa-plus"></i> {props.modalName} 
+       <i className={props.simbol}></i> {props.modalName} 
       </Button>
 
       <ModalAddDebts
@@ -78,24 +78,22 @@ export default class DebtList extends React.Component {
       {
         return (
           <tr key={item.id}>
-            <td>{item.name}</td>
-            <td>
-              R$ {decimalAdjust(item.value)}
-            </td>
-            <td>{debtInstallmentTransform(item.debtInstallmentType)}</td>
+            <td className='td1'>{item.name}</td>
+            <td className='td2'>R$ {decimalAdjust(item.value)}</td>
+            <td className='td3'>{debtInstallmentTransform(item.debtInstallmentType)}</td>
             <td className='tdd'>
-              {<SetModalEdit value={item.id} name={item.name} modalName="Editar" simbol="fas fa-edit" className='btn btn-primary'></SetModalEdit>}{" "}
+              {<SetModalEdit value={item.id} name={item.name} modalName="" simbol="fas fa-edit" className='btn btn-primary'></SetModalEdit>}{" "}
               <Button className="btn btn-danger" onClick={() => Delete(item.id)}>
-                <i className="fa fa-trash" aria-hidden="true"></i> Apagar
+                <i className="fa fa-trash" aria-hidden="true"></i>
               </Button>
-              {<SetModalInstallments value={item.id} name={item.name} modalName="Parcelas" simbol="fas fa-align-justify"></SetModalInstallments>}{" "}
+              {<SetModalInstallments value={item.id} name={item.name} modalName="" simbol="fas fa-align-justify"></SetModalInstallments>}{" "}
             </td>
           </tr>
         )
       }
     })
     return (
-      <Table responsive striped bordered hover variant="white" className="table">
+      <Table responsive striped bordered hover variant="white" className="table" size="sm">
         <thead>
           <tr>
             <th>Nome</th>

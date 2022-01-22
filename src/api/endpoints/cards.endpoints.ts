@@ -12,8 +12,8 @@ export class CardsEndpoints extends AbstractEndpoints {
     return `${this.getURL()}/GetCardById`;
   }
 
-  addValues() {
-    return `${this.getURL()}/AddValues`;
+  addValues(cardId: string) {
+    return `${this.getURL()}/AddValues?CardId=${cardId}`;
   }
 
   filterCards(id: string, month: string, year: string) {
