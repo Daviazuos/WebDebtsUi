@@ -3,15 +3,14 @@
     flex-direction: row;
     justify-content: space-evenly;
     align-items: center;
-    max-width: 600px;
     max-height: 50px;
 }
 
-.td1, .td2, .td3 {
+.td1 {
     max-width: 150px;
     max-height: 50px;
 }
 
 .table {
-    max-width: 750px;
+    font-size: 15px;
 }

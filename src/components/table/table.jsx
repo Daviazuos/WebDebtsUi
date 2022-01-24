@@ -79,8 +79,8 @@ export default class DebtList extends React.Component {
         return (
           <tr key={item.id}>
             <td className='td1'>{item.name}</td>
-            <td className='td2'>R$ {decimalAdjust(item.value)}</td>
-            <td className='td3'>{debtInstallmentTransform(item.debtInstallmentType)}</td>
+            <td className='td1'>R$ {decimalAdjust(item.value)}</td>
+            <td className='td1'>{debtInstallmentTransform(item.debtInstallmentType)}</td>
             <td className='tdd'>
               {<SetModalEdit value={item.id} name={item.name} modalName="" simbol="fas fa-edit" className='btn btn-primary'></SetModalEdit>}{" "}
               <Button className="btn btn-danger" onClick={() => Delete(item.id)}>
