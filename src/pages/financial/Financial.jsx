@@ -4,8 +4,8 @@ import "./Financial.css"
 
 export default () => {
   return (
-    <div className="financial">
-      <Container>
+    <div>
+      <Container className="financial">
         <CardAnaliticValue></CardAnaliticValue>
       </Container>
     </div>);

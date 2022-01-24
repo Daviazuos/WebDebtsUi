@@ -93,7 +93,7 @@ export default class DebtList extends React.Component {
       }
     })
     return (
-      <Table responsive striped bordered hover variant="white" className="table" size="sm">
+      <Table responsive striped bordered hover variant="white" className="table">
         <thead>
           <tr>
             <th>Nome</th>

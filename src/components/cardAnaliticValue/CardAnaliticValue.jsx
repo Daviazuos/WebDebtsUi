@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Card, Table, Button } from "react-bootstrap";
 import { axiosInstance } from "../../api";
 import { Endpoints } from "../../api/endpoints";
@@ -6,6 +6,8 @@ import { decimalAdjust } from "../../utils/valuesFormater";
 import { dateAdjust, monthByNumber } from "../../utils/dateFormater";
 import { statusTransform } from "../../utils/enumFormatter";
 import ModalPaid from "../Modals/ModalPaid";
+import "./CardAnaliticValue.css"
+
 
 function SetStatus(id, status) {
   axiosInstance.put(Endpoints.debt.put(id, status, "", "")).then(response => {
@@ -63,16 +65,16 @@ export default class PersonList extends React.Component {
     const lis = this.state.installments.items?.map(item => {
       return (
         <tr>
-          <td>{item.debtName}</td>
-          <td>R$ {decimalAdjust(item.value)}</td>
-          <td>{dateAdjust(item.date)}</td>
-          <td>{statusTransform(item.status)}</td>
+          <td className="td1">{item.debtName}</td>
+          <td className="td2">R$ {decimalAdjust(item.value)}</td>
+          <td className="td3">{dateAdjust(item.date)}</td>
+          <td className="td4">{statusTransform(item.status)}</td>
           <td className="buttonPaid">
-            <SetModalPaid modalName="Pagar" value={item.id}></SetModalPaid>
-            <Button className="btn btn-danger" onClick={() => SetStatus(item.id, "NotPaid")}>Pendente <i className="fas fa-times"></i>
+            <SetModalPaid modalName="" simbol="fas fa-check" value={item.id}></SetModalPaid>
+            <Button className="btn btn-danger" onClick={() => SetStatus(item.id, "NotPaid")}><i className="fas fa-times"></i>
             </Button>
           </td>
-          <td>{dateAdjust(item.paymentDate)}</td>
+          <td className="td5">{dateAdjust(item.paymentDate)}</td>
         </tr>
       )
     })
@@ -81,7 +83,7 @@ export default class PersonList extends React.Component {
       <>
         <Card className='cardTable'>
             <span className="month">{monthByNumber(mm)}/{yyyy}</span>
-            <Table responsive striped bordered hover variant="white" className="table">
+            <Table responsive striped bordered hover variant="white" className="tableFinancial">
               <thead>
                 <tr>
                   <th>Nome</th>

@@ -6,13 +6,9 @@
     align-content: center;
 }
 
-.debts{
-    display: flex;
-    flex-flow: column;
-}
-
 .debts .cardTable{
-    padding: 5px;
+    padding: 10px;
+    min-width: 700px;
 }
 
 .debts .cardName{
@@ -21,5 +17,5 @@
 }
 
 .debts .addButton{
-    margin-left: 10px;
+    margin: 10px;
 }
