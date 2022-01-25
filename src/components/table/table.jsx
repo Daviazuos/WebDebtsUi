@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Button, Table } from "react-bootstrap";
 import { Endpoints } from '../../api/endpoints';
 import { axiosInstance } from "../../api";
@@ -9,6 +9,7 @@ import ModalAddDebts from "../../components/modal/modalDebts";
 
 import { decimalAdjust } from "../../utils/valuesFormater";
 import { debtInstallmentTransform } from "../../utils/enumFormatter";
+import { CustomPagination } from "../customPagination/customPagination";
 
 function SetModalInstallments(props) {
   const [modalShow, setModalShow] = React.useState(false);
@@ -32,7 +33,7 @@ function SetModalEdit(props) {
   return (
     <>
       <Button className={props.className} variant='dark' onClick={() => setModalShow(true)}>
-       <i className={props.simbol}></i> {props.modalName} 
+        <i className={props.simbol}></i> {props.modalName}
       </Button>
 
       <ModalAddDebts
@@ -59,40 +60,46 @@ function Delete(id) {
   )
 }
 
+export default function DebtList() {
+  const [debts, setDebts] = React.useState([]);
+  const [pageNumber, setPageNumber] = React.useState(1);
 
-export default class DebtList extends React.Component {
-  state = {
-    debts: []
+  const pageChange = event => {
+    console.log(event.target.text)
+    setPageNumber(event.target.text);
   }
 
-  componentDidMount() {
-    axiosInstance.get(Endpoints.debt.filter(1))
+  useEffect(() => {
+    let mounted = true;
+    console.log(pageNumber)
+    axiosInstance.get(Endpoints.debt.filter(pageNumber))
       .then(res => {
-        const debts = res.data;
-        this.setState({ debts });
+        setDebts(res.data)
       })
-  }
+    return () => mounted = false;
+  }, [pageNumber])
 
-  render() {
-    const lis = this.state.debts.items?.map(item => {
-      {
-        return (
-          <tr key={item.id}>
-            <td className='td1'>{item.name}</td>
-            <td className='td1'>R$ {decimalAdjust(item.value)}</td>
-            <td className='td1'>{debtInstallmentTransform(item.debtInstallmentType)}</td>
-            <td className='tdd'>
-              {<SetModalEdit value={item.id} name={item.name} modalName="" simbol="fas fa-edit" className='btn btn-primary'></SetModalEdit>}{" "}
-              <Button className="btn btn-danger" onClick={() => Delete(item.id)}>
-                <i className="fa fa-trash" aria-hidden="true"></i>
-              </Button>
-              {<SetModalInstallments value={item.id} name={item.name} modalName="" simbol="fas fa-align-justify"></SetModalInstallments>}{" "}
-            </td>
-          </tr>
-        )
-      }
-    })
-    return (
+  const lis = debts.items?.map(item => {
+    {
+      return (
+        <tr key={item.id}>
+          <td className='td1'>{item.name}</td>
+          <td className='td1'>R$ {decimalAdjust(item.value)}</td>
+          <td className='td1'>{debtInstallmentTransform(item.debtInstallmentType)}</td>
+          <td className='tdd'>
+            {<SetModalEdit value={item.id} name={item.name} modalName="" simbol="fas fa-edit" className='btn btn-primary'></SetModalEdit>}{" "}
+            <Button className="btn btn-danger" onClick={() => Delete(item.id)}>
+              <i className="fa fa-trash" aria-hidden="true"></i>
+            </Button>
+            {<SetModalInstallments value={item.id} name={item.name} modalName="" simbol="fas fa-align-justify"></SetModalInstallments>}{" "}
+          </td>
+        </tr>
+      )
+    }
+  })
+
+  return (
+    <>
       <Table responsive striped bordered hover variant="white" className="table">
         <thead>
           <tr>
@@ -106,6 +113,7 @@ export default class DebtList extends React.Component {
           {lis}
         </tbody>
       </Table>
-    )
-  }
+      <CustomPagination currentPage={debts.currentPage} totalItems={debts.totalItems} totalPages={debts.totalPages} onChange={pageChange}></CustomPagination>
+    </>
+  )
 }

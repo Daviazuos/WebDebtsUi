@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./pages/dashboard/Dashboard";
@@ -13,7 +13,7 @@ import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
 import CreditCard from "./pages/creditCard/CreditCard";
 import authService from "./services/auth.service";
-
+import { monthByNumber } from "./utils/dateFormater";
 
 export function logout() {
   localStorage.removeItem("user");
@@ -24,7 +24,7 @@ export function isLogged() {
   if (user) {
     return (
       <div>
-        <Navbar name={user['name']} home="Web Debts" link1="Dívidas" link2="Cartões" link3="Finanças" link4="Carteira" link5="Sair"></Navbar>
+        <Navbar name={user['name']} home="Web Debts" link1="Dívidas" link2="Cartões" link3="Finanças" link4="Carteira" link5="Sair" month={monthByNumber(1)}></Navbar>
         <Route path="/dash" component={App} />
         <Route path="/Debts" component={Debts} />
         <Route path="/Cards" component={CreditCard} />
