@@ -30,7 +30,7 @@ export default class SumAllValue extends React.Component {
       <CustomCard
         title="Fixas"
         children={decimalAdjust(valueTotal)}
-        icon="far fa-calendar red font-large-2"
+        icon="far fa-calendar red fa-4x"
       >
       </CustomCard>
     )

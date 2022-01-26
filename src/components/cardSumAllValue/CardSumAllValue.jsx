@@ -23,9 +23,6 @@ export default class SumAllValue extends React.Component {
   }
 
   render() {
-
-    console.log(this.state.installments)
-
     const valueTotal = this.state.installments.items?.reduce(function (prev, cur) {
       return prev + cur.value;
     }, 0);
@@ -36,7 +33,7 @@ export default class SumAllValue extends React.Component {
           title="Total do mês"
           subTitle={monthByNumber(mm)+"/"+yyyy}
           children={decimalAdjust(valueTotal)}
-          icon="fas fa-hand-holding-usd red font-large-2"
+          icon="fas fa-hand-holding-usd red fa-4x"
           >
         </CustomCard>
       </>

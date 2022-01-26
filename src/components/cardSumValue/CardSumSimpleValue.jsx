@@ -32,7 +32,7 @@ export default class SumAllValue extends React.Component {
       <CustomCard
         title="Simples"
         children={decimalAdjust(valueTotal)}
-        icon="fas fa-coins red font-large-2"
+        icon="fas fa-coins red fa-4x"
       >
       </CustomCard>
     )

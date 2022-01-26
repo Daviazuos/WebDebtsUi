@@ -26,8 +26,6 @@ export default function ModalInstallments(props) {
         return () => setMounted(false);
     }, [pageNumber, mounted])
 
-    console.log(props.show)
-
     const lis = installments.items?.map(item => {
         return (
             <tr key={item.id}>

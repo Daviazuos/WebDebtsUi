@@ -103,14 +103,14 @@ export default class Wallet extends React.Component {
           title="Total"
           subTitle={monthByNumber(mm - 1) + "/" + yyyy}
           children={decimalAdjust(valueTotal)}
-          icon="fas fa-wallet red font-large-2"
+          icon="fas fa-wallet red fa-4x"
         >
         </CustomCard>
         <CustomCard
           title="Saldo"
           subTitle={monthByNumber(mm - 1) + "/" + yyyy}
           children={saldoTotal === 0 ? decimalAdjust(valueTotal) : decimalAdjust(saldoTotal)}
-          icon="fas fa-wallet red font-large-2"
+          icon="fas fa-wallet red fa-4x"
         >
         </CustomCard>
         </div>

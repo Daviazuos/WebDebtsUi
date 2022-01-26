@@ -13,10 +13,10 @@ export default () => {
     <>
       <div className='dashPage'>
         <Container className='containerUpPage'>
-            <CardSumAllValue></CardSumAllValue>
-            <CardSumFixedValue></CardSumFixedValue>
-            <CardSumSimpleValue></CardSumSimpleValue>
-            <CardSumInstallmentValue></CardSumInstallmentValue>   
+          <CardSumAllValue></CardSumAllValue>
+          <CardSumFixedValue></CardSumFixedValue>
+          <CardSumSimpleValue></CardSumSimpleValue>
+          <CardSumInstallmentValue></CardSumInstallmentValue>
         </Container>
         <Container>
           <div className='graphicPage'>

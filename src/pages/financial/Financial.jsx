@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 
 import { Card, Button, Table, Container, Pagination } from "react-bootstrap";
 import "./Financial.css"
@@ -11,6 +11,7 @@ import { statusTransform } from "../../utils/enumFormatter";
 import ModalPaid from "../../components/Modals/ModalPaid";
 import { getMonthYear, refreshPage } from "../../utils/utils";
 import { CustomPagination } from "../../components/customPagination/customPagination";
+import Context from "../../context/Context";
 
 
 const { month, year } = getMonthYear()
@@ -44,6 +45,7 @@ export default function Financial() {
   const [financial, setFinancial] = React.useState([]);
   const [cards, setCards] = React.useState([]);
   const [pageNumber, setPageNumber] = React.useState(1);
+  const [month, setMonth] = useContext(Context);
 
   const pageChange = event => {
     setPageNumber(event.target.text);
@@ -56,7 +58,7 @@ export default function Financial() {
         setFinancial(res.data)
       })
     return () => mounted = false;
-  }, [pageNumber])
+  }, [pageNumber, month])
 
   useEffect(() => {
     let mounted = true;
@@ -65,7 +67,7 @@ export default function Financial() {
         setCards(res.data)
       })
     return () => mounted = false;
-  }, [])
+  }, [month])
 
   const debtTableData = financial.items?.map(item => {
     return (
