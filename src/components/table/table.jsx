@@ -71,7 +71,6 @@ export default function DebtList() {
 
   useEffect(() => {
     let mounted = true;
-    console.log(pageNumber)
     axiosInstance.get(Endpoints.debt.filter(pageNumber))
       .then(res => {
         setDebts(res.data)
@@ -91,7 +90,7 @@ export default function DebtList() {
             <Button className="btn btn-danger" onClick={() => Delete(item.id)}>
               <i className="fa fa-trash" aria-hidden="true"></i>
             </Button>
-            {<SetModalInstallments value={item.id} name={item.name} modalName="" simbol="fas fa-align-justify"></SetModalInstallments>}{" "}
+            {<SetModalInstallments value={item.id} name={item.name} modalName="" simbol="fas fa-search"></SetModalInstallments>}{" "}
           </td>
         </tr>
       )

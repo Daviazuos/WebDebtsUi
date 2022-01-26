@@ -21,8 +21,7 @@ export default function ModalInstallments(props) {
 
     useEffect(() => {
         let mounted = true;
-        console.log(pageNumber)
-        axiosInstance.get(Endpoints.debt.filterInstallments(pageNumber, props.value, '', '', '', ''))
+        axiosInstance.get(Endpoints.debt.filterInstallments(pageNumber, 10, props.value, '', '', '', ''))
             .then(res => {
                 setInstallments(res.data)
             })

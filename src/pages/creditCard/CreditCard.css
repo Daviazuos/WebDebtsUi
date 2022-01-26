@@ -3,15 +3,12 @@
     display: flex;
     flex-flow: column;
     box-shadow: 3px 3px 5px #1b1b1ba2;
-    margin: auto;
 }
 
 .cardCredit .debit-card {
-    margin: 5px;
     min-width: 320px;
-    height: 195px;
-    padding: 20px;
-    position: relative;
+    min-height: 195px;
+    padding: 15px;
     border-radius: 5px;
     box-shadow: 3px 3px 5px #0000001a;
     transition: all 0.3s ease-in;
@@ -21,7 +18,7 @@
 .px-4 {
     flex-flow: row;
     flex-wrap: wrap;
-    margin: 10px;
+    max-width: 1040px;
 }
 
 .cardCredit .debit-card:hover {
@@ -30,6 +27,10 @@
 
 .cardCredit .card-2 {
     border-color: black;
+    margin-top: 10px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 5px;
 }
 
 .cardCredit .text-muted {
@@ -47,4 +48,8 @@
 .cardCredit .creditBody {
     font-size: 12px;    
 
+}
+
+.modalButton {
+    margin: 10px;
 }

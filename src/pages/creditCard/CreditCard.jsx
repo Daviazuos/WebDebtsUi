@@ -7,12 +7,11 @@ import { Button, Container } from "react-bootstrap";
 import ModalAddDebts from "../../components/modal/modalDebts";
 import CustomModal from "../../components/customModal/CustomModal";
 import CreditCardModal from "./CreditCardModal";
+import { getMonthYear } from "../../utils/utils";
 
 
 
-const today = new Date();
-const mm = String(today.getMonth() + 1).padStart(2, '0')
-const yyyy = today.getFullYear()
+const { month, year } = getMonthYear()
 
 function SetModalAddCard(props) {
     const [modalShow, setModalShow] = React.useState(false);
@@ -58,8 +57,8 @@ function SetModalCredDebts(props) {
             </Button>
             <CustomModal
                 id={props.value}
-                month={mm}
-                year={yyyy}
+                month={month}
+                year={year}
                 show={modalShow}
                 onHide={() => setModalShow(false)}
                 head={props.name}
@@ -74,7 +73,7 @@ export default class CardCredit extends React.Component {
     }
 
     componentDidMount() {
-        axiosInstance.get(Endpoints.card.filterCards(null, 2, yyyy))
+        axiosInstance.get(Endpoints.card.filterCards(null, month, year))
             .then(res => {
                 const cards = res.data;
                 this.setState({ cards });
@@ -82,13 +81,13 @@ export default class CardCredit extends React.Component {
     }
 
     render() {
-        console.log(this.state.cards)
         const lis = this.state.cards.map(item => {
-            let valueTotal = 0
+            let cardValue = 0.00
+
             for (const debt in item?.debts) {
-                valueTotal = valueTotal + item?.debts[debt].installments.reduce(function (prev, cur) {
-                    return prev + cur.value;
-                }, 0);
+                if (item?.debts[debt]?.installments[0]?.value != undefined) {
+                    cardValue = cardValue + item?.debts[debt]?.installments[0]?.value
+                }
             }
 
             {
@@ -99,16 +98,15 @@ export default class CardCredit extends React.Component {
                                 <div>
                                     <p class="text-black fw-bold">{item.name}</p>
                                 </div>
-                                <div class="input"></div>
                             </div>
                             {<SetModalAddDebts modalName="" cardId={item.id}></SetModalAddDebts>}{" "}
                             {<SetModalCredDebts value={item.id} name={item.name} modalName="" simbol="fas fa-search"></SetModalCredDebts>}{" "}
                         </label>
                             <div class="mt-auto fw-bold d-flex align-items-center justify-content-between">
                                 <div className="creditBody">
-                                    <p class="m-0">Valor Total R$ {decimalAdjust(valueTotal)}</p>
-                                    <p class="m-0">Fechamento {item.closureDate}/{mm}/{yyyy}</p>
-                                    <p class="m-0">Vencimento {item.dueDate}/{mm}/{yyyy}</p>
+                                    <p class="m-0">Valor Total R$ {decimalAdjust(cardValue)}</p>
+                                    <p class="m-0">Fechamento {item.closureDate}/{month}/{year}</p>
+                                    <p class="m-0">Vencimento {item.dueDate}/{month}/{year}</p>
                                 </div>
                             </div>
                         </div>
@@ -117,14 +115,13 @@ export default class CardCredit extends React.Component {
             }
         })
 
-        return (<Container className="containerCardPage">
-            <div class="cardCredit card px-4">
-                {lis}
-            </div>
-            {<SetModalAddCard name={'Adicionar novo cartão'} modalName="Adicionar cartão" simbol="fas fa-plus" className="modalButton"></SetModalAddCard>}{" "}
-
-
-        </Container>)
+        return (
+            <Container className="containerCardPage">
+                <div class="cardCredit card px-4">
+                    {lis}
+                </div>
+                {<SetModalAddCard name={'Adicionar novo cartão'} modalName="Adicionar cartão" simbol="fas fa-plus" className="modalButton"></SetModalAddCard>}{" "}
+            </Container>)
     }
 };
 

@@ -15,7 +15,7 @@ export default class SumAllValue extends React.Component {
   }
 
   componentDidMount() {
-    axiosInstance.get(Endpoints.debt.filterInstallments(1, '', mm, yyyy, '', 'NotPaid'))
+    axiosInstance.get(Endpoints.debt.filterInstallments(1, 9999, '', mm, yyyy, '', 'NotPaid'))
       .then(res => {
         const installments = res.data;
         this.setState({ installments });
@@ -23,6 +23,9 @@ export default class SumAllValue extends React.Component {
   }
 
   render() {
+
+    console.log(this.state.installments)
+
     const valueTotal = this.state.installments.items?.reduce(function (prev, cur) {
       return prev + cur.value;
     }, 0);

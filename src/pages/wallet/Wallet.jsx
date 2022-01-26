@@ -115,7 +115,7 @@ export default class Wallet extends React.Component {
         </CustomCard>
         </div>
 
-        <Card className="cardAnalitic">
+        <Card className="cardWallet">
           <Table responsive striped bordered hover variant="white" className="table">
             <thead>
               <tr>

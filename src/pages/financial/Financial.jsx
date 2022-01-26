@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 
 import { Card, Button, Table, Container, Pagination } from "react-bootstrap";
 import "./Financial.css"
@@ -42,24 +42,32 @@ function SetModalPaid(props) {
 
 export default function Financial() {
   const [financial, setFinancial] = React.useState([]);
+  const [cards, setCards] = React.useState([]);
   const [pageNumber, setPageNumber] = React.useState(1);
 
   const pageChange = event => {
-    console.log(event.target.text)
     setPageNumber(event.target.text);
   }
 
   useEffect(() => {
     let mounted = true;
-    console.log(pageNumber)
-    axiosInstance.get(Endpoints.debt.filterInstallments(pageNumber, '', month, year, '', ''))
+    axiosInstance.get(Endpoints.debt.filterInstallments(pageNumber, 5, '', month, year, '', ''))
       .then(res => {
         setFinancial(res.data)
       })
     return () => mounted = false;
   }, [pageNumber])
 
-  const tableData = financial.items?.map(item => {
+  useEffect(() => {
+    let mounted = true;
+    axiosInstance.get(Endpoints.card.filterCards('', month, year))
+      .then(res => {
+        setCards(res.data)
+      })
+    return () => mounted = false;
+  }, [])
+
+  const debtTableData = financial.items?.map(item => {
     return (
       <tr>
         <td className="td1">{item.debtName}</td>
@@ -71,6 +79,39 @@ export default function Financial() {
           <Button className="btn btn-danger" onClick={() => SetStatus(item.id, "NotPaid")}><i className="fas fa-times"></i></Button>
         </td>
         <td className="td1">{dateAdjust(item.paymentDate)}</td>
+      </tr>
+    )
+  })
+  const cardTableData = cards.map(item => {
+
+    let cardValue = 0.00
+
+
+    for (const debt in item?.debts) {
+      if (item?.debts[debt]?.installments[0]?.value != undefined) {
+        cardValue = cardValue + item?.debts[debt]?.installments[0]?.value
+      }
+    }
+
+    if (cardValue === 0) {
+      return ""
+    }
+
+    const cardStatus = item.debts[0]?.installments[0]?.status
+
+    const paymentDate = item.debts[0]?.installments[0]?.paymentDate
+
+    return (
+      <tr>
+        <td className="td1">{item.name}</td>
+        <td className="td1">R$ {decimalAdjust(cardValue)}</td>
+        <td className="td1">{item.dueDate}/{month}/{year}</td>
+        <td className="td1">{statusTransform(cardStatus)}</td>
+        <td className="tdd">
+          <SetModalPaid modalName="" simbol="fas fa-check" value={item.id}></SetModalPaid>
+          <Button className="btn btn-danger" onClick={() => SetStatus(item.id, "NotPaid")}><i className="fas fa-times"></i></Button>
+        </td>
+        <td className="td1">{dateAdjust(paymentDate)}</td>
       </tr>
     )
   })
@@ -90,10 +131,27 @@ export default function Financial() {
             </tr>
           </thead>
           <tbody>
-            {tableData}
+            {debtTableData}
           </tbody>
         </Table>
         <CustomPagination currentPage={financial.currentPage} totalItems={financial.totalItems} totalPages={financial.totalPages} onChange={pageChange}></CustomPagination>
+      </Card>
+      <Card>
+        <Table responsive striped bordered hover variant="white" className="tableFinancial">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Valor</th>
+              <th>Vencimento</th>
+              <th>Status</th>
+              <th>Ação</th>
+              <th>Pagamento</th>
+            </tr>
+          </thead>
+          <tbody>
+            {cardTableData}
+          </tbody>
+        </Table>
       </Card>
     </Container>
   )
