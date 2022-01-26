@@ -5,7 +5,6 @@ import { Endpoints } from '../../api/endpoints';
 import { decimalAdjust } from "../../utils/valuesFormater";
 import { statusTransform } from "../../utils/enumFormatter";
 
-
 import "./installments.css"
 import { dateAdjust } from "../../utils/dateFormater";
 import { CustomPagination } from "../customPagination/customPagination";
@@ -13,20 +12,21 @@ import { CustomPagination } from "../customPagination/customPagination";
 export default function ModalInstallments(props) {
     const [installments, setInstallments] = React.useState([]);
     const [pageNumber, setPageNumber] = React.useState(1);
+    const [mounted, setMounted] = React.useState(false) 
 
     const pageChange = event => {
-        console.log(event.target.text)
         setPageNumber(event.target.text);
     }
 
     useEffect(() => {
-        let mounted = true;
-        axiosInstance.get(Endpoints.debt.filterInstallments(pageNumber, 10, props.value, '', '', '', ''))
+        axiosInstance.get(Endpoints.debt.filterInstallments(pageNumber, 10, props.value, '', '', '', '', ''))
             .then(res => {
                 setInstallments(res.data)
             })
-        return () => mounted = false;
-    }, [pageNumber])
+        return () => setMounted(false);
+    }, [pageNumber, mounted])
+
+    console.log(props.show)
 
     const lis = installments.items?.map(item => {
         return (

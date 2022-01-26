@@ -25,4 +25,8 @@ export class CardsEndpoints extends AbstractEndpoints {
     }
     
   }
+
+  deleteById(cardId: string) {
+    return `${this.getURL()}/DeleteCard?CardId=${cardId}`;
+  }
 }

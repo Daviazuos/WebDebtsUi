@@ -9,9 +9,23 @@ import CustomModal from "../../components/customModal/CustomModal";
 import CreditCardModal from "./CreditCardModal";
 import { getMonthYear } from "../../utils/utils";
 
-
-
 const { month, year } = getMonthYear()
+
+
+function refreshPage() {
+    window.location.reload();
+  }
+  
+  function Delete(id) {
+    axiosInstance.delete(Endpoints.card.deleteById(id)).then(response => {
+      const id = response.data.Body;
+      refreshPage()
+    })
+    return (
+      <>
+      </>
+    )
+  }
 
 function SetModalAddCard(props) {
     const [modalShow, setModalShow] = React.useState(false);
@@ -101,6 +115,9 @@ export default class CardCredit extends React.Component {
                             </div>
                             {<SetModalAddDebts modalName="" cardId={item.id}></SetModalAddDebts>}{" "}
                             {<SetModalCredDebts value={item.id} name={item.name} modalName="" simbol="fas fa-search"></SetModalCredDebts>}{" "}
+                            <Button className="btn btn-danger" onClick={() => Delete(item.id)}>
+                                <i className="fa fa-trash" aria-hidden="true"></i>
+                            </Button>
                         </label>
                             <div class="mt-auto fw-bold d-flex align-items-center justify-content-between">
                                 <div className="creditBody">

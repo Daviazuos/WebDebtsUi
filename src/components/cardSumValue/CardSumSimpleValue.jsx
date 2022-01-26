@@ -15,7 +15,7 @@ export default class SumAllValue extends React.Component {
     const today = new Date();
     const mm = String(today.getMonth() + 1).padStart(2, '0')
     const yyyy = today.getFullYear()
-    axiosInstance.get(Endpoints.debt.filterInstallments(1, 9999, '', mm, yyyy, 'Simple', 'NotPaid'))
+    axiosInstance.get(Endpoints.debt.filterInstallments(1, 9999, '', mm, yyyy, 'Simple', 'NotPaid', ''))
       .then(res => {
         const installments = res.data;
         this.setState({ installments });

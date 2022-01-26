@@ -13,7 +13,7 @@ export default class MaxDebts extends React.Component {
         const today = new Date();
         const mm = String(today.getMonth() + 1).padStart(2, '0')
         const yyyy = today.getFullYear()
-        axiosInstance.get(Endpoints.debt.filterInstallments(1, '', mm, yyyy, 'Fixed', ''))
+        axiosInstance.get(Endpoints.debt.filterInstallments(1, '', mm, yyyy, 'Fixed', '', ''))
             .then(res => {
                 const installments = res.data;
                 this.setState({ installments });
