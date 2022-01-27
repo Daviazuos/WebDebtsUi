@@ -6,7 +6,7 @@ import "./Financial.css"
 import { axiosInstance } from "../../api";
 import { Endpoints } from "../../api/endpoints";
 import { decimalAdjust } from "../../utils/valuesFormater";
-import { dateAdjust, monthByNumber } from "../../utils/dateFormater";
+import { dateAdjust } from "../../utils/dateFormater";
 import { statusTransform } from "../../utils/enumFormatter";
 import ModalPaid from "../../components/Modals/ModalPaid";
 import { getMonthYear, refreshPage } from "../../utils/utils";
