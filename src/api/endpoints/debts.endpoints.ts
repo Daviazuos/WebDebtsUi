@@ -12,8 +12,8 @@ export class DebtsEndpoints extends AbstractEndpoints {
     return `${this.getURL()}/GetDebtById`;
   }
 
-  filter(pageNumber: string) {
-    return `${this.getURL()}/FilterDebt?PageNumber=${pageNumber}`;
+  filter(pageNumber: string, pageSize: string, debtType: string,) {
+    return `${this.getURL()}/FilterDebt?PageNumber=${pageNumber}&PageSize=${pageSize}&DebtType=${debtType}`;
   }
 
   filterInstallments(pageNumber: string, pageSize: string, id: string, month: string, year: string, type: string, statusApp: string, debtType: string) {

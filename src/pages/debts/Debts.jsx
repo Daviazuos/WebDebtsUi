@@ -5,7 +5,7 @@ import { Endpoints } from '../../api/endpoints';
 import { axiosInstance } from "../../api";
 
 import { decimalAdjust } from "../../utils/valuesFormater";
-import { debtInstallmentTransform } from "../../utils/enumFormatter";
+import { debtInstallmentTransform, debtTypeTransform } from "../../utils/enumFormatter";
 
 import "./Debts.css";
 import { CustomPagination } from "../../components/customPagination/customPagination";
@@ -89,7 +89,7 @@ export default function Debts() {
 
   useEffect(() => {
     let mounted = true;
-    axiosInstance.get(Endpoints.debt.filter(pageNumber))
+    axiosInstance.get(Endpoints.debt.filter(pageNumber, 10, ''))
       .then(res => {
         setDebts(res.data)
       })
@@ -103,6 +103,7 @@ export default function Debts() {
           <td className='td1'>{item.name}</td>
           <td className='td1'>R$ {decimalAdjust(item.value)}</td>
           <td className='td1'>{debtInstallmentTransform(item.debtInstallmentType)}</td>
+          <td className='td1'>{debtTypeTransform(item.debtType)}</td>
           <td className='tdd'>
             {<SetModalEdit value={item.id} name={item.name} modalName="" simbol="fas fa-edit" className='btn btn-primary'></SetModalEdit>}{" "}
             <Button className="btn btn-danger" onClick={() => Delete(item.id)}>
@@ -125,6 +126,7 @@ export default function Debts() {
                 <th>Nome</th>
                 <th>Valor</th>
                 <th>Tipo</th>
+                <th>Origem</th>
                 <th>Ação</th>
               </tr>
             </thead>

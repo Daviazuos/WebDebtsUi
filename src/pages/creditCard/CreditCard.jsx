@@ -21,10 +21,6 @@ function refreshPage() {
       const id = response.data.Body;
       refreshPage()
     })
-    return (
-      <>
-      </>
-    )
   }
 
 function SetModalAddCard(props) {
@@ -55,7 +51,7 @@ function SetModalAddDebts(props) {
             <ModalAddDebts
                 show={modalShow}
                 onHide={() => setModalShow(false)}
-                head="Adicionar débitos"
+                head={props.head}
                 cardId={props.cardId}
             />
         </>
@@ -113,7 +109,7 @@ export default class CardCredit extends React.Component {
                                     <p class="text-black fw-bold">{item.name}</p>
                                 </div>
                             </div>
-                            {<SetModalAddDebts modalName="" cardId={item.id}></SetModalAddDebts>}{" "}
+                            {<SetModalAddDebts modalName="" head={item.name} cardId={item.id}></SetModalAddDebts>}{" "}
                             {<SetModalCredDebts value={item.id} name={item.name} modalName="" simbol="fas fa-search"></SetModalCredDebts>}{" "}
                             <Button className="btn btn-danger" onClick={() => Delete(item.id)}>
                                 <i className="fa fa-trash" aria-hidden="true"></i>
