@@ -36,6 +36,8 @@ function SetModalPaid(props) {
         show={modalShow}
         onHide={() => setModalShow(false)}
         head={props.name}
+        month={props.month}
+        year={props.year}
       />
     </>
   );
@@ -77,7 +79,7 @@ export default function Financial() {
         <td className="td1">{dateAdjust(item.date)}</td>
         <td className="td1">{statusTransform(item.status)}</td>
         <td className="tdd">
-          <SetModalPaid modalName="" simbol="fas fa-check" value={item.id}></SetModalPaid>
+          <SetModalPaid modalName="" simbol="fas fa-check" value={item.id} month={month} year={year}></SetModalPaid>
           <Button className="btn btn-danger" onClick={() => SetStatus(item.id, "NotPaid")}><i className="fas fa-times"></i></Button>
         </td>
         <td className="td1">{dateAdjust(item.paymentDate)}</td>

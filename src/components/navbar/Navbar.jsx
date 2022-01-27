@@ -35,6 +35,15 @@ const Header = (props) => {
             <NavDropdown.Item eventKey={1}>Janeiro</NavDropdown.Item>
             <NavDropdown.Item eventKey={2}>Fevereiro</NavDropdown.Item>
             <NavDropdown.Item eventKey={3}>Março</NavDropdown.Item>
+            <NavDropdown.Item eventKey={4}>Abril</NavDropdown.Item>
+            <NavDropdown.Item eventKey={5}>Maio</NavDropdown.Item>
+            <NavDropdown.Item eventKey={6}>Junho</NavDropdown.Item>
+            <NavDropdown.Item eventKey={7}>Julho</NavDropdown.Item>
+            <NavDropdown.Item eventKey={8}>Agosto</NavDropdown.Item>
+            <NavDropdown.Item eventKey={9}>Setembro</NavDropdown.Item>
+            <NavDropdown.Item eventKey={10}>Outubro</NavDropdown.Item>
+            <NavDropdown.Item eventKey={11}>Novembro</NavDropdown.Item>
+            <NavDropdown.Item eventKey={12}>Dezembro</NavDropdown.Item>
           </NavDropdown>
         </Nav>
       </Navbar.Collapse>

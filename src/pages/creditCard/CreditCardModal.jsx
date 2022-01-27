@@ -26,7 +26,6 @@ export default class CreditCardModal extends React.Component {
         this.setState({ closureDate: event.target.value });
     }
     colorChange = event => {
-        console.log(event.target.value)
         this.setState({ color: event.target.value });
     }
 

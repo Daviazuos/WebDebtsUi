@@ -7,7 +7,6 @@ import { Button, Container } from "react-bootstrap";
 import ModalAddDebts from "../../components/modal/modalDebts";
 import CustomModal from "../../components/customModal/CustomModal";
 import CreditCardModal from "./CreditCardModal";
-import { getMonthYear } from "../../utils/utils";
 import Context from "../../context/Context";
 
 function refreshPage() {
@@ -68,6 +67,8 @@ function SetModalCredDebts(props) {
                 show={modalShow}
                 onHide={() => setModalShow(false)}
                 head={props.name}
+                month={props.month}
+                totalValue={props.totalValue}
             />
         </>
     );
@@ -105,7 +106,7 @@ export default function CardCredit() {
                             </div>
                         </div>
                         {<SetModalAddDebts modalName="" head={item.name} cardId={item.id}></SetModalAddDebts>}{" "}
-                        {<SetModalCredDebts value={item.id} name={item.name} modalName="" month={month} simbol="fas fa-search"></SetModalCredDebts>}{" "}
+                        {<SetModalCredDebts value={item.id} name={item.name} modalName="" month={month} simbol="fas fa-search" totalValue={decimalAdjust(cardValue)}></SetModalCredDebts>}{" "}
                         <Button className="btn btn-danger" onClick={() => Delete(item.id)}>
                             <i className="fa fa-trash" aria-hidden="true"></i>
                         </Button>

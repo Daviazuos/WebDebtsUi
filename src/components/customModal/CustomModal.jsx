@@ -20,19 +20,19 @@ export default function CustomModal(props) {
 
     useEffect(() => {
         let mounted = true;
-        axiosInstance.get(Endpoints.debt.filterInstallments(pageNumber, 10, '', '2', '2022', '', '', '', props.id))
+        axiosInstance.get(Endpoints.debt.filterInstallments(pageNumber, 10, '', props.month, '2022', '', '', '', props.id))
             .then(res => {
                 setInstallments(res.data);
             })
         return () => mounted = false;
-    }, [pageNumber])
+    }, [pageNumber, props.month])
 
 
     const lis = installments?.items?.map(item => {
         return (
             <tr key={item.id}>
                 <td>{item.debtName}</td>
-                <td>{item.installmentNumber == 0 ? "" : item.installmentNumber}</td>
+                <td>{item.installmentNumber == 0 ? "Fixa" : item.installmentNumber}</td>
                 <td>R$ {decimalAdjust(item.value)}</td>
                 <td>{dateAdjust(item.date)}</td>
                 <td>{statusTransform(item.status)}</td>
@@ -43,10 +43,11 @@ export default function CustomModal(props) {
         <Modal
             {...props}
             className="modalInstallments"
+            scrollable="true"
         >
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
-                    {props.head}
+                    {props.head} - R$ {props.totalValue}
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>

@@ -33,7 +33,6 @@ export default class ModalPaid extends React.Component {
         this.setState({ date: event.target.value });
     }
     walletIdChange = event => {
-        console.log(event.target.value)
         this.setState({ walletId: event.target.value });
     }
 
@@ -46,7 +45,7 @@ export default class ModalPaid extends React.Component {
     }
 
     componentDidMount() {
-        axiosInstance.get(Endpoints.wallet.getEnable('Enable'))
+        axiosInstance.get(Endpoints.wallet.getEnable('Enable', this.props.month, this.props.year))
             .then(res => {
                 const wallet = res.data;
                 this.setState({ wallet });
