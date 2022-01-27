@@ -19,7 +19,7 @@ export default function ModalInstallments(props) {
     }
 
     useEffect(() => {
-        axiosInstance.get(Endpoints.debt.filterInstallments(pageNumber, 10, props.value, '', '', '', '', ''))
+        axiosInstance.get(Endpoints.debt.filterInstallments(pageNumber, 10, props.value, '', '', '', '', '', ''))
             .then(res => {
                 setInstallments(res.data)
             })
@@ -29,7 +29,7 @@ export default function ModalInstallments(props) {
     const lis = installments.items?.map(item => {
         return (
             <tr key={item.id}>
-                <td>{item.installmentNumber == 0 ? "" : item.installmentNumber}</td>
+                <td>{item.installmentNumber == 0 ? "Fixa" : item.installmentNumber}</td>
                 <td>
                     R$ {decimalAdjust(item.value)}
                 </td>
@@ -48,7 +48,7 @@ export default function ModalInstallments(props) {
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <Table responsive striped bordered hover variant="white" className="installmentsTable">
+                <Table responsive striped bordered hover variant="white" className="installmentsTable" size="sm">
                     <thead>
                         <tr className="trr">
                             <th>Parcela</th>

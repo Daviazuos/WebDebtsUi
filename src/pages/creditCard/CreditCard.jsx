@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { Endpoints } from '../../api/endpoints';
 import { axiosInstance } from "../../api";
 import "./CreditCard.css"
@@ -8,20 +8,18 @@ import ModalAddDebts from "../../components/modal/modalDebts";
 import CustomModal from "../../components/customModal/CustomModal";
 import CreditCardModal from "./CreditCardModal";
 import { getMonthYear } from "../../utils/utils";
-
-const { month, year } = getMonthYear()
-
+import Context from "../../context/Context";
 
 function refreshPage() {
     window.location.reload();
-  }
-  
-  function Delete(id) {
+}
+
+function Delete(id) {
     axiosInstance.delete(Endpoints.card.deleteById(id)).then(response => {
-      const id = response.data.Body;
-      refreshPage()
+        const id = response.data.Body;
+        refreshPage()
     })
-  }
+}
 
 function SetModalAddCard(props) {
     const [modalShow, setModalShow] = React.useState(false);
@@ -67,8 +65,6 @@ function SetModalCredDebts(props) {
             </Button>
             <CustomModal
                 id={props.value}
-                month={month}
-                year={year}
                 show={modalShow}
                 onHide={() => setModalShow(false)}
                 head={props.name}
@@ -77,64 +73,63 @@ function SetModalCredDebts(props) {
     );
 }
 
-export default class CardCredit extends React.Component {
-    state = {
-        cards: []
-    }
+export default function CardCredit() {
+    const [cards, setCards] = React.useState([]);
+    const [month, setMonth] = useContext(Context);
 
-    componentDidMount() {
-        axiosInstance.get(Endpoints.card.filterCards(null, month, year))
+    useEffect(() => {
+        let mounted = true;
+        axiosInstance.get(Endpoints.card.filterCards(null, month, '2022'))
             .then(res => {
-                const cards = res.data;
-                this.setState({ cards });
+                setCards(res.data);
             })
-    }
+        return () => mounted = false;
+    }, [month])
 
-    render() {
-        const lis = this.state.cards.map(item => {
-            let cardValue = 0.00
+    const lis = cards.map(item => {
+        let cardValue = 0.00
 
-            for (const debt in item?.debts) {
-                if (item?.debts[debt]?.installments[0]?.value != undefined) {
-                    cardValue = cardValue + item?.debts[debt]?.installments[0]?.value
-                }
+        for (const debt in item?.debts) {
+            if (item?.debts[debt]?.installments[0]?.value != undefined) {
+                cardValue = cardValue + item?.debts[debt]?.installments[0]?.value
             }
+        }
 
-            {
-                return (
-                    <div class="debit-card card-2 mb-4" style={{ backgroundColor: `${(item.color != null && item.color != '') ? item.color : "#6F87E1"}` }}>
-                        <div class="d-flex flex-column h-100"> <label class="d-block">
-                            <div class="d-flex position-relative">
-                                <div>
-                                    <p class="text-black fw-bold">{item.name}</p>
-                                </div>
-                            </div>
-                            {<SetModalAddDebts modalName="" head={item.name} cardId={item.id}></SetModalAddDebts>}{" "}
-                            {<SetModalCredDebts value={item.id} name={item.name} modalName="" simbol="fas fa-search"></SetModalCredDebts>}{" "}
-                            <Button className="btn btn-danger" onClick={() => Delete(item.id)}>
-                                <i className="fa fa-trash" aria-hidden="true"></i>
-                            </Button>
-                        </label>
-                            <div class="mt-auto fw-bold d-flex align-items-center justify-content-between">
-                                <div className="creditBody">
-                                    <p class="m-0">Valor Total R$ {decimalAdjust(cardValue)}</p>
-                                    <p class="m-0">Fechamento {item.closureDate}/{month}/{year}</p>
-                                    <p class="m-0">Vencimento {item.dueDate}/{month}/{year}</p>
-                                </div>
+        {
+            return (
+                <div class="debit-card card-2 mb-4" style={{ backgroundColor: `${(item.color != null && item.color != '') ? item.color : "#6F87E1"}` }}>
+                    <div class="d-flex flex-column h-100"> <label class="d-block">
+                        <div class="d-flex position-relative">
+                            <div>
+                                <p class="text-black fw-bold">{item.name}</p>
                             </div>
                         </div>
-                    </div >
-                )
-            }
-        })
+                        {<SetModalAddDebts modalName="" head={item.name} cardId={item.id}></SetModalAddDebts>}{" "}
+                        {<SetModalCredDebts value={item.id} name={item.name} modalName="" month={month} simbol="fas fa-search"></SetModalCredDebts>}{" "}
+                        <Button className="btn btn-danger" onClick={() => Delete(item.id)}>
+                            <i className="fa fa-trash" aria-hidden="true"></i>
+                        </Button>
+                    </label>
+                        <div class="mt-auto fw-bold d-flex align-items-center justify-content-between">
+                            <div className="creditBody">
+                                <p class="m-0">Valor Total R$ {decimalAdjust(cardValue)}</p>
+                                <p class="m-0">Fechamento {item.closureDate}/{month}/2022</p>
+                                <p class="m-0">Vencimento {item.dueDate}/{month}/2022</p>
+                            </div>
+                        </div>
+                    </div>
+                </div >
+            )
+        }
+    })
 
-        return (
-            <Container className="containerCardPage">
-                <div class="cardCredit card px-4">
-                    {lis}
-                </div>
-                {<SetModalAddCard name={'Adicionar novo cartão'} modalName="Adicionar cartão" simbol="fas fa-plus" className="modalButton"></SetModalAddCard>}{" "}
-            </Container>)
-    }
-};
+    return (
+        <Container className="containerCardPage">
+            <div class="cardCredit card px-4">
+                {lis}
+            </div>
+            {<SetModalAddCard name={'Adicionar novo cartão'} modalName="Adicionar cartão" simbol="fas fa-plus" className="modalButton"></SetModalAddCard>}{" "}
+        </Container>)
+}
+
 

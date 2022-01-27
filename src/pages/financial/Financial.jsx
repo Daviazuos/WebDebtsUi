@@ -53,7 +53,7 @@ export default function Financial() {
 
   useEffect(() => {
     let mounted = true;
-    axiosInstance.get(Endpoints.debt.filterInstallments(pageNumber, 5, '', month, year, '', '', 'Simple'))
+    axiosInstance.get(Endpoints.debt.filterInstallments(pageNumber, 5, '', month, year, '', '', 'Simple', ''))
       .then(res => {
         setFinancial(res.data)
       })

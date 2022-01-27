@@ -1,7 +1,5 @@
-.installmentsTable{
+.installmentsTable .td1 {
     max-width: 450px;
+
 }
 
-.trr{
-    justify-content: center;
-}

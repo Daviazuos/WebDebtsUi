@@ -24,7 +24,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     let mounted = true;
-    axiosInstance.get(Endpoints.debt.filterInstallments(1, 9999, '', month, '2022', '', '', ''))
+    axiosInstance.get(Endpoints.debt.filterInstallments(1, 9999, '', month, '2022', '', '', '', ''))
       .then(res => {
         setSumAllValue(res.data)
       })
@@ -37,7 +37,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     let mounted = true;
-    axiosInstance.get(Endpoints.debt.filterInstallments(1, 9999, '', month, '2022', 'Fixed', '', ''))
+    axiosInstance.get(Endpoints.debt.filterInstallments(1, 9999, '', month, '2022', 'Fixed', '', '', ''))
       .then(res => {
         setFixedValue(res.data)
       })
@@ -50,7 +50,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     let mounted = true;
-    axiosInstance.get(Endpoints.debt.filterInstallments(1, 9999, '', month, '2022', 'Simple', '', ''))
+    axiosInstance.get(Endpoints.debt.filterInstallments(1, 9999, '', month, '2022', 'Simple', '', '', ''))
       .then(res => {
         setSimpleValue(res.data)
       })
@@ -64,7 +64,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     let mounted = true;
-    axiosInstance.get(Endpoints.debt.filterInstallments(1, 9999, '', month, '2022', 'Installment', '', ''))
+    axiosInstance.get(Endpoints.debt.filterInstallments(1, 9999, '', month, '2022', 'Installment', '', '', ''))
       .then(res => {
         setInstallmentValue(res.data)
       })
