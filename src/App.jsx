@@ -44,12 +44,12 @@ export function isLogged() {
 }
 
 export default function App() {
-    const [month, setMonth] = useState(1);
+    const [isAltered, setIsAltered] = useState(false);
 
     return (
         <Router>
             <Switch>
-                <Context.Provider value={[month, setMonth]}>
+                <Context.Provider value={[isAltered, setIsAltered]}>
                     {isLogged()}
                 </Context.Provider>
             </Switch>

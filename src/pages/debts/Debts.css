@@ -13,6 +13,7 @@
 
 .debts .addButton{
     margin: 10px;
+    max-width: 120px;
 }
 
 .tdd {

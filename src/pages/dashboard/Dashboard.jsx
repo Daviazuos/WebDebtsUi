@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 
 import { axiosInstance } from "../../api";
@@ -15,16 +15,17 @@ import CustomCard from "../../components/customCard/CustomCard";
 
 
 export default function Dashboard() {
-  const [month, setMonth] = useContext(Context);
-  const [sumAllValue, setSumAllValue] = React.useState([]);
-  const [fixedValue, setFixedValue] = React.useState([]);
-  const [simpleValue, setSimpleValue] = React.useState([]);
-  const [installmentValue, setInstallmentValue] = React.useState([]);
+  const [month, setMonth] = useState(localStorage.getItem("month"));
+  const [year, setYear] = useState(localStorage.getItem("year"));
+  const [sumAllValue, setSumAllValue] = useState([]);
+  const [fixedValue, setFixedValue] = useState([]);
+  const [simpleValue, setSimpleValue] = useState([]);
+  const [installmentValue, setInstallmentValue] = useState([]);
 
 
   useEffect(() => {
     let mounted = true;
-    axiosInstance.get(Endpoints.debt.filterInstallments(1, 9999, '', month, '2022', '', '', '', ''))
+    axiosInstance.get(Endpoints.debt.filterInstallments(1, 9999, '', month, year, '', '', '', ''))
       .then(res => {
         setSumAllValue(res.data)
       })
@@ -37,7 +38,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     let mounted = true;
-    axiosInstance.get(Endpoints.debt.filterInstallments(1, 9999, '', month, '2022', 'Fixed', '', '', ''))
+    axiosInstance.get(Endpoints.debt.filterInstallments(1, 9999, '', month, year, 'Fixed', '', '', ''))
       .then(res => {
         setFixedValue(res.data)
       })
@@ -50,7 +51,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     let mounted = true;
-    axiosInstance.get(Endpoints.debt.filterInstallments(1, 9999, '', month, '2022', 'Simple', '', '', ''))
+    axiosInstance.get(Endpoints.debt.filterInstallments(1, 9999, '', month, year, 'Simple', '', '', ''))
       .then(res => {
         setSimpleValue(res.data)
       })
@@ -64,7 +65,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     let mounted = true;
-    axiosInstance.get(Endpoints.debt.filterInstallments(1, 9999, '', month, '2022', 'Installment', '', '', ''))
+    axiosInstance.get(Endpoints.debt.filterInstallments(1, 9999, '', month, year, 'Installment', '', '', ''))
       .then(res => {
         setInstallmentValue(res.data)
       })
@@ -80,28 +81,28 @@ export default function Dashboard() {
     <div className='dashPage'>
       <Container className='containerUpPage'>
         <CustomCard
-          title="Total do mês"
+          title="Total"
           subTitle={monthByNumber(month) + "/" + "2022"}
           children={decimalAdjust(sumAll)}
-          icon="fas fa-hand-holding-usd red fa-4x"
+          icon="fas fa-hand-holding-usd red fa-3x"
         >
         </CustomCard>
         <CustomCard
           title="Fixas"
           children={decimalAdjust(fixed)}
-          icon="far fa-calendar red fa-4x"
+          icon="far fa-calendar red fa-3x"
         >
         </CustomCard>
         <CustomCard
           title="Simples"
           children={decimalAdjust(simple)}
-          icon="fas fa-coins red fa-4x"
+          icon="fas fa-coins red fa-3x"
         >
         </CustomCard>
         <CustomCard
           title="Parceladas"
           children={decimalAdjust(installment)}
-          icon="fas fa-credit-card red fa-4x"
+          icon="fas fa-credit-card red fa-3x"
         >
         </CustomCard>
       </Container>

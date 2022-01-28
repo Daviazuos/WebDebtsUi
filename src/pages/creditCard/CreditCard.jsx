@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Endpoints } from '../../api/endpoints';
 import { axiosInstance } from "../../api";
 import "./CreditCard.css"
@@ -7,18 +7,7 @@ import { Button, Container } from "react-bootstrap";
 import ModalAddDebts from "../../components/modal/modalDebts";
 import CustomModal from "../../components/customModal/CustomModal";
 import CreditCardModal from "./CreditCardModal";
-import Context from "../../context/Context";
-
-function refreshPage() {
-    window.location.reload();
-}
-
-function Delete(id) {
-    axiosInstance.delete(Endpoints.card.deleteById(id)).then(response => {
-        const id = response.data.Body;
-        refreshPage()
-    })
-}
+import ModalDelete from "../../components/modalDelete/ModalDelete";
 
 function SetModalAddCard(props) {
     const [modalShow, setModalShow] = React.useState(false);
@@ -74,13 +63,33 @@ function SetModalCredDebts(props) {
     );
 }
 
+
+function SetModalDelete(props) {
+    const [modalShow, setModalShow] = React.useState(false);
+    return (
+      <>
+        <Button className='btn btn-danger' variant='dark' onClick={() => setModalShow(true)}>
+          <i className="fa fa-trash"></i> {props.modalName}
+        </Button>
+        <ModalDelete
+          show={modalShow}
+          onHide={() => setModalShow(false)}
+          head={props.name}
+          deleteUrl={Endpoints.card.deleteById(props.id)}
+        />
+      </>
+    );
+  }
+  
+
 export default function CardCredit() {
-    const [cards, setCards] = React.useState([]);
-    const [month, setMonth] = useContext(Context);
+    const [cards, setCards] = useState([]);
+    const [month, setMonth] = useState(localStorage.getItem("month"));
+    const [year, setyear] = useState(localStorage.getItem("year"));
 
     useEffect(() => {
         let mounted = true;
-        axiosInstance.get(Endpoints.card.filterCards(null, month, '2022'))
+        axiosInstance.get(Endpoints.card.filterCards(null, month, year))
             .then(res => {
                 setCards(res.data);
             })
@@ -107,9 +116,7 @@ export default function CardCredit() {
                         </div>
                         {<SetModalAddDebts modalName="" head={item.name} cardId={item.id}></SetModalAddDebts>}{" "}
                         {<SetModalCredDebts value={item.id} name={item.name} modalName="" month={month} simbol="fas fa-search" totalValue={decimalAdjust(cardValue)}></SetModalCredDebts>}{" "}
-                        <Button className="btn btn-danger" onClick={() => Delete(item.id)}>
-                            <i className="fa fa-trash" aria-hidden="true"></i>
-                        </Button>
+                        {<SetModalDelete id={item.id}></SetModalDelete>}
                     </label>
                         <div class="mt-auto fw-bold d-flex align-items-center justify-content-between">
                             <div className="creditBody">
@@ -129,7 +136,7 @@ export default function CardCredit() {
             <div class="cardCredit card px-4">
                 {lis}
             </div>
-            {<SetModalAddCard name={'Adicionar novo cartão'} modalName="Adicionar cartão" simbol="fas fa-plus" className="modalButton"></SetModalAddCard>}{" "}
+            {<SetModalAddCard name={'Adicionar novo cartão'} modalName="Adicionar" simbol="fas fa-plus" className="modalButton"></SetModalAddCard>}{" "}
         </Container>)
 }
 

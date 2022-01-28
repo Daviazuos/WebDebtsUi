@@ -1,8 +1,8 @@
 import "./Navbar.css";
-import React, { useContext } from "react";
 import { Navbar, Nav, NavDropdown } from "react-bootstrap";
-import Context from "../../context/Context";
 import { monthByNumber } from "../../utils/dateFormater";
+import React, { useEffect } from "react";
+import { refreshPage } from "../../utils/utils";
 
 
 export function logout() {
@@ -11,9 +11,14 @@ export function logout() {
 
 
 const Header = (props) => {
-  const [month, setMonth] = useContext(Context);
-  const handleSelect=(e)=>{
-    setMonth(e);
+  const [month, setMonth] = React.useState(localStorage.getItem("month"))
+  
+  const handleSelect=(newMonth)=>{
+    const year = new Date().getFullYear()
+    localStorage.setItem("year", year);
+    localStorage.setItem("month", newMonth);
+    setMonth(newMonth)
+    refreshPage()
   }
 
   return (

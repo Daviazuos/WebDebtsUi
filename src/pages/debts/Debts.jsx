@@ -10,6 +10,7 @@ import { debtInstallmentTransform, debtTypeTransform } from "../../utils/enumFor
 import "./Debts.css";
 import { CustomPagination } from "../../components/customPagination/customPagination";
 import ModalInstallments from "../../components/installments/Installments";
+import ModalDelete from "../../components/modalDelete/ModalDelete";
 
 
 function SetModal(props) {
@@ -46,36 +47,21 @@ function SetModalInstallments(props) {
   );
 }
 
-function SetModalEdit(props) {
+function SetModalDelete(props) {
   const [modalShow, setModalShow] = React.useState(false);
   return (
     <>
-      <Button className={props.className} variant='dark' onClick={() => setModalShow(true)}>
-        <i className={props.simbol}></i> {props.modalName}
+      <Button className='btn btn-danger' variant='dark' onClick={() => setModalShow(true)}>
+        <i className="fa fa-trash"></i> {props.modalName}
       </Button>
-
-      <ModalAddDebts
+      <ModalDelete
         show={modalShow}
         onHide={() => setModalShow(false)}
         head={props.name}
+        deleteUrl={Endpoints.debt.deleteById(props.id)}
       />
     </>
   );
-}
-
-function refreshPage() {
-  window.location.reload();
-}
-
-function Delete(id) {
-  axiosInstance.delete(Endpoints.debt.deleteById(id)).then(response => {
-    const id = response.data.Body;
-    refreshPage()
-  })
-  return (
-    <>
-    </>
-  )
 }
 
 
@@ -89,7 +75,7 @@ export default function Debts() {
 
   useEffect(() => {
     let mounted = true;
-    axiosInstance.get(Endpoints.debt.filter(pageNumber, 10, ''))
+    axiosInstance.get(Endpoints.debt.filter(pageNumber, 8, ''))
       .then(res => {
         setDebts(res.data)
       })
@@ -105,10 +91,7 @@ export default function Debts() {
           <td className='td1'>{debtInstallmentTransform(item.debtInstallmentType)}</td>
           <td className='td1'>{debtTypeTransform(item.debtType)}</td>
           <td className='tdd'>
-            {<SetModalEdit value={item.id} name={item.name} modalName="" simbol="fas fa-edit" className='btn btn-primary'></SetModalEdit>}{" "}
-            <Button className="btn btn-danger" onClick={() => Delete(item.id)}>
-              <i className="fa fa-trash" aria-hidden="true"></i>
-            </Button>
+            {<SetModalDelete id={item.id}></SetModalDelete>}
             {<SetModalInstallments value={item.id} name={item.name} modalName="" simbol="fas fa-search"></SetModalInstallments>}{" "}
           </td>
         </tr>
@@ -120,9 +103,9 @@ export default function Debts() {
     <div className="debts">
       <Container className="containerDebtpage">
         <Card className="cardTable">
-          <Table responsive striped bordered hover variant="white" className="table">
+          <Table responsive striped bordered hover variant="black" className="table">
             <thead>
-              <tr>
+              <tr className='tr'>
                 <th>Nome</th>
                 <th>Valor</th>
                 <th>Tipo</th>

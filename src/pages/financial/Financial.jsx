@@ -14,8 +14,6 @@ import { CustomPagination } from "../../components/customPagination/customPagina
 import Context from "../../context/Context";
 
 
-const { month, year } = getMonthYear()
-
 function SetStatus(id, status) {
   axiosInstance.put(Endpoints.debt.put(id, status, "", "")).then(response => {
     const id = response.data.Body;
@@ -47,7 +45,9 @@ export default function Financial() {
   const [financial, setFinancial] = React.useState([]);
   const [cards, setCards] = React.useState([]);
   const [pageNumber, setPageNumber] = React.useState(1);
-  const [month, setMonth] = useContext(Context);
+  const [year, setYear] = React.useState(localStorage.getItem("year"))
+  const [month, setMonth] = React.useState(localStorage.getItem("month"))
+
 
   const pageChange = event => {
     setPageNumber(event.target.text);
@@ -123,7 +123,7 @@ export default function Financial() {
   return (
     <Container className="financial">
       <Card className='cardTable'>
-        <Table responsive striped bordered hover variant="white" className="tableFinancial">
+        <Table responsive striped bordered hover variant="white" className="tableFinancial" size="sm">
           <thead>
             <tr>
               <th>Nome</th>
@@ -140,8 +140,8 @@ export default function Financial() {
         </Table>
         <CustomPagination currentPage={financial.currentPage} totalItems={financial.totalItems} totalPages={financial.totalPages} onChange={pageChange}></CustomPagination>
       </Card>
-      <Card>
-        <Table responsive striped bordered hover variant="white" className="tableFinancial">
+      <Card className='cardTable'>
+        <Table responsive striped bordered hover variant="white" className="tableFinancial" size="sm">
           <thead>
             <tr>
               <th>Nome</th>

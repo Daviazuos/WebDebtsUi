@@ -8,11 +8,11 @@ export default (props) => {
             <div class="card-body cleartfix">
               <div class="media align-items-stretch">
                 <div class="align-self-center">
-                  <h1 class="mr-2">R$ {props.children}</h1>
+                  <h1 class="mr-2" id="fontColors">R$ {props.children}</h1>
                 </div>
                 <div class="media-body">
-                  <h4>{props.title}</h4>
-                  <span>{props.subTitle}</span>
+                  <h4  id="fontColors">{props.title}</h4>
+                  <span id="fontColors">{props.subTitle}</span>
                 </div>
                 <div class="align-self-center">
                   <i class={props.icon}></i>

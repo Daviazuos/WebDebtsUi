@@ -15,7 +15,7 @@ export default function ModalAddDebts(props) {
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >
-      <Card className="modalAddDebts">
+      <Card>
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
             {props.head}

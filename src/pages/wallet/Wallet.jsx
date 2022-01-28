@@ -5,15 +5,9 @@ import { Endpoints } from "../../api/endpoints";
 import { decimalAdjust } from "../../utils/valuesFormater";
 import WalletModal from "./WalletModal"
 
-
 import "./Wallet.css";
 import CustomCard from "../../components/customCard/CustomCard";
 import { monthByNumber } from "../../utils/dateFormater";
-import Context from "../../context/Context";
-
-const today = new Date();
-const mm = String(today.getMonth() + 2).padStart(2, '0')
-const yyyy = today.getFullYear()
 
 function Delete(wallet) {
   const editWallet = {
@@ -58,12 +52,12 @@ function SetModal(props) {
 export default function Wallet() {
   const [sumAllValue, setSumAllValue] = React.useState([]);
   const [wallet, setWallet] = React.useState([]);
-  const [month, setMonth] = useContext(Context);
-
+  const [month, setMonth] = React.useState(localStorage.getItem("month"))
+  const [year, setYear] = React.useState(localStorage.getItem("year"))
 
   useEffect(() => {
     let mounted = true;
-    axiosInstance.get(Endpoints.wallet.getEnable('Enable', month, '2022'))
+    axiosInstance.get(Endpoints.wallet.getEnable('Enable', month, year))
       .then(res => {
         setWallet(res.data);
       })
@@ -72,7 +66,7 @@ export default function Wallet() {
 
   useEffect(() => {
     let mounted = true;
-    axiosInstance.get(Endpoints.debt.filterInstallments(1, 9999, '', month, '2022', '', '', '', ''))
+    axiosInstance.get(Endpoints.debt.filterInstallments(1, 9999, '', month, year, '', '', '', ''))
       .then(res => {
         setSumAllValue(res.data)
       })
@@ -125,35 +119,35 @@ export default function Wallet() {
       <div className="walletCards">
         <CustomCard
           title="Total"
-          subTitle={monthByNumber(mm - 1) + "/" + yyyy}
+          subTitle={monthByNumber(month) + "/" + year}
           children={decimalAdjust(valueTotal)}
-          icon="fas fa-wallet red fa-4x"
+          icon="fas fa-wallet red fa-3x"
         >
         </CustomCard>
         <CustomCard
           title="Total Dividas"
-          subTitle={monthByNumber(mm - 1) + "/" + yyyy}
+          subTitle={monthByNumber(month) + "/" + year}
           children={decimalAdjust(sumAll)}
-          icon="fas fa-wallet red fa-4x"
+          icon="fas fa-wallet red fa-3x"
         >
         </CustomCard>
         <CustomCard
           title="Saldo"
           children={saldoTotal === 0 ? decimalAdjust(valueTotal) : decimalAdjust(saldoTotal)}
-          icon="fas fa-wallet red fa-4x"
+          icon="fas fa-wallet red fa-3x"
         >
         </CustomCard>
         <CustomCard
-          title="Saldo Provisionado"
+          title="Provisionado"
           children={decimalAdjust(provisionedValue)}
-          icon="fas fa-wallet red fa-4x"
+          icon="fas fa-wallet red fa-3x"
         >
         </CustomCard>
 
       </div>
 
       <Card className="cardWallet">
-        <Table responsive striped bordered hover variant="white" className="table">
+        <Table responsive striped bordered hover variant="black" className="table">
           <thead>
             <tr>
               <th>Nome</th>
@@ -167,7 +161,7 @@ export default function Wallet() {
           </tbody>
         </Table>
       </Card>
-      {<SetModal name={'Adicionar novo valor'} modalName="Adicionar" simbol="fas fa-plus" className="modalButton"></SetModal>}{" "}
+      {<SetModal name={'Adicionar'} modalName="Adicionar" simbol="fas fa-plus" className="modalButton"></SetModal>}{" "}
     </Container>
   )
 }
