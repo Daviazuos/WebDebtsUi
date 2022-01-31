@@ -11,9 +11,12 @@ export function logout() {
 
 
 const Header = (props) => {
-  const [month, setMonth] = React.useState(localStorage.getItem("month"))
-  
-  const handleSelect=(newMonth)=>{
+  const today = new Date();
+  const actualMonth = String(today.getMonth() + 1).padStart(2, '0');
+
+  const [month, setMonth] = React.useState(localStorage.getItem("month") ? localStorage.getItem("month") : actualMonth)
+
+  const handleSelect = (newMonth) => {
     const year = new Date().getFullYear()
     localStorage.setItem("year", year);
     localStorage.setItem("month", newMonth);
