@@ -64,7 +64,7 @@ const Header = (props) => {
           title={props.name}
           menuVariant="dark"
         >
-          <NavDropdown.Item onClick={logout} href="/sign-in">{props.link5}</NavDropdown.Item>
+          <NavDropdown.Item onClick={logout} href="/">{props.link5}</NavDropdown.Item>
         </NavDropdown>
       </Navbar.Collapse>
     </Navbar>
