@@ -36,7 +36,7 @@ export function isLogged() {
     else {
         return (
             <div>
-                <Route exact path="/sign-in" component={Login} />
+                <Route exact path="/" component={Login} />
                 <Route path="/Register" component={Register} />
             </div>
         )
