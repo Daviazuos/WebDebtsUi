@@ -1,7 +1,7 @@
 import "./Navbar.css";
 import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 import { monthByNumber } from "../../utils/dateFormater";
-import React, { useEffect } from "react";
+import React from "react";
 import { refreshPage } from "../../utils/utils";
 
 
@@ -26,7 +26,9 @@ const Header = (props) => {
 
   return (
     <Navbar bg="dark" variant="dark" expand="lg" className="sticky-nav">
-      <Navbar.Brand href="/dash">{props.home}</Navbar.Brand>
+      <Navbar.Brand href="/dash">
+       {props.home}
+      </Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="mr-auto">
@@ -56,10 +58,14 @@ const Header = (props) => {
           <NavDropdown.Item eventKey={11}>Novembro</NavDropdown.Item>
           <NavDropdown.Item eventKey={12}>Dezembro</NavDropdown.Item>
         </NavDropdown>
-        <Navbar.Text>
-          Logado como: {props.name}
-        </Navbar.Text>
-        <Nav.Link className="logout" onClick={logout} href="/sign-in">{props.link5}</Nav.Link>
+
+        <NavDropdown
+          id="nav-dropdown-dark-example"
+          title={props.name}
+          menuVariant="dark"
+        >
+          <NavDropdown.Item onClick={logout} href="/sign-in">{props.link5}</NavDropdown.Item>
+        </NavDropdown>
       </Navbar.Collapse>
     </Navbar>
   );
