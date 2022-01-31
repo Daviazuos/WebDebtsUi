@@ -48,7 +48,7 @@ export default function ModalInstallments(props) {
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <Table responsive striped bordered hover variant="white" className="installmentsTable" size="sm">
+                <Table responsive hover variant="white" className="installmentsTable" size="sm">
                     <thead>
                         <tr className="trr">
                             <th>Parcela</th>

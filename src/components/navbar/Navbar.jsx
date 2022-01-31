@@ -25,7 +25,7 @@ const Header = (props) => {
   }
 
   return (
-    <Navbar bg="dark" variant="dark" expand="lg">
+    <Navbar bg="dark" variant="dark" expand="lg" className="sticky-nav">
       <Navbar.Brand href="/dash">{props.home}</Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
@@ -34,28 +34,28 @@ const Header = (props) => {
           <Nav.Link href="/debts">{props.link1}</Nav.Link>
           <Nav.Link href="/cards">{props.link2}</Nav.Link>
           <Nav.Link href="/wallet">{props.link4}</Nav.Link>
-          <NavDropdown
-            id="nav-dropdown-dark-example"
-            title={monthByNumber(month)}
-            menuVariant="dark"
-            onSelect={handleSelect}
-          >
-            <NavDropdown.Item eventKey={1}>Janeiro</NavDropdown.Item>
-            <NavDropdown.Item eventKey={2}>Fevereiro</NavDropdown.Item>
-            <NavDropdown.Item eventKey={3}>Março</NavDropdown.Item>
-            <NavDropdown.Item eventKey={4}>Abril</NavDropdown.Item>
-            <NavDropdown.Item eventKey={5}>Maio</NavDropdown.Item>
-            <NavDropdown.Item eventKey={6}>Junho</NavDropdown.Item>
-            <NavDropdown.Item eventKey={7}>Julho</NavDropdown.Item>
-            <NavDropdown.Item eventKey={8}>Agosto</NavDropdown.Item>
-            <NavDropdown.Item eventKey={9}>Setembro</NavDropdown.Item>
-            <NavDropdown.Item eventKey={10}>Outubro</NavDropdown.Item>
-            <NavDropdown.Item eventKey={11}>Novembro</NavDropdown.Item>
-            <NavDropdown.Item eventKey={12}>Dezembro</NavDropdown.Item>
-          </NavDropdown>
         </Nav>
       </Navbar.Collapse>
       <Navbar.Collapse className="justify-content-end">
+        <NavDropdown
+          id="nav-dropdown-dark-example"
+          title={monthByNumber(month)}
+          menuVariant="dark"
+          onSelect={handleSelect}
+        >
+          <NavDropdown.Item eventKey={1}>Janeiro</NavDropdown.Item>
+          <NavDropdown.Item eventKey={2}>Fevereiro</NavDropdown.Item>
+          <NavDropdown.Item eventKey={3}>Março</NavDropdown.Item>
+          <NavDropdown.Item eventKey={4}>Abril</NavDropdown.Item>
+          <NavDropdown.Item eventKey={5}>Maio</NavDropdown.Item>
+          <NavDropdown.Item eventKey={6}>Junho</NavDropdown.Item>
+          <NavDropdown.Item eventKey={7}>Julho</NavDropdown.Item>
+          <NavDropdown.Item eventKey={8}>Agosto</NavDropdown.Item>
+          <NavDropdown.Item eventKey={9}>Setembro</NavDropdown.Item>
+          <NavDropdown.Item eventKey={10}>Outubro</NavDropdown.Item>
+          <NavDropdown.Item eventKey={11}>Novembro</NavDropdown.Item>
+          <NavDropdown.Item eventKey={12}>Dezembro</NavDropdown.Item>
+        </NavDropdown>
         <Navbar.Text>
           Logado como: {props.name}
         </Navbar.Text>

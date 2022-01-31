@@ -1,33 +1,11 @@
 .cardWallet {
-    box-shadow: 1px 3px 1px #9E9E9E;
-    margin: 10px;
+    padding: 10PX;
 }
 
 .cardWallet .allValue {
-    font-size: 200%;
     margin: auto;
-    margin-bottom: 30px;
 }
 
-.containerWallet .cardWallet {
-    margin: 10px;
-}
-
-.containerWallet .modalButton {
-    margin-left: 10px;
-}
-
-.cardWallet .totalAllValue {
-    margin-left: 10px;
-    font-size: 125%;
-}
-.cardWallet .fa-wallet {
-    size: 3px;
-    margin-left: 10px;
-    margin-right: 10px;
-    margin-top: 20px;
-    color: rgb(4, 135, 4)
-}
 
 .containerWallet {
     margin-left: auto;

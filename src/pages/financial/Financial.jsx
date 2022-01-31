@@ -26,7 +26,7 @@ function SetModalPaid(props) {
   const [modalShow, setModalShow] = React.useState(false);
   return (
     <>
-      <Button className='btn btn-green' onClick={() => setModalShow(true)}>
+      <Button size="sm" className='btn btn-green' onClick={() => setModalShow(true)}>
         <i className={props.simbol}></i> {props.modalName}
       </Button>
       <ModalPaid
@@ -77,10 +77,10 @@ export default function Financial() {
         <td className="td1">{item.debtName}</td>
         <td className="td1">R$ {decimalAdjust(item.value)}</td>
         <td className="td1">{dateAdjust(item.date)}</td>
-        <td className="td1">{statusTransform(item.status)}</td>
+        <td className="td1">{item.status == 'Paid' ? <i class="fas fa-circle success fa-xs"></i> : <i class="fas fa-circle red fa-xs"></i>}   {statusTransform(item.status)}</td>
         <td className="tdd">
           <SetModalPaid modalName="" simbol="fas fa-check" value={item.id} month={month} year={year}></SetModalPaid>
-          <Button className="btn btn-danger" onClick={() => SetStatus(item.id, "NotPaid")}><i className="fas fa-times"></i></Button>
+          <Button size="sm" className="btn btn-danger" onClick={() => SetStatus(item.id, "NotPaid")}><i className="fas fa-times"></i></Button>
         </td>
         <td className="td1">{dateAdjust(item.paymentDate)}</td>
       </tr>
@@ -110,10 +110,10 @@ export default function Financial() {
         <td className="td1">{item.name}</td>
         <td className="td1">R$ {decimalAdjust(cardValue)}</td>
         <td className="td1">{item.dueDate}/{month}/{year}</td>
-        <td className="td1">{statusTransform(cardStatus)}</td>
+        <td className="td1">{cardStatus == 'Paid' ? <i class="fas fa-circle success fa-xs"></i> : <i class="fas fa-circle red fa-xs"></i>}  {statusTransform(cardStatus)}</td>
         <td className="tdd">
           <SetModalPaid modalName="" simbol="fas fa-check" value={item.id}></SetModalPaid>
-          <Button className="btn btn-danger" onClick={() => SetStatus(item.id, "NotPaid")}><i className="fas fa-times"></i></Button>
+          <Button size="sm" className="btn btn-danger" onClick={() => SetStatus(item.id, "NotPaid")}><i className="fas fa-times"></i></Button>
         </td>
         <td className="td1">{dateAdjust(paymentDate)}</td>
       </tr>
@@ -123,7 +123,7 @@ export default function Financial() {
   return (
     <Container className="financial">
       <Card className='cardTable'>
-        <Table responsive striped bordered hover variant="white" className="tableFinancial" size="sm">
+        <Table responsive hover variant="white" className="tableFinancial" size="sm">
           <thead>
             <tr>
               <th>Nome</th>
@@ -139,19 +139,7 @@ export default function Financial() {
           </tbody>
         </Table>
         <CustomPagination currentPage={financial.currentPage} totalItems={financial.totalItems} totalPages={financial.totalPages} onChange={pageChange}></CustomPagination>
-      </Card>
-      <Card className='cardTable'>
-        <Table responsive striped bordered hover variant="white" className="tableFinancial" size="sm">
-          <thead>
-            <tr>
-              <th>Nome</th>
-              <th>Valor</th>
-              <th>Vencimento</th>
-              <th>Status</th>
-              <th>Ação</th>
-              <th>Pagamento</th>
-            </tr>
-          </thead>
+        <Table responsive hover variant="white" className="tableFinancial" size="sm">
           <tbody>
             {cardTableData}
           </tbody>

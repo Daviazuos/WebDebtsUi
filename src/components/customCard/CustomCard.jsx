@@ -8,7 +8,7 @@ export default (props) => {
             <div class="card-body cleartfix">
               <div class="media align-items-stretch">
                 <div class="align-self-center">
-                  <h1 class="mr-2" id="fontColors">R$ {props.children}</h1>
+                  <h2 class="mr-2" id="fontColors">R$ {props.children}</h2>
                 </div>
                 <div class="media-body">
                   <h4  id="fontColors">{props.title}</h4>

@@ -7,7 +7,7 @@
 }
 
 .debts .cardTable{
-    padding: 5px;
+    padding: 10px;
     min-width: 700px;
 }
 
@@ -21,14 +21,14 @@
     flex-direction: row;
     justify-content: space-evenly;
     align-items: center;
-    max-height: 50px;
+    min-width: 150px;
 }
 
 .td1 {
     max-width: 150px;
-    max-height: 50px;
+    max-height: 30px;
 }
 
 .table {
-    font-size: 15px;
+    font-size: 13px;
 }

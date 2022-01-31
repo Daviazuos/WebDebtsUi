@@ -2,7 +2,6 @@
 .cardCredit{
     display: flex;
     flex-flow: column;
-    box-shadow: 3px 3px 5px #1b1b1ba2;
 }
 
 .cardCredit .debit-card {
@@ -37,7 +36,7 @@
     font-size: 0.8rem
 }
 
-.cardCredit .text-black {
+.cardCredit .text-white {
     font-size: 30px
 }
 
@@ -46,7 +45,7 @@
 }
 
 .cardCredit .creditBody {
-    font-size: 14px;    
+    font-size: 14px;
 }
 
 .modalButton {

@@ -111,7 +111,7 @@ export default function CardCredit() {
                     <div class="d-flex flex-column h-100"> <label class="d-block">
                         <div class="d-flex position-relative">
                             <div>
-                                <p class="text-black fw-bold">{item.name}</p>
+                                <p class="text-white fw-bold">{item.name}</p>
                             </div>
                         </div>
                         {<SetModalAddDebts modalName="" head={item.name} cardId={item.id}></SetModalAddDebts>}{" "}

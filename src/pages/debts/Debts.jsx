@@ -34,7 +34,7 @@ function SetModalInstallments(props) {
   const [modalShow, setModalShow] = React.useState(false);
   return (
     <>
-      <Button className='btn btn-secondary' variant='dark' onClick={() => setModalShow(true)}>
+      <Button size="sm" className='btn btn-secondary' variant='dark' onClick={() => setModalShow(true)}>
         <i className={props.simbol}></i> {props.modalName}
       </Button>
       <ModalInstallments
@@ -51,7 +51,7 @@ function SetModalDelete(props) {
   const [modalShow, setModalShow] = React.useState(false);
   return (
     <>
-      <Button className='btn btn-danger' variant='dark' onClick={() => setModalShow(true)}>
+      <Button size="sm" className='btn btn-danger' variant='dark' onClick={() => setModalShow(true)}>
         <i className="fa fa-trash"></i> {props.modalName}
       </Button>
       <ModalDelete
@@ -103,7 +103,7 @@ export default function Debts() {
     <div className="debts">
       <Container className="containerDebtpage">
         <Card className="cardTable">
-          <Table responsive striped bordered hover variant="black" className="table">
+          <Table responsive hover variant="black" className="table" size="sm">
             <thead>
               <tr className='tr'>
                 <th>Nome</th>

@@ -36,7 +36,7 @@ function SetModal(props) {
   const [modalShow, setModalShow] = React.useState(false);
   return (
     <>
-      <Button className={props.className} variant='dark' onClick={() => setModalShow(true)}>
+      <Button size="sm" className={props.className} variant='dark' onClick={() => setModalShow(true)}>
         <i className={props.simbol}></i> {props.modalName}
       </Button>
       <WalletModal
@@ -103,9 +103,9 @@ export default function Wallet() {
             R$ {item.updatedValue === 0 ? decimalAdjust(item.value) : decimalAdjust(item.updatedValue)}
           </td>
           <td className='tdd'>
-            {<SetModal value={item.id} name={item.name} modalName="Editar" simbol="fas fa-edit" className='btn btn-primary'></SetModal>}{" "}
-            <Button className="btn btn-danger" onClick={() => Delete(item)}>
-              <i className="fa fa-trash" aria-hidden="true"></i> Apagar
+            {<SetModal value={item.id} name={item.name} modalName="" simbol="fas fa-edit" className='btn btn-primary'></SetModal>}{" "}
+            <Button size="sm" className="btn btn-danger" onClick={() => Delete(item)}>
+              <i className="fa fa-trash" aria-hidden="true"></i>
             </Button>
           </td>
         </tr>
@@ -118,36 +118,34 @@ export default function Wallet() {
     <Container className="containerWallet">
       <div className="walletCards">
         <CustomCard
-          title="Total"
-          subTitle={monthByNumber(month) + "/" + year}
+          title="Total carteira"
           children={decimalAdjust(valueTotal)}
-          icon="fas fa-wallet red fa-3x"
+          icon="fas fa-wallet blue fa-2x"
         >
         </CustomCard>
         <CustomCard
           title="Total Dividas"
-          subTitle={monthByNumber(month) + "/" + year}
           children={decimalAdjust(sumAll)}
-          icon="fas fa-wallet red fa-3x"
+          icon="fas fa-wallet blue fa-2x"
         >
         </CustomCard>
         <CustomCard
           title="Saldo"
           children={saldoTotal === 0 ? decimalAdjust(valueTotal) : decimalAdjust(saldoTotal)}
-          icon="fas fa-wallet red fa-3x"
+          icon="fas fa-wallet blue fa-2x"
         >
         </CustomCard>
         <CustomCard
           title="Provisionado"
           children={decimalAdjust(provisionedValue)}
-          icon="fas fa-wallet red fa-3x"
+          icon="fas fa-wallet blue fa-2x"
         >
         </CustomCard>
 
       </div>
 
       <Card className="cardWallet">
-        <Table responsive striped bordered hover variant="black" className="table">
+        <Table responsive hover variant="black" className="table" size="sm">
           <thead>
             <tr>
               <th>Nome</th>

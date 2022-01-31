@@ -8,10 +8,10 @@ import { monthByNumber } from "../../utils/dateFormater";
 import { decimalAdjust } from "../../utils/valuesFormater";
 
 import CardGraphic from "../../components/cardGraphic/CardGraphic"
-import Context from "../../context/Context";
 
 import "./Dashboard.css";
 import CustomCard from "../../components/customCard/CustomCard";
+import CardApexGraphic from "../../components/cardGraphic/CardApexGraphic";
 
 
 export default function Dashboard() {
@@ -81,34 +81,33 @@ export default function Dashboard() {
     <div className='dashPage'>
       <Container className='containerUpPage'>
         <CustomCard
-          title="Total"
-          subTitle={monthByNumber(month) + "/" + "2022"}
+          title="Total dívidas"
           children={decimalAdjust(sumAll)}
-          icon="fas fa-hand-holding-usd red fa-3x"
+          icon="fas fa-hand-holding-usd blue fa-2x"
         >
         </CustomCard>
         <CustomCard
           title="Fixas"
           children={decimalAdjust(fixed)}
-          icon="far fa-calendar red fa-3x"
+          icon="far fa-calendar blue fa-2x"
         >
         </CustomCard>
         <CustomCard
           title="Simples"
           children={decimalAdjust(simple)}
-          icon="fas fa-coins red fa-3x"
+          icon="fas fa-coins blue fa-2x"
         >
         </CustomCard>
         <CustomCard
           title="Parceladas"
           children={decimalAdjust(installment)}
-          icon="fas fa-credit-card red fa-3x"
+          icon="fas fa-credit-card blue fa-2x"
         >
         </CustomCard>
       </Container>
       <Container>
         <div className='graphicPage'>
-          <CardGraphic></CardGraphic>
+          <CardApexGraphic></CardApexGraphic>
         </div>
       </Container>
     </div>);
