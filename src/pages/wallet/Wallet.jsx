@@ -120,7 +120,7 @@ export default function Wallet() {
         <CustomCard
           title="Total carteira"
           children={decimalAdjust(valueTotal)}
-          icon="fas fa-wallet blue fa-2x"
+          icon="fa-light fa-piggy-bank blue fa-2x"
         >
         </CustomCard>
         <CustomCard
