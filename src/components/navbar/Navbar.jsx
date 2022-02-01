@@ -26,7 +26,7 @@ const Header = (props) => {
 
   return (
     <Navbar bg="dark" variant="dark" expand="lg" className="sticky-nav">
-      <Navbar.Brand href="/dash">
+      <Navbar.Brand href="/">
        {props.home}
       </Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -64,7 +64,7 @@ const Header = (props) => {
           title={props.name}
           menuVariant="dark"
         >
-          <NavDropdown.Item onClick={logout} href="/">{props.link5}</NavDropdown.Item>
+          <NavDropdown.Item onClick={logout} href="/sign-in">{props.link5}</NavDropdown.Item>
         </NavDropdown>
       </Navbar.Collapse>
     </Navbar>

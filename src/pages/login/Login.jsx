@@ -30,7 +30,7 @@ export default function Login(props) {
         axiosInstance.post(Endpoints.user.login(), login)
             .then(response => {
                 localStorage.setItem("user", JSON.stringify(response.data));
-                props.history.push("dash");
+                props.history.push("/");
                 refreshPage()
             });
     }

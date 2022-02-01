@@ -120,25 +120,25 @@ export default function Wallet() {
         <CustomCard
           title="Total carteira"
           children={decimalAdjust(valueTotal)}
-          icon="fa-light fa-piggy-bank blue fa-2x"
+          icon="fas fa-wallet blue fa-2x"
         >
         </CustomCard>
         <CustomCard
           title="Total Dividas"
           children={decimalAdjust(sumAll)}
-          icon="fas fa-wallet blue fa-2x"
+          icon="fas fa-hand-holding-usd blue fa-2x"
         >
         </CustomCard>
         <CustomCard
           title="Saldo"
           children={saldoTotal === 0 ? decimalAdjust(valueTotal) : decimalAdjust(saldoTotal)}
-          icon="fas fa-wallet blue fa-2x"
+          icon="fas fa-piggy-bank blue fa-2x"
         >
         </CustomCard>
         <CustomCard
           title="Provisionado"
           children={decimalAdjust(provisionedValue)}
-          icon="fas fa-wallet blue fa-2x"
+          icon="fas fa-lightbulb blue fa-2x"
         >
         </CustomCard>
 

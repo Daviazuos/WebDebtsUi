@@ -11,20 +11,24 @@ import Navbar from './components/navbar/Navbar'
 import Dashboard from "./pages/dashboard/Dashboard";
 import Context from "./context/Context";
 import { useState } from "react";
+import './App.scss';
 
 export function logout() {
     localStorage.removeItem("user");
+    localStorage.removeItem("month");
+    localStorage.removeItem("year");
 }
 
 
 export function isLogged() {
     const user = authService.getCurrentUser();
+    console.log(user)
     if (user) {
         return (
 
             <div>
                 <Navbar name={user['name']} home="Web Debts" link1="Dívidas" link2="Cartões" link3="Finanças" link4="Carteira" link5="Sair" month={monthByNumber(1)}></Navbar>
-                <Route path="/dash" component={Dashboard} />
+                <Route exact path="/" component={Dashboard} />
                 <Route path="/Debts" component={Debts} />
                 <Route path="/Cards" component={CreditCard} />
                 <Route path="/Financial" component={Financial} />
@@ -34,8 +38,10 @@ export function isLogged() {
         )
     }
     else {
+        logout()
         return (
             <div>
+                <Route exact path="/sign-in" component={Login} />
                 <Route exact path="/" component={Login} />
                 <Route path="/Register" component={Register} />
             </div>
