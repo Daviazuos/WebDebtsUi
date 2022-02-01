@@ -20,7 +20,7 @@ export default function CustomModal(props) {
 
     useEffect(() => {
         let mounted = true;
-        axiosInstance.get(Endpoints.debt.filterInstallments(pageNumber, 10, '', props.month, '2022', '', '', '', props.id))
+        axiosInstance.get(Endpoints.debt.filterInstallments(pageNumber, 20, '', props.month, '2022', '', '', '', props.id))
             .then(res => {
                 setInstallments(res.data);
             })

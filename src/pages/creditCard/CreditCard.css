@@ -1,7 +1,10 @@
 
-.cardCredit{
+#cardCredit{
+    position: relative;
     display: flex;
-    flex-flow: column;
+    flex-direction: row;
+    min-width: 0;
+    flex-wrap: wrap;
 }
 
 .cardCredit .debit-card {
@@ -14,12 +17,6 @@
     cursor: pointer
 }
 
-.px-4 {
-    flex-flow: row;
-    flex-wrap: wrap;
-    max-width: 1040px;
-}
-
 .cardCredit .debit-card:hover {
     box-shadow: 5px 3px 5px #000000a2
 }
@@ -30,10 +27,6 @@
     margin-left: 5px;
     margin-right: 5px;
     margin-bottom: 5px;
-}
-
-.cardCredit .text-muted {
-    font-size: 0.8rem
 }
 
 .cardCredit .text-white {
