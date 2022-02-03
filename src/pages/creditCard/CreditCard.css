@@ -8,8 +8,8 @@
 }
 
 .cardCredit .debit-card {
-    min-width: 320px;
-    min-height: 195px;
+    min-width: 295px;
+    min-height: 200px;
     padding: 15px;
     border-radius: 5px;
     box-shadow: 3px 3px 5px #0000001a;
@@ -38,9 +38,13 @@
 }
 
 .cardCredit .creditBody {
-    font-size: 14px;
+    font-size: 11px;
 }
 
 .modalButton {
     margin: 10px;
+}
+
+#cardText {
+    color: white;
 }

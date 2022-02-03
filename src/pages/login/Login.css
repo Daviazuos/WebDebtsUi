@@ -1,14 +1,15 @@
 .loginContainer {
     max-width: 400px;
+}
+
+.loginContainer .cardLogin {
+    margin: 5px;
+    max-width: 350px;
     justify-content: space-evenly;
     left:50%;
     top:50%;
     position:absolute;
     transform:translate(-50%, -50%);
-}
-
-.loginContainer .cardLogin {
-    margin: 5px;
 }
 
 .loginContainer .google {

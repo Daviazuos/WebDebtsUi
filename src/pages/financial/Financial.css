@@ -1,31 +1,14 @@
-.financial{
-    display: flex;
-    flex-flow: column;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-content: center;
-}
-
 .financial .cardTable{
     margin:10px;
     padding: 10px;
 }
 
 .financial .tableFinancial {
-    max-width: 750px;
     font-size: 12px;
     font-family: sans-serif;
 }
 
-.financial .tableFinancial .td1 {
-    width: 100px;
-    height: 5px;
-}
-
-.financial .tableFinancial .tdd {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-    align-items: center;
-    min-width: 150px;
+.table td, .table th {
+    border-top: 0px;
+    text-align: center;
 }

@@ -103,9 +103,9 @@ export default function Wallet() {
             R$ {item.updatedValue === 0 ? decimalAdjust(item.value) : decimalAdjust(item.updatedValue)}
           </td>
           <td className='tdd'>
-            {<SetModal value={item.id} name={item.name} modalName="" simbol="fas fa-edit" className='btn btn-primary'></SetModal>}{" "}
+            {<SetModal value={item.id} name={item.name} modalName="Editar" simbol="fas fa-edit" className='btn btn-primary'></SetModal>}{" "}
             <Button size="sm" className="btn btn-danger" onClick={() => Delete(item)}>
-              <i className="fa fa-trash" aria-hidden="true"></i>
+              <i className="fa fa-trash" aria-hidden="true"></i> Apagar
             </Button>
           </td>
         </tr>

@@ -2,13 +2,27 @@
     display: flex;
     flex-flow: column;
     flex-wrap: wrap;
-    justify-content: center;
-    align-content: center;
 }
 
 .debts .cardTable{
     padding: 10px;
     min-width: 700px;
+}
+
+.debts .cardTable .formTable{
+    display: flex;
+    flex-flow: row;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: stretch;
+    justify-content: flex-end;
+    align-items: baseline;
+}
+
+#nameSearch {
+    max-height: 40px;
+    max-width: 200px;
+    margin: 10px;
 }
 
 .debts .addButton{

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Button, Card, Container, Table, Dropdown } from "react-bootstrap";
+import { Button, Card, Container, Table, Form } from "react-bootstrap";
 import ModalAddDebts from "../../components/modal/modalDebts";
 import { Endpoints } from '../../api/endpoints';
 import { axiosInstance } from "../../api";
@@ -67,20 +67,39 @@ function SetModalDelete(props) {
 
 export default function Debts() {
   const [debts, setDebts] = React.useState([]);
+  const [name, setName] = React.useState('');
+  const [origin, setOrigin] = React.useState('');
   const [pageNumber, setPageNumber] = React.useState(1);
 
   const pageChange = event => {
     setPageNumber(event.target.text);
   }
 
+  const nameChange = event => {
+    setName(event.target.value);
+  }
+  
+  const originChange = event => {
+    setOrigin(event.target.value);
+  }
+
   useEffect(() => {
     let mounted = true;
-    axiosInstance.get(Endpoints.debt.filter(pageNumber, 8, ''))
+    axiosInstance.get(Endpoints.debt.filter(pageNumber, 8, '', ''))
       .then(res => {
         setDebts(res.data)
       })
     return () => mounted = false;
   }, [pageNumber])
+
+  useEffect(() => {
+    let mounted = true;
+    axiosInstance.get(Endpoints.debt.filter(pageNumber, 8, origin, name))
+      .then(res => {
+        setDebts(res.data)
+      })
+    return () => mounted = false;
+  }, [name, origin])
 
   const lis = debts.items?.map(item => {
     {
@@ -91,8 +110,8 @@ export default function Debts() {
           <td className='td1'>{debtInstallmentTransform(item.debtInstallmentType)}</td>
           <td className='td1'>{debtTypeTransform(item.debtType)}</td>
           <td className='tdd'>
-            {<SetModalDelete id={item.id}></SetModalDelete>}
-            {<SetModalInstallments value={item.id} name={item.name} modalName="" simbol="fas fa-search"></SetModalInstallments>}{" "}
+            {<SetModalDelete id={item.id} modalName="Apagar"></SetModalDelete>}
+            {<SetModalInstallments value={item.id} name={item.name} modalName="Parcelas" simbol="fas fa-search"></SetModalInstallments>}{" "}
           </td>
         </tr>
       )
@@ -103,6 +122,16 @@ export default function Debts() {
     <div className="debts">
       <Container className="containerDebtpage">
         <Card className="cardTable">
+          <Form className="formTable">
+            <Form.Group className="mb-3">
+              <Form.Control type="search" placeholder="Nome" id="nameSearch" onChange={nameChange} />
+            </Form.Group>
+            <Form.Control  id="nameSearch" as="select" name='debtInstallmentType' onChange={originChange}>
+              <option value="">Selecione a origem</option>
+              <option value="Simple">Simples</option>
+              <option value="Card">Cartão de crédito</option>
+            </Form.Control>
+          </Form>
           <Table responsive hover variant="black" className="table" size="sm">
             <thead>
               <tr className='tr'>

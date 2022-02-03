@@ -120,9 +120,9 @@ export default function CardCredit() {
                     </label>
                         <div class="mt-auto fw-bold d-flex align-items-center justify-content-between">
                             <div className="creditBody">
-                                <p class="m-0">Valor Total R$ {decimalAdjust(cardValue)}</p>
-                                <p class="m-0">Fechamento {item.closureDate}/{month}/2022</p>
-                                <p class="m-0">Vencimento {item.dueDate}/{month}/2022</p>
+                                <p id="cardText" class="m-0">Valor Total R$ {decimalAdjust(cardValue)}</p>
+                                <p id="cardText" class="m-0">Fechamento {item.closureDate}/{month}/2022</p>
+                                <p id="cardText" class="m-0">Vencimento {item.dueDate}/{month}/2022</p>
                             </div>
                         </div>
                     </div>
