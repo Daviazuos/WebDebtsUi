@@ -7,6 +7,9 @@ export function decimalAdjust(value) {
   else if (value === 0) {
     return value.toLocaleString('pt-br', { minimumFractionDigits: 2 });;
   }
+  else {
+    return ''
+  }
 
 }
 

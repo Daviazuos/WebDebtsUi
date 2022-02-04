@@ -22,7 +22,6 @@ export function logout() {
 
 export function isLogged() {
     const user = authService.getCurrentUser();
-    console.log(user)
     if (user) {
         return (
 

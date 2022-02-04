@@ -10,7 +10,7 @@ function refreshPage() {
   window.location.reload();
 }
 
-export default class DebtList extends React.Component {
+export default class EditDebtForm extends React.Component {
   state = {
     name: '',
     value: '',
@@ -38,23 +38,20 @@ export default class DebtList extends React.Component {
   handleSubmit = event => {
     event.preventDefault();
 
-    const addDebts = {
+    const editDebts = {
       name: this.state.name || this.props.data?.name,
       value: this.state.value || this.props.data?.value,
       date: this.state.date || this.props.data?.date,
       numberOfInstallments: this.state.numberOfInstallments || this.props.data?.numberOfInstallments,
       debtInstallmentType: this.state.debtInstallmentType || this.props.data?.debtInstallmentType
     };
-    this.props.cardId === null ? axiosInstance.post(Endpoints.debt.add(), addDebts).then(response => {
-      const id = response.data.Body;
-      refreshPage()
-    }) : axiosInstance.post(Endpoints.card.addValues(this.props.cardId), addDebts).then(response => {
-      const id = response.data.Body;
+    axiosInstance.put(Endpoints.debt.putDebt(this.props.id), editDebts).then(response => {
       refreshPage()
     })
   }
 
   render() {
+    console.log(this.props.data?.date)
     return (
       <>
         <Form onSubmit={this.handleSubmit}>
@@ -86,7 +83,7 @@ export default class DebtList extends React.Component {
             <Form.Label>Quantidade de Parcelas</Form.Label>
             <Form.Control name='numberOfInstallments' type="number" onChange={this.installmentsChange} placeholder="Entre com o quantidade de parcelas" defaultValue={this.props.data?.numberOfInstallments}/>
           </Form.Group>: ""}
-          <Button variant="dark" type="submit"> Adicionar </Button>
+          <Button variant="dark" type="submit"> Atualizar </Button>
         </Form>
       </>
     );

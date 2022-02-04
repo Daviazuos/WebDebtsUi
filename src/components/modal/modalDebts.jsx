@@ -22,7 +22,7 @@ export default function ModalAddDebts(props) {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form cardId={props.cardId != null ? props.cardId : null}></Form>
+          <Form cardId={props.cardId != null ? props.cardId : null} data={props.data}></Form>
         </Modal.Body>
       </Card>
     </Modal>

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Button, Card, Container, Table, Form } from "react-bootstrap";
+import { Button, Card, Container, Table, Form, Modal } from "react-bootstrap";
 import ModalAddDebts from "../../components/modal/modalDebts";
 import { Endpoints } from '../../api/endpoints';
 import { axiosInstance } from "../../api";
@@ -11,6 +11,8 @@ import "./Debts.css";
 import { CustomPagination } from "../../components/customPagination/customPagination";
 import ModalInstallments from "../../components/installments/Installments";
 import ModalDelete from "../../components/modalDelete/ModalDelete";
+import EditDebtForm from "../../components/form/editDebtForm";
+import { dateAdjust } from "../../utils/dateFormater";
 
 
 function SetModal(props) {
@@ -47,6 +49,35 @@ function SetModalInstallments(props) {
   );
 }
 
+function SetModalEdit(props) {
+  const [modalShow, setModalShow] = React.useState(false);
+  return (
+    <>
+      <Button size="sm" className='btn btn-secondary' variant='dark' onClick={() => setModalShow(true)}>
+        <i className={props.simbol}></i> {props.modalName}
+      </Button>
+      <Modal
+        show={modalShow ? modalShow : props.show}
+        onHide={props.onHide ? props.onHide : () => setModalShow(false)}
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+      >
+        <Card>
+          <Modal.Header closeButton>
+            <Modal.Title id="contained-modal-title-vcenter">
+              {props.name}
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <EditDebtForm data={props.data} id={props.value}></EditDebtForm>
+          </Modal.Body>
+        </Card>
+      </Modal>
+    </>
+  );
+}
+
 function SetModalDelete(props) {
   const [modalShow, setModalShow] = React.useState(false);
   return (
@@ -78,29 +109,17 @@ export default function Debts() {
   const nameChange = event => {
     setName(event.target.value);
   }
-  
+
   const originChange = event => {
     setOrigin(event.target.value);
   }
 
   useEffect(() => {
-    let mounted = true;
-    axiosInstance.get(Endpoints.debt.filter(pageNumber, 8, '', ''))
-      .then(res => {
-        setDebts(res.data)
-      })
-    return () => mounted = false;
-  }, [pageNumber])
-
-  useEffect(() => {
-    let mounted = true;
     axiosInstance.get(Endpoints.debt.filter(pageNumber, 8, origin, name))
       .then(res => {
         setDebts(res.data)
       })
-    return () => mounted = false;
-  }, [name, origin])
-
+  }, [pageNumber, name, origin])
   const lis = debts.items?.map(item => {
     {
       return (
@@ -109,7 +128,11 @@ export default function Debts() {
           <td className='td1'>R$ {decimalAdjust(item.value)}</td>
           <td className='td1'>{debtInstallmentTransform(item.debtInstallmentType)}</td>
           <td className='td1'>{debtTypeTransform(item.debtType)}</td>
+          <td className='td1'>{dateAdjust(item.date)}</td>
+          <td className='td1'>{(item.numberOfInstallments == 0) ? '-' : item.numberOfInstallments}</td>
+          <td className='td1'>{(item.paidInstallment == 0 || item.paidInstallment == null) ? '-' : item.paidInstallment}</td>
           <td className='tdd'>
+            {<SetModalEdit value={item.id} data={item} name={item.name} modalName="Editar" simbol="fas fa-edit" className='btn btn-primary'></SetModalEdit>}{" "}
             {<SetModalDelete id={item.id} modalName="Apagar"></SetModalDelete>}
             {<SetModalInstallments value={item.id} name={item.name} modalName="Parcelas" simbol="fas fa-search"></SetModalInstallments>}{" "}
           </td>
@@ -126,7 +149,7 @@ export default function Debts() {
             <Form.Group className="mb-3">
               <Form.Control type="search" placeholder="Filtrar por Nome" id="nameSearch" onChange={nameChange} />
             </Form.Group>
-            <Form.Control  id="nameSearch" as="select" name='debtInstallmentType' onChange={originChange}>
+            <Form.Control id="nameSearch" type="search" as="select" name='debtInstallmentType' onChange={originChange}>
               <option value="">Filtrar por origem</option>
               <option value="Simple">Simples</option>
               <option value="Card">Cartão de crédito</option>
@@ -139,6 +162,9 @@ export default function Debts() {
                 <th>Valor</th>
                 <th>Tipo</th>
                 <th>Origem</th>
+                <th>data Início</th>
+                <th>Parcelas</th>
+                <th>Parcela pagas</th>
                 <th>Ação</th>
               </tr>
             </thead>
