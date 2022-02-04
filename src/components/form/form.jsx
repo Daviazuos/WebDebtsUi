@@ -59,21 +59,21 @@ export default class DebtList extends React.Component {
         <Form onSubmit={this.handleSubmit}>
           <Form.Group>
             <Form.Label>Nome</Form.Label>
-            <Form.Control name="name" onChange={this.nameChange} placeholder="Entre com o nome" />
+            <Form.Control required="true" name="name" onChange={this.nameChange} placeholder="Entre com o nome" />
           </Form.Group>
 
           <Form.Group>
             <Form.Label>Valor</Form.Label>
-            <Form.Control name='value' type="number" step=".01" onChange={this.valueChange} placeholder="Entre com o valor total" />
+            <Form.Control required="true" name='value' type="number" step=".01" onChange={this.valueChange} placeholder="Entre com o valor total" />
           </Form.Group>
 
           <Form.Group>
             <Form.Label>Data</Form.Label>
-            <Form.Control name='date' type="date" onChange={this.dateChange} placeholder="Entre com o data" />
+            <Form.Control required="true" name='date' type="date" onChange={this.dateChange} placeholder="Entre com o data" />
           </Form.Group>
           <Form.Group>
             <Form.Label>Tipo de débito</Form.Label>
-            <Form.Control as="select" name='debtInstallmentType' onChange={this.typeChange}>
+            <Form.Control required="true" as="select" name='debtInstallmentType' onChange={this.typeChange}>
               <option>Selecione o Tipo de debito</option>
               <option value="0">Parcelado</option>
               <option value="1">Fixo</option>

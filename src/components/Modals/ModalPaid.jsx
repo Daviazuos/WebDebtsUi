@@ -80,11 +80,11 @@ export default class ModalPaid extends React.Component {
                     <Form onSubmit={this.handleSubmit}>
                         <Form.Group>
                             <Form.Label>Data pagamento</Form.Label>
-                            <Form.Control name='date' type="date" onChange={this.dateChange} placeholder="Entre com o data" />
+                            <Form.Control required="true" name='date' type="date" onChange={this.dateChange} placeholder="Entre com o data" />
                         </Form.Group>
                         <Form.Group>
                             <Form.Label>Carteira</Form.Label>
-                            <Form.Control as="select" name='debtInstallmentType' onChange={this.walletIdChange}>
+                            <Form.Control required="true" as="select" name='debtInstallmentType' onChange={this.walletIdChange}>
                                 {lis}
                             </Form.Control>
                         </Form.Group>

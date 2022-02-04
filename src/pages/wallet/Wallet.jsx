@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Card, Container, Table } from "react-bootstrap";
 import { axiosInstance } from "../../api";
 import { Endpoints } from "../../api/endpoints";
@@ -7,7 +7,6 @@ import WalletModal from "./WalletModal"
 
 import "./Wallet.css";
 import CustomCard from "../../components/customCard/CustomCard";
-import { monthByNumber } from "../../utils/dateFormater";
 
 function Delete(wallet) {
   const editWallet = {
@@ -50,10 +49,10 @@ function SetModal(props) {
 }
 
 export default function Wallet() {
-  const [sumAllValue, setSumAllValue] = React.useState([]);
-  const [wallet, setWallet] = React.useState([]);
-  const [month, setMonth] = React.useState(localStorage.getItem("month"))
-  const [year, setYear] = React.useState(localStorage.getItem("year"))
+  const [sumAllValue, setSumAllValue] = useState([]);
+  const [wallet, setWallet] = useState([]);
+  const [month, setMonth] = useState(localStorage.getItem("month"))
+  const [year, setYear] = useState(localStorage.getItem("year"))
 
   useEffect(() => {
     let mounted = true;
@@ -101,6 +100,9 @@ export default function Wallet() {
           </td>
           <td>
             R$ {item.updatedValue === 0 ? decimalAdjust(item.value) : decimalAdjust(item.updatedValue)}
+          </td>
+          <td>
+            {item.finishAt ? 'Simples' : 'Fixa'}
           </td>
           <td className='tdd'>
             {<SetModal value={item.id} name={item.name} modalName="Editar" simbol="fas fa-edit" className='btn btn-primary'></SetModal>}{" "}
@@ -151,6 +153,7 @@ export default function Wallet() {
               <th>Nome</th>
               <th>Valor</th>
               <th>Saldo</th>
+              <th>Tipo</th>
               <th>Ação</th>
             </tr>
           </thead>

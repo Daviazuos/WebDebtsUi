@@ -2,7 +2,7 @@ import React from "react";
 import { Button, Modal, Form } from "react-bootstrap";
 import { axiosInstance } from "../../api";
 import { Endpoints } from '../../api/endpoints';
-import { decimalAdjust } from "../../utils/valuesFormater";
+import { converteMoedaFloat, decimalAdjust } from "../../utils/valuesFormater";
 
 import "./WalletModal.css"
 
@@ -51,7 +51,7 @@ export default class ModalInstallments extends React.Component {
 
         const editWallet = {
             name: this.state.name || this.state.wallet.name,
-            value: this.state.value || this.state.wallet.value,
+            value: converteMoedaFloat(this.state.value) || this.state.wallet.value,
             walletStatus: this.state.walletStatus || this.state.wallet.walletStatus,
             finishDate: (this.state.type == '0') ? lastDayOfMonth : ''
         };
@@ -94,8 +94,7 @@ export default class ModalInstallments extends React.Component {
                         </Form.Group>
                         <Form.Group>
                             <Form.Label>Tipo de Carteira</Form.Label>
-                            <Form.Control as="select" name='debtInstallmentType' onChange={this.typeChange}>
-                                <option>Selecione o Tipo de Carteira</option>
+                            <Form.Control as="select" name='debtInstallmentType' onChange={this.typeChange} defaultValue={this.state.wallet?.finishAt? '0' : '1'}>
                                 <option value="0">Simples</option>
                                 <option value="1">Fixa</option>
                             </Form.Control>

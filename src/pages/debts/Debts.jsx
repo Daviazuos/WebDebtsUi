@@ -124,10 +124,10 @@ export default function Debts() {
         <Card className="cardTable">
           <Form className="formTable">
             <Form.Group className="mb-3">
-              <Form.Control type="search" placeholder="Nome" id="nameSearch" onChange={nameChange} />
+              <Form.Control type="search" placeholder="Filtrar por Nome" id="nameSearch" onChange={nameChange} />
             </Form.Group>
             <Form.Control  id="nameSearch" as="select" name='debtInstallmentType' onChange={originChange}>
-              <option value="">Selecione a origem</option>
+              <option value="">Filtrar por origem</option>
               <option value="Simple">Simples</option>
               <option value="Card">Cartão de crédito</option>
             </Form.Control>

@@ -48,7 +48,7 @@ function SetModalCredDebts(props) {
     const [modalShow, setModalShow] = React.useState(false);
     return (
         <>
-            <Button className='btn btn-blue' variant='dark' onClick={() => setModalShow(true)}>
+            <Button className='btn btn-green' onClick={() => setModalShow(true)}>
                 <i className={props.simbol}></i> {props.modalName}
             </Button>
             <CustomModal
