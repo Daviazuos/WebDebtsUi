@@ -36,6 +36,7 @@ function SetModalPaid(props) {
         head={props.name}
         month={props.month}
         year={props.year}
+        isCard={props.isCard}
       />
     </>
   );
@@ -76,8 +77,8 @@ export default function Financial() {
         <td className="td1">{item.status == 'Paid' ? <i class="fas fa-circle success fa-xs"></i> : <i class="fas fa-circle red fa-xs"></i>}   {statusTransform(item.status)}</td>
         <td className="td1">{dateAdjust(item.paymentDate)}</td>
         <td className="tdd">
-          {item.status == 'Paid' ? <SetModalPaid disabled={true} modalName="Pagar" simbol="fas fa-check" value={item.id} month={month} year={year}></SetModalPaid> :
-            <SetModalPaid disabled={false} modalName="Pagar" simbol="fas fa-check" value={item.id} month={month} year={year}></SetModalPaid>}
+          {item.status == 'Paid' ? <SetModalPaid disabled={true} modalName="Pagar" simbol="fas fa-check" value={item.id} month={month} year={year} isCard={false}></SetModalPaid> :
+            <SetModalPaid disabled={false} modalName="Pagar" simbol="fas fa-check" value={item.id} month={month} year={year} isCard={false}></SetModalPaid>}
           {item.status == 'Paid' ?
             <Button disabled={false} size="sm" className="btn btn-danger" onClick={() => SetStatus(item.id, "NotPaid")}><i className="fas fa-times"></i> Pendente</Button> :
             <Button disabled={true} size="sm" className="btn btn-danger" onClick={() => SetStatus(item.id, "NotPaid")}><i className="fas fa-times"></i> Pendente</Button>}
@@ -112,9 +113,9 @@ export default function Financial() {
         <td className="td1">{cardStatus == 'Paid' ? <i class="fas fa-circle success fa-xs"></i> : <i class="fas fa-circle red fa-xs"></i>}  {statusTransform(cardStatus)}</td>
         <td className="td1">{dateAdjust(paymentDate)}</td>
         <td className="tdd">
-          {item.status == 'Paid' ? <SetModalPaid disabled={true} modalName="Pagar" simbol="fas fa-check" value={item.id} month={month} year={year}></SetModalPaid> :
-            <SetModalPaid disabled={false} modalName="Pagar" simbol="fas fa-check" value={item.id} month={month} year={year}></SetModalPaid>}
-          {item.status == 'Paid' ?
+          {cardStatus == 'Paid' ? <SetModalPaid disabled={true} modalName="Pagar" simbol="fas fa-check" value={item.id} month={month} year={year} isCard={true}></SetModalPaid> :
+            <SetModalPaid disabled={false} modalName="Pagar" simbol="fas fa-check" value={item.id} month={month} year={year} isCard={true}></SetModalPaid>}
+          {cardStatus == 'Paid' ?
             <Button disabled={false} size="sm" className="btn btn-danger" onClick={() => SetStatus(item.id, "NotPaid")}><i className="fas fa-times"></i> Pendente</Button> :
             <Button disabled={true} size="sm" className="btn btn-danger" onClick={() => SetStatus(item.id, "NotPaid")}><i className="fas fa-times"></i> Pendente</Button>}
         </td>

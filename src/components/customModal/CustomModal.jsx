@@ -1,31 +1,30 @@
 import React, { useContext, useEffect } from "react";
-import { Table, Modal } from "react-bootstrap";
+import { Table, Modal, Button } from "react-bootstrap";
 import { axiosInstance } from "../../api";
 import { Endpoints } from '../../api/endpoints';
 import { decimalAdjust } from "../../utils/valuesFormater";
 import { statusTransform } from "../../utils/enumFormatter";
 
-import { dateAdjust } from "../../utils/dateFormater";
+import { dateAdjust, monthByNumber } from "../../utils/dateFormater";
 import Context from "../../context/Context";
 import { CustomPagination } from "../customPagination/customPagination";
+import "./CustomModal.css"
 
 export default function CustomModal(props) {
     const [installments, setInstallments] = React.useState([]);
-    const [month, setMonth] = useContext(Context);
+    const [month, setMonth] = React.useState(props.month);
     const [pageNumber, setPageNumber] = React.useState(1);
-  
+
     const pageChange = event => {
-      setPageNumber(event.target.text);
+        setPageNumber(event.target.text);
     }
 
     useEffect(() => {
-        let mounted = true;
-        axiosInstance.get(Endpoints.debt.filterInstallments(pageNumber, 20, '', props.month, '2022', '', '', '', props.id))
+        axiosInstance.get(Endpoints.debt.filterInstallments(pageNumber, 20, '', month, '2022', '', '', '', props.id))
             .then(res => {
                 setInstallments(res.data);
             })
-        return () => mounted = false;
-    }, [pageNumber, props.month])
+    }, [pageNumber, month])
 
 
     const lis = installments?.items?.map(item => {
@@ -39,15 +38,28 @@ export default function CustomModal(props) {
             </tr>
         )
     })
+
+    const valueTotal = installments?.items?.reduce(function (prev, cur) {
+        return prev + cur.value;
+    }, 0);
     return (
         <Modal
             {...props}
             className="modalInstallments"
             scrollable="true"
         >
-            <Modal.Header closeButton>
+            <Modal.Header>
                 <Modal.Title id="contained-modal-title-vcenter">
-                    {props.head} - R$ {props.totalValue}
+                    <div id="head">
+                        <Button size="sm" onClick={() => setMonth(parseInt(month) - 1)}>
+                            <i className="fas fa-angle-left" aria-hidden="true"></i>
+                        </Button>
+                        {monthByNumber(month)}
+                        <Button size="sm" onClick={() => setMonth(parseInt(month) + 1)}>
+                            <i className="fas fa-angle-right" aria-hidden="true"></i>
+                        </Button>
+                    </div>
+                    {props.head} - R$ {decimalAdjust(valueTotal)}
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>

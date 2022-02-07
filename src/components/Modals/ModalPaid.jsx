@@ -2,6 +2,7 @@ import React from "react";
 import { Form, Button, Modal } from "react-bootstrap";
 import { axiosInstance } from "../../api";
 import { Endpoints } from '../../api/endpoints';
+import { decimalAdjust } from "../../utils/valuesFormater";
 
 
 function SetStatus(id, status) {
@@ -23,7 +24,6 @@ function refreshPage() {
 
 export default class ModalPaid extends React.Component {
     state = {
-        installments: [],
         wallet: [],
         date: '',
         walletId: ''
@@ -37,14 +37,6 @@ export default class ModalPaid extends React.Component {
     }
 
     componentDidMount() {
-        axiosInstance.get(Endpoints.debt.filterInstallments(1, this.props.value, '', '', '', ''))
-            .then(res => {
-                const installments = res.data;
-                this.setState({ installments });
-            })
-    }
-
-    componentDidMount() {
         axiosInstance.get(Endpoints.wallet.getEnable('Enable', this.props.month, this.props.year))
             .then(res => {
                 const wallet = res.data;
@@ -53,17 +45,26 @@ export default class ModalPaid extends React.Component {
     }
 
     handleSubmit = event => {
+        console.log(this.props.value)
         event.preventDefault();
-        axiosInstance.put(Endpoints.debt.put(this.props.value,  "Paid", this.state.date, this.state.walletId)).then(response => {
-            const id = response.data.Body;
-            refreshPage()
-        })
+        if (this.props.isCard == true) {
+            axiosInstance.put(Endpoints.debt.put(null, this.props.value, "Paid", this.state.date, this.state.walletId)).then(response => {
+                const id = response.data.Body;
+                refreshPage()
+            })
+        }else {
+            axiosInstance.put(Endpoints.debt.put(this.props.value, null,  "Paid", this.state.date, this.state.walletId)).then(response => {
+                const id = response.data.Body;
+                refreshPage()
+            })
+        }
     }
 
     render() {
         const lis = this.state.wallet.map(item => {
+            console.log(item)
             return (
-                <option value={item.id}>{item.name}</option>
+                <option value={item.id}>{`${item.name} - restante: R$ ${(item.updatedValue === 0) ? decimalAdjust(item.value) : decimalAdjust(item.updatedValue)}`}</option>
             )
         })
         lis.unshift(<option>Escolha uma carteira</option>)
