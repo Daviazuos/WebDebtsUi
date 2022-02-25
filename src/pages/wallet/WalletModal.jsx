@@ -2,6 +2,7 @@ import React from "react";
 import { Button, Modal, Form } from "react-bootstrap";
 import { axiosInstance } from "../../api";
 import { Endpoints } from '../../api/endpoints';
+import MaskedFormControl from "../../utils/maskedInputs";
 import { converteMoedaFloat, decimalAdjust } from "../../utils/valuesFormater";
 
 import "./WalletModal.css"
@@ -19,6 +20,7 @@ export default class ModalInstallments extends React.Component {
         value: '',
         walletStatus: '',
         type: '0',
+        month: ''
     }
 
     componentDidMount() {
@@ -32,8 +34,8 @@ export default class ModalInstallments extends React.Component {
     nameChange = event => {
         this.setState({ name: event.target.value });
     }
-    valueChange = event => {
-        this.setState({ value: event.target.value });
+    valueChange = (event, value, maskedValue) => {
+        this.setState({ value: value });
     }
     statusChange = event => {
         this.setState({ walletStatus: event.target.value });
@@ -43,17 +45,21 @@ export default class ModalInstallments extends React.Component {
         this.setState({ type: event.target.value });
     }
 
+    monthChange = event => {
+        this.setState({ month: event.target.value + '-01' });
+    }
+
     handleSubmit = event => {
         event.preventDefault();
 
-        const today = new Date();
-        const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+        const lastDayOfMonth = new Date(this.state.month.substring(0, 4), this.state.month.substring(5, 7), 0);
 
         const editWallet = {
             name: this.state.name || this.state.wallet.name,
-            value: converteMoedaFloat(this.state.value) || this.state.wallet.value,
+            value: this.state.value || this.state.wallet.value,
             walletStatus: this.state.walletStatus || this.state.wallet.walletStatus,
-            finishDate: (this.state.type == '0') ? lastDayOfMonth : ''
+            finishDate: (this.state.type == '0') ? lastDayOfMonth : '',
+            initialDate: this.state.month || this.state.wallet.month
         };
 
         if (this.props.value) {
@@ -90,11 +96,16 @@ export default class ModalInstallments extends React.Component {
                         </Form.Group>
                         <Form.Group>
                             <Form.Label>Valor</Form.Label>
-                            <Form.Control name="value" onChange={this.valueChange} placeholder="Valor" defaultValue={decimalAdjust(this.state.wallet?.value)} />
+                            <MaskedFormControl currency="BRL" required="true" name='value' onChange={this.valueChange} placeholder="Valor" defaultValue={this.state.wallet?.value} />
                         </Form.Group>
                         <Form.Group>
+                            <Form.Label>Mês</Form.Label>
+                            <Form.Control type="month" onChange={this.monthChange} defaultValue={this.state.wallet?.month} />
+                        </Form.Group>
+
+                        <Form.Group>
                             <Form.Label>Tipo de Carteira</Form.Label>
-                            <Form.Control as="select" name='debtInstallmentType' onChange={this.typeChange} defaultValue={this.state.wallet?.finishAt? '0' : '1'}>
+                            <Form.Control as="select" name='debtInstallmentType' onChange={this.typeChange} defaultValue={this.state.wallet?.finishAt ? '0' : '1'}>
                                 <option value="0">Simples</option>
                                 <option value="1">Fixa</option>
                             </Form.Control>

@@ -37,11 +37,9 @@ export default function CustomModal(props) {
                 <td>{statusTransform(item.status)}</td>
             </tr>
         )
-    })
 
-    const valueTotal = installments?.items?.reduce(function (prev, cur) {
-        return prev + cur.value;
-    }, 0);
+    })
+    
     return (
         <Modal
             {...props}
@@ -59,7 +57,7 @@ export default function CustomModal(props) {
                             <i className="fas fa-angle-right" aria-hidden="true"></i>
                         </Button>
                     </div>
-                    {props.head} - R$ {decimalAdjust(valueTotal)}
+                    {props.head} - R$ {props.totalValue}
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>

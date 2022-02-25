@@ -62,7 +62,6 @@ export default class ModalPaid extends React.Component {
 
     render() {
         const lis = this.state.wallet.map(item => {
-            console.log(item)
             return (
                 <option value={item.id}>{`${item.name} - restante: R$ ${(item.updatedValue === 0) ? decimalAdjust(item.value) : decimalAdjust(item.updatedValue)}`}</option>
             )
