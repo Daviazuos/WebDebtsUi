@@ -20,7 +20,7 @@ export default class CardApexGraphic extends React.Component {
         const dataDebts = []
         const dataWallet = []
         const today = new Date()
-        const pastMonths = new Date(today.setMonth(today.getMonth() - 5));
+        const pastMonths = new Date(today.setMonth(today.getMonth() - 4));
         const mm = String(pastMonths.getMonth())
         const yyyy = pastMonths.getFullYear()
 

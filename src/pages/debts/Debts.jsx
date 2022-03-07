@@ -99,6 +99,7 @@ function SetModalDelete(props) {
 export default function Debts() {
   const [debts, setDebts] = React.useState([]);
   const [name, setName] = React.useState('');
+  const [type, setType] = React.useState('');
   const [origin, setOrigin] = React.useState('');
   const [pageNumber, setPageNumber] = React.useState(1);
 
@@ -110,16 +111,20 @@ export default function Debts() {
     setName(event.target.value);
   }
 
+  const typeChange = event => {
+    setType(event.target.value);
+  }
+
   const originChange = event => {
     setOrigin(event.target.value);
   }
 
   useEffect(() => {
-    axiosInstance.get(Endpoints.debt.filter(pageNumber, 8, origin, name))
+    axiosInstance.get(Endpoints.debt.filter(pageNumber, 15, origin, name, type))
       .then(res => {
         setDebts(res.data)
       })
-  }, [pageNumber, name, origin])
+  }, [pageNumber, name, origin, type])
   const lis = debts.items?.map(item => {
     {
       return (
@@ -148,6 +153,14 @@ export default function Debts() {
           <Form className="formTable">
             <Form.Group className="mb-3">
               <Form.Control type="search" placeholder="Filtrar por Nome" id="nameSearch" onChange={nameChange} />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Control type="search" id="typeSearch" as="select" onChange={typeChange}>
+              <option value="">Filtrar por tipo</option>
+              <option value="Installment">Parcelado</option>
+              <option value="Fixed">Fixo</option>
+              <option value="Simple">Simples</option>
+              </Form.Control>
             </Form.Group>
             <Form.Control id="nameSearch" type="search" as="select" name='debtInstallmentType' onChange={originChange}>
               <option value="">Filtrar por origem</option>

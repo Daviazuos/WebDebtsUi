@@ -3,7 +3,6 @@ import { Button, Modal, Form } from "react-bootstrap";
 import { axiosInstance } from "../../api";
 import { Endpoints } from '../../api/endpoints';
 import MaskedFormControl from "../../utils/maskedInputs";
-import { converteMoedaFloat, decimalAdjust } from "../../utils/valuesFormater";
 
 import "./WalletModal.css"
 
@@ -19,7 +18,7 @@ export default class ModalInstallments extends React.Component {
         name: '',
         value: '',
         walletStatus: '',
-        type: '0',
+        type: '',
         month: ''
     }
 
@@ -58,7 +57,7 @@ export default class ModalInstallments extends React.Component {
             name: this.state.name || this.state.wallet.name,
             value: this.state.value || this.state.wallet.value,
             walletStatus: this.state.walletStatus || this.state.wallet.walletStatus,
-            finishDate: (this.state.type == '0') ? lastDayOfMonth : '',
+            finishDate: (this.state.type == '0') ? lastDayOfMonth : null,
             initialDate: this.state.month || this.state.wallet.month
         };
 
@@ -100,7 +99,7 @@ export default class ModalInstallments extends React.Component {
                         </Form.Group>
                         <Form.Group>
                             <Form.Label>Mês</Form.Label>
-                            <Form.Control type="month" onChange={this.monthChange} defaultValue={this.state.wallet?.month} />
+                            <Form.Control type="month" onChange={this.monthChange} defaultValue={this.state.wallet?.startAt?.substring(0,7)} />
                         </Form.Group>
 
                         <Form.Group>

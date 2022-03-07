@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Card, Container, Table } from "react-bootstrap";
+import { Button, Card, Container, Table, Modal } from "react-bootstrap";
 import { axiosInstance } from "../../api";
 import { Endpoints } from "../../api/endpoints";
 import { decimalAdjust } from "../../utils/valuesFormater";
@@ -7,27 +7,26 @@ import WalletModal from "./WalletModal"
 
 import "./Wallet.css";
 import CustomCard from "../../components/customCard/CustomCard";
+import { dateAdjust } from "../../utils/dateFormater";
+import WalletModalDelete from "./WalletDeleteModal";
 
-function Delete(wallet) {
-  const editWallet = {
-    name: wallet.name,
-    value: wallet.value,
-    walletStatus: 'disable'
-  };
 
-  axiosInstance.put(Endpoints.wallet.put(wallet.id), editWallet).then(response => {
-    const id = response.data.Body;
-    refreshPage()
-  })
+function SetModalDelete(props) {
+  const [modalShow, setModalShow] = React.useState(false);
+  console.log(props)
   return (
     <>
+      <Button size="sm" className={props.className} variant='dark' onClick={() => setModalShow(true)}>
+        <i className={props.simbol}></i> {props.modalName}
+      </Button>
+      <WalletModalDelete
+        value={props.value}
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+        head={props.name}
+      />
     </>
-  )
-}
-
-
-function refreshPage() {
-  window.location.reload();
+  );
 }
 
 
@@ -106,9 +105,7 @@ export default function Wallet() {
           </td>
           <td className='tdd'>
             {<SetModal value={item.id} name={item.name} modalName="Editar" simbol="fas fa-edit" className='btn btn-primary'></SetModal>}{" "}
-            <Button size="sm" className="btn btn-danger" onClick={() => Delete(item)}>
-              <i className="fa fa-trash" aria-hidden="true"></i> Apagar
-            </Button>
+            {<SetModalDelete size="sm" className="btn btn-danger" simbol="fa fa-trash" modalName="Apagar" value={item}>Apagar</SetModalDelete>}{" "}
           </td>
         </tr>
       )

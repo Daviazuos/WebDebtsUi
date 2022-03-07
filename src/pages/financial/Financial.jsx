@@ -55,7 +55,7 @@ export default function Financial() {
   }
 
   useEffect(() => {
-    axiosInstance.get(Endpoints.debt.filterInstallments(pageNumber, 5, '', month, year, '', '', 'Simple', ''))
+    axiosInstance.get(Endpoints.debt.filterInstallments(pageNumber, 6, '', month, year, '', '', 'Simple', ''))
       .then(res => {
         setFinancial(res.data)
       })
