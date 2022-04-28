@@ -7,13 +7,11 @@ import WalletModal from "./WalletModal"
 
 import "./Wallet.css";
 import CustomCard from "../../components/customCard/CustomCard";
-import { dateAdjust } from "../../utils/dateFormater";
 import WalletModalDelete from "./WalletDeleteModal";
 
 
 function SetModalDelete(props) {
   const [modalShow, setModalShow] = React.useState(false);
-  console.log(props)
   return (
     <>
       <Button size="sm" className={props.className} variant='dark' onClick={() => setModalShow(true)}>
@@ -77,16 +75,16 @@ export default function Wallet() {
   }, 0);
 
 
+  const paidValue = sumAllValue.items?.filter(({status}) => status === 'Paid').reduce(function (prev, cur) {
+    return prev + cur.value;
+  }, 0);
+
   const provisionedValue = valueTotal - sumAllValue.items?.reduce(function (prev, cur) {
     return prev + cur.value;
   }, 0);
 
   const sumAll = sumAllValue.items?.reduce(function (prev, cur) {
     return prev + cur.value;
-  }, 0);
-
-  const saldoTotal = wallet.reduce(function (prev, cur) {
-    return prev + (cur.updatedValue === 0 ? cur.value : cur.updatedValue);
   }, 0);
 
   const lis = wallet.map(item => {
@@ -96,9 +94,6 @@ export default function Wallet() {
           <td>{item.name}</td>
           <td>
             R$ {decimalAdjust(item.value)}
-          </td>
-          <td>
-            R$ {item.updatedValue === 0 ? decimalAdjust(item.value) : decimalAdjust(item.updatedValue)}
           </td>
           <td>
             {item.finishAt ? 'Simples' : 'Fixa'}
@@ -129,18 +124,17 @@ export default function Wallet() {
         >
         </CustomCard>
         <CustomCard
-          title="Saldo"
-          children={saldoTotal === 0 ? decimalAdjust(valueTotal) : decimalAdjust(saldoTotal)}
-          icon="fas fa-piggy-bank blue fa-2x"
+          title="Pago"
+          children={decimalAdjust(paidValue)}
+          icon="fas fa-lightbulb blue fa-2x"
         >
         </CustomCard>
         <CustomCard
-          title="Provisionado"
+          title="Restante carteira"
           children={decimalAdjust(provisionedValue)}
           icon="fas fa-lightbulb blue fa-2x"
         >
         </CustomCard>
-
       </div>
 
       <Card className="cardWallet">
@@ -149,7 +143,6 @@ export default function Wallet() {
             <tr>
               <th>Nome</th>
               <th>Valor</th>
-              <th>Saldo</th>
               <th>Tipo</th>
               <th>Ação</th>
             </tr>

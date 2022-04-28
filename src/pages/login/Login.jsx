@@ -12,6 +12,10 @@ export default function Login(props) {
     const [password, setPassword] = React.useState('');
     const [isLoading, setIsLoading] = React.useState(false);
 
+    const today = new Date();
+    const actualMonth = String(today.getMonth() + 1).padStart(2, '0');
+    const actualYear = String(today.getFullYear());
+
     const usernameChange = event => {
         setUsername(event.target.value);
     }
@@ -30,6 +34,8 @@ export default function Login(props) {
         axiosInstance.post(Endpoints.user.login(), login)
             .then(response => {
                 localStorage.setItem("user", JSON.stringify(response.data));
+                localStorage.setItem("month", actualMonth);
+                localStorage.setItem("year", actualYear);
                 props.history.push("/");
                 refreshPage()
             });
