@@ -1,0 +1,39 @@
+.loginContainer {
+    max-width: 400px;
+}
+
+.loginContainer .cardLogin {
+    margin: 5px;
+    max-width: 350px;
+    justify-content: space-evenly;
+    left:50%;
+    top:50%;
+    position:absolute;
+    cursor: auto;
+    transform:translate(-50%, -50%);
+}
+
+.loginContainer .cardLogin .registerButton {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.loginContainer .cardLogin .signButton {
+    background-color: #0070D2;
+    color: white;
+    
+}
+
+.loginContainer .google {
+    margin-top: 10px;
+}
+
+.register {
+    margin-left: 20px;
+}
+
+.signText {
+    color: #9FA2B4;
+    font-size: 11px;
+    
+}

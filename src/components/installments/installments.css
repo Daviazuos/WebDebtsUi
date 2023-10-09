@@ -1,0 +1,8 @@
+.installmentsTable .td1 {
+    max-width: 450px;
+
+}
+
+.installmentsTable td, .installmentsTable th {
+    padding: 0.2rem;
+}

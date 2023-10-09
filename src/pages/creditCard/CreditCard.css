@@ -1,0 +1,46 @@
+
+#cardCredit{
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    min-width: 0;
+    flex-wrap: wrap;
+}
+
+.cardCredit .debit-card {
+    min-width: 295px;
+    min-height: 180px;
+    max-width: 340px;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 5px 3px 5px #000000a2
+    
+}
+
+.cardCredit .card-2 {
+    border-color: black;
+    margin-top: 10px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+
+.cardCredit .text-white {
+    font-size: 25px
+}
+
+.cardCredit .m-0 {
+    color: black;
+}
+
+.cardCredit .creditBody {
+    font-size: 11px;
+}
+
+.modalButton {
+    margin: 10px;
+}
+
+#cardText {
+    color: white !important;
+}

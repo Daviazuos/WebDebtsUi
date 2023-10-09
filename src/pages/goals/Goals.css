@@ -1,0 +1,52 @@
+
+#cardGoal{
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    min-width: 0;
+    flex-wrap: wrap;
+}
+
+.cardGoal .debit-card {
+    min-width: 295px;
+    min-height: 180px;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 5px 3px 5px #000000a2
+    
+}
+
+.cardGoal .card-2 {
+    border-color: black;
+    margin-top: 10px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+
+.cardGoal .text-white {
+    font-size: 25px
+}
+
+.cardGoal .m-0 {
+    color: black;
+}
+
+.cardGoal .creditBody {
+    font-size: 11px;
+}
+
+.modalButton {
+    margin: 10px;
+}
+
+#cardText {
+    color: rgb(0, 0, 0);
+}
+
+.CircularProgressbar .CircularProgressbar-text {
+    fill: #3e98c7;
+    font-size: 10px;
+    dominant-baseline: middle;
+    text-anchor: middle;
+}

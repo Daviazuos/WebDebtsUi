@@ -1,0 +1,17 @@
+.cardMaxDebts{
+    margin: 10px;
+    box-shadow: 1px 3px 1px #9E9E9E;
+    margin-left: 0px;
+    max-height: 280px;
+    max-width: 480px;
+}
+
+.cardMaxDebts .maxName{
+    margin: 10px;
+    font-size: 100%;
+}
+
+.cardMaxDebts .tableMaxDebts{
+    margin:5px;
+    width: 450px;
+}

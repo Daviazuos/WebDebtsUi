@@ -1,0 +1,17 @@
+.cardWallet {
+    padding: 10PX;
+}
+
+.cardWallet .allValue {
+    margin: auto;
+}
+
+
+.containerWallet {
+    margin-left: auto;
+}
+
+.containerWallet .walletCards {
+    display: flex;
+    flex-flow: row wrap;
+}

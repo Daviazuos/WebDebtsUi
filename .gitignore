@@ -381,3 +381,8 @@ MigrationBackup/
 *.code-workspace
 
 # End of https://www.toptal.com/developers/gitignore/api/react,vscode,vs
+build/static/css/2.5c573378.chunk.css.map
+build/static/css/main.01a53a8b.chunk.css.map
+build/static/js/2.8956708a.chunk.js.map
+build/static/js/main.b786e7b4.chunk.js.map
+build/static/js/runtime-main.4d00c1a7.js.map

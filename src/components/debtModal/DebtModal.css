@@ -1,0 +1,15 @@
+.debtModal {
+    display: flex;
+}
+
+.chartProgress {
+    display: flex;
+    margin-left: 30px;
+    margin-top: 30px;
+}
+
+.buttonsModal {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
