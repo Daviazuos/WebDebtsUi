@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Button, Card, Container, Table, Modal } from "react-bootstrap";
+import { Button, Card, Table } from "react-bootstrap";
 import { axiosInstance } from "../../api";
 import { Endpoints } from "../../api/endpoints";
 import { decimalAdjust } from "../../utils/valuesFormater";
 import WalletModal from "./WalletModal"
 
 import "./Wallet.css";
-import CustomCard from "../../components/customCard/CustomCard";
 import WalletModalDelete from "./WalletDeleteModal";
-import { debtInstallmentTransform, debtInstallmentTypeToNumber, getMonthDifference, walletStatusTransform } from "../../utils/enumFormatter";
-import CardApexGraphic from "../../components/cardGraphic/CardApexGraphic";
+import { debtInstallmentTransform, walletStatusTransform } from "../../utils/enumFormatter";
 import WalletModalEdit from "./WalletModalEdit";
 
 
@@ -66,7 +64,6 @@ function SetModalAdd(props) {
 }
 
 export default function Wallet() {
-  const [sumAllValue, setSumAllValue] = useState([]);
   const [wallet, setWallet] = useState([]);
   const [month, setMonth] = useState(localStorage.getItem("month"))
   const [year, setYear] = useState(localStorage.getItem("year"))
@@ -79,42 +76,6 @@ export default function Wallet() {
       })
     return () => mounted = false;
   }, [month])
-
-  useEffect(() => {
-    let mounted = true;
-    axiosInstance.get(Endpoints.debt.filterInstallments(1, 9999, '', month, year, '', '', '', '', null))
-      .then(res => {
-        setSumAllValue(res.data)
-      })
-    return () => mounted = false;
-  }, [month])
-
-  const valueTotal = wallet.filter(({ walletStatus }) => walletStatus !== 'Pending').reduce(function (prev, cur) {
-    return prev + cur.value;
-  }, 0);
-
-
-  const paidValue = sumAllValue.items?.filter(({ status }) => status === 'Paid').reduce(function (prev, cur) {
-    return prev + cur.value;
-  }, 0);
-
-  const provisionedValue = valueTotal - sumAllValue.items?.reduce(function (prev, cur) {
-    return prev + cur.value;
-  }, 0);
-
-  const hoje = new Date();
-  const mesAtual = hoje.getMonth();
-  const anoAtual = hoje.getFullYear();
-
-  const primeiroDiaProximoMes = new Date(anoAtual, mesAtual + 1, 1);
-  const milissegundosRestantes = primeiroDiaProximoMes - hoje;
-  const diasRestantes = Math.floor(milissegundosRestantes / 86400000);
-
-  const valuePerDay = provisionedValue / (diasRestantes + 1)
-
-  const sumAll = sumAllValue.items?.reduce(function (prev, cur) {
-    return prev + cur.value;
-  }, 0);
 
   const lis = wallet.map(item => {
     {
@@ -146,34 +107,6 @@ export default function Wallet() {
 
   return (
     <div className="containerWallet">
-      <div className="walletCards">
-        <CustomCard
-          title="Carteira"
-          children={decimalAdjust(valueTotal)}
-          icon="fas fa-wallet blue fa-2x"
-        >
-        </CustomCard>
-        <CustomCard
-          title="Dividas"
-          children={decimalAdjust(sumAll)}
-          icon="fas fa-hand-holding-usd red fa-2x"
-        >
-        </CustomCard>
-         <CustomCard
-          title="Valor por dia"
-          children={decimalAdjust(valuePerDay)}
-          icon="fas fa-calendar-day success fa-2x"
-          
-        ></CustomCard>
-        <CustomCard
-          title="Provisionado"
-          children={decimalAdjust(provisionedValue)}
-          icon="fas fa-lightbulb yellow fa-2x"
-        >
-        </CustomCard>
-      </div>
-
-
       <Card className="cardWallet">
         <Table responsive hover variant="black" className="table" size="sm">
           <thead>

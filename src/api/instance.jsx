@@ -9,7 +9,7 @@ export function getToken(){
 
 
 const axiosInstance = axios.create({
-  baseURL: 'https://web-debts.herokuapp.com/',
+  baseURL: 'http://backend.meshdebts.org/',
   //baseURL: 'https://localhost:5001/',
   timeout: 20000,
   headers: getToken()

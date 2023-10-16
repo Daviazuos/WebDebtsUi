@@ -1,0 +1,8 @@
+
+.containerWallet {
+}
+
+.containerWallet .walletCards {
+    display: flex;
+    flex-flow: row wrap;
+}

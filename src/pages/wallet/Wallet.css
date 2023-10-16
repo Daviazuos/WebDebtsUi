@@ -6,12 +6,3 @@
     margin: auto;
 }
 
-
-.containerWallet {
-    margin-left: auto;
-}
-
-.containerWallet .walletCards {
-    display: flex;
-    flex-flow: row wrap;
-}

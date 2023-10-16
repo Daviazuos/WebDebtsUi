@@ -17,8 +17,6 @@ export default (props) => {
               </div>
               <div class="media-body" id="tittle">
                 <span id="fontColorsTitle">{props.title}</span>
-              </div>
-              <div class="align-self-center">
                 <h2 class="mr-2" id="fontColors">R$ {props.children}</h2>
               </div>
             </div>

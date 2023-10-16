@@ -119,36 +119,6 @@ export default function Dashboard() {
 
   return (
     <div>
-      <div className="cards">
-        <CustomCard
-          title="Total dívidas"
-          children={decimalAdjust(sumAll)}
-          icon="fas fa-hand-holding-usd blue fa-2x"
-          data={sumAllValue}
-        >
-        </CustomCard>
-        <CustomCard
-          title="Fixas"
-          children={decimalAdjust(fixed)}
-          icon="far fa-calendar blue fa-2x"
-          data={fixedValue}
-        >
-        </CustomCard>
-        <CustomCard
-          title="Simples"
-          children={decimalAdjust(simple)}
-          icon="fas fa-coins blue fa-2x"
-          data={simpleValue}
-        >
-        </CustomCard>
-        <CustomCard
-          title="Parceladas"
-          children={decimalAdjust(installment)}
-          icon="fas fa-credit-card blue fa-2x"
-          data={installmentValue}
-        >
-        </CustomCard>
-      </div>
       <div className="graphics">
         <Card className="cardDash">
           <CardApexGraphic></CardApexGraphic>
@@ -157,29 +127,55 @@ export default function Dashboard() {
           <CardApexGraphicPie></CardApexGraphicPie>
         </Card>
       </div>
-      <Card className='categorieTable'>
-        <text className="finishingInstallments">Parcelamentos acabando em {monthByNumber(month)}</text>
-        <p></p>
-        {lis_instalments.length === 0 ?
-          <div style={{ marginLeft: '150px' }}>
-            <Image src={imageEmpty} rounded></Image>
-          </div> :
-          <div>
-            <Table responsive hover variant="black" className="tableTotal" size="sm">
-              <thead>
-                <tr>
-                  <th>Nome</th>
-                  <th>Valor</th>
-                  <th>Parcela</th>
-                </tr>
-              </thead>
-              <tbody>
-                {lis_instalments}
-              </tbody>
-            </Table>
-            <text>Total: R$ {decimalAdjust(totalFinishing)}</text>
-          </div>
-        }
-      </Card>
+      <div className="analitics">
+        <Card className='categorieTable'>
+          <text className="finishingInstallments">Parcelamentos acabando em {monthByNumber(month)}</text>
+          <p></p>
+          {lis_instalments.length === 0 ?
+            <div style={{ marginLeft: '150px' }}>
+              <Image src={imageEmpty} rounded></Image>
+            </div> :
+            <div>
+              <Table responsive hover variant="black" className="tableTotal" size="sm">
+                <thead>
+                  <tr>
+                    <th>Nome</th>
+                    <th>Valor</th>
+                    <th>Parcela</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {lis_instalments}
+                </tbody>
+              </Table>
+              <text>Total: R$ {decimalAdjust(totalFinishing)}</text>
+            </div>
+          }
+        </Card>
+
+        <div className="cards">
+          <CustomCard
+            title="Fixas"
+            children={decimalAdjust(fixed)}
+            icon="far fa-calendar blue fa-2x"
+            data={fixedValue}
+          >
+          </CustomCard>
+          <CustomCard
+            title="Simples"
+            children={decimalAdjust(simple)}
+            icon="fas fa-coins blue fa-2x"
+            data={simpleValue}
+          >
+          </CustomCard>
+          <CustomCard
+            title="Parceladas"
+            children={decimalAdjust(installment)}
+            icon="fas fa-credit-card blue fa-2x"
+            data={installmentValue}
+          >
+          </CustomCard>
+        </div>
+      </div>
     </div>);
 };
