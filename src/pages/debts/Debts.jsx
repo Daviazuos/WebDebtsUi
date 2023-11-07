@@ -18,6 +18,11 @@ import DebtModal from "../../components/debtModal/DebtModal";
 
 function SetModal(props) {
   const [modalShow, setModalShow] = React.useState(false);
+
+  function updateValuesv2() {
+    setModalShow(false)
+  }
+
   return (
     <>
       <Button size="sm" className={props.className} variant='dark' onClick={() => setModalShow(true)}>
@@ -27,6 +32,7 @@ function SetModal(props) {
       <ModalAddDebts
         show={modalShow}
         onHide={() => setModalShow(false)}
+        update={updateValuesv2}
         head={props.modalName}
         value={props.value}
         data={props.data}

@@ -8,6 +8,7 @@ import { addLeadingZeros, decimalAdjust } from "../../utils/valuesFormater";
 import { CustomPagination } from "../../components/customPagination/customPagination";
 import CardApexGraphicPie from "../../components/cardGraphicPie/CardApexGraphicPie";
 import ModalAddDebts from "../../components/modal/modalDebts";
+import DebtList from "../../components/form/form";
 
 function SetModalAddDebts(props) {
     const [modalShow, setModalShow] = useState(false);
@@ -37,14 +38,13 @@ function SetModalAddDebts(props) {
 
 export default function CreditCardSelected({ match }, props) {
     var CurrentDate = new Date();
-    CurrentDate.setMonth(CurrentDate.getMonth() + 1);
 
     const [loading, setLoading] = useState(true);
     const [loadingGraphic, setLoadingGraphic] = useState(true);
     const [key, setKey] = useState(`${localStorage.getItem("month")} - ${localStorage.getItem("year")}`);
     const [installments, setInstallments] = useState([]);
     const [pageNumber, setPageNumber] = useState(1);
-    const [selectedDate, setSelectedDate] = useState(CurrentDate);
+    const [selectedDate, setSelectedDate] = useState(`${CurrentDate.getMonth()}-${CurrentDate.getFullYear()}`);
     const [year, setyear] = useState(localStorage.getItem("year"));
     const [card, setCard] = useState([]);
     const [cardMonthValue, setCardMonthValue] = useState(0.00)
@@ -64,7 +64,7 @@ export default function CreditCardSelected({ match }, props) {
     const cardId = match.params.cardId;
 
     useEffect(() => {
-        axiosInstance.get(Endpoints.debt.filterInstallments(pageNumber, 18, '', selectedDate.getMonth(), selectedDate.getFullYear(), '', '', '', cardId, null))
+        axiosInstance.get(Endpoints.debt.filterInstallments(pageNumber, 18, '', selectedDate.split('-')[0], selectedDate.split('-')[1], '', '', '', cardId, null))
             .then(res => {
                 setInstallments(res.data);
             })
@@ -72,7 +72,7 @@ export default function CreditCardSelected({ match }, props) {
     }, [pageNumber, selectedDate, updateStatus])
 
     useEffect(() => {
-        axiosInstance.get(Endpoints.card.filterCards(cardId, selectedDate.getMonth(), selectedDate.getFullYear()))
+        axiosInstance.get(Endpoints.card.filterCards(cardId, selectedDate.split('-')[0], selectedDate.split('-')[1]))
             .then(res => {
                 setCard(res.data);
                 let cardValue = 0.00
@@ -83,7 +83,7 @@ export default function CreditCardSelected({ match }, props) {
                 }
                 setCardMonthValue(cardValue)
                 setCardGraphic(<Card className="graphicPagePie">
-                    <CardApexGraphicPie cardId={res.data[0].id} month={selectedDate.getMonth()} year={selectedDate.getFullYear()}></CardApexGraphicPie>
+                    <CardApexGraphicPie cardId={res.data[0].id} month={selectedDate.split('-')[0]} year={selectedDate.split('-')[1]}></CardApexGraphicPie>
                 </Card>)
                 setLoadingGraphic(false)
                 setLoading(false)
@@ -119,7 +119,7 @@ export default function CreditCardSelected({ match }, props) {
 
     const handleTabSelect = (selectedTab) => {
         setLoadingGraphic(true)
-        setSelectedDate(new Date(selectedTab.split(' - ')[1], selectedTab.split(' - ')[0], 1))
+        setSelectedDate(selectedTab)
         setKey(selectedTab);
     };
 
@@ -131,24 +131,26 @@ export default function CreditCardSelected({ match }, props) {
                 <Tab eventKey={`${item.month} - ${item.year}`} title={`${monthByNumber(item.month)} - ${item.year}`}>
                     <div className="debtModal">
                         <div class="cardCreditSelected px-4" id='cardCreditSelected'>
-                            <Accordion></Accordion>
-                            {<SetModalAddDebts modalName="" head={card[0].name} cardId={card[0].id} update={updateValues}></SetModalAddDebts>}{" "}
-                            <div className="cardForm">
-                                <Form>
-                                    <Form.Group className="mb-3" controlId="formBasicEmail">
+                            <div className="cardForm" style={{ marginLeft: '20px' }}>
+                                <Form style={{ display: 'flex', flexDirection: 'column' }}>
+                                    <Form.Group controlId="formBasicEmail">
                                         <Form.Label>Fatura de {monthByNumber(item.month)}</Form.Label>
-                                        <Form.Control disabled type="text" value={`R$ ${decimalAdjust(cardMonthValue)}`} />
+                                        <Form.Control className="formCredCardSelected" disabled type="text" value={`R$ ${decimalAdjust(cardMonthValue)}`} />
                                     </Form.Group>
-                                    <Form.Group className="mb-3" controlId="formBasicEmail">
+                                    <Form.Group controlId="formBasicEmail">
                                         <Form.Label>Vencimento</Form.Label>
-                                        <Form.Control disabled type="text" value={`${addLeadingZeros(card[0].dueDate, 2)}/${addLeadingZeros(item.month, 2)}/${year}`} />
+                                        <Form.Control className="formCredCardSelected" disabled type="text" value={`${addLeadingZeros(card[0].dueDate, 2)}/${addLeadingZeros(item.month, 2)}/${year}`} />
+                                    </Form.Group>
+                                    <Form.Group controlId="formBasicEmail">
+                                        <Form.Label>Fechamento</Form.Label>
+                                        <Form.Control className="formCredCardSelected" disabled type="text" value={`${addLeadingZeros(card[0].closureDate, 2)}/${addLeadingZeros(item.month, 2)}/${year}`} />
                                     </Form.Group>
                                 </Form>
                             </div>
-                            {loadingGraphic ? <Card style={{ width: 600, height: 400 }}></Card> : cardGraphic}
+                            {loadingGraphic ? <Card style={{ width: 600, height: 400, marginLeft: '20px' }}></Card> : cardGraphic}
                         </div >
 
-                        <div>
+                        <div style={{ marginLeft: '20px' }}>
                             <Table responsive hover variant="white" size="lg">
                                 <thead>
                                     <tr className="trr">
@@ -165,6 +167,18 @@ export default function CreditCardSelected({ match }, props) {
                             </Table>
                             <CustomPagination currentPage={installments.currentPage} totalItems={installments.totalItems} totalPages={installments.totalPages} onChange={pageChange}></CustomPagination>
                         </div>
+                        <div style={{marginLeft: '260px', marginTop: '50px'}}>
+                        {<SetModalAddDebts modalName="" head={card[0].name} cardId={card[0].id} update={updateValues}></SetModalAddDebts>}{" "}
+                            
+                            {/* <Accordion defaultActiveKey="0">
+                                <Accordion.Item eventKey="0">
+                                    <Accordion.Header>Adicionar valor</Accordion.Header>
+                                    <Accordion.Body> */}
+                                        {/* <DebtList></DebtList> */}
+                                    {/* </Accordion.Body>
+                                </Accordion.Item>
+                            </Accordion> */}
+                        </div>
                     </div>
                 </Tab>
             )
@@ -176,15 +190,29 @@ export default function CreditCardSelected({ match }, props) {
     return <>
         {loading === true ? <i class="fas fa-spinner fa-spin"></i> :
             <>
-                <h1>{card[0].name}</h1>
-                <Tabs
-                    id="controlled-tab-example"
-                    activeKey={key}
-                    onSelect={handleTabSelect}
-                    className="mb-3"
-                >
-                    {tab_lis}
-                </Tabs>
+                <div class="cardCredit px-4" id='cardCredit' style={{ position: 'relative', marginBottom: "-120px", zIndex: 3, display: 'flex', flexDirection: 'row-reverse', pointerEvents: 'none' }}>
+                    <div class="debit-card card-2 mb-4" style={{ backgroundColor: `${(card[0].color != null && card[0].color != '') ? card[0].color : "#6F87E1"}` }}>
+                        <div class="d-flex flex-column h-100"> <label class="d-block">
+                            <div class="d-flex position-relative">
+                                <div>
+                                    <h3 class="text-white fw-bold">{card[0].name}</h3>
+                                </div>
+                            </div>
+                        </label>
+                        </div>
+                    </div >
+                </div>
+                <Card style={{ zIndex: 2 }}>
+                    <Tabs
+                        id="controlled-tab-example"
+                        activeKey={key}
+                        onSelect={handleTabSelect}
+                        className="mb-3"
+                        style={{ zIndex: 3, marginLeft: '20px' }}
+                    >
+                        {tab_lis}
+                    </Tabs>
+                </Card>
             </>}
     </>
 }

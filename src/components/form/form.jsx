@@ -7,6 +7,8 @@ import MaskedFormControl from "../../utils/maskedInputs";
 import "./form.css"
 import CategoryModal from "../../pages/categories/CategoryModal";
 import LoadingButton from "../loadingButton/LoadingButton";
+import CardLayout from "../cardLayout/CardLayout";
+import { refreshPage } from "../../utils/utils";
 
 export default function DebtList(props) {
   const [name, setName] = useState('');
@@ -98,6 +100,7 @@ export default function DebtList(props) {
         props.update()
       })
     }
+    refreshPage()
   }
 
   return (

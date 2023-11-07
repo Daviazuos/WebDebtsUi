@@ -16,21 +16,19 @@ export default function CardLayout() {
     const [year, setYear] = useState(localStorage.getItem("year"))
 
     useEffect(() => {
-        let mounted = true;
         axiosInstance.get(Endpoints.wallet.getEnable(month, year))
             .then(res => {
                 setWallet(res.data);
             })
-        return () => mounted = false;
+
     }, [month])
 
     useEffect(() => {
-        let mounted = true;
         axiosInstance.get(Endpoints.debt.filterInstallments(1, 9999, '', month, year, '', '', '', '', null))
             .then(res => {
                 setSumAllValue(res.data)
             })
-        return () => mounted = false;
+
     }, [month])
 
     const valueTotal = wallet.filter(({ walletStatus }) => walletStatus !== 'Pending').reduce(function (prev, cur) {
