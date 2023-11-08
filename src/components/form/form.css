@@ -1,3 +1,13 @@
 .categorySelector{
     display: flex;
 }
+
+.AddForm {
+    display: flex;
+    flex-direction: column;
+}
+
+.inputGroup {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}

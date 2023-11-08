@@ -105,22 +105,22 @@ export default function DebtList(props) {
 
   return (
     <>
-      <Form onSubmit={handleSubmit}>
-        <Form.Group>
+      <Form onSubmit={handleSubmit} className="AddForm">
+        <Form.Group className="inputGroup">
           <Form.Label>Nome</Form.Label>
           <Form.Control required="true" name="name" onChange={nameChange} placeholder="Entre com o nome" defaultValue={props.data?.name} />
         </Form.Group>
 
-        <Form.Group>
+        <Form.Group className="inputGroup">
           <Form.Label>Valor</Form.Label>
           <MaskedFormControl currency="BRL" required="true" name='value' onChange={valueChange} placeholder="Entre com o valor total" defaultValue={props.data?.value} />
         </Form.Group>
 
-        <Form.Group>
+        <Form.Group className="inputGroup">
           <Form.Label>Data</Form.Label>
           <Form.Control required="true" name='date' type="date" onChange={dateChange} placeholder="Entre com o data" defaultValue={props.data?.date.split('T')[0]} />
         </Form.Group>
-        <Form.Group>
+        <Form.Group className="inputGroup">
           <Form.Label>Categoria</Form.Label>
           <div className="categorySelector">
             <Form.Control required="true" name='category' onChange={categoryChange} as="select" defaultValue={props.data?.category}>
@@ -129,7 +129,7 @@ export default function DebtList(props) {
             <SetModal modalName="Adicionar" simbol="fas fa-plus" className="modalButton"></SetModal>
           </div>
         </Form.Group>
-        <Form.Group>
+        <Form.Group className="inputGroup">
           <Form.Label>Tipo de débito</Form.Label>
           <Form.Control required="true" as="select" name='debtInstallmentType' onChange={typeChange} defaultValue={debtInstallmentTypeToNumber(props.data?.debtInstallmentType)}>
             <option>Selecione o Tipo de debito</option>
@@ -139,7 +139,7 @@ export default function DebtList(props) {
           </Form.Control>
         </Form.Group>
         {(debtInstallmentType === "0" || debtInstallmentTypeToNumber(props.data?.debtInstallmentType) == "0") ?
-          <Form.Group>
+          <Form.Group className="inputGroup">
             <Form.Label>Quantidade de Parcelas</Form.Label>
             <Form.Control name='numberOfInstallments' type="number" onChange={installmentsChange} placeholder="Entre com o quantidade de parcelas" defaultValue={props.data?.numberOfInstallments} />
           </Form.Group> : ""}
