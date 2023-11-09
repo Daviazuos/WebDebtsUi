@@ -111,7 +111,7 @@ export default function CardCredit() {
         }
 
         return (
-            <div class="debit-card card-2 mb-4" style={{ backgroundColor: `${(item.color != null && item.color != '') ? item.color : "#6F87E1"}` }}>
+            <div class="debit-card card-2 mb-4" style={{ backgroundColor: `${(item.color != null && item.color != '') ? item.color : "#6F87E1"}` }} id="creditCardBlock">
                 <div class="d-flex flex-column h-100"> <label class="d-block">
                     <div class="d-flex position-relative">
                         <div>

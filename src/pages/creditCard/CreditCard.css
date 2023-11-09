@@ -1,5 +1,4 @@
-
-#cardCredit{
+#cardCredit {
     position: relative;
     display: flex;
     flex-direction: row;
@@ -8,13 +7,11 @@
 }
 
 .cardCredit .debit-card {
-    min-width: 295px;
-    min-height: 180px;
-    max-width: 340px;
+    width: 295px;
+    height: 190px;
     padding: 15px;
     border-radius: 5px;
     box-shadow: 5px 3px 5px #000000a2
-    
 }
 
 .cardCredit .card-2 {
@@ -43,4 +40,14 @@
 
 #cardText {
     color: white !important;
+}
+
+#creditCardBlock {
+    cursor:'pointer'
+}
+
+#creditCardBlock:hover {
+    -webkit-transform: scale(1.1);
+  -ms-transform: scale(1.1);
+  transform: scale(1.1);
 }

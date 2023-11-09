@@ -128,7 +128,7 @@ export default function CreditCardSelected({ match }, props) {
                 <Tab eventKey={`${item.month}-${item.year}`} title={`${monthByNumber(item.month)} - ${item.year}`}>
                     <div className="CreditCardCard">
                         <div style={{ marginLeft: '20px' }}>
-                            <Table responsive hover variant="white" size="lg">
+                            <Table responsive striped hover variant="white" size="lg">
                                 <thead>
                                     <tr className="trr">
                                         <th>Nome</th>
@@ -160,7 +160,7 @@ export default function CreditCardSelected({ match }, props) {
                         <div class="d-flex flex-column h-100"> <label class="d-block">
                             <div class="d-flex position-relative">
                                 <div>
-                                    <h3 class="text-white fw-bold">{((card[0].name).length > 17) ? (((card[0].name).substring(0,17-3)) + '...') : card[0].name }</h3>
+                                    <h3 class="text-white fw-bold">{((card[0].name).length > 15) ? (((card[0].name).substring(0,17-3)) + '...') : card[0].name }</h3>
                                 </div>
                                 {<SetModalAddDebts color={`${(card[0].color != null && card[0].color != '') ? card[0].color : "#6F87E1"}`} modalName="" head={card[0].name} cardId={card[0].id} update={updateValues}></SetModalAddDebts>}{" "}
                             </div>
@@ -175,7 +175,7 @@ export default function CreditCardSelected({ match }, props) {
                         </div>
                     </div >
                 </div>
-                <Card style={{ zIndex: 2 }}>
+                <Card style={{ zIndex: 2, borderColor: `${(card[0].color != null && card[0].color != '') ? card[0].color : "#6F87E1"}`, borderWidth: '6px', padding: '10px'}}>
                     <Tabs
                         id="controlled-tab-example"
                         activeKey={key}
