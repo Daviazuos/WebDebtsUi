@@ -54,11 +54,11 @@ export default function Login(props) {
                 <Card.Img variant="top" src={image} />
                 <Card.Body>
                     <Form onSubmit={handleSubmit}>
-                        <Form.Group>
+                        <Form.Group className='formLogin'>
                             <Form.Label>Usuário</Form.Label>
                             <Form.Control required="true" name='username' placeholder="Entre com o usuário" onChange={usernameChange} />
                         </Form.Group>
-                        <Form.Group>
+                        <Form.Group className='formLogin'>
                             <Form.Label>Senha</Form.Label>
                             <Form.Control required="true" name='password' type="password" placeholder="Entre com a senha" onChange={passwordChange} />
                         </Form.Group>

@@ -3,9 +3,7 @@
 }
 
 .loginContainer .cardLogin {
-    margin: 5px;
     max-width: 350px;
-    justify-content: space-evenly;
     left:50%;
     top:50%;
     position:absolute;
@@ -24,10 +22,6 @@
     
 }
 
-.loginContainer .google {
-    margin-top: 10px;
-}
-
 .register {
     margin-left: 20px;
 }
@@ -36,4 +30,9 @@
     color: #9FA2B4;
     font-size: 11px;
     
+}
+
+.formLogin {
+    margin-top: 15px;
+    margin-bottom: 15px;
 }

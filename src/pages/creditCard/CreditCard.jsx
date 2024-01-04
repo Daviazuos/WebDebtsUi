@@ -4,7 +4,7 @@ import { axiosInstance } from "../../api";
 import "./CreditCard.css"
 import { Link } from 'react-router-dom';
 import { addLeadingZeros, decimalAdjust } from "../../utils/valuesFormater";
-import { Button } from "react-bootstrap";
+import { Button, Form } from "react-bootstrap";
 
 import CreditCardModal from "./CreditCardModal";
 import ModalDelete from "../../components/modalDelete/ModalDelete";
@@ -91,6 +91,7 @@ export default function CardCredit() {
     const [cards, setCards] = useState([]);
     const [month, setMonth] = useState(localStorage.getItem("month"));
     const [year, setyear] = useState(localStorage.getItem("year"));
+    const [showZeros, setShowZeros] = useState(false);
 
     useEffect(() => {
         setLoading(true)
@@ -101,11 +102,28 @@ export default function CardCredit() {
         setLoading(false)
     }, [month])
 
-    const lis = cards.map(item => {
+    const filtered_list = cards.filter(item => {
         let cardValue = 0.00
 
         for (const debt in item?.debts) {
-            if (item?.debts[debt]?.installments[0]?.value != undefined) {
+            if (item?.debts[debt]?.installments[0]?.value !== undefined) {
+                cardValue = cardValue + item?.debts[debt]?.installments[0]?.value
+            }
+        }
+
+        if (cardValue !== 0.00) {
+            return item;
+        }
+        else if (showZeros === true) {
+            return item;
+        }
+    })
+
+    const lis = filtered_list.map(item => {
+        let cardValue = 0.00
+
+        for (const debt in item?.debts) {
+            if (item?.debts[debt]?.installments[0]?.value !== undefined) {
                 cardValue = cardValue + item?.debts[debt]?.installments[0]?.value
             }
         }
@@ -137,12 +155,27 @@ export default function CardCredit() {
         )
     })
 
+    const handleChange=(e)=>{
+        setShowZeros(!showZeros)
+         
+     }
+
     return (
         <div className="containerCardPage">
+            <Form className="switchButton">
+                <Form.Check
+                    type="switch"
+                    id="custom-switch"
+                    label="Apenas com valor"
+                    defaultChecked
+                    onChange={handleChange}
+                />
+
+            </Form>
             {loading ? <i class="fas fa-spinner fa-spin"></i> :
-            <div class="cardCredit card px-4" id='cardCredit'>
-                {lis}
-            </div>}
+                <div class="cardCredit card px-4" id='cardCredit'>
+                    {lis}
+                </div>}
             <SetModalAddCard name={'Adicionar novo cartão'} modalName="Adicionar" simbol="fas fa-plus" className="modalButton"></SetModalAddCard>
         </div>)
 }

@@ -8,6 +8,7 @@ import { addLeadingZeros, decimalAdjust } from "../../utils/valuesFormater";
 import { CustomPagination } from "../../components/customPagination/customPagination";
 import CardApexGraphicPie from "../../components/cardGraphicPie/CardApexGraphicPie";
 import ModalAddDebts from "../../components/modal/modalDebts";
+import "./CreditCardSelected.css"
 
 function SetModalAddDebts(props) {
     const [modalShow, setModalShow] = useState(false);
@@ -36,9 +37,12 @@ function SetModalAddDebts(props) {
 
 
 export default function CreditCardSelected({ match }, props) {
+
+    const zeroPad = (num, places) => String(num).padStart(places, '0')
+
     const [loading, setLoading] = useState(true);
     const [loadingGraphic, setLoadingGraphic] = useState(true);
-    const [key, setKey] = useState(`${localStorage.getItem("month")}-${localStorage.getItem("year")}`);
+    const [key, setKey] = useState(`${zeroPad(localStorage.getItem("month"), 2)}-${localStorage.getItem("year")}`);
     const [installments, setInstallments] = useState([]);
     const [pageNumber, setPageNumber] = useState(1);
     const [selectedDate, setSelectedDate] = useState(`${localStorage.getItem("month")}-${localStorage.getItem("year")}`);
@@ -104,7 +108,7 @@ export default function CreditCardSelected({ match }, props) {
 
     useEffect(() => {
         var months_dynamic = []
-        for (let i = -1; i <= 4; i++) {
+        for (let i = -1; i <= 9; i++) {
             let dateAdjusted = addMonthsToDate(Date(), i)
             months_dynamic.push({
                 month: dateAdjusted.split('/')[1],
@@ -155,14 +159,14 @@ export default function CreditCardSelected({ match }, props) {
     return <>
         {loading === true ? <i class="fas fa-spinner fa-spin"></i> :
             <>
-                <div class="cardCredit px-4" id='cardCredit' style={{ position: 'relative', marginBottom: "-115px", zIndex: 2, display: 'flex', flexDirection: 'row' }}>
+                <div class="cardCreditSelected px-4" id='cardCreditSelected' style={{ position: 'relative', marginBottom: "-115px", zIndex: 2, display: 'flex', flexDirection: 'row' }}>
                     <div class="debit-card card-2 mb-4" style={{ backgroundColor: `${(card[0].color != null && card[0].color != '') ? card[0].color : "#6F87E1"}` }}>
                         <div class="d-flex flex-column h-100"> <label class="d-block">
                             <div class="d-flex position-relative">
                                 <div>
                                     <h3 class="text-white fw-bold">{((card[0].name).length > 15) ? (((card[0].name).substring(0,17-3)) + '...') : card[0].name }</h3>
                                 </div>
-                                {<SetModalAddDebts color={`${(card[0].color != null && card[0].color != '') ? card[0].color : "#6F87E1"}`} modalName="" head={card[0].name} cardId={card[0].id} update={updateValues}></SetModalAddDebts>}{" "}
+                                {<SetModalAddDebts color={`${(card[0].color != null && card[0].color !== '') ? card[0].color : "#6F87E1"}`} modalName="" head={card[0].name} cardId={card[0].id} update={updateValues}></SetModalAddDebts>}{" "}
                             </div>
                             <div id='textCard' class="mt-auto fw-bold d-flex align-items-center justify-content-between">
                                 <div className="creditBody">

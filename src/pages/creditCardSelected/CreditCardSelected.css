@@ -7,8 +7,8 @@
 }
 
 .cardCreditSelected .debit-card {
-    min-width: 295px;
-    min-height: 180px;
+    min-width: 300px;
+    min-height: 190px;
     padding: 15px;
     border-radius: 5px;
     box-shadow: 5px 3px 5px #000000a2
@@ -47,7 +47,7 @@
     margin-top: 15px;
 }
 
-.cardCredit {
+.cardCreditSelected {
     position: relative;
     margin-bottom: 100px;
 }
