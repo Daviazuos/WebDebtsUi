@@ -45,7 +45,7 @@ export default function CardApexGraphicPie(props) {
                             position: 'right'
                         },
                         title: {
-                            text: `Percentual de categorias de ${monthByNumber(month)}`,
+                            text: `Percentual de categorias`,
                             align: 'left'
                         },
                         responsive: [{

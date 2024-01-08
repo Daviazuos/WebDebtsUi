@@ -74,8 +74,8 @@ export default function DebtModal(props) {
                     setInstallmentNumber(res.data.debtInstallmentType === 'Fixed' ?
                         'Fixo' : (res.data.paidInstallment === null ? 0 : res.data.paidInstallment) +'/'+ (res.data.numberOfInstallments === 0 ? 1 : res.data.numberOfInstallments)
                     )
-                    var dateInstallment = res.data.installments.filter(installment => installment.installmentNumber === parseInt(res.data.paidInstallment === null ? 1 : res.data.paidInstallment))
-                    setValueMonth(dateInstallment[0].value)
+                    var dateInstallment = res.data.installments.filter(installment => installment.installmentNumber === parseInt(res.data.paidInstallment === null ? (res.data.debtInstallmentType === 'Fixed' ? 0 : 1) : res.data.paidInstallment))
+                    setValueMonth(dateInstallment[0]?.value)
                     setLoading(false)
                 })
         }

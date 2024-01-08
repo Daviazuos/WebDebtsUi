@@ -12,7 +12,7 @@ import "./Dashboard.css";
 import CustomCard from "../../components/customCard/CustomCard";
 import CardApexGraphic from "../../components/cardGraphic/CardApexGraphic";
 import CardApexGraphicPie from "../../components/cardGraphicPie/CardApexGraphicPie";
-import { dateAdjust, monthByNumber } from "../../utils/dateFormater";
+import CardApexGraphicByDay from "../../components/cardGraphic/CardApexGraphicByDay";
 
 
 export default function Dashboard() {
@@ -127,33 +127,7 @@ export default function Dashboard() {
           <CardApexGraphicPie></CardApexGraphicPie>
         </Card>
       </div>
-      <div className="analitics">
-        <Card className='categorieTable'>
-          <text className="finishingInstallments">Parcelamentos acabando em {monthByNumber(month)}</text>
-          <p></p>
-          {lis_instalments.length === 0 ?
-            <div style={{ marginLeft: '150px' }}>
-              <Image src={imageEmpty} rounded></Image>
-            </div> :
-            <div>
-              <Table responsive hover variant="black" className="tableTotal" size="sm">
-                <thead>
-                  <tr>
-                    <th>Nome</th>
-                    <th>Valor</th>
-                    <th>Parcela</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {lis_instalments}
-                </tbody>
-              </Table>
-              <text>Total: R$ {decimalAdjust(totalFinishing)}</text>
-            </div>
-          }
-        </Card>
-
-        <div className="cards">
+      <div className="cards">
           <CustomCard
             title="Fixas"
             children={decimalAdjust(fixed)}
@@ -176,6 +150,37 @@ export default function Dashboard() {
           >
           </CustomCard>
         </div>
+      <div className="analitics">
+        <Card className='categorieTable'>
+          <text className="finishingInstallments">Parcelamentos acabando</text>
+          <p></p>
+          {lis_instalments.length === 0 ?
+            <div style={{ marginLeft: '100px', marginRight: '90px' }}>
+              <Image src={imageEmpty} rounded></Image>
+            </div> :
+            <div>
+              <Table responsive hover variant="black" className="tableTotal" size="sm">
+                <thead>
+                  <tr>
+                    <th>Nome</th>
+                    <th>Valor</th>
+                    <th>Parcela</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {lis_instalments}
+                </tbody>
+              </Table>
+              <text>Total: R$ {decimalAdjust(totalFinishing)}</text>
+            </div>
+          }
+        </Card>
+
+        <Card className="cardDash">
+            <CardApexGraphicByDay></CardApexGraphicByDay>
+          </Card>
+
+        
       </div>
     </div>);
 };

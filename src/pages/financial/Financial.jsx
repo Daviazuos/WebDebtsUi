@@ -43,6 +43,7 @@ function SetModalPaid(props) {
         show={modalShow}
         onHide={() => setModalShow(false)}
         head={props.name}
+        data={props.data}
         month={props.month}
         year={props.year}
         isCard={props.isCard}
@@ -116,7 +117,7 @@ export default function Financial() {
         <td className="td1">{dateAdjust(item.paymentDate)}</td>
         <td className="tdd">
           {item.status == 'Paid' ? <SetModalPaid disabled={true} modalName="Pagar" simbol="fas fa-check" value={item.id} month={month} year={year} isCard={false}></SetModalPaid> :
-            <SetModalPaid disabled={false} name={item.debtName} modalName="Pagar" simbol="fas fa-check" value={item.id} month={month} year={year} isCard={false} update={updateValues} updateStatus={updateStatus}></SetModalPaid>}
+            <SetModalPaid disabled={false} name={item.debtName} modalName="Pagar" simbol="fas fa-check" value={item.id} month={month} year={year} isCard={false} update={updateValues} updateStatus={updateStatus} data={item}></SetModalPaid>}
           {item.status == 'Paid' ?
             <Button disabled={false} size="sm" className="btn btn-danger" onClick={() => SetStatus(item.id, "NotPaid", `${year}-${month}-${item.dueDate}`)}><i className="fas fa-times"></i> Pendente</Button> :
             <Button disabled={true} size="sm" className="btn btn-danger" onClick={() => SetStatus(item.id, "NotPaid", `${year}-${month}-${item.dueDate}`)}><i className="fas fa-times"></i> Pendente</Button>}
@@ -147,6 +148,7 @@ export default function Financial() {
       <tr>
         <td className="td1">{item.name}</td>
         <td className="td1">R$ {decimalAdjust(cardValue)}</td>
+        <td className="td1">{addLeadingZeros(item.closureDate, 2)}</td>
         <td className="td1">{item.dueDate}/{addLeadingZeros(month, 2)}/{year}</td>
         <td className="td1">{cardStatus == 'Paid' ? <i class="fas fa-circle success fa-xs"></i> : <i class="fas fa-circle red fa-xs"></i>}  {statusTransform(cardStatus)}</td>
         <td className="td1">{dateAdjust(paymentDate)}</td>
@@ -198,6 +200,7 @@ export default function Financial() {
           <tr>
             <th>Nome</th>
             <th>Valor</th>
+            <th>Dia de Fechamento</th>
             <th>Vencimento</th>
             <th>Status</th>
             <th>Pagamento</th>

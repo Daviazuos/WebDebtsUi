@@ -86,8 +86,9 @@ export default function EditDebtForm(props) {
     };
     axiosInstance.put(Endpoints.debt.putDebt(props.id), addDebts).then(response => {
       setIsLoading(false)
-      props.update()
+      refreshPage()
     })
+    props.update()
   }
 
   return (

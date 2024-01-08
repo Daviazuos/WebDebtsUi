@@ -7,6 +7,7 @@ import { decimalAdjust } from "../../utils/valuesFormater";
 import "./CardLayout.css";
 import { debtInstallmentTransform, walletStatusTransform } from "../../utils/enumFormatter";
 import CustomCard from "../customCard/CustomCard";
+import { monthByNumber } from "../../utils/dateFormater";
 
 
 export default function CardLayout() {
@@ -61,6 +62,9 @@ export default function CardLayout() {
 
     return (
         <div className="containerWallet">
+            <div id="linha">
+                {monthByNumber(month)} - {year}
+            </div>
             <div className="walletCards">
                 <CustomCard
                     title="Carteira"
