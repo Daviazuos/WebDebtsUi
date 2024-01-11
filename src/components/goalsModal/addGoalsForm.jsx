@@ -81,11 +81,12 @@ export default function AddGoalsForm(props) {
                     <Form.Label>Nome</Form.Label>
                     <Form.Control required name="name" onChange={nameChange} placeholder="Entre com o nome" defaultValue={props.data?.name} />
                 </Form.Group>
-
+                <p></p>
                 <Form.Group>
                     <Form.Label>Valor total necessário</Form.Label>
                     <MaskedFormControl currency="BRL" required name='value' onChange={valueChange} placeholder="Entre com o valor total" defaultValue={props.data?.value} />
                 </Form.Group>
+                <p></p>
                 <Form.Group>
                     <OverlayTrigger
                         key='top'
@@ -100,9 +101,9 @@ export default function AddGoalsForm(props) {
                     </OverlayTrigger>
                     <Form.Control required name='date' defaultValue={date} type="date" onChange={dateChange} placeholder="Entre com o data" />
                 </Form.Group>
-
+                <p></p>
                 <Form.Label>{`Previsão de fim: ${(globalValue <= 12) ? addMonthsToDate(date, monthValue) : addYearsToDate(date, yearValue)}`}</Form.Label>
-                               
+                <p></p>            
                 <Form.Group>
                     <Form.Label>{`Tempo para alcançar a meta: ${(globalValue <= 12) ? `${monthValue} meses.` : `${yearValue} anos.`}`}</Form.Label>
                     <RangeSlider
@@ -117,6 +118,7 @@ export default function AddGoalsForm(props) {
                  <Form.Group>
                     <Form.Label>{`Total de investimento por mês: R$ ${decimalAdjust(goalValue)}`}</Form.Label>
                 </Form.Group>
+                <p></p>
 
                 <LoadingButton variant="dark" type="submit" name="Adicionar" isLoading={isLoading}></LoadingButton>
             </Form>

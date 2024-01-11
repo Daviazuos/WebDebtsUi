@@ -47,6 +47,7 @@ export default function CreditCardSelected({ match }, props) {
     const [pageNumber, setPageNumber] = useState(1);
     const [selectedDate, setSelectedDate] = useState(`${localStorage.getItem("month")}-${localStorage.getItem("year")}`);
     const [year, setyear] = useState(localStorage.getItem("year"));
+    const [month, setMonth] = useState(localStorage.getItem("month"));
     const [card, setCard] = useState([]);
     const [cardMonthValue, setCardMonthValue] = useState(0.00)
     const [cardGraphic, setCardGraphic] = useState(undefined)
@@ -109,14 +110,17 @@ export default function CreditCardSelected({ match }, props) {
     useEffect(() => {
         var months_dynamic = []
         for (let i = -1; i <= 9; i++) {
-            let dateAdjusted = addMonthsToDate(Date(), i)
+            var date = new Date();
+            date.setMonth(month-1)
+            date.setFullYear(year)
+            let dateAdjusted = addMonthsToDate(date, i)
             months_dynamic.push({
                 month: dateAdjusted.split('/')[1],
                 year: dateAdjusted.split('/')[2]
             })
         }
         setMonths(months_dynamic)
-    }, [selectedDate])
+    }, [selectedDate, month, year])
 
     const handleTabSelect = (selectedTab) => {
         setLoadingGraphic(true)
@@ -129,7 +133,7 @@ export default function CreditCardSelected({ match }, props) {
         tab_lis = months.map(item => {
 
             return (
-                <Tab eventKey={`${item.month}-${item.year}`} title={`${monthByNumber(item.month)} - ${item.year}`}>
+                <Tab eventKey={`${item.month}-${item.year}`} title={`${monthByNumber(item.month)}/${item.year}`}>
                     <div className="CreditCardCard">
                         <div style={{ marginLeft: '20px' }}>
                             <Table responsive striped hover variant="white" size="lg">

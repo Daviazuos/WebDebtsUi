@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Endpoints } from '../../api/endpoints';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, Alert } from 'react-bootstrap';
 import { axiosInstance } from "../../api";
 import { debtInstallmentTypeToNumber } from "../../utils/enumFormatter";
 import MaskedFormControl from "../../utils/maskedInputs";
@@ -20,7 +20,7 @@ export default function DebtList(props) {
   const [list_categories, setlist_categories] = useState([]);
   const [refreshCategories, setRefreshCategories] = useState(false)
   const [isLoading, setIsLoading] = React.useState(false);
-
+  const [onError, setOnError] = React.useState(false)
 
   function SetModal(props) {
     const [modalShow, setModalShow] = React.useState(false);
@@ -89,22 +89,36 @@ export default function DebtList(props) {
       props.cardId === null ? axiosInstance.post(Endpoints.debt.add(), addDebts).then(response => {
         setIsLoading(false)
         props.update()
+      }).catch(err => {
+        console.log(err)
+        setOnError(!onError);
+        setIsLoading(false)
       }) : axiosInstance.post(Endpoints.card.addValues(props.cardId), addDebts).then(response => {
         setIsLoading(false)
         props.update()
+      }).catch(err => {
+        console.log(err)
+        setOnError(!onError);
+        setIsLoading(false)
       })
     }
     else {
       axiosInstance.put(Endpoints.debt.putDebt(props.id), addDebts).then(response => {
         setIsLoading(false)
         props.update()
+      }).catch(err => {
+        console.log(err)
+        setOnError(!onError);
+        setIsLoading(false)
       })
     }
-    refreshPage()
   }
 
   return (
     <>
+      <Alert show={onError} variant="danger">
+        Erro ao salvar {props.error}
+      </Alert>
       <Form onSubmit={handleSubmit} className="AddForm">
         <Form.Group className="inputGroup">
           <Form.Label>Nome</Form.Label>

@@ -45,7 +45,7 @@ export default class ModalPaid extends React.Component {
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    Valor a pagar: R$ {decimalAdjust(this.props.data?.value)}
+                    Valor a pagar: R$ {decimalAdjust(this.props.amount)}
                     <p></p>
                     <Form onSubmit={this.handleSubmit}>
                         <Form.Group>

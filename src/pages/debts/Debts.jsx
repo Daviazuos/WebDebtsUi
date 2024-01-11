@@ -94,6 +94,7 @@ export default function Debts() {
         <td className='td1'>R$ {decimalAdjust(item.value)}</td>
         <td className='td1'>{debtInstallmentTransform(item.debtInstallmentType)}</td>
         <td className='td1'>{debtTypeTransform(item.debtType)}</td>
+        <td className='td1'>{item.cardName}</td>
         <td className='td1'>{dateAdjust(item.date)}</td>
         <td className='td1'>{item.category}</td>
         {item.debtInstallmentType === 'Fixed' ?
@@ -141,6 +142,7 @@ export default function Debts() {
               <th>Valor</th>
               <th>Tipo</th>
               <th>Origem</th>
+              <th>Cartão</th>
               <th>Data Início</th>
               <th>Categoria</th>
               <th>Parcelas</th>

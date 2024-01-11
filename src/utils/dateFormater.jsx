@@ -55,6 +55,6 @@ export function addYearsToDate(date, years) {
 }
 
 export function addMonthsToDate(date, months) {
-  const dateParsed = moment().add(parseInt(months), 'months').format('DD/MM/YYYY');
+  const dateParsed = moment(date).add(parseInt(months), 'months').format('DD/MM/YYYY');
   return dateParsed;
 }

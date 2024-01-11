@@ -35,7 +35,7 @@ function SetModalPaid(props) {
 
   return (
     <>
-      <Button disabled={props.disabled} size="sm" className='btn btn-green' onClick={() => setModalShow(true)}>
+      <Button disabled={props.disabled} size="sm" className={props.classname} onClick={() => setModalShow(true)}>
         <i className={props.simbol}></i> {props.modalName}
       </Button>
       <ModalPaid
@@ -43,7 +43,7 @@ function SetModalPaid(props) {
         show={modalShow}
         onHide={() => setModalShow(false)}
         head={props.name}
-        data={props.data}
+        amount={props.amount}
         month={props.month}
         year={props.year}
         isCard={props.isCard}
@@ -99,10 +99,10 @@ export default function Financial() {
               resultFiltered.push(res.data[card])
               break
             }
-            
+
           }
         }
-        
+
         setCards(resultFiltered)
       })
   }, [month, paidStatus, updateStatus])
@@ -110,17 +110,13 @@ export default function Financial() {
   const debtTableData = financial.items?.map(item => {
     return (
       <tr>
-        <td className="td1">{item.debtName}</td>
-        <td className="td1">R$ {decimalAdjust(item.value)}</td>
-        <td className="td1">{dateAdjust(item.date)}</td>
-        <td className="td1">{item.status == 'Paid' ? <i class="fas fa-circle success fa-xs"></i> : <i class="fas fa-circle red fa-xs"></i>}   {statusTransform(item.status)}</td>
-        <td className="td1">{dateAdjust(item.paymentDate)}</td>
-        <td className="tdd">
-          {item.status == 'Paid' ? <SetModalPaid disabled={true} modalName="Pagar" simbol="fas fa-check" value={item.id} month={month} year={year} isCard={false}></SetModalPaid> :
-            <SetModalPaid disabled={false} name={item.debtName} modalName="Pagar" simbol="fas fa-check" value={item.id} month={month} year={year} isCard={false} update={updateValues} updateStatus={updateStatus} data={item}></SetModalPaid>}
-          {item.status == 'Paid' ?
-            <Button disabled={false} size="sm" className="btn btn-danger" onClick={() => SetStatus(item.id, "NotPaid", `${year}-${month}-${item.dueDate}`)}><i className="fas fa-times"></i> Pendente</Button> :
-            <Button disabled={true} size="sm" className="btn btn-danger" onClick={() => SetStatus(item.id, "NotPaid", `${year}-${month}-${item.dueDate}`)}><i className="fas fa-times"></i> Pendente</Button>}
+        <td>{item.debtName}</td>
+        <td>R$ {decimalAdjust(item.value)}</td>
+        <td>{dateAdjust(item.date)}</td>
+        <td>{dateAdjust(item.paymentDate)}</td>
+        <td>
+          {item.status === 'Paid' ? <SetModalPaid disabled={true} modalName="Pago" simbol="fas fa-check" value={item.id} month={month} year={year} isCard={false} classname='btn btn-green'></SetModalPaid> :
+            <SetModalPaid disabled={false} name={item.debtName} modalName="A pagar" simbol="fas fa-times" value={item.id} month={month} year={year} isCard={false} update={updateValues} updateStatus={updateStatus} amount={item.value} classname='btn btn-danger'></SetModalPaid>}
         </td>
       </tr>
     )
@@ -146,71 +142,63 @@ export default function Financial() {
 
     return (
       <tr>
-        <td className="td1">{item.name}</td>
-        <td className="td1">R$ {decimalAdjust(cardValue)}</td>
-        <td className="td1">{addLeadingZeros(item.closureDate, 2)}</td>
-        <td className="td1">{item.dueDate}/{addLeadingZeros(month, 2)}/{year}</td>
-        <td className="td1">{cardStatus == 'Paid' ? <i class="fas fa-circle success fa-xs"></i> : <i class="fas fa-circle red fa-xs"></i>}  {statusTransform(cardStatus)}</td>
-        <td className="td1">{dateAdjust(paymentDate)}</td>
-        <td className="tdd">
-          {cardStatus == 'Paid' ? <SetModalPaid disabled={true} modalName="Pagar" simbol="fas fa-check" value={item.id} month={month} year={year} isCard={true}></SetModalPaid> :
-            <SetModalPaid name={item.name} modalName="Pagar" simbol="fas fa-check" value={item.id} month={month} year={year} isCard={true} update={updateValues} updateStatus={updateStatus}></SetModalPaid>}
-          {cardStatus == 'Paid' ?
-            <Button disabled={false} size="sm" className="btn btn-danger" onClick={() => SetCardStatus(item.id, "NotPaid", `${year}-${month}-${item.dueDate}`)}><i className="fas fa-times"></i> Pendente</Button> :
-            <Button disabled={true} size="sm" className="btn btn-danger" onClick={() => SetCardStatus(item.id, "NotPaid", `${year}-${month}-${item.dueDate}`)}><i className="fas fa-times"></i> Pendente</Button>}
+        <td>{item.name}</td>
+        <td>R$ {decimalAdjust(cardValue)}</td>
+        <td>{item.dueDate}/{addLeadingZeros(month, 2)}/{year}</td>
+        <td>{dateAdjust(paymentDate)}</td>
+        <td>
+          {cardStatus === 'Paid' ? <SetModalPaid disabled={true} modalName="Pago" simbol="fas fa-check" value={item.id} month={month} year={year} isCard={true} classname='btn btn-green'></SetModalPaid> :
+            <SetModalPaid disabled={false} name={item.debtName} modalName="A pagar" simbol="fas fa-times" value={item.id} month={month} year={year} isCard={true} update={updateValues} updateStatus={updateStatus} amount={cardValue} classname='btn btn-danger'></SetModalPaid>}
         </td>
       </tr>
     )
   })
 
   return (
-    <Card className='cardTable'>
-      <Form.Group className="mb-3">
-        <Form.Control type="search" id="typeSearch" as="select" onChange={statusChange}>
-          <option value="">Filtrar por status</option>
-          <option value="Paid">Pago</option>
-          <option value="NotPaid">Não pago</option>
-        </Form.Control>
-      </Form.Group>
-      <Table responsive hover variant="white" className="tableFinancial" size="sm">
-        <thead>
-          <tr>
-            <th>Nome</th>
-            <th>Valor</th>
-            <th>Vencimento</th>
-            <th>Status</th>
-            <th>Pagamento</th>
-            <th>Ação</th>
-          </tr>
-        </thead>
-        <tbody>
-          {debtTableData}
-        </tbody>
-      </Table>
-      {(financial.totalItems !== undefined) ?
-        <PaginationComponent
-          itemsCount={financial.totalItems}
-          itemsPerPage={6}
-          currentPage={financial.currentPage}
-          setCurrentPage={setPageNumber}
-          alwaysShown={false}
-        /> : ""}
-      <Table responsive hover variant="white" className="tableFinancial" size="sm">
-        <thead>
-          <tr>
-            <th>Nome</th>
-            <th>Valor</th>
-            <th>Dia de Fechamento</th>
-            <th>Vencimento</th>
-            <th>Status</th>
-            <th>Pagamento</th>
-            <th>Ação</th>
-          </tr>
-        </thead>
-        <tbody>
-          {cardTableData}
-        </tbody>
-      </Table>
-    </Card>
-  )
+          <Card className='cardTable'>
+        <Form.Group className="mb-3">
+          <Form.Control type="search" id="typeSearch" as="select" onChange={statusChange}>
+            <option value="">Filtrar por status</option>
+            <option value="Paid">Pago</option>
+            <option value="NotPaid">Não pago</option>
+          </Form.Control>
+        </Form.Group>
+        <Table responsive hover variant="white" className="tableFinancial" size="sm">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Valor</th>
+              <th>Vencimento</th>
+              <th>Pagamento</th>
+              <th>Ação</th>
+            </tr>
+          </thead>
+          <tbody>
+            {debtTableData}
+          </tbody>
+        </Table>
+        {(financial.totalItems !== undefined) ?
+          <PaginationComponent
+            itemsCount={financial.totalItems}
+            itemsPerPage={6}
+            currentPage={financial.currentPage}
+            setCurrentPage={setPageNumber}
+            alwaysShown={false}
+          /> : ""}
+        <Table responsive hover variant="white" className="tableFinancial" size="sm">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Valor</th>
+              <th>Vencimento</th>
+              <th>Pagamento</th>
+              <th>Ação</th>
+            </tr>
+          </thead>
+          <tbody>
+            {cardTableData}
+          </tbody>
+        </Table>
+      </Card>
+      )
 };
