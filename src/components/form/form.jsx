@@ -12,7 +12,7 @@ import { refreshPage } from "../../utils/utils";
 
 export default function DebtList(props) {
   const [name, setName] = useState('');
-  const [value, setValue] = useState('');
+  const [values, setValues] = useState(['']); // Lista para armazenar valores dos campos de valor
   const [date, setDate] = useState('');
   const [numberOfInstallments, setNumberOfInstallments] = useState('0');
   const [debtInstallmentType, setDebtInstallmentType] = useState('');
@@ -40,9 +40,14 @@ export default function DebtList(props) {
   const nameChange = event => {
     setName(event.target.value)
   }
-  const valueChange = (event, value, maskedValue) => {
-    setValue(value)
+
+  // Atualiza um valor específico na lista de valores adicionais
+  const valueChange = (event, value, maskedValue, index) => {
+    const newValues = [...values];
+    newValues[index] = value;
+    setValues(newValues);
   }
+
   const dateChange = event => {
     setDate(event.target.value)
   }
@@ -73,13 +78,23 @@ export default function DebtList(props) {
 
   }, [refreshCategories])
 
+  function addFieldValue() {
+    setValues([...values, '']); // Adiciona um novo campo vazio à lista de valores
+  }
+
+  function removeFieldValue(index) {
+    const newValues = [...values];
+    newValues.splice(index, 1); // Remove o campo de valor com o índice fornecido
+    setValues(newValues);
+  }
 
   function handleSubmit(event) {
     setIsLoading(true)
     event.preventDefault();
     const addDebts = {
       name: name || props.data?.name,
-      value: value || props.data?.value,
+      value: values[0],
+      values: [...values], // Envia todos os valores da lista para a API
       date: date || props.data?.date,
       numberOfInstallments: numberOfInstallments || props.data?.numberOfInstallments,
       debtInstallmentType: debtInstallmentType || props.data?.debtInstallmentType,
@@ -125,11 +140,18 @@ export default function DebtList(props) {
           <Form.Control required="true" name="name" onChange={nameChange} placeholder="Entre com o nome" defaultValue={props.data?.name} />
         </Form.Group>
 
-        <Form.Group className="inputGroup">
-          <Form.Label>Valor</Form.Label>
-          <MaskedFormControl currency="BRL" required="true" name='value' onChange={valueChange} placeholder="Entre com o valor total" defaultValue={props.data?.value} />
-        </Form.Group>
-
+        {/* Renderiza campos de valor dinamicamente */}
+        {values.map((value, index) => (
+          <Form.Group className="inputGroup" key={index}>
+            <Form.Label>Valor</Form.Label>
+            <div style={{ display: 'flex' }}>
+              <MaskedFormControl currency="BRL" required="true" name={`value${index}`} value={value} onChange={(event, value, maskedValue) => valueChange(event, value, maskedValue, index)} placeholder="Entre com o valor total" />
+              {(index !== 0) ? <Button variant="danger" onClick={() => removeFieldValue(index)}>-</Button> : "" }
+            </div>
+          </Form.Group>
+        ))}
+        <Button variant="outline-secondary" onClick={addFieldValue}><i className="fas fa-plus"></i> Adicionar mais Valores</Button> {/* Botão para adicionar campos de valor */}
+        
         <Form.Group className="inputGroup">
           <Form.Label>Data</Form.Label>
           <Form.Control required="true" name='date' type="date" onChange={dateChange} placeholder="Entre com o data" defaultValue={props.data?.date.split('T')[0]} />
@@ -157,6 +179,7 @@ export default function DebtList(props) {
             <Form.Label>Quantidade de Parcelas</Form.Label>
             <Form.Control name='numberOfInstallments' type="number" onChange={installmentsChange} placeholder="Entre com o quantidade de parcelas" defaultValue={props.data?.numberOfInstallments} />
           </Form.Group> : ""}
+
         <LoadingButton variant="dark" type="submit" name="Adicionar" isLoading={isLoading}></LoadingButton>
       </Form>
     </>
