@@ -8,6 +8,7 @@ import "./CardLayout.css";
 import { debtInstallmentTransform, walletStatusTransform } from "../../utils/enumFormatter";
 import CustomCard from "../customCard/CustomCard";
 import { monthByNumber } from "../../utils/dateFormater";
+import { refreshPage } from "../../utils/utils";
 
 
 export default function CardLayout() {
@@ -45,25 +46,55 @@ export default function CardLayout() {
         return prev + cur.value;
     }, 0);
 
-    const hoje = new Date();
-    const mesAtual = hoje.getMonth();
-    const anoAtual = hoje.getFullYear();
+    const now = new Date();
+
+    const mountedDate = new Date(year, month -1, parseInt(month) == now.getMonth() +1 ? now.getDate() : 1);
+    const mesAtual = mountedDate.getMonth();
+    const anoAtual = mountedDate.getFullYear();
 
     const primeiroDiaProximoMes = new Date(anoAtual, mesAtual + 1, 1);
-    const milissegundosRestantes = primeiroDiaProximoMes - hoje;
+    const milissegundosRestantes = primeiroDiaProximoMes - mountedDate;
     const diasRestantes = Math.floor(milissegundosRestantes / 86400000);
 
-    const valuePerDay = provisionedValue / (diasRestantes + 1)
+    let valuePerDay = provisionedValue / (diasRestantes)
+
+    if (valuePerDay < 0) {
+        valuePerDay = 0.00
+    }
+
+    let day = `Valor por dia referente a ${diasRestantes} dias`
 
     const sumAll = sumAllValue.items?.reduce(function (prev, cur) {
         return prev + cur.value;
     }, 0);
 
+    const selectNewMonth = (direction) => {
+        if (direction === 'left') {
+            if (parseInt(month) === 1) {
+                localStorage.setItem("year", parseInt(year) - 1);
+                localStorage.setItem("month", 12);
+            } else {
+                localStorage.setItem("month", parseInt(month) - 1);
+            }
+        } else {
+            if (parseInt(month) === 12) {
+                localStorage.setItem("year", parseInt(year) + 1);
+                localStorage.setItem("month", 1)
+            } else {
+                localStorage.setItem("month", parseInt(month)+1);
+
+            }
+        }
+        refreshPage()
+    }
+
 
     return (
         <div className="containerWallet">
             <div id="linha">
-                {monthByNumber(month)} - {year}
+                <i onClick={() => selectNewMonth("left")} style={{cursor: 'pointer'}} class={"fas fa-chevron-left"}></i> 
+                {' '}{monthByNumber(month)} - {year}{' '}
+                <i style={{cursor: 'pointer'}} onClick={() => selectNewMonth("right")} class={"fas fa-chevron-right"}></i>
             </div>
             <div className="walletCards">
                 <CustomCard
@@ -79,7 +110,7 @@ export default function CardLayout() {
                 >
                 </CustomCard>
                 <CustomCard
-                    title="Valor por dia"
+                    title={day}
                     children={decimalAdjust(valuePerDay)}
                     icon="fas fa-calendar-day success fa-2x"
 
