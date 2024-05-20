@@ -120,42 +120,42 @@ export default function Dashboard() {
   return (
     <div>
       <div className="graphics">
-        <Card className="cardDash">
-          <CardApexGraphic></CardApexGraphic>
-        </Card>
         <Card className="graphicPagePie">
           <CardApexGraphicPie></CardApexGraphicPie>
         </Card>
-      </div>
-      <div className="cards">
-          <CustomCard
-            title="Fixas"
-            children={decimalAdjust(fixed)}
-            icon="far fa-calendar blue fa-2x"
-            data={fixedValue}
-          >
-          </CustomCard>
-          <CustomCard
-            title="Simples"
-            children={decimalAdjust(simple)}
-            icon="fas fa-coins blue fa-2x"
-            data={simpleValue}
-          >
-          </CustomCard>
-          <CustomCard
-            title="Parceladas"
-            children={decimalAdjust(installment)}
-            icon="fas fa-credit-card blue fa-2x"
-            data={installmentValue}
-          >
-          </CustomCard>
+        <Card className="cardDash">
+          <CardApexGraphic></CardApexGraphic>
+        </Card>
+        <div style={{display: "flex"}}>
+        <CustomCard
+          title="Fixas"
+          children={decimalAdjust(fixed)}
+          icon="far fa-calendar blue fa-2x"
+          data={fixedValue}
+        >
+        </CustomCard>
+        <CustomCard
+          title="Simples"
+          children={decimalAdjust(simple)}
+          icon="fas fa-coins blue fa-2x"
+          data={simpleValue}
+        >
+        </CustomCard>
+        <CustomCard
+          title="Parceladas"
+          children={decimalAdjust(installment)}
+          icon="fas fa-credit-card blue fa-2x"
+          data={installmentValue}
+        >
+        </CustomCard>
         </div>
+      </div>
       <div className="analitics">
         <Card className='categorieTable'>
           <text className="finishingInstallments">Parcelamentos acabando</text>
           <p></p>
           {lis_instalments.length === 0 ?
-            <div style={{ marginLeft: '100px', marginRight: '90px' }}>
+            <div style={{ marginLeft: '148px', marginRight: '148px', marginTop: '30px'}}>
               <Image src={imageEmpty} rounded></Image>
             </div> :
             <div>
@@ -176,11 +176,11 @@ export default function Dashboard() {
           }
         </Card>
 
-        <Card className="cardDash">
-            <CardApexGraphicByDay></CardApexGraphicByDay>
-          </Card>
+        <Card className="outsByDay">
+          <CardApexGraphicByDay></CardApexGraphicByDay>
+        </Card>
 
-        
+
       </div>
     </div>);
 };

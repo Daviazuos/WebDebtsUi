@@ -1,6 +1,6 @@
 .cardMaxDebts{
     margin: 10px;
-    box-shadow: 1px 3px 1px #9E9E9E;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
     margin-left: 0px;
     max-height: 280px;
     max-width: 480px;

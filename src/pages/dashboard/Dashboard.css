@@ -6,9 +6,11 @@
 }
 
 .graphicPagePie {
-    min-width: 300px;
-    max-width: 600px;
-    height: 400px;
+    grid-column-start: 3;
+    grid-column-end: 5;
+    grid-row-start: 1;
+    grid-row-end: 3;
+    padding: 5px;
 }
 
 .graphicPageBar {
@@ -18,11 +20,7 @@
 }
 
 .categorieTable {
-    min-width: 400px;
-    max-width: 600px;
-    height: 345px;
-    min-height: 200px;
-    padding: 15px;
+    padding: 10px;
 }
 
 .tableTotal {
@@ -55,12 +53,25 @@
 }
 
 .graphics {
-    display: flex;
-    flex-flow: row wrap;
+    display: grid;
+    grid-template-columns: auto auto auto;
+    
 }
 
 .cardDash {
-    max-width: 950px;
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    padding: 5px;
+} 
+
+.outsByDay {
+    grid-column-start: 2;
+    grid-column-end: 5;
+    grid-row-start: 4;
+    grid-row-end: 6;
+    padding: 5px;
 }
 
 .finishingInstallments {

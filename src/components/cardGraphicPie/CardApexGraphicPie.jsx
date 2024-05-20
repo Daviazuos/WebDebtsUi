@@ -45,7 +45,7 @@ export default function CardApexGraphicPie(props) {
                             position: 'right'
                         },
                         title: {
-                            text: `Percentual de categorias`,
+                            text: `Percentual por categorias`,
                             align: 'left'
                         },
                         responsive: [{
@@ -62,7 +62,7 @@ export default function CardApexGraphicPie(props) {
     }, [(props?.month != undefined) ? props.month : month])
     return (
         graphic !== null ?
-            <ReactApexChart options={graphic.options} series={graphic.series} type="donut" width={600} height={400}/> : <Card style={{width: 600, height: 400}}></Card>
+            <ReactApexChart options={graphic.options} series={graphic.series} type="donut" width={790} height={500}/> : <Card style={{width: 600, height: 400}}></Card>
     )
 }
 

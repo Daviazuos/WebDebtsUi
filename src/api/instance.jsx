@@ -9,8 +9,8 @@ export function getToken(){
 
 
 const axiosInstance = axios.create({
-  baseURL: 'https://backend.webdebt.net/',
-  //baseURL: 'https://localhost:5001/',
+  //baseURL: 'https://backend.webdebt.net/',
+  baseURL: 'https://00f1-2804-14d-4cd8-415f-00-17bd.ngrok-free.app/',
   timeout: 20000,
   headers: getToken()
   

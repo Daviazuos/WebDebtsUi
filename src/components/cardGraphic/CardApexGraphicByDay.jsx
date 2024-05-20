@@ -56,7 +56,7 @@ export default class CardApexGraphicByDay extends React.Component {
                 data: this.state.dataDebts,
             }],
             options: {
-                colors: ["#fc0303", "#25d988"],
+                colors: ["#C60C30", "#C60C30"],
                 chart: {
                     height: 350,
                     type: 'line',
@@ -102,7 +102,7 @@ export default class CardApexGraphicByDay extends React.Component {
         };
 
         return (
-            <ReactApexChart options={graphic.options} series={graphic.series} type="line" height={350} />
+            <ReactApexChart options={graphic.options} series={graphic.series} type="line" height={350} width={974} />
         )
     }
 }
