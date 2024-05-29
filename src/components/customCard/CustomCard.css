@@ -16,7 +16,9 @@
 }
 
 #fontColors {
-    font-size: 20px;
+    font-size: 22px;
+    font-weight: 700;
+    color: #546E7A;
 }
 
 #tittle {
@@ -24,5 +26,7 @@
 }
 
 #fontColorsTitle {
-    font-size: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #888eac;
 }

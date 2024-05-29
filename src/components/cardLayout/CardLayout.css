@@ -9,8 +9,9 @@
 
 #linha {
     width: 100%;
-    border-bottom: 1px solid #000000;
     margin-left: 10px;
     font-size: 30px;
-    color: black;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
   }

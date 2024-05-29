@@ -12,7 +12,7 @@ export default function CardApexGraphicPie(props) {
     const [graphic, setGraphic] = useState(null);
     const [year, setYear] = useState(localStorage.getItem("year"));
 
-    let month = props?.month === undefined? localStorage.getItem("month") : props?.month
+    let month = props?.month === undefined ? localStorage.getItem("month") : props?.month
 
     useEffect(() => {
         const labelsList = []
@@ -41,7 +41,7 @@ export default function CardApexGraphicPie(props) {
                         labels: labelsList,
                         legend: {
                             show: true,
-                            fontSize: '11px',
+                            fontSize: '12px',
                             position: 'right'
                         },
                         title: {
@@ -55,14 +55,24 @@ export default function CardApexGraphicPie(props) {
                                     width: 180
                                 }
                             }
-                        }]
+                        }],
+                        theme: {
+                            mode: 'light',
+                            palette: 'palette3',
+                            monochrome: {
+                                enabled: false,
+                                color: '#255aee',
+                                shadeTo: 'light',
+                                shadeIntensity: 0.65
+                            },
+                        }
                     },
                 })
             })
     }, [(props?.month != undefined) ? props.month : month])
     return (
         graphic !== null ?
-            <ReactApexChart options={graphic.options} series={graphic.series} type="donut" width={790} height={500}/> : <Card style={{width: 600, height: 400}}></Card>
+            <ReactApexChart options={graphic.options} series={graphic.series} type="donut" width={790} height={500} /> : <Card style={{ width: 600, height: 400 }}></Card>
     )
 }
 

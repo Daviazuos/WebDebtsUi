@@ -58,11 +58,13 @@ export default function CardLayout() {
 
     let valuePerDay = provisionedValue / (diasRestantes)
 
+    let balanceColor = provisionedValue < 0? "fas fa-balance-scale red fa-2x":"fas fa-balance-scale success fa-2x"
+
     if (valuePerDay < 0) {
         valuePerDay = 0.00
     }
 
-    let day = `Valor por dia referente a ${diasRestantes} dias`
+    let day = `Valor por dia - ${diasRestantes} dias`
 
     const sumAll = sumAllValue.items?.reduce(function (prev, cur) {
         return prev + cur.value;
@@ -92,21 +94,27 @@ export default function CardLayout() {
     return (
         <div className="containerWallet">
             <div id="linha">
-                <i onClick={() => selectNewMonth("left")} style={{cursor: 'pointer'}} class={"fas fa-chevron-left"}></i> 
-                {' '}{monthByNumber(month)} - {year}{' '}
-                <i style={{cursor: 'pointer'}} onClick={() => selectNewMonth("right")} class={"fas fa-chevron-right"}></i>
+                <i onClick={() => selectNewMonth("left")} style={{cursor: 'pointer', color: '#B3B8D4'}} class={"fas fa-chevron-left"}></i> 
+                <div style={{minWidth: '250px', display: 'flex', justifyContent: 'center'}}>{monthByNumber(month)} - {year}</div>
+                <i style={{cursor: 'pointer', color: '#B3B8D4'}} onClick={() => selectNewMonth("right")} class={"fas fa-chevron-right"}></i>
             </div>
             <div className="walletCards">
                 <CustomCard
-                    title="Carteira"
+                    title="Entradas"
                     children={decimalAdjust(valueTotal)}
-                    icon="fas fa-wallet blue fa-2x"
+                    icon="fas fa-hand-holding-usd success fa-2x"
                 >
                 </CustomCard>
                 <CustomCard
-                    title="Dividas"
+                    title="Saídas"
                     children={decimalAdjust(sumAll)}
                     icon="fas fa-hand-holding-usd red fa-2x"
+                >
+                </CustomCard>
+                <CustomCard
+                    title="Saldo Atual"
+                    children={decimalAdjust(provisionedValue)}
+                    icon={balanceColor}
                 >
                 </CustomCard>
                 <CustomCard
@@ -116,12 +124,6 @@ export default function CardLayout() {
 
                 ></CustomCard>
                 <CustomCard
-                    title="Provisionado"
-                    children={decimalAdjust(provisionedValue)}
-                    icon="fas fa-lightbulb yellow fa-2x"
-                >
-                </CustomCard>
-                <CustomCard
                     title="Valor pago"
                     children={decimalAdjust(paidValue)}
                     icon="fas fa-check success fa-2x"
@@ -130,7 +132,7 @@ export default function CardLayout() {
                 <CustomCard
                     title="Valor a pagar"
                     children={decimalAdjust(sumAll - paidValue)}
-                    icon="fas fa-lightbulb red fa-2x"
+                    icon="fas fa-times red fa-2x"
                 >
                 </CustomCard>
 

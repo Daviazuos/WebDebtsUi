@@ -41,6 +41,10 @@ export default class CardApexGraphic extends React.Component {
 
 
     render() {
+        console.log(this.state.labels)
+        console.log(this.state.dataDebts)
+        console.log(this.state.dataWallet)
+
         const graphic = {
 
             series: [{
@@ -52,7 +56,7 @@ export default class CardApexGraphic extends React.Component {
                 data: this.state.dataWallet,
             }],
             options: {
-                colors: ["#C60C30", "#25d988"],
+                colors: ["#C60C30", "#13D8AA"],
                 chart: {
                     height: 350,
                     type: 'line',
@@ -78,7 +82,7 @@ export default class CardApexGraphic extends React.Component {
                 grid: {
                     row: {
                         colors: ['#f3f3f3', 'transparent'],
-                        opacity: 0.5
+                        opacity: 0.2
                     },
                 },
                 xaxis: {

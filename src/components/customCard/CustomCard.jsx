@@ -3,6 +3,7 @@ import DashModal from "../../pages/dashboard/DashModal";
 import "./CustomCard.css"
 
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default (props) => {
   const [modalShow, setModalShow] = React.useState(false);
 
@@ -13,7 +14,7 @@ export default (props) => {
           <div class="card-body cleartfix">
             <div class="media align-items-stretch">
               <div class="align-self-center">
-                <i class={props.icon}></i>
+                <i class={props.icon} style={{color: "#1a4173"}}></i>
               </div>
               <div class="media-body" id="tittle">
                 <span id="fontColorsTitle">{props.title}</span>

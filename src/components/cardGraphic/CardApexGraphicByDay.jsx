@@ -10,99 +10,91 @@ import { getLessMonthByMonth, getLessMonthYearByMonth } from "../../utils/dateFo
 
 export default class CardApexGraphicByDay extends React.Component {
     state = {
-        installments: [],
         labels: [],
-        dataDebts: [],
-        dataWallet: []
+        valuesData: [],
     }
 
     componentDidMount() {
         const labels = []
-        const dataDebts = []
+        const values = []
 
-        axiosInstance.get(Endpoints.debt.filterInstallments(1, 9999, '', localStorage.getItem("month"), localStorage.getItem("year"), '', '', '', '', null))
-            .then(res => {
-                const installments = res.data.items;
-                var result = [];
-                installments.reduce(function (res, value) {
-                    if (!res[new Date(value.date).getUTCDate()]) {
-                        res[new Date(value.date).getUTCDate()] = { Id: new Date(value.date).getUTCDate(), value: 0.00 };
-                        result.push(res[new Date(value.date).getUTCDate()])
+
+        let months = Array.from(Array(4).keys())
+        for (const index in months) {
+            let month_year = getLessMonthYearByMonth(parseInt(localStorage.getItem("month")), months[index], localStorage.getItem("year"))
+            axiosInstance.get(Endpoints.debt.getDebtCategories(month_year[0], month_year[1], undefined))
+                .then(res => {
+                    const categories = res.data;
+                    for (const value in categories) {
+                        values.push({
+                            name: `${categories[value].name}`,
+                            data: `R$ ${decimalAdjust(categories[value].value)}`
+                        })
                     }
-                    res[new Date(value.date).getUTCDate()].value += value.value;
-                    return res;
-                }, {});
-
-                result.sort(function(a, b) { 
-                    return a.Id - b.Id;
                 })
-
-
-                for (const value in result) {
-                    dataDebts.push(result[value].value)
-                    labels.push(result[value].Id)
-                }
-                this.setState({ labels: labels });
-                this.setState({ dataDebts: dataDebts });
-            })
+            labels.push(month_year[0])
+        }
+        this.setState({ labels: labels });
+        this.setState({ valuesData: values });
     }
 
 
     render() {
-        const graphic = {
 
-            series: [{
-                name: "Gastos",
-                data: this.state.dataDebts,
-            }],
-            options: {
-                colors: ["#C60C30", "#C60C30"],
-                chart: {
-                    height: 350,
-                    type: 'line',
-                },
-                dataLabels: {
-                    enabled: true,
-                    formatter: function (val, opts) {
-                        return "R$ " + decimalAdjust(val);
-                    },
-                    style: {
-                        fontSize: "8px",
-                        fontFamily: "Helvetica, Arial, sans-serif",
-                        fontWeight: "bold"
-                    }
-                },
-                stroke: {
-                    curve: 'straight'
-                },
-                title: {
-                    text: 'Movimentação por dia',
-                    align: 'left'
-                },
-                grid: {
-                    row: {
-                        colors: ['#f3f3f3', 'transparent'],
-                        opacity: 0.5
-                    },
-                },
-                xaxis: {
-                    categories: this.state.labels,
-                },
+        console.log(this.state.labels)
+        console.log(this.state.valuesData)
+        // const graphic = {
 
-                yaxis: {
-                    labels: {
-                        formatter: function (value) {
-                            return "R$ " + decimalAdjust(value);
-                        }
-                    },
-                },
-            },
+        //     series: [this.state.values],
+        //     options: {
+        //         colors: ["#C60C30", "#C60C30"],
+        //         chart: {
+        //             height: 350,
+        //             type: 'line',
+        //         },
+        //         dataLabels: {
+        //             enabled: true,
+        //             formatter: function (val, opts) {
+        //                 return "R$ " + decimalAdjust(val);
+        //             },
+        //             style: {
+        //                 fontSize: "8px",
+        //                 fontFamily: "Helvetica, Arial, sans-serif",
+        //                 fontWeight: "bold"
+        //             }
+        //         },
+        //         stroke: {
+        //             curve: 'straight'
+        //         },
+        //         title: {
+        //             text: 'Movimentação por dia',
+        //             align: 'left'
+        //         },
+        //         grid: {
+        //             row: {
+        //                 colors: ['#f3f3f3', 'transparent'],
+        //                 opacity: 0.5
+        //             },
+        //         },
+        //         xaxis: {
+        //             categories: this.state.labels,
+        //         },
+
+        //         yaxis: {
+        //             labels: {
+        //                 formatter: function (value) {
+        //                     return "R$ " + decimalAdjust(value);
+        //                 }
+        //             },
+        //         },
+        //     },
 
 
-        };
+        // };
 
         return (
-            <ReactApexChart options={graphic.options} series={graphic.series} type="line" height={350} width={974} />
+            // <ReactApexChart options={graphic.options} series={graphic.series} type="line" height={350} width={957} />
+            <></>
         )
     }
 }

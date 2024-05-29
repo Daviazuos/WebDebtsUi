@@ -167,7 +167,7 @@ export default function DebtModal(props) {
     </Tab>]
 
     return <>
-        <Button onClick={() => setModalShow(true)}><i class="fas fa-search fa-sm"></i></Button>
+        <Button style={{ backgroundColor: "#1A4173", borderColor: "#1A4173" }} variant='dark' onClick={() => setModalShow(true)}><i class="fas fa-search fa-sm"></i></Button>
         <Modal
             show={modalShow}
             size='lg'
