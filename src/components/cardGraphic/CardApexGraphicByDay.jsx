@@ -20,17 +20,23 @@ export default class CardApexGraphicByDay extends React.Component {
 
 
         let months = Array.from(Array(4).keys())
+        const nameMap = {};
         for (const index in months) {
             let month_year = getLessMonthYearByMonth(parseInt(localStorage.getItem("month")), months[index], localStorage.getItem("year"))
             axiosInstance.get(Endpoints.debt.getDebtCategories(month_year[0], month_year[1], undefined))
                 .then(res => {
                     const categories = res.data;
-                    for (const value in categories) {
-                        values.push({
-                            name: `${categories[value].name}`,
-                            data: `R$ ${decimalAdjust(categories[value].value)}`
-                        })
-                    }
+                    for (const item in categories) {
+                        if (!nameMap[categories[item].name]) {
+                            nameMap[categories[item].name] = {
+                                name: categories[item].name,
+                                data: []
+                            };
+                            values.push(nameMap[categories[item].name]);
+                        }
+                        nameMap[categories[item].name].data.push(categories[item].value);
+                    };
+
                 })
             labels.push(month_year[0])
         }
@@ -40,61 +46,58 @@ export default class CardApexGraphicByDay extends React.Component {
 
 
     render() {
-
-        console.log(this.state.labels)
         console.log(this.state.valuesData)
-        // const graphic = {
+        const graphic = {
 
-        //     series: [this.state.values],
-        //     options: {
-        //         colors: ["#C60C30", "#C60C30"],
-        //         chart: {
-        //             height: 350,
-        //             type: 'line',
-        //         },
-        //         dataLabels: {
-        //             enabled: true,
-        //             formatter: function (val, opts) {
-        //                 return "R$ " + decimalAdjust(val);
-        //             },
-        //             style: {
-        //                 fontSize: "8px",
-        //                 fontFamily: "Helvetica, Arial, sans-serif",
-        //                 fontWeight: "bold"
-        //             }
-        //         },
-        //         stroke: {
-        //             curve: 'straight'
-        //         },
-        //         title: {
-        //             text: 'Movimentação por dia',
-        //             align: 'left'
-        //         },
-        //         grid: {
-        //             row: {
-        //                 colors: ['#f3f3f3', 'transparent'],
-        //                 opacity: 0.5
-        //             },
-        //         },
-        //         xaxis: {
-        //             categories: this.state.labels,
-        //         },
+            series: [this.state.valuesData],
+            options: {
+                colors: ["#C60C30", "#C60C30"],
+                chart: {
+                    height: 350,
+                    type: 'line',
+                },
+                dataLabels: {
+                    enabled: true,
+                    formatter: function (val, opts) {
+                        return "R$ " + decimalAdjust(val);
+                    },
+                    style: {
+                        fontSize: "8px",
+                        fontFamily: "Helvetica, Arial, sans-serif",
+                        fontWeight: "bold"
+                    }
+                },
+                stroke: {
+                    curve: 'straight'
+                },
+                title: {
+                    text: 'Movimentação por dia',
+                    align: 'left'
+                },
+                grid: {
+                    row: {
+                        colors: ['#f3f3f3', 'transparent'],
+                        opacity: 0.5
+                    },
+                },
+                xaxis: {
+                    categories: this.state.labels,
+                },
 
-        //         yaxis: {
-        //             labels: {
-        //                 formatter: function (value) {
-        //                     return "R$ " + decimalAdjust(value);
-        //                 }
-        //             },
-        //         },
-        //     },
+                yaxis: {
+                    labels: {
+                        formatter: function (value) {
+                            return "R$ " + decimalAdjust(value);
+                        }
+                    },
+                },
+            },
 
 
-        // };
+        };
 
         return (
-            // <ReactApexChart options={graphic.options} series={graphic.series} type="line" height={350} width={957} />
-            <></>
+            <ReactApexChart options={graphic.options} series={graphic.series} type="line" height={350} width={957} />
         )
     }
 }

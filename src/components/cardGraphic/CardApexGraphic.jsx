@@ -41,10 +41,6 @@ export default class CardApexGraphic extends React.Component {
 
 
     render() {
-        console.log(this.state.labels)
-        console.log(this.state.dataDebts)
-        console.log(this.state.dataWallet)
-
         const graphic = {
 
             series: [{
