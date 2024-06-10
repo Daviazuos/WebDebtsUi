@@ -190,7 +190,7 @@ export default function Financial() {
             alwaysShown={false}
           /> : ""}
       </Card>
-      <Card className='cardTable'>
+      <Card className='cardFinancialTable'>
         <Table responsive hover variant="white" className="tableFinancial" size="sm">
           <thead>
             <tr>
