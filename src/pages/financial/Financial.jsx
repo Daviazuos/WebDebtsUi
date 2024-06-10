@@ -77,7 +77,7 @@ export default function Financial() {
 
 
   useEffect(() => {
-    axiosInstance.get(Endpoints.debt.filterInstallments(pageNumber, 6, '', month, year, '', paidStatus, 'Simple', '', null))
+    axiosInstance.get(Endpoints.debt.filterInstallments(pageNumber, 15, '', month, year, '', paidStatus, 'Simple', '', null))
       .then(res => {
         setFinancial(res.data)
       })
@@ -148,14 +148,15 @@ export default function Financial() {
         <td>{dateAdjust(paymentDate)}</td>
         <td>
           {cardStatus === 'Paid' ? <SetModalPaid disabled={true} modalName="Pago" simbol="fas fa-check" value={item.id} month={month} year={year} isCard={true} classname='btn btn-green'></SetModalPaid> :
-            <SetModalPaid disabled={false} name={item.debtName} modalName="A pagar" simbol="fas fa-times" value={item.id} month={month} year={year} isCard={true} update={updateValues} updateStatus={updateStatus} amount={cardValue} classname='btn btn-danger'></SetModalPaid>}
+            <SetModalPaid disabled={false} name={item.name} modalName="A pagar" simbol="fas fa-times" value={item.id} month={month} year={year} isCard={true} update={updateValues} updateStatus={updateStatus} amount={cardValue} classname='btn btn-danger'></SetModalPaid>}
         </td>
       </tr>
     )
   })
 
   return (
-          <Card className='cardTable'>
+    <>
+    <div className="selectorPaid">
         <Form.Group className="mb-3">
           <Form.Control type="search" id="typeSearch" as="select" onChange={statusChange}>
             <option value="">Filtrar por status</option>
@@ -163,6 +164,9 @@ export default function Financial() {
             <option value="NotPaid">Não pago</option>
           </Form.Control>
         </Form.Group>
+      </div>
+    <div className="financialTables">
+      <Card className='debtTable'>
         <Table responsive hover variant="white" className="tableFinancial" size="sm">
           <thead>
             <tr>
@@ -180,11 +184,13 @@ export default function Financial() {
         {(financial.totalItems !== undefined) ?
           <PaginationComponent
             itemsCount={financial.totalItems}
-            itemsPerPage={6}
+            itemsPerPage={15}
             currentPage={financial.currentPage}
             setCurrentPage={setPageNumber}
             alwaysShown={false}
           /> : ""}
+      </Card>
+      <Card className='cardTable'>
         <Table responsive hover variant="white" className="tableFinancial" size="sm">
           <thead>
             <tr>
@@ -200,5 +206,7 @@ export default function Financial() {
           </tbody>
         </Table>
       </Card>
-      )
+
+    </div>
+    </>)
 };

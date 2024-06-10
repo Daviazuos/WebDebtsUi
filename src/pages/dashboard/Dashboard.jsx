@@ -126,61 +126,58 @@ export default function Dashboard() {
         <Card className="cardDash">
           <CardApexGraphic></CardApexGraphic>
         </Card>
-        <div style={{display: "flex"}}>
-        <CustomCard
-          title="Fixas"
-          children={decimalAdjust(fixed)}
-          icon="far fa-calendar blue fa-2x"
-          data={fixedValue}
-        >
-        </CustomCard>
-        <CustomCard
-          title="Simples"
-          children={decimalAdjust(simple)}
-          icon="fas fa-coins blue fa-2x"
-          data={simpleValue}
-        >
-        </CustomCard>
-        <CustomCard
-          title="Parceladas"
-          children={decimalAdjust(installment)}
-          icon="fas fa-credit-card blue fa-2x"
-          data={installmentValue}
-        >
-        </CustomCard>
+        <div style={{ display: "flex" }}>
+          <CustomCard
+            title="Fixas"
+            children={decimalAdjust(fixed)}
+            icon="far fa-calendar blue fa-2x"
+            data={fixedValue}
+          >
+          </CustomCard>
+          <CustomCard
+            title="Simples"
+            children={decimalAdjust(simple)}
+            icon="fas fa-coins blue fa-2x"
+            data={simpleValue}
+          >
+          </CustomCard>
+          <CustomCard
+            title="Parceladas"
+            children={decimalAdjust(installment)}
+            icon="fas fa-credit-card blue fa-2x"
+            data={installmentValue}
+          >
+          </CustomCard>
         </div>
       </div>
       <div className="analitics">
-        <Card className='categorieTable'>
-          <text className="finishingInstallments">Parcelamentos acabando</text>
-          <p></p>
-          {lis_instalments.length === 0 ?
-            <div style={{ marginLeft: '148px', marginRight: '148px', marginTop: '30px'}}>
-              <Image src={imageEmpty} rounded></Image>
-            </div> :
-            <div>
-              <Table responsive hover variant="black" className="tableTotal" size="sm">
-                <thead>
-                  <tr>
-                    <th>Nome</th>
-                    <th>Valor</th>
-                    <th>Parcela</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {lis_instalments}
-                </tbody>
-              </Table>
-              <text>Total: R$ {decimalAdjust(totalFinishing)}</text>
-            </div>
-          }
-        </Card>
-
         <Card className="outsByDay">
           <CardApexGraphicByDay></CardApexGraphicByDay>
         </Card>
-
-
+        <Card className='categorieTable'>
+        <text className="finishingInstallments">Parcelamentos acabando</text>
+        <p></p>
+        {lis_instalments.length === 0 ?
+          <div style={{ marginLeft: '148px', marginRight: '148px', marginTop: '30px' }}>
+            <Image src={imageEmpty} rounded></Image>
+          </div> :
+          <div>
+            <Table responsive hover variant="black" className="tableTotal" size="sm">
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th>Valor</th>
+                  <th>Parcela</th>
+                </tr>
+              </thead>
+              <tbody>
+                {lis_instalments}
+              </tbody>
+            </Table>
+            <text>Total: R$ {decimalAdjust(totalFinishing)}</text>
+          </div>
+        }
+      </Card>
       </div>
     </div>);
 };
