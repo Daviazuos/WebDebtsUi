@@ -67,7 +67,6 @@ export default function Login(props) {
                         </div>
                     </Form>
                     <p></p>
-                    {/* <Button onClick={event => window.location.href = '/register'} className="register" variant="primary"> Criar usuário </Button> */}
                     <div className='signText'>Não tem conta ainda? <a className='registerButton' onClick={() => window.location.href = '/register'}>cadastre-se</a></div>
 
                     <Alert show={errorMessageShow} variant="red">
