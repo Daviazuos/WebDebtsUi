@@ -115,8 +115,8 @@ export default function Financial() {
         <td>{dateAdjust(item.date)}</td>
         <td>{dateAdjust(item.paymentDate)}</td>
         <td>
-          {item.status === 'Paid' ? <SetModalPaid disabled={true} modalName="Pago" simbol="fas fa-check" value={item.id} month={month} year={year} isCard={false} classname='btn btn-green'></SetModalPaid> :
-            <SetModalPaid disabled={false} name={item.debtName} modalName="A pagar" simbol="fas fa-times" value={item.id} month={month} year={year} isCard={false} update={updateValues} updateStatus={updateStatus} amount={item.value} classname='btn btn-danger'></SetModalPaid>}
+          {item.status === 'Paid' ? <SetModalPaid disabled={true} modalName="Pago" simbol="" value={item.id} month={month} year={year} isCard={false} classname='btn btn-green'></SetModalPaid> :
+            <SetModalPaid disabled={false} name={item.debtName} modalName="Pagar" simbol="" value={item.id} month={month} year={year} isCard={false} update={updateValues} updateStatus={updateStatus} amount={item.value} classname='btn btn-danger'></SetModalPaid>}
         </td>
       </tr>
     )
@@ -147,8 +147,8 @@ export default function Financial() {
         <td>{item.dueDate}/{addLeadingZeros(month, 2)}/{year}</td>
         <td>{dateAdjust(paymentDate)}</td>
         <td>
-          {cardStatus === 'Paid' ? <SetModalPaid disabled={true} modalName="Pago" simbol="fas fa-check" value={item.id} month={month} year={year} isCard={true} classname='btn btn-green'></SetModalPaid> :
-            <SetModalPaid disabled={false} name={item.name} modalName="A pagar" simbol="fas fa-times" value={item.id} month={month} year={year} isCard={true} update={updateValues} updateStatus={updateStatus} amount={cardValue} classname='btn btn-danger'></SetModalPaid>}
+          {cardStatus === 'Paid' ? <SetModalPaid disabled={true} modalName="Pago" simbol="" value={item.id} month={month} year={year} isCard={true} classname='btn btn-green'></SetModalPaid> :
+            <SetModalPaid disabled={false} name={item.name} modalName="Pagar" simbol="" value={item.id} month={month} year={year} isCard={true} update={updateValues} updateStatus={updateStatus} amount={cardValue} classname='btn btn-danger'></SetModalPaid>}
         </td>
       </tr>
     )

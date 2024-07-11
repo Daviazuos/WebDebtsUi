@@ -64,4 +64,8 @@ export class DebtsEndpoints extends AbstractEndpoints {
     return `${this.getURL()}/Edit?Id=${id}`;
   }
 
+  putInstallment(id: string) {
+    return `${this.getURL()}/Installments?Id=${id}`;
+  }
+
 }
