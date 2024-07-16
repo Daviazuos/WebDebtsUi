@@ -19,7 +19,7 @@ function AddGoalsModal(props) {
   const [modalShow, setModalShow] = React.useState(false);
   return (
     <>
-      <Button size="sm" className={props.className} variant='dark' onClick={() => setModalShow(true)}>
+      <Button size="sm" className={props.className} style={{ backgroundColor: "#1A4173", borderColor: "#1A4173" }} variant='dark' onClick={() => setModalShow(true)}>
         <i className={props.simbol}></i> {props.modalName}
       </Button>
 
@@ -80,6 +80,7 @@ export default function Goals() {
 
   return (
     <div>
+      <span id="PagesTitle">Metas</span>
       <Card className='cardTable'>
         <Table responsive hover variant="white" className="tableFinancial" size="sm">
           <thead>

@@ -156,6 +156,7 @@ export default function Financial() {
 
   return (
     <>
+    <span id="PagesTitle">Finanças</span>
     <div className="selectorPaid">
         <Form.Group className="mb-3">
           <Form.Control type="search" id="typeSearch" as="select" onChange={statusChange}>

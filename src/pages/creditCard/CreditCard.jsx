@@ -14,7 +14,7 @@ function SetModalAddCard(props) {
     const [modalShow, setModalShow] = React.useState(false);
     return (
         <>
-            <Button size="sm" className={props.className} variant='dark' onClick={() => setModalShow(true)}>
+            <Button size="sm" className={props.className} style={{ backgroundColor: "#1A4173", borderColor: "#1A4173" }} variant='dark' onClick={() => setModalShow(true)}>
                 <i className={props.simbol}></i> {props.modalName}
             </Button>
             <CreditCardModal
@@ -162,6 +162,7 @@ export default function CardCredit() {
 
     return (
         <div className="containerCardPage">
+            <span id="PagesTitle">Cartões</span>
             <Form className="switchButton">
                 <Form.Check
                     type="switch"

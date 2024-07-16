@@ -109,6 +109,7 @@ export default function Debts() {
 
   return (
     <div>
+      <span id="PagesTitle">Dívidas</span>
       <Card className="cardTable">
         <Form className="filters">
           <Form.Group>

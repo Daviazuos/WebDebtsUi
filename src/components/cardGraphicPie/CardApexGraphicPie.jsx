@@ -72,7 +72,7 @@ export default function CardApexGraphicPie(props) {
     }, [(props?.month != undefined) ? props.month : month])
     return (
         graphic !== null ?
-            <ReactApexChart options={graphic.options} series={graphic.series} type="donut" width={790} height={500} /> : <Card style={{ width: 600, height: 400 }}></Card>
+            <ReactApexChart options={graphic.options} series={graphic.series} type="donut" width={770} height={500} /> : <Card style={{ width: 700, height: 400 }}></Card>
     )
 }
 

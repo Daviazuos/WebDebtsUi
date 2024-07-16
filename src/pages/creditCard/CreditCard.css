@@ -42,10 +42,6 @@
     color: white !important;
 }
 
-#creditCardBlock {
-    cursor:'pointer'
-}
-
 #creditCardBlock:hover {
     -webkit-transform: scale(1.1);
   -ms-transform: scale(1.1);

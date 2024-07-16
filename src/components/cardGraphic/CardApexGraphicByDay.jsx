@@ -123,7 +123,7 @@ export default class CardApexGraphicByDay extends React.Component {
         };
 
         return (
-            <ReactApexChart options={graphic.options} series={graphic.series} type="line" height={350} width={960} />
+            <ReactApexChart options={graphic.options} series={graphic.series} type="line" height={350} width={955} />
         )
     }
 }

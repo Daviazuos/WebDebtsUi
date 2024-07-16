@@ -50,7 +50,7 @@ function SetModalAdd(props) {
   const [modalShow, setModalShow] = React.useState(false);
   return (
     <>
-      <Button size="sm" className={props.className} variant='dark' onClick={() => setModalShow(true)}>
+      <Button size="sm" className={props.className} style={{ backgroundColor: "#1A4173", borderColor: "#1A4173" }} variant='dark' onClick={() => setModalShow(true)}>
         <i className={props.simbol}></i> {props.modalName}
       </Button>
       <WalletModal
@@ -107,6 +107,7 @@ export default function Wallet() {
 
   return (
     <div className="containerWallet">
+      <span id="PagesTitle">Carteira</span>
       <Card className="cardWallet">
         <Table responsive hover variant="black" className="table" size="sm">
           <thead>

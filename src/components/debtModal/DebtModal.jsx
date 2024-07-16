@@ -56,6 +56,7 @@ export default function DebtModal(props) {
     const [paidValue, setPaidValue] = useState(0);
     const [valueMonth, setValueMonth] = useState(0.00);
     const [installments, setInstallments] = useState([]);
+    const [pagination, setPagination] = useState({});
     const [pageNumber, setPageNumber] = useState(1);
     const [installmentNumber, setInstallmentNumber] = useState('-')
 
@@ -89,6 +90,7 @@ export default function DebtModal(props) {
             axiosInstance.get(Endpoints.debt.filterInstallments(pageNumber, 10, props.id, '', '', '', '', '', '', null))
                 .then(res => {
                     setInstallments(res.data.items); // Fix here, set only the items array
+                    setPagination(res.data)
                     // Initialize edit mode state for each installment
                     const initialEditModeState = {};
                     res.data.items.forEach(installment => {
@@ -108,7 +110,7 @@ export default function DebtModal(props) {
                 <td>
                     {editMode[item.id] ? (
                         <input
-                            type="text" 
+                            type="text"
                             value={item.value}
                             onChange={(e) => handleEditChange(e, item.id, 'value')}
                         />
@@ -260,7 +262,7 @@ export default function DebtModal(props) {
                                                 {lis_instalments}
                                             </tbody>
                                         </Table>
-                                        <CustomPagination currentPage={installments.currentPage} totalItems={installments.totalItems} totalPages={installments.totalPages} onChange={pageChange}></CustomPagination>
+                                        <CustomPagination currentPage={pagination.currentPage} totalItems={pagination.totalItems} totalPages={pagination.totalPages} onChange={pageChange}></CustomPagination>
                                     </div>
                                 </Tab>
                             ]}
