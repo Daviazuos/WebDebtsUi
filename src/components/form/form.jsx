@@ -9,6 +9,7 @@ import CategoryModal from "../../pages/categories/CategoryModal";
 import LoadingButton from "../loadingButton/LoadingButton";
 import CardLayout from "../cardLayout/CardLayout";
 import { refreshPage } from "../../utils/utils";
+import { useGlobalContext } from "../../services/local-storage-event";
 
 export default function DebtList(props) {
   const [name, setName] = useState('');
@@ -21,6 +22,7 @@ export default function DebtList(props) {
   const [refreshCategories, setRefreshCategories] = useState(false)
   const [isLoading, setIsLoading] = React.useState(false);
   const [onError, setOnError] = React.useState(false)
+  const { sharedValue, setSharedValue } = useGlobalContext();
 
   function SetModal(props) {
     const [modalShow, setModalShow] = React.useState(false);
@@ -103,6 +105,7 @@ export default function DebtList(props) {
     if (props.id === undefined) {
       props.cardId === null ? axiosInstance.post(Endpoints.debt.add(), addDebts).then(response => {
         setIsLoading(false)
+        setSharedValue(!sharedValue);
         props.update()
       }).catch(err => {
         console.log(err)
@@ -110,6 +113,7 @@ export default function DebtList(props) {
         setIsLoading(false)
       }) : axiosInstance.post(Endpoints.card.addValues(props.cardId), addDebts).then(response => {
         setIsLoading(false)
+        setSharedValue(!sharedValue);
         props.update()
       }).catch(err => {
         console.log(err)
@@ -120,6 +124,7 @@ export default function DebtList(props) {
     else {
       axiosInstance.put(Endpoints.debt.putDebt(props.id), addDebts).then(response => {
         setIsLoading(false)
+        setSharedValue(!sharedValue);
         props.update()
       }).catch(err => {
         console.log(err)
@@ -146,12 +151,12 @@ export default function DebtList(props) {
             <Form.Label>Valor</Form.Label>
             <div style={{ display: 'flex' }}>
               <MaskedFormControl currency="BRL" required="true" name={`value${index}`} value={value} onChange={(event, value, maskedValue) => valueChange(event, value, maskedValue, index)} placeholder="Entre com o valor total" />
-              {(index !== 0) ? <Button variant="danger" onClick={() => removeFieldValue(index)}>-</Button> : "" }
+              {(index !== 0) ? <Button variant="danger" onClick={() => removeFieldValue(index)}>-</Button> : ""}
             </div>
           </Form.Group>
         ))}
         <Button variant="outline-secondary" onClick={addFieldValue}><i className="fas fa-plus"></i> Adicionar mais Valores</Button> {/* Botão para adicionar campos de valor */}
-        
+
         <Form.Group className="inputGroup">
           <Form.Label>Data</Form.Label>
           <Form.Control required="true" name='date' type="date" onChange={dateChange} placeholder="Entre com o data" defaultValue={props.data?.date.split('T')[0]} />

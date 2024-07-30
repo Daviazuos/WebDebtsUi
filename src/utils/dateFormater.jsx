@@ -58,3 +58,10 @@ export function addMonthsToDate(date, months) {
   const dateParsed = moment(date).add(parseInt(months), 'months').format('DD/MM/YYYY');
   return dateParsed;
 }
+
+export function addMonthsToMonth(month, months) { 
+  if (month == 12) {
+    return 1
+  }
+  return parseInt(month) + parseInt(months)
+}

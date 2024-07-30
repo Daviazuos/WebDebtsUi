@@ -41,3 +41,9 @@
     }
 
 }
+
+.nexMonthbutton {
+    background: linear-gradient(211.23deg, #8257e8 -18.92%, #9333ea 47.22%, #e633ea 106.81%) !important;
+    color: #fff !important;
+    margin-left: 15px;
+}

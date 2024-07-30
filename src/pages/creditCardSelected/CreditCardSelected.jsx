@@ -142,7 +142,7 @@ export default function CreditCardSelected({ match }, props) {
                                         <th>Nome</th>
                                         <th>Parcela</th>
                                         <th>Valor</th>
-                                        <th>Data</th>
+                                        <th>Data da compra</th>
                                         <th>Status</th>
                                     </tr>
                                 </thead>

@@ -16,6 +16,7 @@ import Sidebar from "./components/sidebar/Sidebar";
 import Layout from "./Layout";
 import Goals from "./pages/goals/Goals";
 import CreditCardSelected from "./pages/creditCardSelected/CreditCardSelected";
+import { GlobalProvider } from "./services/local-storage-event";
 
 export function logout() {
     localStorage.removeItem("user");
@@ -56,12 +57,14 @@ export function isLogged() {
 export default function App() {
     const [isAltered, setIsAltered] = useState(false);
     return (
-        <Router>
-            <Switch>
-                <Context.Provider value={[isAltered, setIsAltered]}>
-                    {isLogged()}
-                </Context.Provider>
-            </Switch>
-        </Router>)
+        <GlobalProvider>
+            <Router>
+                <Switch>
+                    <Context.Provider value={[isAltered, setIsAltered]}>
+                        {isLogged()}
+                    </Context.Provider>
+                </Switch>
+            </Router>
+        </GlobalProvider>)
 }
 

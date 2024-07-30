@@ -9,6 +9,7 @@ import { debtInstallmentTransform, walletStatusTransform } from "../../utils/enu
 import CustomCard from "../customCard/CustomCard";
 import { monthByNumber } from "../../utils/dateFormater";
 import { refreshPage } from "../../utils/utils";
+import { useGlobalContext } from "../../services/local-storage-event";
 
 
 export default function CardLayout() {
@@ -16,6 +17,7 @@ export default function CardLayout() {
     const [wallet, setWallet] = useState([]);
     const [month, setMonth] = useState(localStorage.getItem("month"))
     const [year, setYear] = useState(localStorage.getItem("year"))
+    const { sharedValue } = useGlobalContext();
 
     useEffect(() => {
         axiosInstance.get(Endpoints.wallet.getEnable(month, year))
@@ -23,7 +25,9 @@ export default function CardLayout() {
                 setWallet(res.data);
             })
 
-    }, [month])
+    }, [month, sharedValue])
+
+    console.log(sharedValue)
 
     useEffect(() => {
         axiosInstance.get(Endpoints.debt.filterInstallments(1, 9999, '', month, year, '', '', '', '', null))
@@ -31,7 +35,7 @@ export default function CardLayout() {
                 setSumAllValue(res.data)
             })
 
-    }, [month])
+    }, [month, sharedValue])
 
     const valueTotal = wallet.filter(({ walletStatus }) => walletStatus !== 'Pending').reduce(function (prev, cur) {
         return prev + cur.value;
