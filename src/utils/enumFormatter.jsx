@@ -61,6 +61,15 @@ export function walletStatusTransform(status) {
     }
 }
 
+export function walletInstallmentStatusTransform(status) {
+    if (status == true) {
+        return 'Recebido'
+    }
+    else if (status == false) {
+        return 'Á receber'
+    }
+}
+
 export function getMonthDifference(startDate, endDate) {
     const startDateUpdated = new Date(startDate)
 

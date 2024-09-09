@@ -9,7 +9,7 @@ import { addMonthsToDate, addMonthsToMonth, monthByNumber } from "../../utils/da
 
 export default class ModalNextMonth extends React.Component {
     state = {
-        date: new Date().toISOString().substring(0, 10),
+        date: new Date().toISOString(),
         isLoading: false
     }
 
@@ -23,7 +23,7 @@ export default class ModalNextMonth extends React.Component {
         this.setState({ isLoading: true })
         event.preventDefault();
         const editInstallmentLine = {
-            date: this.props.data.date,
+            date: this.state.date,
             paymentDate: this.props.data.paymentDate,
             installmentNumber: this.props.data.installmentNumber,
             value: this.props.data.value,

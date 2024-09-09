@@ -158,10 +158,10 @@ export default function Dashboard() {
         <text className="finishingInstallments">Parcelamentos acabando</text>
         <p></p>
         {lis_instalments.length === 0 ?
-          <div style={{ marginLeft: '148px', marginRight: '148px', marginTop: '30px' }}>
+          <div style={{ marginLeft: '148px', marginRight: '160px', marginTop: '30px' }}>
             <Image src={imageEmpty} rounded></Image>
           </div> :
-          <div>
+          <div style={{maxWidth: '570px'}}>
             <Table responsive hover variant="black" className="tableTotal" size="sm">
               <thead>
                 <tr>

@@ -1,8 +1,17 @@
 .cardWallet {
     padding: 10PX;
+    min-width: 1305px !important;
+    min-height: 600px;
+}
+
+.walletGroup{
+    display: flex;
 }
 
 .cardWallet .allValue {
     margin: auto;
 }
 
+.walletTable {
+    cursor: default;
+}

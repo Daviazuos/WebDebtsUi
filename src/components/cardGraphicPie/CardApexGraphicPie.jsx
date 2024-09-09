@@ -5,7 +5,7 @@ import { Endpoints } from "../../api/endpoints";
 import ReactApexChart from "react-apexcharts";
 import { monthByNumber } from "../../utils/dateFormater";
 import { decimalAdjust } from "../../utils/valuesFormater";
-import { Card } from "react-bootstrap";
+import { Card, CardBody } from "react-bootstrap";
 
 
 export default function CardApexGraphicPie(props) {
@@ -72,7 +72,7 @@ export default function CardApexGraphicPie(props) {
     }, [(props?.month != undefined) ? props.month : month])
     return (
         graphic !== null ?
-            <ReactApexChart options={graphic.options} series={graphic.series} type="donut" width={770} height={500} /> : <Card style={{ width: 700, height: 400 }}></Card>
+            <ReactApexChart options={graphic.options} series={graphic.series} type="donut" width={770} height={500} /> : <div style={{ width: 770, height: 400 }}><i style={{ display: "flex", justifyContent: "center", alignItems: "center", marginTop: "210px" }} class="fas fa-spinner fa-spin gray fa-4x"></i></div>
     )
 }
 

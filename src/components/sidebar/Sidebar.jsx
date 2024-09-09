@@ -111,37 +111,41 @@ function Sidebar(props) {
 
                 <SidebarFooter style={{ textAlign: "center" }}>
                     <MenuItem>
-                    {!sidebar?<>
-                        <NavDropdown
-                            id="nav-dropdown-dark-example"
-                            title={monthByNumber(month)}
-                            menuVariant="dark"
-                            onSelect={handleSelect}
-                        >
-                            <NavDropdown.Item eventKey={1}>Janeiro</NavDropdown.Item>
-                            <NavDropdown.Item eventKey={2}>Fevereiro</NavDropdown.Item>
-                            <NavDropdown.Item eventKey={3}>Março</NavDropdown.Item>
-                            <NavDropdown.Item eventKey={4}>Abril</NavDropdown.Item>
-                            <NavDropdown.Item eventKey={5}>Maio</NavDropdown.Item>
-                            <NavDropdown.Item eventKey={6}>Junho</NavDropdown.Item>
-                            <NavDropdown.Item eventKey={7}>Julho</NavDropdown.Item>
-                            <NavDropdown.Item eventKey={8}>Agosto</NavDropdown.Item>
-                            <NavDropdown.Item eventKey={9}>Setembro</NavDropdown.Item>
-                            <NavDropdown.Item eventKey={10}>Outubro</NavDropdown.Item>
-                            <NavDropdown.Item eventKey={11}>Novembro</NavDropdown.Item>
-                            <NavDropdown.Item eventKey={12}>Dezembro</NavDropdown.Item>
-                        </NavDropdown>
-                        <NavDropdown
-                        id="nav-dropdown-dark-example"
-                        title={year}
-                        menuVariant="dark"
-                        onSelect={handleSelectYear}
-                    >
-                        <NavDropdown.Item eventKey={2022}>2022</NavDropdown.Item>
-                        <NavDropdown.Item eventKey={2023}>2023</NavDropdown.Item>
-                        <NavDropdown.Item eventKey={2024}>2024</NavDropdown.Item>
-                        <NavDropdown.Item eventKey={2025}>2025</NavDropdown.Item>
-                    </NavDropdown> </>: <FaIcons.FaCalendarAlt/>}
+                        {!sidebar ? <>
+                            <NavDropdown
+                                id="nav-dropdown-dark-example"
+                                title={monthByNumber(month)}
+                                menuVariant="dark"
+                                onSelect={handleSelect}
+                            >
+                                <NavDropdown.Item eventKey={1}>Janeiro</NavDropdown.Item>
+                                <NavDropdown.Item eventKey={2}>Fevereiro</NavDropdown.Item>
+                                <NavDropdown.Item eventKey={3}>Março</NavDropdown.Item>
+                                <NavDropdown.Item eventKey={4}>Abril</NavDropdown.Item>
+                                <NavDropdown.Item eventKey={5}>Maio</NavDropdown.Item>
+                                <NavDropdown.Item eventKey={6}>Junho</NavDropdown.Item>
+                                <NavDropdown.Item eventKey={7}>Julho</NavDropdown.Item>
+                                <NavDropdown.Item eventKey={8}>Agosto</NavDropdown.Item>
+                                <NavDropdown.Item eventKey={9}>Setembro</NavDropdown.Item>
+                                <NavDropdown.Item eventKey={10}>Outubro</NavDropdown.Item>
+                                <NavDropdown.Item eventKey={11}>Novembro</NavDropdown.Item>
+                                <NavDropdown.Item eventKey={12}>Dezembro</NavDropdown.Item>
+                            </NavDropdown>
+                            <NavDropdown
+                                id="nav-dropdown-dark-example"
+                                title={year}
+                                menuVariant="dark"
+                                onSelect={handleSelectYear}
+                            >
+                                <NavDropdown.Item eventKey={2022}>2022</NavDropdown.Item>
+                                <NavDropdown.Item eventKey={2023}>2023</NavDropdown.Item>
+                                <NavDropdown.Item eventKey={2024}>2024</NavDropdown.Item>
+                                <NavDropdown.Item eventKey={2025}>2025</NavDropdown.Item>
+                                <NavDropdown.Item eventKey={2026}>2026</NavDropdown.Item>
+                                <NavDropdown.Item eventKey={2027}>2027</NavDropdown.Item>
+                                <NavDropdown.Item eventKey={2028}>2028</NavDropdown.Item>
+                                <NavDropdown.Item eventKey={2029}>2029</NavDropdown.Item>
+                            </NavDropdown> </> : <FaIcons.FaCalendarAlt />}
                         <p onClick={logout} >Sair</p>
                     </MenuItem>
                 </SidebarFooter>

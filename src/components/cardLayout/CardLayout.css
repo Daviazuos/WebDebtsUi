@@ -1,11 +1,10 @@
 
-.containerWallet {
-}
-
 .containerWallet .walletCards {
     display: flex;
     flex-flow: row wrap;
 }
+
+
 
 #linha {
     width: 100%;
