@@ -128,8 +128,11 @@ export default function CreditCardSelected({ match }, props) {
         setKey(selectedTab);
     };
 
+    let closingDate = ""
+
     let tab_lis = ""
     if (!loading) {
+        closingDate = card[0].closureDate > card[0].dueDate? `${addLeadingZeros(card[0].closureDate, 2)}/${addLeadingZeros(month-1, 2)}/${year}` : `${addLeadingZeros(card[0].closureDate, 2)}/${addLeadingZeros(month, 2)}/${year}`
         tab_lis = months.map(item => {
 
             return (
@@ -174,7 +177,7 @@ export default function CreditCardSelected({ match }, props) {
                             </div>
                             <div id='textCard' class="mt-auto fw-bold d-flex align-items-center justify-content-between">
                                 <div className="creditBody">
-                                    <p id="cardText" class="m-0">Fechamento {addLeadingZeros(card[0].closureDate, 2)}/{selectedDate.replace('-', '/')}</p>
+                                    <p id="cardText" class="m-0">Fechamento {closingDate}</p>
                                     <p id="cardText" class="m-0">Vencimento {addLeadingZeros(card[0].dueDate, 2)}/{selectedDate.replace('-', '/')}</p>
                                 </div>
                                 <h5 id="cardText" class="m-0">R$ {decimalAdjust(cardMonthValue)}</h5>

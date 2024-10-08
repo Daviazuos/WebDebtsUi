@@ -132,7 +132,10 @@ export default function DebtModal(props) {
                 <td>
                     {!editMode[item.id] ? (
                         // Edit icon when not in edit mode
-                        <i className="fas fa-pencil-alt" onClick={() => toggleEditMode(item.id)} style={{ cursor: 'pointer', marginRight: '5px' }}></i>
+                        <>
+                            <i className="fas fa-pencil-alt" onClick={() => toggleEditMode(item.id)} style={{ cursor: 'pointer', marginRight: '5px' }}></i>
+                            <i className="fas fa-trash" onClick={() => handleDeleteInstallment(item.id)} style={{ cursor: 'pointer', marginRight: '5px' }}></i>
+                        </>
                     ) : (
                         // Check icon when in edit mode
                         <i className="fas fa-check" onClick={() => handleSaveEdit(item.id)} style={{ cursor: 'pointer', marginRight: '5px' }}></i>
@@ -181,6 +184,11 @@ export default function DebtModal(props) {
         axiosInstance.put(Endpoints.debt.putInstallment(installmentId), editInstallmentLine)
             .then()
         toggleEditMode(installmentId); // Toggle edit mode back to view mode after saving
+    }
+
+    const handleDeleteInstallment = (installmentId) => {
+        axiosInstance.delete(Endpoints.debt.deleteInstallment(installmentId))
+            .then(setInstallments(installments.filter(installment => installment.id !== installmentId)))
     }
     const percentual_paid = paidValue / debt?.value * 100
 

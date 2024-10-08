@@ -65,3 +65,21 @@ export function addMonthsToMonth(month, months) {
   }
   return parseInt(month) + parseInt(months)
 }
+
+export function addOrRemoveMonth(number, month) {
+  number = parseInt(number)
+  month = parseInt(month)
+
+  let response = number + month
+  if (month == 12) {
+    if (number > 0) {
+      response = 1 + number
+    }
+  }
+  else if (month == 1) {
+    if (number < 0) {
+      response = 13 + number
+    }
+  }
+  return response 
+}

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button, Card, Container, Table, Modal } from "react-bootstrap";
 import { axiosInstance } from "../../api";
 import { Endpoints } from "../../api/endpoints";
-import { decimalAdjust } from "../../utils/valuesFormater";
+import { addLeadingZeros, decimalAdjust } from "../../utils/valuesFormater";
 
 import "./CardLayout.css";
 import { debtInstallmentTransform, walletStatusTransform } from "../../utils/enumFormatter";
@@ -10,6 +10,7 @@ import CustomCard from "../customCard/CustomCard";
 import { monthByNumber } from "../../utils/dateFormater";
 import { refreshPage } from "../../utils/utils";
 import { useGlobalContext } from "../../services/local-storage-event";
+import CustomCardSize from "../customCardSize/CustomCardSize";
 
 
 export default function CardLayout() {
@@ -26,8 +27,6 @@ export default function CardLayout() {
             })
 
     }, [month, sharedValue])
-
-    console.log(sharedValue)
 
     useEffect(() => {
         axiosInstance.get(Endpoints.debt.filterInstallments(1, 9999, '', month, year, '', '', '', '', null))
@@ -50,25 +49,10 @@ export default function CardLayout() {
         return prev + cur.value;
     }, 0);
 
-    const now = new Date();
-
-    const mountedDate = new Date(year, month -1, parseInt(month) == now.getMonth() +1 ? now.getDate() : 1);
-    const mesAtual = mountedDate.getMonth();
-    const anoAtual = mountedDate.getFullYear();
-
-    const primeiroDiaProximoMes = new Date(anoAtual, mesAtual + 1, 1);
-    const milissegundosRestantes = primeiroDiaProximoMes - mountedDate;
-    const diasRestantes = Math.floor(milissegundosRestantes / 86400000);
-
-    let valuePerDay = provisionedValue / (diasRestantes)
+    localStorage.setItem("provisionedValue", provisionedValue);
 
     let balanceColor = provisionedValue < 0? "fas fa-balance-scale red fa-2x":"fas fa-balance-scale success fa-2x"
 
-    if (valuePerDay < 0) {
-        valuePerDay = 0.00
-    }
-
-    let day = `Valor por dia - ${diasRestantes} dias`
 
     const sumAll = sumAllValue.items?.reduce(function (prev, cur) {
         return prev + cur.value;
@@ -92,7 +76,10 @@ export default function CardLayout() {
             }
         }
         refreshPage()
+        
     }
+
+    let cardSize = "310px"
 
 
     return (
@@ -103,42 +90,41 @@ export default function CardLayout() {
                 <i style={{cursor: 'pointer', color: '#B3B8D4'}} onClick={() => selectNewMonth("right")} class={"fas fa-chevron-right"}></i>
             </div>
             <div className="walletCards">
-                <CustomCard
+                <CustomCardSize
                     title="Entradas"
                     children={decimalAdjust(valueTotal)}
                     icon="fas fa-hand-holding-usd success fa-2x"
+                    size={cardSize}
                 >
-                </CustomCard>
-                <CustomCard
+                </CustomCardSize>
+                <CustomCardSize
                     title="Saídas"
                     children={decimalAdjust(sumAll)}
                     icon="fas fa-hand-holding-usd red fa-2x"
+                    size={cardSize}
                 >
-                </CustomCard>
-                <CustomCard
+                </CustomCardSize>
+                <CustomCardSize
                     title="Saldo Atual"
                     children={decimalAdjust(provisionedValue)}
                     icon={balanceColor}
+                    size={cardSize}
                 >
-                </CustomCard>
-                <CustomCard
-                    title={day}
-                    children={decimalAdjust(valuePerDay)}
-                    icon="fas fa-calendar-day success fa-2x"
-
-                ></CustomCard>
-                <CustomCard
+                </CustomCardSize>
+                <CustomCardSize
                     title="Valor pago"
                     children={decimalAdjust(paidValue)}
                     icon="fas fa-check success fa-2x"
+                    size={cardSize}
                 >
-                </CustomCard>
-                <CustomCard
+                </CustomCardSize>
+                <CustomCardSize
                     title="Valor a pagar"
                     children={decimalAdjust(sumAll - paidValue)}
                     icon="fas fa-times red fa-2x"
+                    size={cardSize}
                 >
-                </CustomCard>
+                </CustomCardSize>
 
             </div>
         </div>

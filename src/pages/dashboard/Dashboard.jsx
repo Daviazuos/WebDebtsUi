@@ -6,13 +6,15 @@ import imageEmpty from '../../assets/empty.png'
 import { axiosInstance } from "../../api";
 import { Endpoints } from "../../api/endpoints";
 
-import { decimalAdjust } from "../../utils/valuesFormater";
+import { addLeadingZeros, decimalAdjust } from "../../utils/valuesFormater";
 
 import "./Dashboard.css";
 import CustomCard from "../../components/customCard/CustomCard";
 import CardApexGraphic from "../../components/cardGraphic/CardApexGraphic";
 import CardApexGraphicPie from "../../components/cardGraphicPie/CardApexGraphicPie";
 import CardApexGraphicByDay from "../../components/cardGraphic/CardApexGraphicByDay";
+import CustomCardSize from "../../components/customCardSize/CustomCardSize";
+import { addOrRemoveMonth, monthByNumber } from "../../utils/dateFormater";
 
 
 export default function Dashboard() {
@@ -24,6 +26,9 @@ export default function Dashboard() {
   const [installmentValue, setInstallmentValue] = useState([]);
   const [category, setCategory] = useState(null);
   const [debts, setDebts] = useState([])
+  const [cards, setCards] = useState([])
+  const [isLoading, setIsLoading] = useState(true);
+
 
 
   useEffect(() => {
@@ -116,17 +121,90 @@ export default function Dashboard() {
     }
   }
 
+  useEffect(() => {
+    setIsLoading(true)
+    axiosInstance.get(Endpoints.card.filterCards(null, month, year))
+      .then(res => {
+        setCards(res.data);
+        setIsLoading(!isLoading)
+      })
+  }, [month])
+
+  let minDate = new Date()
+  let minCreditCard = ''
+  let closureDate = 0
+
+  if (isLoading == false) {
+    minDate = cards[0].closureDate > cards[0].dueDate ? new Date(year, month - 2, cards[0].closureDate) : new Date(year, month - 1, cards[0].closureDate)
+    for (const card in cards) {
+      let closingDate = cards[card].closureDate > cards[card].dueDate ? new Date(year, month - 2, cards[card].closureDate) : new Date(year, month - 1, cards[card].closureDate)
+      if (closingDate < minDate) {
+        minDate = closingDate
+        minCreditCard = cards[card].name
+        closureDate = cards[card].closureDate
+      }
+    }
+  }
+
+  const dataHoje = new Date();
+  const calculateDate = new Date(dataHoje.getFullYear(), month == dataHoje.getMonth() ? addOrRemoveMonth(-1, month) : addOrRemoveMonth(-2, month), addOrRemoveMonth(-1, month) != addOrRemoveMonth(1, dataHoje.getMonth()) ? 1 : dataHoje.getDate())
+
+  let provisionedValue = localStorage.getItem("provisionedValue");
+
+  const dataFechamento = minDate
+  const valorDisponivel = provisionedValue
+  const diffMilissegundos = dataFechamento - calculateDate;
+  const diasRestantes = Math.ceil(diffMilissegundos / (1000 * 60 * 60 * 24));
+  const valorPorDia = valorDisponivel / diasRestantes;
+
+  let day = `Valor por dia`
+  let text = `${diasRestantes} dias referente ao cartão ${minCreditCard} que fecha dia ${closureDate}/${addLeadingZeros(month-1, 2)}`
+
+  let showPerDay = dataHoje < dataFechamento || dataHoje > dataFechamento && dataHoje.getMonth() == dataFechamento.getMonth()
 
   return (
     <div>
       <div className="graphics">
+        {showPerDay ?
+          <div className="valuePerDay">
+            <CustomCardSize
+              title={day}
+              children={decimalAdjust(valorPorDia > 0 ? valorPorDia: 0.00)}
+              icon="fas fa-calendar-day success fa-2x"
+              text={text}
+              size='380px'
+            ></CustomCardSize>
+            <CustomCardSize
+              title={`Parcelamentos acabando`}
+              children={decimalAdjust(totalFinishing)}
+              icon="fas fa-calendar-check success fa-2x"
+              text=""
+              size='380px'
+            ></CustomCardSize>
+          </div> : <div className="valuePerDay">
+            <CustomCardSize
+              title={day}
+              children="0.00"
+              icon="fas fa-calendar-day success fa-2x"
+              text=""
+              size='380px'
+            ></CustomCardSize>
+            <CustomCardSize
+              title={`Parcelamentos acabando`}
+              children={decimalAdjust(totalFinishing)}
+              icon="fas fa-calendar-check success fa-2x"
+              text=""
+              size='380px'
+            ></CustomCardSize>
+            
+          </div>}
         <Card className="graphicPagePie">
           <CardApexGraphicPie></CardApexGraphicPie>
         </Card>
         <Card className="cardDash">
           <CardApexGraphic></CardApexGraphic>
         </Card>
-        <div style={{ display: "flex" }}>
+        <div style={{ display: "flex" }} className="cardsValues">
           <CustomCard
             title="Fixas"
             children={decimalAdjust(fixed)}
@@ -155,29 +233,28 @@ export default function Dashboard() {
           <CardApexGraphicByDay></CardApexGraphicByDay>
         </Card>
         <Card className='categorieTable'>
-        <text className="finishingInstallments">Parcelamentos acabando</text>
-        <p></p>
-        {lis_instalments.length === 0 ?
-          <div style={{ marginLeft: '148px', marginRight: '160px', marginTop: '30px' }}>
-            <Image src={imageEmpty} rounded></Image>
-          </div> :
-          <div style={{maxWidth: '570px'}}>
-            <Table responsive hover variant="black" className="tableTotal" size="sm">
-              <thead>
-                <tr>
-                  <th>Nome</th>
-                  <th>Valor</th>
-                  <th>Parcela</th>
-                </tr>
-              </thead>
-              <tbody>
-                {lis_instalments}
-              </tbody>
-            </Table>
-            <text>Total: R$ {decimalAdjust(totalFinishing)}</text>
-          </div>
-        }
-      </Card>
+          <text className="finishingInstallments">Parcelamentos acabando</text>
+          <p></p>
+          {lis_instalments.length === 0 ?
+            <div style={{ marginLeft: '148px', marginRight: '160px', marginTop: '30px' }}>
+              <Image src={imageEmpty} rounded></Image>
+            </div> :
+            <div style={{ maxWidth: '570px'}}>
+              <Table responsive hover variant="black" className="tableTotal" size="sm">
+                <thead>
+                  <tr>
+                    <th>Nome</th>
+                    <th>Valor</th>
+                    <th>Parcela</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {lis_instalments}
+                </tbody>
+              </Table>
+            </div>
+          }
+        </Card>
       </div>
     </div>);
 };

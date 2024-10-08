@@ -128,6 +128,8 @@ export default function CardCredit() {
             }
         }
 
+        let closingDate = item.closureDate > item.dueDate? `${addLeadingZeros(item.closureDate, 2)}/${addLeadingZeros(month-1, 2)}/${year}` : `${addLeadingZeros(item.closureDate, 2)}/${addLeadingZeros(month, 2)}/${year}`
+        
         return (
             <div class="debit-card card-2 mb-4" style={{ backgroundColor: `${(item.color != null && item.color != '') ? item.color : "#6F87E1"}` }} id="creditCardBlock">
                 <div class="d-flex flex-column h-100"> <label class="d-block">
@@ -138,7 +140,7 @@ export default function CardCredit() {
                     </div>
                     <div id='textCard' class="mt-auto fw-bold d-flex align-items-center justify-content-between">
                         <div className="creditBody">
-                            <p id="cardText" class="m-0">Fechamento {addLeadingZeros(item.closureDate, 2)}/{addLeadingZeros(month, 2)}/{year}</p>
+                            <p id="cardText" class="m-0">Fechamento {closingDate}</p>
                             <p id="cardText" class="m-0">Vencimento {addLeadingZeros(item.dueDate, 2)}/{addLeadingZeros(month, 2)}/{year}</p>
                         </div>
                         <h5 id="cardText" class="m-0">R$ {decimalAdjust(cardValue)}</h5>
