@@ -6,12 +6,22 @@
     flex-wrap: wrap;
 }
 
+.cardCreditSelected .debit-card:hover {
+    transition: all 0.3s ease !important; /* Suaviza a transição */
+    transform: translateY(-42px) scale(1.05) !important; /* Sobe e aumenta levemente */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2) !important; /* Adiciona uma sombra suave */
+}
+
 .cardCreditSelected .debit-card {
     min-width: 300px;
     min-height: 190px;
     padding: 15px;
-    border-radius: 5px;
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    width: 300px;
+    height: 200px;
+    position: absolute;
+    border-radius: 15px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .cardCreditSelected .card-2 {
@@ -50,4 +60,10 @@
 .cardCreditSelected {
     position: relative;
     margin-bottom: 100px;
+}
+
+.card-stack-container {
+    position: relative;
+    height: 300px; /* Ajuste conforme necessário */
+    width: 100%;
 }

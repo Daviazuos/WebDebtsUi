@@ -31,7 +31,7 @@ export default (props) => {
       <DashModal
         show={modalShow}
         onHide={() => setModalShow(false)}
-        data={props.data}
+        data={props.data?.items}
         head={props.title}
       />:""}
     </div>

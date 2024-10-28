@@ -83,7 +83,6 @@ export default function Wallet() {
 
   useEffect(() => {
     let mounted = true;
-    console.log('trocou')
     axiosInstance.get(Endpoints.wallet.getEnable(month, year))
       .then(res => {
         setWallet(res.data);

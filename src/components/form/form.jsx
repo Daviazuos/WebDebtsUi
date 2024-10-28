@@ -108,7 +108,6 @@ export default function DebtList(props) {
         setSharedValue(!sharedValue);
         props.update()
       }).catch(err => {
-        console.log(err)
         setOnError(!onError);
         setIsLoading(false)
       }) : axiosInstance.post(Endpoints.card.addValues(props.cardId), addDebts).then(response => {
@@ -116,7 +115,6 @@ export default function DebtList(props) {
         setSharedValue(!sharedValue);
         props.update()
       }).catch(err => {
-        console.log(err)
         setOnError(!onError);
         setIsLoading(false)
       })
@@ -127,7 +125,6 @@ export default function DebtList(props) {
         setSharedValue(!sharedValue);
         props.update()
       }).catch(err => {
-        console.log(err)
         setOnError(!onError);
         setIsLoading(false)
       })

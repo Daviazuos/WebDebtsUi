@@ -20,7 +20,7 @@ function SetModalAddDebts(props) {
 
     return (
         <>
-            <Button variant='custom' style={{ marginLeft: '60px', color: 'white', borderColor: 'black' }} className='btn-custom' onClick={() => setModalShow(true)}>
+            <Button variant='custom' style={{ marginLeft: '20px', color: 'black', borderColor: 'black' }} className='btn-custom' onClick={() => setModalShow(true)}>
                 <i className="fas fa-plus"></i> {props.modalName}
             </Button>
 
@@ -30,6 +30,8 @@ function SetModalAddDebts(props) {
                 update={updateValuesv2}
                 head={props.head}
                 cardId={props.cardId}
+                color={props.color}
+                title={props.head}
             />
         </>
     );
@@ -48,11 +50,14 @@ export default function CreditCardSelected({ match }, props) {
     const [selectedDate, setSelectedDate] = useState(`${localStorage.getItem("month")}-${localStorage.getItem("year")}`);
     const [year, setyear] = useState(localStorage.getItem("year"));
     const [month, setMonth] = useState(localStorage.getItem("month"));
-    const [card, setCard] = useState([]);
-    const [cardMonthValue, setCardMonthValue] = useState(0.00)
+    const [cards, setCards] = useState([]); // Modificação para lidar com múltiplos cartões
+    const [selectedCardIndex, setSelectedCardIndex] = useState(0); // Index do cartão selecionado
+    const [cardClosingDate, setCardClosingDate] = useState(null)
+    const [cardMonthValue, setCardMonthValue] = useState(new Map())
     const [cardGraphic, setCardGraphic] = useState(undefined)
     const [months, setMonths] = useState([])
     const [updateStatus, setUpdateStatus] = useState(false)
+    const [cardId, setCardId] = useState(match.params.cardId)
 
 
     const pageChange = event => {
@@ -63,35 +68,76 @@ export default function CreditCardSelected({ match }, props) {
         setUpdateStatus(change);
     }
 
-    const cardId = match.params.cardId;
+    useEffect(() => {
+        if (cardId != undefined) {
+            axiosInstance.get(Endpoints.debt.filterInstallments(pageNumber, 13, '', selectedDate.split('-')[0], selectedDate.split('-')[1], '', '', '', cardId, null))
+                .then(res => {
+                    setInstallments(res.data);
+                })
+            setUpdateStatus(false)
+        }
+    }, [pageNumber, selectedDate, updateStatus, cardId])
 
     useEffect(() => {
-        axiosInstance.get(Endpoints.debt.filterInstallments(pageNumber, 13, '', selectedDate.split('-')[0], selectedDate.split('-')[1], '', '', '', cardId, null))
-            .then(res => {
-                setInstallments(res.data);
+        var months_dynamic = []
+        for (let i = -1; i <= 9; i++) {
+            var date = new Date();
+            date.setMonth(month - 1)
+            date.setFullYear(year)
+            let dateAdjusted = addMonthsToDate(date, i)
+            months_dynamic.push({
+                month: dateAdjusted.split('/')[1],
+                year: dateAdjusted.split('/')[2]
             })
-        setUpdateStatus(false)
-    }, [pageNumber, selectedDate, updateStatus])
+        }
+        setMonths(months_dynamic)
+    }, [year])
 
     useEffect(() => {
-        axiosInstance.get(Endpoints.card.filterCards(cardId, selectedDate.split('-')[0], selectedDate.split('-')[1]))
+        // Alteração: Carregar múltiplos cartões e configurar o estado dos cartões
+        axiosInstance.get(Endpoints.card.filterCards(null, selectedDate.split('-')[0], selectedDate.split('-')[1]))
             .then(res => {
-                setCard(res.data);
-                let cardValue = 0.00
-                for (const debt in res.data[0]?.debts) {
-                    if (res.data[0]?.debts[debt]?.installments[0]?.value != undefined) {
-                        cardValue = cardValue + res.data[0]?.debts[debt]?.installments[0]?.value
-                    }
-                }
-                setCardMonthValue(cardValue)
+                setCards(res.data); // Armazena todos os cartões
+                const cardIndex = res.data.findIndex(card => card.id === cardId);
+                setSelectedCardIndex(cardIndex >= 0 ? cardIndex : 0); // Inicia com o primeiro cartão selecionado
+
+                // Novo Map para armazenar o valor total por cartão
+                const cardClosingDate = new Map();
+                const cardValue = new Map();
+
+
+                // Iterar sobre todos os cartões
+                res.data.forEach(card => {
+                    let closingDate = card.closureDate > card.dueDate ? `${addLeadingZeros(card.closureDate, 2)}/${addLeadingZeros(month - 1, 2)}/${year}` : `${addLeadingZeros(card.closureDate, 2)}/${addLeadingZeros(month, 2)}/${year}`
+                    cardClosingDate.set(card.id, { closingDate: closingDate });
+                    let value = 0.00
+                    card.debts.forEach(debt => {
+                        value = value + ((debt?.installments[0]?.value == undefined) ? 0.00 : debt?.installments[0]?.value)
+                    })
+                    cardValue.set(card.id, { totalValue: value })
+                    
+                    setCardMonthValue(cardValue)
+                });
+
+
+
+                setCardClosingDate(cardClosingDate)
+
+                setCardId(res.data[0].id)
                 setCardGraphic(<Card className="graphicPagePie">
                     <CardApexGraphicPie cardId={res.data[0].id} month={selectedDate.split('-')[0]} year={selectedDate.split('-')[1]}></CardApexGraphicPie>
                 </Card>)
                 setLoadingGraphic(false)
-                setLoading(false)
                 setUpdateStatus(false)
-            })
-    }, [selectedDate, updateStatus])
+                setLoading(false)
+            });
+    }, [updateStatus]);
+
+    // Função para selecionar o cartão ao clicar
+    const selectCard = (index, cardId) => {
+        setSelectedCardIndex(index);
+        setCardId(cardId)
+    };
 
     const lis_instalments = installments.items?.map(item => {
         return (
@@ -107,21 +153,6 @@ export default function CreditCardSelected({ match }, props) {
         )
     })
 
-    useEffect(() => {
-        var months_dynamic = []
-        for (let i = -1; i <= 9; i++) {
-            var date = new Date();
-            date.setMonth(month-1)
-            date.setFullYear(year)
-            let dateAdjusted = addMonthsToDate(date, i)
-            months_dynamic.push({
-                month: dateAdjusted.split('/')[1],
-                year: dateAdjusted.split('/')[2]
-            })
-        }
-        setMonths(months_dynamic)
-    }, [selectedDate, month, year])
-
     const handleTabSelect = (selectedTab) => {
         setLoadingGraphic(true)
         setSelectedDate(selectedTab)
@@ -129,15 +160,14 @@ export default function CreditCardSelected({ match }, props) {
     };
 
     let closingDate = ""
-
     let tab_lis = ""
     if (!loading) {
-        closingDate = card[0].closureDate > card[0].dueDate? `${addLeadingZeros(card[0].closureDate, 2)}/${addLeadingZeros(month-1, 2)}/${year}` : `${addLeadingZeros(card[0].closureDate, 2)}/${addLeadingZeros(month, 2)}/${year}`
         tab_lis = months.map(item => {
 
             return (
                 <Tab eventKey={`${item.month}-${item.year}`} title={`${monthByNumber(item.month)}/${item.year}`}>
                     <div className="CreditCardCard">
+                        <SetModalAddDebts modalName="Adicionar" head={cards[selectedCardIndex].name} cardId={cards[selectedCardIndex].id} update={updateValues} color={`${(cards[selectedCardIndex].color != null && cards[selectedCardIndex].color != '') ? cards[selectedCardIndex].color : "#6F87E1"}`}></SetModalAddDebts>
                         <div style={{ marginLeft: '20px' }}>
                             <Table responsive striped hover variant="white" size="lg">
                                 <thead>
@@ -162,41 +192,65 @@ export default function CreditCardSelected({ match }, props) {
         )
     }
 
-
-    return <>
-        {loading === true ? <i class="fas fa-spinner fa-spin"></i> :
-            <>
-                <div class="cardCreditSelected px-4" id='cardCreditSelected' style={{ position: 'relative', marginBottom: "-115px", zIndex: 2, display: 'flex', flexDirection: 'row' }}>
-                    <div class="debit-card card-2 mb-4" style={{ backgroundColor: `${(card[0].color != null && card[0].color != '') ? card[0].color : "#6F87E1"}` }}>
-                        <div class="d-flex flex-column h-100"> <label class="d-block">
-                            <div class="d-flex position-relative">
-                                <div>
-                                    <h3 class="text-white fw-bold">{((card[0].name).length > 15) ? (((card[0].name).substring(0,17-3)) + '...') : card[0].name }</h3>
-                                </div>
-                                {<SetModalAddDebts color={`${(card[0].color != null && card[0].color !== '') ? card[0].color : "#6F87E1"}`} modalName="" head={card[0].name} cardId={card[0].id} update={updateValues}></SetModalAddDebts>}{" "}
+    return (
+        <>
+            {loading === true ? <i className="fas fa-spinner fa-spin"></i> :
+                <>
+                    {/* Cartões empilhados */}
+                    <div className="card-stack-container" style={{ position: 'relative', marginBottom: "-115px", zIndex: 2, display: 'flex', flexDirection: 'row' }}>
+                        {cards.map((card, index) => (
+                            <div class="cardCreditSelected px-4" id='cardCreditSelected' style={{
+                                position: 'relative', marginBottom: "-115px", display: 'flex', flexDirection: 'row'
+                            }}>
+                                <div className={`debit-card card-2 mb-4 ${selectedCardIndex === index ? 'selected' : ''}`} onClick={() => selectCard(index, card.id)} style={{
+                                    backgroundColor: `${card.color !== null && card.color !== '' ? card.color : "#6F87E1"}`,
+                                    position: 'absolute',
+                                    left: `${index * 50}px`,
+                                    zIndex: selectedCardIndex === index
+                                        ? cards.length
+                                        : index < selectedCardIndex
+                                            ? index
+                                            : cards.length - (index - selectedCardIndex),
+                                    cursor: 'pointer',
+                                    transform: selectedCardIndex === index ? 'scale(1)' : 'scale(0.9)', // Tamanho menor para os cartões atrás
+                                    transition: 'all 0.4s ease', // Transição suave
+                                    pointerEvents: 'auto'
+                                }}>
+                                    <div class="d-flex flex-column h-100">
+                                        <label class="d-block">
+                                            <div class="d-flex position-relative">
+                                                <div>
+                                                    <h3 class="text-white fw-bold">{((card.name).length > 15) ? (((card.name).substring(0, 17 - 3)) + '...') : card.name}</h3>
+                                                </div>
+                                            </div>
+                                            <div id='textCard' class="mt-auto fw-bold d-flex align-items-center justify-content-between">
+                                                <div className="creditBody">
+                                                    <p id="cardText" class="m-0">Fechamento {cardClosingDate.get(card.id).closingDate}</p>
+                                                    <p id="cardText" class="m-0">Vencimento {addLeadingZeros(card.dueDate, 2)}/{selectedDate.replace('-', '/')}</p>
+                                                </div>
+                                                <h5 id="cardText" class="m-0">R$ {decimalAdjust(cardMonthValue.get(card.id)?.totalValue)}</h5>
+                                            </div>
+                                            <div style={{ display: 'flex', marginTop: '40px', marginLeft: '0px' }}>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div >
                             </div>
-                            <div id='textCard' class="mt-auto fw-bold d-flex align-items-center justify-content-between">
-                                <div className="creditBody">
-                                    <p id="cardText" class="m-0">Fechamento {closingDate}</p>
-                                    <p id="cardText" class="m-0">Vencimento {addLeadingZeros(card[0].dueDate, 2)}/{selectedDate.replace('-', '/')}</p>
-                                </div>
-                                <h5 id="cardText" class="m-0">R$ {decimalAdjust(cardMonthValue)}</h5>
-                            </div>
-                        </label>
-                        </div>
-                    </div >
-                </div>
-                <Card style={{ zIndex: 2, borderColor: `${(card[0].color != null && card[0].color != '') ? card[0].color : "#6F87E1"}`, borderWidth: '6px', padding: '10px'}}>
-                    <Tabs
-                        id="controlled-tab-example"
-                        activeKey={key}
-                        onSelect={handleTabSelect}
-                        className="mb-3"
-                        style={{ zIndex: 3, marginLeft: '20px' }}
-                    >
-                        {tab_lis}
-                    </Tabs>
-                </Card>
-            </>}
-    </>
+                        ))}
+                    </div>
+                    <Card style={{ zIndex: 2, borderColor: `${(cards[selectedCardIndex].color != null && cards[selectedCardIndex].color != '') ? cards[selectedCardIndex].color : "#6F87E1"}`, borderWidth: '6px', padding: '10px' }}>
+                        <Tabs
+                            id="controlled-tab-example"
+                            activeKey={key}
+                            onSelect={handleTabSelect}
+                            className="mb-3"
+                            style={{ zIndex: 3, marginLeft: '20px' }}
+                        >
+                            {tab_lis}
+                        </Tabs>
+                    </Card>
+                </>
+            }
+        </>
+    );
 }

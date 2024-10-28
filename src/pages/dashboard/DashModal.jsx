@@ -5,7 +5,7 @@ import { decimalAdjust } from "../../utils/valuesFormater";
 import "./DashModal.css"
 
 export default function DashModal(props) {
-    const lis = props.data?.items?.map(item => {
+    const lis = props.data?.map(item => {
         return (
             <tr key={item.id}>
                 <td>{item.debtName}</td>

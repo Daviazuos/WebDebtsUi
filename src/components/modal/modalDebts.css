@@ -2,3 +2,9 @@
     max-width: 500px;
     margin: 0px;
 }
+
+.custom-modal-header {
+    color: white; /* Texto em branco para contraste */
+    padding: 15px; /* Ajuste o espaçamento se necessário */
+    border-bottom: 2px solid black; /* Opcional: borda inferior */
+}
