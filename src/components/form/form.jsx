@@ -10,6 +10,8 @@ import LoadingButton from "../loadingButton/LoadingButton";
 import CardLayout from "../cardLayout/CardLayout";
 import { refreshPage } from "../../utils/utils";
 import { useGlobalContext } from "../../services/local-storage-event";
+import ResponsibleParty from "../../pages/responsibleParty/ResponsibleParty";
+import ResponsiblePartyModal from "../../pages/responsibleParty/ResponsiblePartyModal";
 
 export default function DebtList(props) {
   const [name, setName] = useState('');
@@ -18,10 +20,14 @@ export default function DebtList(props) {
   const [numberOfInstallments, setNumberOfInstallments] = useState('0');
   const [debtInstallmentType, setDebtInstallmentType] = useState('');
   const [category, setCategory] = useState('');
+  const [responsibleParty, setResponsibleParty] = useState('');
   const [list_categories, setlist_categories] = useState([]);
+  const [list_responsibleParty, setlist_responsibleParty] = useState([]);
   const [refreshCategories, setRefreshCategories] = useState(false)
+  const [refreshResponsibleParty, setRefreshResponsibleParty] = useState(false)
   const [isLoading, setIsLoading] = React.useState(false);
   const [onError, setOnError] = React.useState(false)
+  const [check, setCheck] = React.useState(false)
   const { sharedValue, setSharedValue } = useGlobalContext();
 
   function SetModal(props) {
@@ -33,6 +39,21 @@ export default function DebtList(props) {
           show={modalShow}
           onHide={() => setModalShow(false)}
           refresh={() => setRefreshCategories(true)}
+          head={props.name}
+        />
+      </>
+    );
+  }
+
+  function SetModalAddResponsibleParty(props) {
+    const [modalShow, setModalShow] = React.useState(false);
+    return (
+      <>
+        <Button variant="outline-secondary" className={props.classname} onClick={() => setModalShow(true)}><i className="fas fa-plus"></i> </Button>
+        <ResponsiblePartyModal
+          show={modalShow}
+          onHide={() => setModalShow(false)}
+          refresh={() => setRefreshResponsibleParty(true)}
           head={props.name}
         />
       </>
@@ -62,6 +83,18 @@ export default function DebtList(props) {
   const categoryChange = event => {
     setCategory(event.target.value)
   }
+  const responsiblePartyChange = event => {
+    setResponsibleParty(event.target.value)
+  }
+
+  const checkChange = event => {
+    if (event.target.checked) {
+      setCheck(true)
+  } else {
+      setCheck(false)
+  }
+    
+  }
 
   useEffect(() => {
     axiosInstance.get(Endpoints.debt.getCategories())
@@ -79,6 +112,23 @@ export default function DebtList(props) {
       })
 
   }, [refreshCategories])
+
+  useEffect(() => {
+    axiosInstance.get(Endpoints.responsibleParty.getByUser())
+      .then(res => {
+        const responsibleParty = res.data;
+
+        const lis = responsibleParty.map(item => {
+          return (
+            <option value={item.id}>{item.name}</option>
+          )
+        })
+        lis.unshift(<option value="">Escolha uma pessoa</option>)
+        setlist_responsibleParty(lis)
+        setRefreshResponsibleParty(false)
+      })
+
+  }, [refreshResponsibleParty])
 
   function addFieldValue() {
     setValues([...values, '']); // Adiciona um novo campo vazio à lista de valores
@@ -100,7 +150,8 @@ export default function DebtList(props) {
       date: date || props.data?.date,
       numberOfInstallments: numberOfInstallments || props.data?.numberOfInstallments,
       debtInstallmentType: debtInstallmentType || props.data?.debtInstallmentType,
-      CategoryId: category || props.data?.category
+      CategoryId: category || props.data?.category,
+      ResponsiblePartyId: responsibleParty || props.data?.responsibleParty
     };
     if (props.id === undefined) {
       props.cardId === null ? axiosInstance.post(Endpoints.debt.add(), addDebts).then(response => {
@@ -167,6 +218,21 @@ export default function DebtList(props) {
             <SetModal modalName="Adicionar" simbol="fas fa-plus" className="modalButton"></SetModal>
           </div>
         </Form.Group>
+        <Form.Check
+          type="checkbox"
+          id="custom-switch"
+          label="Vincular a uma pessoa?"
+          onChange={checkChange}
+        />
+        {(check === true) ? <Form.Group className="inputGroup">
+          <div className="ResponsiblePartySelector">
+            <Form.Control required="true" name='responsibleParty' onChange={responsiblePartyChange} as="select">
+              {list_responsibleParty}
+            </Form.Control>
+            <SetModalAddResponsibleParty modalName="Adicionar" simbol="fas fa-plus" className="modalButton"></SetModalAddResponsibleParty>
+          </div>
+        </Form.Group> : ''}
+        
         <Form.Group className="inputGroup">
           <Form.Label>Tipo de débito</Form.Label>
           <Form.Control required="true" as="select" name='debtInstallmentType' onChange={typeChange} defaultValue={debtInstallmentTypeToNumber(props.data?.debtInstallmentType)}>

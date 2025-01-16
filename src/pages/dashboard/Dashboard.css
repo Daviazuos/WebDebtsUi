@@ -40,12 +40,6 @@
     padding: 5px;
 }
 
-.graphicPageBar {
-    /* min-width: 300px;
-    max-width: 600px;
-    height: 400px; */
-}
-
 .categorieTable {
     padding: 10px;
 }
@@ -86,6 +80,7 @@
 }
 
 .outsByDay {
+    display: block;
     grid-column-start: 2;
     grid-column-end: 5;
     grid-row-start: 4;
@@ -101,4 +96,35 @@
 .analitics {
     display: flex;
     flex-flow: row wrap;
+}
+
+
+@media (max-width: 768px) {
+    .graphics {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+    }
+
+    .valuePerDay {
+        padding: 5px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .graphicPagePie {
+        height: 300px;
+    }
+
+    .cardsValues {
+        flex-direction: column;
+    }
+
+    .outsByDay {
+        display: none !important; 
+    }
+
+    .card {
+        margin-left: 0px;
+    }
 }

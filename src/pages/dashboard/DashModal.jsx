@@ -23,6 +23,7 @@ export default function DashModal(props) {
                 size="lg"
                 centered
                 scrollable
+                dialogClassName="GlobalModal"
             >
                 <Modal.Header closeButton>
                     <Modal.Title id="contained-modal-title-vcenter">

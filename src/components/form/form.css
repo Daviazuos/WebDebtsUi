@@ -2,6 +2,11 @@
     display: flex;
 }
 
+.ResponsiblePartySelector{
+    display: flex;
+}
+
+
 .AddForm {
     display: flex;
     flex-direction: column;
@@ -10,4 +15,11 @@
 .inputGroup {
     margin-top: 10px;
     margin-bottom: 10px;
+}
+
+@media (max-width: 768px) {
+    .inputGroup {
+        margin-bottom: 40px; /* Ajuste o valor conforme o necessário */
+      }
+      
 }

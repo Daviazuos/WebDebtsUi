@@ -81,6 +81,47 @@ export default class CardApexGraphic extends React.Component {
                         opacity: 0.2
                     },
                 },
+                responsive: [
+                    {
+                        breakpoint: 1024, // Tablets ou telas intermediárias
+                        options: {
+                            chart: {
+                                width: '100%' // Ajusta a largura para o container pai
+                            },
+                            legend: {
+                                position: 'bottom', // Mova a legenda para baixo
+                                fontSize: '10px', // Reduza o tamanho da fonte
+                            },
+                        }
+                    },
+                    {
+                        breakpoint: 768, // Dispositivos móveis maiores
+                        options: {
+                            chart: {
+                                width: '90%', // Reduz ainda mais a largura
+                            },
+                            legend: {
+                                position: 'bottom',
+                                fontSize: '8px', // Fonte menor
+                            },
+                        }
+                    },
+                    {
+                        breakpoint: 480, // Dispositivos móveis pequenos
+                        options: {
+                            chart: {
+                                width: '100%', // Largura completa do container
+                            },
+                            legend: {
+                                position: 'bottom',
+                                fontSize: '6px', // Fonte ainda menor
+                            },
+                            dataLabels: {
+                                enabled: false, // Desativa labels para economizar espaço
+                            }
+                        }
+                    }
+                ],
                 xaxis: {
                     categories: this.state.labels,
                 },

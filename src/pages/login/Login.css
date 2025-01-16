@@ -4,11 +4,11 @@
 
 .loginContainer .cardLogin {
     max-width: 350px;
-    left:50%;
-    top:50%;
-    position:absolute;
+    left: 50%;
+    top: 50%;
+    position: absolute;
     cursor: auto;
-    transform:translate(-50%, -50%);
+    transform: translate(-50%, -50%);
 }
 
 .loginContainer .cardLogin .registerButton {
@@ -19,7 +19,7 @@
 .loginContainer .cardLogin .signButton {
     background-color: #0070D2;
     color: white;
-    
+
 }
 
 .register {
@@ -29,10 +29,21 @@
 .signText {
     color: #9FA2B4;
     font-size: 11px;
-    
+
 }
 
 .formLogin {
     margin-top: 15px;
     margin-bottom: 15px;
+}
+
+@media (max-width: 768px) {
+    .loginContainer {
+        max-width: 600px;
+    }
+    .loginContainer .cardLogin {
+        max-width: 500px;
+        position: relative;
+        margin-top: 500px !important;
+    }
 }

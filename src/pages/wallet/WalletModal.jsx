@@ -8,10 +8,10 @@ import MaskedFormControl from "../../utils/maskedInputs";
 import "./WalletModal.css"
 
 
+
 function refreshPage() {
     window.location.reload();
 }
-
 
 export default class ModalInstallments extends React.Component {
     state = {
@@ -22,7 +22,10 @@ export default class ModalInstallments extends React.Component {
         type: '',
         month: '',
         numberOfInstallments: '',
-        walletInstallmentType: ''
+        walletInstallmentType: '',
+        responsibleParty: '',
+        listResponsibleParty: '',
+        checked: false
     }
 
     componentDidMount() {
@@ -31,6 +34,21 @@ export default class ModalInstallments extends React.Component {
                 const wallet = res.data
                 this.setState({ wallet })
             })
+
+        axiosInstance.get(Endpoints.responsibleParty.getByUser())
+            .then(res => {
+                const responsibleParty = res.data;
+
+                const listResponsibleParty = responsibleParty.map(item => {
+                    return (
+                        <option value={item.id}>{item.name}</option>
+                    )
+                })
+                listResponsibleParty.unshift(<option value="">Escolha uma pessoa</option>)
+                this.setState({ listResponsibleParty })
+            })
+
+
     }
 
     nameChange = event => {
@@ -41,6 +59,19 @@ export default class ModalInstallments extends React.Component {
     }
     statusChange = event => {
         this.setState({ walletStatus: event.target.value });
+    }
+
+    checkChange = event => {
+        if (event.target.checked) {
+            this.setState({ checked: true });
+        } else {
+            this.setState({ checked: false });
+        }
+    }
+
+
+    responsiblePartyChange = event => {
+        this.setState({ responsibleParty: event.target.value });
     }
 
     typeChange = event => {
@@ -68,11 +99,13 @@ export default class ModalInstallments extends React.Component {
             walletStatus: this.state.walletStatus || this.state.wallet.walletStatus,
             date: this.state.month || this.state.wallet.month,
             numberOfInstallments: this.state.numberOfInstallments || this.state.wallet.numberOfInstallments,
-            walletInstallmentType: this.state.walletInstallmentType || this.state.wallet.walletInstallmentType
+            walletInstallmentType: this.state.walletInstallmentType || this.state.wallet.walletInstallmentType,
+            responsiblePartyId: this.state.responsibleParty || this.state.wallet.responsibleParty.value
         } : {
             name: this.state.name || this.state.wallet.name,
             value: this.state.value || this.state.wallet.value,
-            walletStatus: this.state.walletStatus || this.state.wallet.walletStatus
+            walletStatus: this.state.walletStatus || this.state.wallet.walletStatus,
+            responsiblePartyId: this.state.responsibleParty || this.state.wallet.responsibleParty.value
         }
 
         if (this.props.value) {
@@ -91,6 +124,7 @@ export default class ModalInstallments extends React.Component {
     }
 
     render() {
+        console.log(this.state.listResponsibleParty)
         return (
             <Modal
                 {...this.props}
@@ -120,7 +154,7 @@ export default class ModalInstallments extends React.Component {
                         </Form.Group>
                         <Form.Group>
                             <Form.Label>Mês</Form.Label>
-                            <Form.Control type="month" onChange={this.monthChange} defaultValue={this.state.wallet?.startAt?.substring(0,7)} />
+                            <Form.Control type="month" onChange={this.monthChange} defaultValue={this.state.wallet?.startAt?.substring(0, 7)} />
                         </Form.Group>
                         <Form.Group>
                             <Form.Label>Tipo de entrada</Form.Label>
@@ -136,6 +170,20 @@ export default class ModalInstallments extends React.Component {
                                 <Form.Label>Quantidade de Parcelas</Form.Label>
                                 <Form.Control name='numberOfInstallments' type="number" onChange={this.numberOfInstallmentsChange} placeholder="Entre com o quantidade de parcelas" defaultValue={this.state.wallet.numberOfInstallments} />
                             </Form.Group> : ""}
+                        <p></p>
+                        <Form.Check
+                            type="checkbox"
+                            id="custom-switch"
+                            label="Vincular a uma pessoa?"
+                            onChange={this.checkChange}
+                        />
+                        {(this.state.checked === true) ?  <Form.Group className="inputGroup">
+                            <Form.Control name='responsibleParty' onChange={this.responsiblePartyChange} as="select">
+                                {this.state.listResponsibleParty}
+                            </Form.Control>
+                        </Form.Group>: ''}
+                        <p></p>
+                       
                         <Button variant="dark" type="submit"> {this.props.value ? 'Atualizar' : 'Adicionar'} </Button>
                     </Form>
                 </Modal.Body>

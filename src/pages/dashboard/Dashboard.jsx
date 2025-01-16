@@ -123,9 +123,9 @@ export default function Dashboard() {
 
   useEffect(() => {
     setIsLoading(true)
-    axiosInstance.get(Endpoints.card.filterCards(null, month, year))
+    axiosInstance.get(Endpoints.card.filterCards(1, 9999, null, month, year))
       .then(res => {
-        setCards(res.data);
+        setCards(res.data.items);
         setIsLoading(!isLoading)
       })
   }, [month])
@@ -134,7 +134,7 @@ export default function Dashboard() {
   let minCreditCard = ''
   let closureDate = 0
 
-  if (isLoading == false) {
+  if (isLoading == false && cards[0]?.closureDate) {
     minDate = cards[0].closureDate > cards[0].dueDate ? new Date(year, month - 2, cards[0].closureDate) : new Date(year, month - 1, cards[0].closureDate)
     for (const card in cards) {
       let closingDate = cards[card].closureDate > cards[card].dueDate ? new Date(year, month - 2, cards[card].closureDate) : new Date(year, month - 1, cards[card].closureDate)

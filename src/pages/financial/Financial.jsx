@@ -36,9 +36,10 @@ function SetModalPaid(props) {
 
   return (
     <>
-      <Button disabled={props.disabled} size="sm" className={props.classname} onClick={() => setModalShow(true)}>
-        <i className={props.simbol}></i> {props.modalName}
-      </Button>
+      <div className={`indicator ${props.status === 'Paid' ? '' : 'unpaid'}`} onClick={props.status === 'Paid' ? '' : () => setModalShow(!modalShow)}>
+        <span className="icon">{props.status === 'Paid' ? '\u2714' : '\u26A0'}</span> {/* Ícone de alerta ou check */}
+      </div>
+
       <ModalPaid
         value={props.value}
         show={modalShow}
@@ -85,14 +86,22 @@ export default function Financial() {
   const [financial, setFinancial] = React.useState([]);
   const [cards, setCards] = React.useState([]);
   const [pageNumber, setPageNumber] = React.useState(1);
+  const [pageCardNumber, setPageCardNumber] = React.useState(1);
   const [year, setYear] = React.useState(localStorage.getItem("year"))
   const [month, setMonth] = React.useState(localStorage.getItem("month"))
   const [paidStatus, setPaidStatus] = React.useState("")
   const [updateStatus, setUpdateStatus] = React.useState(false)
+  const [modalShow, setModalShow] = React.useState(false);
+  const [cardModalShow, setCardModalShow] = React.useState(false);
+  const [cardPaginationData, setCardPaginationData] = React.useState([])
 
 
   const pageChange = event => {
     setPageNumber(event.target.text);
+  }
+
+  const pageCardChange = event => {
+    setPageCardNumber(event.target.text);
   }
 
   const statusChange = event => {
@@ -103,89 +112,81 @@ export default function Financial() {
     setUpdateStatus(change);
   }
 
-
   useEffect(() => {
-    axiosInstance.get(Endpoints.debt.filterInstallments(pageNumber, 15, '', month, year, '', paidStatus, 'Simple', '', null))
+    axiosInstance.get(Endpoints.debt.filterInstallments(pageNumber, 7, '', month, year, '', paidStatus, 'Simple', '', null))
       .then(res => {
         setFinancial(res.data)
       })
   }, [pageNumber, month, paidStatus, updateStatus])
 
   useEffect(() => {
-    axiosInstance.get(Endpoints.card.filterCards('', month, year))
+    axiosInstance.get(Endpoints.card.filterCards(pageCardNumber, 7, '', month, year, false))
       .then(res => {
         let resultFiltered = []
-        for (const card in res.data) {
-          let debts = res.data[card]?.debts
+        for (const card in res.data.items) {
+          let debts = res.data.items[card]?.debts
           for (const debt in debts) {
             if (paidStatus !== "") {
               if (debts[debt]?.installments[0]?.status === paidStatus) {
-                resultFiltered.push(res.data[card])
+                resultFiltered.push(res.data.items[card])
                 break
               }
             } else {
-              resultFiltered.push(res.data[card])
+              resultFiltered.push(res.data.items[card])
               break
             }
 
           }
         }
-
+        setCardPaginationData(res.data)
         setCards(resultFiltered)
       })
-  }, [month, paidStatus, updateStatus])
-
+  }, [pageCardNumber, month, paidStatus, updateStatus])
+  
   const debtTableData = financial.items?.map(item => {
-    return (
-      <tr key={item.id}>
-        <td>{item.debtName}</td>
-        <td>R$ {decimalAdjust(item.value)}</td>
-        <td>{dateAdjust(item.date)}</td>
-        <td>{dateAdjust(item.paymentDate)}</td>
-        <td>
+    let installmentText = ""
+    if (item.numberOfInstallments > 0 && item.installmentNumber > 0) {
+      installmentText = `Parcela ${item.installmentNumber} de ${item.numberOfInstallments}`
+    } else if (item.numberOfInstallments === 0 && item.installmentNumber === 1) {
+      installmentText = "Parcela única"
+    } else if (item.numberOfInstallments === 0 && item.installmentNumber === 0) {
+      installmentText = "Fixa"
+    }
 
-          {item.status === 'Paid' ? <div style={{ display: 'flex', justifyContent: 'flex-start' }}><SetModalPaid disabled={true} modalName="Pago" simbol="" value={item.id} month={month} year={year} isCard={false} classname='btn btn-green'></SetModalPaid></div> :
-            <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
-              <SetModalPaid
-                disabled={false}
-                name={item.debtName}
-                modalName="Pagar"
-                simbol=""
-                value={item.id}
-                month={month}
-                year={year}
-                isCard={false}
-                update={updateValues}
-                updateStatus={updateStatus}
-                amount={item.value}
-                classname='btn btn-danger'>
-              </SetModalPaid>
-              <SetModalJumpNextMonth
-                disabled={false}
-                name={item.debtName}
-                modalName="Adiar"
-                simbol=""
-                value={item.id}
-                month={month}
-                year={year}
-                isCard={false}
-                update={updateValues}
-                updateStatus={updateStatus}
-                data={item}
-                className="nexMonthbutton"
-              >
-              </SetModalJumpNextMonth>
-            </div>}
-        </td>
-      </tr>
+    return (
+      <div className="card-financial">
+        <div className="card-content-financial">
+          <div className="debt-name">{item.debtName}</div>
+          <div className="installment-text">{installmentText}</div>
+          <div className="debt-value">R$ {decimalAdjust(item.value)}</div>
+          <div className="debt-date">{dateAdjust(item.date)}</div>
+          <div className="progress-bar">
+            <div className="progress-bar-fill" style={{ width: item.numberOfInstallments === 0 ? '0%' : `${(item.installmentNumber / item.numberOfInstallments) * 100}%` }}></div> {/* Ajuste a largura conforme necessário */}
+          </div>
+        </div>
+        <SetModalPaid
+          disabled={false}
+          name={item.debtName}
+          modalName="Pagar"
+          simbol=""
+          value={item.id}
+          month={month}
+          year={year}
+          isCard={false}
+          update={updateValues}
+          updateStatus={updateStatus}
+          amount={item.value}
+          status={item.status}>
+        </SetModalPaid>
+      </div>
     )
   })
+
   const cardTableData = cards.map(item => {
 
     let cardValue = 0.00
     let cardStatus = undefined
     let paymentDate = undefined
-
 
     for (const debt in item?.debts) {
       if (item?.debts[debt]?.installments[0]?.value != undefined) {
@@ -195,21 +196,32 @@ export default function Financial() {
       }
     }
 
-    if (cardValue === 0) {
-      return ""
-    }
-
     return (
-      <tr>
-        <td>{item.name}</td>
-        <td>R$ {decimalAdjust(cardValue)}</td>
-        <td>{item.dueDate}/{addLeadingZeros(month, 2)}/{year}</td>
-        <td>{dateAdjust(paymentDate)}</td>
-        <td>
-          {cardStatus === 'Paid' ? <SetModalPaid disabled={true} modalName="Pago" simbol="" value={item.id} month={month} year={year} isCard={true} classname='btn btn-green'></SetModalPaid> :
-            <SetModalPaid disabled={false} name={item.name} modalName="Pagar" simbol="" value={item.id} month={month} year={year} isCard={true} update={updateValues} updateStatus={updateStatus} amount={cardValue} classname='btn btn-danger'></SetModalPaid>}
-        </td>
-      </tr>
+        <div className="card-financial">
+          <div className="card-background" style={{ '--corFundo': item.color }}></div>
+          <div className="card-content-financial">
+            <div className="debt-name">{item.name}</div>
+            <div className="installment-text">Cartão de crédito</div>
+            <div className="debt-value">R$ {decimalAdjust(cardValue)}</div>
+            <div className="debt-date">{item.dueDate}/{addLeadingZeros(month, 2)}/{year}</div>
+
+          </div>
+           <SetModalPaid 
+              disabled={false}
+              name={item.name}
+              modalName="Pagar"
+              simbol=""
+              value={item.id} 
+              month={month} 
+              year={year} 
+              isCard={true} 
+              update={updateValues} 
+              updateStatus={updateStatus} 
+              amount={cardValue} 
+              classname='btn btn-danger'
+              status={cardStatus}>
+            </SetModalPaid>
+        </div >
     )
   })
 
@@ -226,47 +238,31 @@ export default function Financial() {
         </Form.Group>
       </div>
       <div className="financialTables">
-        <Card className='debtTable'>
-          <Table responsive hover variant="white" className="tableFinancial" size="sm">
-            <thead>
-              <tr>
-                <th>Nome</th>
-                <th>Valor</th>
-                <th>Vencimento</th>
-                <th>Pagamento</th>
-                <th>Ação</th>
-              </tr>
-            </thead>
-            <tbody>
-              {debtTableData}
-            </tbody>
-          </Table>
+        <Card className='cardFinancialTable'>
+          {debtTableData}
+          <p></p>
           {(financial.totalItems !== undefined) ?
             <PaginationComponent
               itemsCount={financial.totalItems}
-              itemsPerPage={15}
+              itemsPerPage={7}
               currentPage={financial.currentPage}
               setCurrentPage={setPageNumber}
               alwaysShown={false}
             /> : ""}
         </Card>
         <Card className='cardFinancialTable'>
-          <Table responsive hover variant="white" className="tableFinancial" size="sm">
-            <thead>
-              <tr>
-                <th>Nome</th>
-                <th>Valor</th>
-                <th>Vencimento</th>
-                <th>Pagamento</th>
-                <th>Ação</th>
-              </tr>
-            </thead>
-            <tbody>
-              {cardTableData}
-            </tbody>
-          </Table>
+          {cardTableData}
+          <p></p>
+          {(cardPaginationData.totalItems !== undefined) ?
+            <PaginationComponent
+              itemsCount={cardPaginationData.totalItems}
+              itemsPerPage={7}
+              currentPage={cardPaginationData.currentPage}
+              setCurrentPage={setPageCardNumber}
+              alwaysShown={false}
+            /> : ""}
         </Card>
-
+        <Card className='cardFinancialTable'></Card>
       </div>
     </>)
 };

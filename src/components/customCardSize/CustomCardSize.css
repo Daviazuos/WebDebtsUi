@@ -34,3 +34,10 @@
     font-weight: 600;
     color: #888eac;
 }
+
+@media (max-width: 768px) {
+    #customCardSize {
+        width: 340px !important;
+    }
+
+}

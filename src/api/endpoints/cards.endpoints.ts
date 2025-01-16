@@ -20,12 +20,12 @@ export class CardsEndpoints extends AbstractEndpoints {
     return `${this.getURL()}/AddValues?CardId=${cardId}`;
   }
 
-  filterCards(id: string, month: string, year: string) {
+  filterCards(pageNumber: string, pageSize: string, id: string, month: string, year: string, withNoDebts: boolean = true) {
     if (id != null){
-      return `${this.getURL()}/FilterCards?Id=${id}&Month=${month}&Year=${year}`;
+      return `${this.getURL()}/FilterCards?PageNumber=${pageNumber}&PageSize=${pageSize}&Id=${id}&Month=${month}&Year=${year}&withNoDebts=${withNoDebts}`;
     }
     else {
-      return `${this.getURL()}/FilterCards?Month=${month}&Year=${year}`;
+      return `${this.getURL()}/FilterCards?PageNumber=${pageNumber}&PageSize=${pageSize}&Month=${month}&Year=${year}&withNoDebts=${withNoDebts}`;
     }
     
   }

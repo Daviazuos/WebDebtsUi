@@ -15,6 +15,7 @@ export default function ModalAddDebts(props) {
       onHide={props.onHide ? props.onHide : () => setModalShow(false)}
       aria-labelledby="contained-modal-title-vcenter"
       centered
+      fullscreen="md-down"
     >
       <Modal.Header className="custom-modal-header" style={{ backgroundColor: props.color }} closeButton>
         <Modal.Title id="contained-modal-title-vcenter">

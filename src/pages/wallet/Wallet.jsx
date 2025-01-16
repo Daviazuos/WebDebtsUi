@@ -98,7 +98,6 @@ export default function Wallet() {
     return prev + cur.value;
   }, 0);
   const lis = wallet.map(item => {
-    {
       return (
         <tr key={item.id} className="walletTable">
           <td>{item.name}</td>
@@ -114,8 +113,8 @@ export default function Wallet() {
 
             </td> : <td> 1/1</td>}
           <td className='tdd'>
-            {<SetModal value={item.id} name={item.name} modalName="Editar" simbol="fas fa-edit" className='btn btn-primary'></SetModal>}{" "}
-            {<SetModalDelete size="sm" className="btn btn-danger" simbol="fa fa-trash" modalName="Apagar" value={item}>Apagar</SetModalDelete>}{" "}
+            {<SetModal value={item.id} name={item.name} modalName="" simbol="fas fa-edit" className='btn btn-primary'></SetModal>}{" "}
+            {<SetModalDelete size="sm" className="btn btn-danger" simbol="fa fa-trash" modalName="" value={item}>Apagar</SetModalDelete>}{" "}
             <Form>
               <Form.Check
                 type="switch"
@@ -128,7 +127,6 @@ export default function Wallet() {
           </td>
         </tr>
       )
-    }
   })
 
 

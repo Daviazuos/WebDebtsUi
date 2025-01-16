@@ -95,9 +95,9 @@ export default function CardCredit() {
 
     useEffect(() => {
         setLoading(true)
-        axiosInstance.get(Endpoints.card.filterCards(null, month, year))
+        axiosInstance.get(Endpoints.card.filterCards(1, 9999, null, month, year))
             .then(res => {
-                setCards(res.data);
+                setCards(res.data.items);
             })
         setLoading(false)
     }, [month])

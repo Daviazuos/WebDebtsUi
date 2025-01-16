@@ -12,11 +12,11 @@ import Dashboard from "./pages/dashboard/Dashboard";
 import Context from "./context/Context";
 import { useState } from "react";
 import './App.scss';
-import Sidebar from "./components/sidebar/Sidebar";
 import Layout from "./Layout";
 import Goals from "./pages/goals/Goals";
 import CreditCardSelected from "./pages/creditCardSelected/CreditCardSelected";
 import { GlobalProvider } from "./services/local-storage-event";
+import ResponsibleParty from "./pages/responsibleParty/ResponsibleParty";
 
 export function logout() {
     localStorage.removeItem("user");
@@ -30,13 +30,14 @@ export function isLogged() {
     if (user) {
         return (
             <Layout>
-                <div>
+                <div className="app2">
                     <Route exact path="/" component={Dashboard} />
                     <Route path="/Debts" component={Debts} />
                     <Route path="/Cards" component={CreditCard} />
                     <Route path="/Financial" component={Financial} />
                     <Route path="/Wallet" component={Wallet} />
                     <Route path="/Goals" component={Goals} />
+                    <Route path="/ResponsibleParty" component={ResponsibleParty} />
                     <Route path="/CreditCardSelected/:cardId" component={CreditCardSelected} />
                 </div>
             </Layout>

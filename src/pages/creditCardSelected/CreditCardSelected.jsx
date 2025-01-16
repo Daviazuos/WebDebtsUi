@@ -43,7 +43,7 @@ export default function CreditCardSelected({ match }, props) {
     const zeroPad = (num, places) => String(num).padStart(places, '0')
 
     const [loading, setLoading] = useState(true);
-    const [loadingGraphic, setLoadingGraphic] = useState(true);
+    const [changingMonth, setChangingMonth] = useState(true);
     const [key, setKey] = useState(`${zeroPad(localStorage.getItem("month"), 2)}-${localStorage.getItem("year")}`);
     const [installments, setInstallments] = useState([]);
     const [pageNumber, setPageNumber] = useState(1);
@@ -54,7 +54,6 @@ export default function CreditCardSelected({ match }, props) {
     const [selectedCardIndex, setSelectedCardIndex] = useState(0); // Index do cartão selecionado
     const [cardClosingDate, setCardClosingDate] = useState(null)
     const [cardMonthValue, setCardMonthValue] = useState(new Map())
-    const [cardGraphic, setCardGraphic] = useState(undefined)
     const [months, setMonths] = useState([])
     const [updateStatus, setUpdateStatus] = useState(false)
     const [cardId, setCardId] = useState(match.params.cardId)
@@ -95,10 +94,10 @@ export default function CreditCardSelected({ match }, props) {
 
     useEffect(() => {
         // Alteração: Carregar múltiplos cartões e configurar o estado dos cartões
-        axiosInstance.get(Endpoints.card.filterCards(null, selectedDate.split('-')[0], selectedDate.split('-')[1]))
+        axiosInstance.get(Endpoints.card.filterCards(1, 9999, null, selectedDate.split('-')[0], selectedDate.split('-')[1]))
             .then(res => {
-                setCards(res.data); // Armazena todos os cartões
-                const cardIndex = res.data.findIndex(card => card.id === cardId);
+                setCards(res.data.items); // Armazena todos os cartões
+                const cardIndex = res.data.items.findIndex(card => card.id === cardId);
                 setSelectedCardIndex(cardIndex >= 0 ? cardIndex : 0); // Inicia com o primeiro cartão selecionado
 
                 // Novo Map para armazenar o valor total por cartão
@@ -107,8 +106,8 @@ export default function CreditCardSelected({ match }, props) {
 
 
                 // Iterar sobre todos os cartões
-                res.data.forEach(card => {
-                    let closingDate = card.closureDate > card.dueDate ? `${addLeadingZeros(card.closureDate, 2)}/${addLeadingZeros(month - 1, 2)}/${year}` : `${addLeadingZeros(card.closureDate, 2)}/${addLeadingZeros(month, 2)}/${year}`
+                res.data.items.forEach(card => {
+                    let closingDate = card.closureDate > card.dueDate ? `${addLeadingZeros(card.closureDate, 2)}/${addLeadingZeros(selectedDate.split('-')[0] - 1, 2)}/${selectedDate.split('-')[1]}` : `${addLeadingZeros(card.closureDate, 2)}/${addLeadingZeros(selectedDate.split('-')[0], 2)}/${selectedDate.split('-')[1]}`
                     cardClosingDate.set(card.id, { closingDate: closingDate });
                     let value = 0.00
                     card.debts.forEach(debt => {
@@ -122,21 +121,16 @@ export default function CreditCardSelected({ match }, props) {
 
 
                 setCardClosingDate(cardClosingDate)
-
-                setCardId(res.data[0].id)
-                setCardGraphic(<Card className="graphicPagePie">
-                    <CardApexGraphicPie cardId={res.data[0].id} month={selectedDate.split('-')[0]} year={selectedDate.split('-')[1]}></CardApexGraphicPie>
-                </Card>)
-                setLoadingGraphic(false)
                 setUpdateStatus(false)
                 setLoading(false)
             });
-    }, [updateStatus]);
+    }, [updateStatus, changingMonth]);
 
     // Função para selecionar o cartão ao clicar
     const selectCard = (index, cardId) => {
         setSelectedCardIndex(index);
         setCardId(cardId)
+        setPageNumber(1)
     };
 
     const lis_instalments = installments.items?.map(item => {
@@ -154,12 +148,12 @@ export default function CreditCardSelected({ match }, props) {
     })
 
     const handleTabSelect = (selectedTab) => {
-        setLoadingGraphic(true)
+        console.log(selectedTab)
+        setChangingMonth(!changingMonth)
         setSelectedDate(selectedTab)
         setKey(selectedTab);
     };
 
-    let closingDate = ""
     let tab_lis = ""
     if (!loading) {
         tab_lis = months.map(item => {
@@ -197,9 +191,9 @@ export default function CreditCardSelected({ match }, props) {
             {loading === true ? <i className="fas fa-spinner fa-spin"></i> :
                 <>
                     {/* Cartões empilhados */}
-                    <div className="card-stack-container" style={{ position: 'relative', marginBottom: "-115px", zIndex: 2, display: 'flex', flexDirection: 'row' }}>
+                    <div className="card-stack-container">
                         {cards.map((card, index) => (
-                            <div class="cardCreditSelected px-4" id='cardCreditSelected' style={{
+                            <div className={`cardCreditSelected px-4 ${selectedCardIndex === index ? 'selected' : ''}`} id='cardCreditSelected' style={{
                                 position: 'relative', marginBottom: "-115px", display: 'flex', flexDirection: 'row'
                             }}>
                                 <div className={`debit-card card-2 mb-4 ${selectedCardIndex === index ? 'selected' : ''}`} onClick={() => selectCard(index, card.id)} style={{
@@ -254,3 +248,5 @@ export default function CreditCardSelected({ match }, props) {
         </>
     );
 }
+
+

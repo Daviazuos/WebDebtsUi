@@ -72,4 +72,9 @@ export class DebtsEndpoints extends AbstractEndpoints {
     return `${this.getURL()}/DeleteInstallment?Id=${id}`;
   }
 
+  getDebtresponsibleParties(month: string, year: string, responsiblePartyId: string | null) {
+    const url = (responsiblePartyId === undefined) ? `${this.getURL()}/GetResponsiblePartiesDebts?Month=${month}&Year=${year}` : `${this.getURL()}/GetDebtCategories?Month=${month}&Year=${year}&responsiblePartyId=${responsiblePartyId}`
+    return url
+  }
+
 }

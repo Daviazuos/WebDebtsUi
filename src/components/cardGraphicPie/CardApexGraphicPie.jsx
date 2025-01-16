@@ -60,14 +60,50 @@ export default function CardApexGraphicPie(props) {
                             text: `Percentual por categorias`,
                             align: 'left'
                         },
-                        responsive: [{
-                            breakpoint: 480,
-                            options: {
-                                chart: {
-                                    width: 180
+                        responsive: [
+                            {
+                                breakpoint: 1024, // Tablets ou telas intermediárias
+                                options: {
+                                    chart: {
+                                        width: '100%' // Ajusta a largura para o container pai
+                                    },
+                                    legend: {
+                                        show: false, // Oculta a legenda
+                                        position: 'bottom', // Mova a legenda para baixo
+                                        fontSize: '10px', // Reduza o tamanho da fonte
+                                    },
+                                }
+                            },
+                            {
+                                breakpoint: 768, // Dispositivos móveis maiores
+                                options: {
+                                    chart: {
+                                        width: '90%', // Reduz ainda mais a largura
+                                    },
+                                    legend: {
+                                        show: false, // Oculta a legenda
+                                        position: 'bottom',
+                                        fontSize: '8px', // Fonte menor
+                                    },
+                                }
+                            },
+                            {
+                                breakpoint: 480, // Dispositivos móveis pequenos
+                                options: {
+                                    chart: {
+                                        width: '100%', // Largura completa do container
+                                    },
+                                    legend: {
+                                        show: false,
+                                        position: 'bottom',
+                                        fontSize: '6px', // Fonte ainda menor
+                                    },
+                                    dataLabels: {
+                                        enabled: true, // Desativa labels para economizar espaço
+                                    }
                                 }
                             }
-                        }],
+                        ],
                         theme: {
                             mode: 'light',
                             palette: 'palette3',

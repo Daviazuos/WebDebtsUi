@@ -14,6 +14,7 @@ import {
     SidebarContent,
 } from "react-pro-sidebar";
 import { useHistory } from 'react-router-dom';
+import "./Sidebar.css"
 
 
 function Sidebar(props) {
@@ -50,11 +51,14 @@ function Sidebar(props) {
 
     return (
         <div>
+            <div className="toggle-button">
+                <FaIcons.FaBars onClick={showSidebar} />
+            </div>
             <ProSidebar
                 breakPoint="md"
                 collapsed={sidebar}
-                toggled={props.toggled}
-                onToggle={props.handleToggleSidebar}
+                toggled={!sidebar} // Atualizar conforme o estado
+                onToggle={() => setSidebar(!sidebar)} // Atualiza o estado ao alternar
             >
                 <SidebarHeader>
                     <div
@@ -105,6 +109,11 @@ function Sidebar(props) {
                             icon={<FaIcons.FaLightbulb />}
                         >
                             Metas<Link to="/goals" />
+                        </MenuItem>
+                        <MenuItem
+                            icon={<FaIcons.FaUser />}
+                        >
+                            Pessoas<Link to="/responsibleParty" />
                         </MenuItem>
                     </Menu>
                 </SidebarContent>

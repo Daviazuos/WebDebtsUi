@@ -1,25 +1,9 @@
 .cardFinancialTable {
+    display: flex;
     margin: 10px;
-    padding: 10px;
-    width: 775px;
+    padding: 30px;
+    width: 550px;
     height: 700px;
-}
-
-.debtTable {
-    margin: 10px;
-    padding: 10px;
-    width: 775px;
-}
-
-.tableFinancial {
-    font-size: 12px;
-    font-family: sans-serif;
-}
-
-.table td,
-.table th {
-    border-top: 0px;
-    text-align: center;
 }
 
 .selectorPaid {
@@ -32,13 +16,6 @@
 .financialTables {
     display: flex;
     flex-direction: row;
-}
-
-@media(max-width: 900px) {
-
-    .financialTables {
-        flex-direction: column;
-    }
 
 }
 
@@ -46,4 +23,135 @@
     background: linear-gradient(211.23deg, #8257e8 -18.92%, #9333ea 47.22%, #e633ea 106.81%) !important;
     color: #fff !important;
     margin-left: 15px;
+}
+
+.card-financial {
+    margin: 5px;
+    display: flex;
+    justify-content: space-between;
+    width: 450px;
+    height: 70px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.card-content-financial {
+    padding: 0px 20px;
+    width: calc(100% - 50px);
+    /* Reduz a largura para considerar a lingueta */
+    position: relative;
+}
+
+.debt-name {
+    font-size: 18px;
+    font-weight: bold;
+    position: absolute;
+    color: #333;
+}
+
+.debt-value {
+    text-align: right;
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;    
+    margin-top: 13px;
+}
+
+.debt-date {
+    text-align: right;
+    font-size: 11px;
+    color: #888;
+}
+
+.progress-bar {
+    position: absolute;
+    bottom: 0;
+    margin-bottom: 5px;
+    left: 0;
+    height: 4px;
+    /* Ajusta a grossura da barra */
+    width: calc(100% - 0px);
+    /* Considera a largura até o início da lingueta */
+    background-color: #eee;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background-color: #4caf50;
+}
+
+.indicator {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    justify-content: center;
+    width: 50px;
+    height: 100%;
+    background-color: #4caf50;
+    /* Verde para pago */
+    color: white;
+    font-size: 18px;
+}
+
+.indicator.unpaid {
+    background-color: #f44336;
+    /* Vermelho para não pago */
+}
+
+.icon {
+    font-size: 18px;
+}
+
+.modal-backdrop {
+    background-color: #0000 !important;
+}
+
+.card-background {
+    background: var(--corFundo, #4caf50);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 70%;
+    /* Ocupa metade do card */
+    height: 100%;
+    clip-path: polygon(0 0, 90% 0, 70% 100%, 0 100%);
+    /* Formato de raio */
+    opacity: 0.2;
+    /* Tornar opaco */
+    z-index: 0;
+    /* Certificar-se de que está atrás do conteúdo */
+}
+
+.installment-text {
+    font-size: 9px;
+    margin-top: 30px;
+    position: absolute;
+}
+
+
+@media(max-width: 900px) {
+
+    .financialTables {
+        flex-direction: column;
+    }
+
+    .card-financial {
+        width: 330px;
+        height: 70px;
+    }
+
+    .cardFinancialTable {
+        width: 363px;
+        height: 700px;
+        padding: 10px;
+    }
+    
+    .debt-name {
+        font-size: 12px;
+    }
+
 }

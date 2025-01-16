@@ -1,7 +1,7 @@
 .cardWallet {
     padding: 10PX;
-    min-width: 1305px !important;
-    min-height: 600px;
+    width: 1305px !important;
+    height: 600px;
 }
 
 .walletGroup{
@@ -14,4 +14,17 @@
 
 .walletTable {
     cursor: default;
+}
+
+
+
+@media(max-width: 900px) {
+    .walletGroup{
+        flex-flow: column-reverse;
+    }
+
+    .cardWallet {
+        width: 350px !important;
+        height: 600px;
+    }
 }
