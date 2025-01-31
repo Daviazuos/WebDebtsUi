@@ -49,6 +49,8 @@ function Sidebar(props) {
 
     const showSidebar = () => setSidebar(!sidebar);
 
+    var arr = JSON.parse( localStorage.getItem('user') );
+
     return (
         <div>
             <div className="toggle-button">
@@ -74,8 +76,11 @@ function Sidebar(props) {
                         }}
                     >
                         {sidebar === true ?
-                             <><FaIcons.FaBars onClick={showSidebar} /></> : <> <h4>Web Debts <AiIcons.AiOutlineClose onClick={showSidebar} /></h4></>}
-                       
+                            <><FaIcons.FaBars onClick={showSidebar} /></> : <>
+                                <h4>Web Debts <AiIcons.AiOutlineClose onClick={showSidebar} /></h4>
+                                <div className='userName'>{arr.name}</div>
+                            </>}
+
                     </div>
                 </SidebarHeader>
                 <SidebarContent>

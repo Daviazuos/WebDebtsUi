@@ -28,6 +28,15 @@
 .td1 {
     max-width: 150px;
     max-height: 30px;
+    cursor: default;
+    text-align: center; /* Centraliza horizontalmente */
+    vertical-align: middle; /* Centraliza verticalmente */
+}
+
+.tr {
+    cursor: default;
+    text-align: center; /* Centraliza horizontalmente */
+    vertical-align: middle; /* Centraliza verticalmente */
 }
 
 .table {

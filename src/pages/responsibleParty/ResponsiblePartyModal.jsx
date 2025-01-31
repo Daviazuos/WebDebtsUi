@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Modal, Form } from "react-bootstrap";
+import { Button, Modal, Form, Table } from "react-bootstrap";
 import { axiosInstance } from "../../api";
 import { Endpoints } from '../../api/endpoints';
 
@@ -21,8 +21,8 @@ export default function ResponsiblePartyModal(props) {
             };
 
             axiosInstance.post(Endpoints.responsibleParty.add(), responsiblePartyModel).then(response => {
-                props.refresh()
                 props.onHide()
+                props.refresh()
             })
         }
 
@@ -35,11 +35,24 @@ export default function ResponsiblePartyModal(props) {
             <Modal.Body>
                 <Form>
                     <Form.Group>
-                        <Form.Label>Nome</Form.Label>
+                        <Form.Label>Nome da pessoa</Form.Label>
                         <Form.Control required="true" name="name" onChange={nameChange} placeholder="Nome" />
                     </Form.Group>
-                    <Button variant="dark" onClick={() => setAddResponsibleParty(true)}>Adicionar</Button>
                 </Form>
+                <p></p>
+                {props.dataTable !== undefined ?
+                    <div>
+                        <>Pessoa já adicionadas</>
+                        <Table  borderless striped responsive hover variant="white" size="sm">
+                            <tbody>
+                                {props.dataTable}
+                            </tbody>
+                        </Table>
+                        <p></p>
+                    </div>
+                    : ""}
+
+                <Button variant="dark" onClick={() => setAddResponsibleParty(true)}>Adicionar</Button>
             </Modal.Body>
         </Modal>
     )

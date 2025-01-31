@@ -10,7 +10,7 @@ export default (props) => {
   let text = props.text ? <span id="fontColorsTextSize">{props.text}</span> : ''
 
   return (
-    <div>
+    <div className={props.className}>
       <div class="card" id="customCardSize" style={{width: props.size, height: '100px'}} onClick={() => setModalShow(true)}>
         <div class="card-content">
           <div class="card-body cleartfix">

@@ -14,6 +14,8 @@
 
 .walletTable {
     cursor: default;
+    text-align: center; /* Centraliza horizontalmente */
+    vertical-align: middle; /* Centraliza verticalmente */
 }
 
 
@@ -26,5 +28,9 @@
     .cardWallet {
         width: 350px !important;
         height: 600px;
+    }
+
+    .walletTable {
+        font-size: 8px;
     }
 }

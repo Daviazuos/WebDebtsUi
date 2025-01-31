@@ -47,7 +47,10 @@ export default function CardApexGraphicPie(props) {
                                     setTittle(config.w.config.labels[config.dataPointIndex])
                                     setModalData(selectedCategory.installmentsPerCategory); // Armazena os itens da categoria
                                     setModalShow(true); // Abre a modal
-                                }
+                                },
+                                mounted: (chart) => {
+                                    chart.windowResizeHandler();
+                                  }
                             }
                         },
                         labels: labelsList,

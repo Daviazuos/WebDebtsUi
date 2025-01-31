@@ -91,4 +91,12 @@
       .debit-card.card-2.mb-4.selected {
         left: 0 !important;
       }
+
+      .CreditCardSelectedTable {
+        font-size: 8px;
+      }
+
+      #controlled-tab-example {
+        font-size: 10px;
+      }
 }

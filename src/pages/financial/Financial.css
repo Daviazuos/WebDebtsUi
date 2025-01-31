@@ -51,13 +51,14 @@
     font-weight: bold;
     position: absolute;
     color: #333;
+    margin-top: 6px;
 }
 
 .debt-value {
     text-align: right;
     font-size: 18px;
     font-weight: bold;
-    color: #333;    
+    color: #546E7A;    
     margin-top: 13px;
 }
 
@@ -110,6 +111,12 @@
     background-color: #0000 !important;
 }
 
+.debt-responsible {
+    font-size: 9px;
+    color: #888;
+    margin-left: 150px;
+}
+
 .card-background {
     background: var(--corFundo, #4caf50);
     position: absolute;
@@ -128,7 +135,9 @@
 
 .installment-text {
     font-size: 9px;
-    margin-top: 30px;
+    margin-top: 32px;
+    margin-left: 5px;
+    color: #8F8EAC;
     position: absolute;
 }
 

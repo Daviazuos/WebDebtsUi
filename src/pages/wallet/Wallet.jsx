@@ -17,9 +17,7 @@ function SetModalDelete(props) {
   const [modalShow, setModalShow] = React.useState(false);
   return (
     <>
-      <Button size="sm" className={props.className} variant='dark' onClick={() => setModalShow(true)}>
-        <i className={props.simbol}></i> {props.modalName}
-      </Button>
+      <i className={props.simbol} onClick={() => setModalShow(true)}></i> {props.modalName}
       <WalletModalDelete
         value={props.value}
         show={modalShow}
@@ -35,9 +33,7 @@ function SetModal(props) {
   const [modalShow, setModalShow] = React.useState(false);
   return (
     <>
-      <Button size="sm" className={props.className} variant='dark' onClick={() => setModalShow(true)}>
-        <i className={props.simbol}></i> {props.modalName}
-      </Button>
+      <i className={props.simbol} onClick={() => setModalShow(true)}></i> {props.modalName}
       <WalletModalEdit
         value={props.value}
         show={modalShow}
@@ -98,35 +94,38 @@ export default function Wallet() {
     return prev + cur.value;
   }, 0);
   const lis = wallet.map(item => {
-      return (
-        <tr key={item.id} className="walletTable">
-          <td>{item.name}</td>
+    return (
+      <tr key={item.id} className="walletTable">
+        <td>{item.name}</td>
+        <td>
+          R$ {decimalAdjust(item.value)}
+        </td>
+        <td>
+          {debtInstallmentTransform(item.walletInstallmentType)}
+        </td>
+        {(item.walletInstallmentType === 'Installment') ?
           <td>
-            R$ {decimalAdjust(item.value)}
-          </td>
-          <td>
-            {debtInstallmentTransform(item.walletInstallmentType)}
-          </td>
-          {(item.walletInstallmentType === 'Installment') ?
-            <td>
-              {item.installmentNumber}/{item.numberOfInstallments}
+            {item.installmentNumber}/{item.numberOfInstallments}
 
-            </td> : <td> 1/1</td>}
-          <td className='tdd'>
-            {<SetModal value={item.id} name={item.name} modalName="" simbol="fas fa-edit" className='btn btn-primary'></SetModal>}{" "}
-            {<SetModalDelete size="sm" className="btn btn-danger" simbol="fa fa-trash" modalName="" value={item}>Apagar</SetModalDelete>}{" "}
-            <Form>
-              <Form.Check
-                type="switch"
-                id="custom-switch"
-                label={walletInstallmentStatusTransform(item.receivedStatus)}
-                checked={item.receivedStatus}
-                onClick={() => EditWalletStatus(item.name, item.value, !item.receivedStatus, item.date, item.installmentId)}
-              />
-            </Form>
-          </td>
-        </tr>
-      )
+          </td> : <td> 1/1</td>}
+        <td>
+          {item.responsiblePartyName}
+        </td>
+        <td className='tdd'>
+          {<SetModal value={item.id} name={item.name} modalName="" simbol="fas fa-edit" className='btn btn-primary'></SetModal>}{" "}
+          {<SetModalDelete size="sm" className="btn btn-danger" simbol="fa fa-trash" modalName="" value={item}>Apagar</SetModalDelete>}{" "}
+          <Form>
+            <Form.Check
+              type="switch"
+              id="custom-switch"
+              label={walletInstallmentStatusTransform(item.receivedStatus)}
+              checked={item.receivedStatus}
+              onClick={() => EditWalletStatus(item.name, item.value, !item.receivedStatus, item.date, item.installmentId)}
+            />
+          </Form>
+        </td>
+      </tr>
+    )
   })
 
 
@@ -135,13 +134,14 @@ export default function Wallet() {
       <span id="PagesTitle">Carteira</span>
       <div className="walletGroup">
         <Card className="cardWallet">
-          <Table responsive hover variant="black" className="table" size="sm">
+          <Table  borderless striped responsive hover variant="black" size="sm">
             <thead>
-              <tr>
+              <tr className="walletTable">
                 <th>Nome</th>
                 <th>Valor</th>
                 <th>Tipo</th>
                 <th>Parcelas</th>
+                <th>Pessoa vinculada</th>
                 <th>Ação</th>
               </tr>
             </thead>

@@ -12,8 +12,13 @@
     cursor: pointer;
 }
 
+.userName {
+    font-size: 11px;
+}
+
 @media (max-width: 768px) {
     .toggle-button {
         display: block;
     }
 }
+

@@ -1,4 +1,3 @@
-
 .containerWallet .walletCards {
     display: flex;
     flex-flow: row wrap;
@@ -14,10 +13,14 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-  }
+}
 
-  @media (max-width: 768px) {
+@media (max-width: 768px) {
     #linha {
         margin-left: 10%;
+    }
+
+    .toPay {
+        display: none;
     }
 }

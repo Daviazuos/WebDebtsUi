@@ -56,6 +56,11 @@ export default class CardApexGraphic extends React.Component {
                 chart: {
                     height: 350,
                     type: 'line',
+                    events: {
+                        mounted: (chart) => {
+                            chart.windowResizeHandler();
+                          }
+                    }
                 },
                 dataLabels: {
                     enabled: true,

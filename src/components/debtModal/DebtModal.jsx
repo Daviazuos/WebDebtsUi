@@ -194,7 +194,7 @@ export default function DebtModal(props) {
 
     return (
         <>
-            <Button onClick={() => setModalShow(true)}><i className="fas fa-search fa-sm"></i></Button>
+            <i className="fas fa-search fa-lg" onClick={() => setModalShow(true)} style={{cursor: 'pointer', color: '#B3B8D4'}}></i>
             <Modal
                 show={modalShow}
                 size='lg'
@@ -256,7 +256,7 @@ export default function DebtModal(props) {
                                 </Tab>,
                                 <Tab key={'Parcelas'} eventKey={'Parcelas'} title={'Parcelas'}>
                                     <div className="installmentModal">
-                                        <Table responsive hover variant="white" size="lg">
+                                        <Table borderless striped responsive hover variant="white" size="lg">
                                             <thead>
                                                 <tr className="trr">
                                                     <th>Parcela</th>

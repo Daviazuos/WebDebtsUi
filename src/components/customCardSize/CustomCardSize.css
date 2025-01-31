@@ -37,7 +37,15 @@
 
 @media (max-width: 768px) {
     #customCardSize {
-        width: 340px !important;
+        width: 170px !important;
+        height: 69px !important;
     }
 
+    #fontColorsTitleSize {
+        font-size: 8px;
+    }
+    
+    #fontColorsSize {
+        font-size: 10px;
+    }
 }

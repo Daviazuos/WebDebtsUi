@@ -116,9 +116,9 @@ export default function DebtList(props) {
   useEffect(() => {
     axiosInstance.get(Endpoints.responsibleParty.getByUser())
       .then(res => {
-        const responsibleParty = res.data;
+        const responsiblePartyData = res.data;
 
-        const lis = responsibleParty.map(item => {
+        const lis = responsiblePartyData.map(item => {
           return (
             <option value={item.id}>{item.name}</option>
           )
@@ -218,12 +218,13 @@ export default function DebtList(props) {
             <SetModal modalName="Adicionar" simbol="fas fa-plus" className="modalButton"></SetModal>
           </div>
         </Form.Group>
-        <Form.Check
+        {props.cardId === null ? <Form.Check
           type="checkbox"
           id="custom-switch"
           label="Vincular a uma pessoa?"
           onChange={checkChange}
-        />
+        /> : ''}
+        
         {(check === true) ? <Form.Group className="inputGroup">
           <div className="ResponsiblePartySelector">
             <Form.Control required="true" name='responsibleParty' onChange={responsiblePartyChange} as="select">

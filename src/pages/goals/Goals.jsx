@@ -82,7 +82,7 @@ export default function Goals() {
     <div>
       <span id="PagesTitle">Metas</span>
       <Card className='cardTable'>
-        <Table responsive hover variant="white" className="tableFinancial" size="sm">
+        <Table  borderless striped responsive hover variant="white" className="tableFinancial" size="sm">
           <thead>
             <tr>
               <th>Nome</th>

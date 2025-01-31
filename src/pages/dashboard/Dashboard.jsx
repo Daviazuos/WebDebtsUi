@@ -240,7 +240,7 @@ export default function Dashboard() {
               <Image src={imageEmpty} rounded></Image>
             </div> :
             <div style={{ maxWidth: '570px'}}>
-              <Table responsive hover variant="black" className="tableTotal" size="sm">
+              <Table  borderless striped responsive hover variant="black" className="tableTotal" size="sm">
                 <thead>
                   <tr>
                     <th>Nome</th>

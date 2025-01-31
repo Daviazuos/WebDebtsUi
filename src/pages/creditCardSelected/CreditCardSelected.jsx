@@ -135,7 +135,7 @@ export default function CreditCardSelected({ match }, props) {
 
     const lis_instalments = installments.items?.map(item => {
         return (
-            <tr key={item.id}>
+            <tr key={item.id} className="CreditCardSelectedTable">
                 <td>{item.debtName}</td>
                 <td>{item.installmentNumber === 0 ? "Fixa" : item.installmentNumber}</td>
                 <td>
@@ -159,11 +159,11 @@ export default function CreditCardSelected({ match }, props) {
         tab_lis = months.map(item => {
 
             return (
-                <Tab eventKey={`${item.month}-${item.year}`} title={`${monthByNumber(item.month)}/${item.year}`}>
+                <Tab className="CreditCardSelectedTab" eventKey={`${item.month}-${item.year}`} title={`${monthByNumber(item.month)}/${item.year}`}>
                     <div className="CreditCardCard">
                         <SetModalAddDebts modalName="Adicionar" head={cards[selectedCardIndex].name} cardId={cards[selectedCardIndex].id} update={updateValues} color={`${(cards[selectedCardIndex].color != null && cards[selectedCardIndex].color != '') ? cards[selectedCardIndex].color : "#6F87E1"}`}></SetModalAddDebts>
                         <div style={{ marginLeft: '20px' }}>
-                            <Table responsive striped hover variant="white" size="lg">
+                            <Table  borderless striped responsive striped hover variant="white" size="lg">
                                 <thead>
                                     <tr className="trr">
                                         <th>Nome</th>

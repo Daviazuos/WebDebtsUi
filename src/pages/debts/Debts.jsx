@@ -100,7 +100,8 @@ export default function Debts() {
         {item.debtInstallmentType === 'Fixed' ?
           <td className='td1'> - </td> : <td className='td1'>{item.paidInstallment === null ? 0 : item.paidInstallment}/{item.numberOfInstallments === 0 ? 1 : item.numberOfInstallments}</td>
         }
-        <td className='tdd'>
+        <td className='td1'>{item.responsibleParty?.name}</td>
+        <td className='td1'>
           {<DebtModal id={item.id}></DebtModal>}
         </td>
       </tr>
@@ -136,7 +137,7 @@ export default function Debts() {
             </Form.Control>
           </Form.Group>
         </Form>
-        <Table responsive hover variant="black" className="table" size="sm">
+        <Table  borderless striped responsive hover variant="black" className="table" size="sm">
           <thead>
             <tr className='tr'>
               <th>Nome</th>
@@ -147,6 +148,7 @@ export default function Debts() {
               <th>Data Início</th>
               <th>Categoria</th>
               <th>Parcelas</th>
+              <th>Pessoa vinculada</th>
               <th>Ação</th>
             </tr>
           </thead>

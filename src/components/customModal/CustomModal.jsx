@@ -62,7 +62,7 @@ export default function CustomModal(props) {
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <Table responsive hover variant="white" size="sm">
+                <Table  borderless striped responsive hover variant="white" size="sm">
                     <thead>
                         <tr>
                             <th>Nome</th>

@@ -93,7 +93,7 @@ export default function CardLayout() {
                 <CustomCardSize
                     title="Entradas"
                     children={decimalAdjust(valueTotal)}
-                    icon="fas fa-hand-holding-usd success fa-2x"
+                    icon="fas fa-hand-holding-usd success fa-1x"
                     size={cardSize}
                 >
                 </CustomCardSize>
@@ -123,6 +123,7 @@ export default function CardLayout() {
                     children={decimalAdjust(sumAll - paidValue)}
                     icon="fas fa-times red fa-2x"
                     size={cardSize}
+                    className="toPay"
                 >
                 </CustomCardSize>
 

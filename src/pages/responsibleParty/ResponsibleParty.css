@@ -50,3 +50,7 @@
     dominant-baseline: middle;
     text-anchor: middle;
 }
+
+.ResponsibleModalButton {
+    margin-left: 10px;
+}
