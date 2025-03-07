@@ -94,7 +94,7 @@ export default function CreditCardSelected({ match }, props) {
 
     useEffect(() => {
         // Alteração: Carregar múltiplos cartões e configurar o estado dos cartões
-        axiosInstance.get(Endpoints.card.filterCards(1, 9999, null, selectedDate.split('-')[0], selectedDate.split('-')[1]))
+        axiosInstance.get(Endpoints.card.filterCards(1, 9999, null, selectedDate.split('-')[0], selectedDate.split('-')[1], false))
             .then(res => {
                 setCards(res.data.items); // Armazena todos os cartões
                 const cardIndex = res.data.items.findIndex(card => card.id === cardId);
@@ -157,13 +157,20 @@ export default function CreditCardSelected({ match }, props) {
     let tab_lis = ""
     if (!loading) {
         tab_lis = months.map(item => {
+            let titleCard = (
+                <div>
+                  <p>{cards[selectedCardIndex].name}</p>
+                  <p style={{fontSize: '12px'}}>Fechamento {cardClosingDate.get(cards[selectedCardIndex].id).closingDate}</p>
+                </div>
+              );
 
             return (
                 <Tab className="CreditCardSelectedTab" eventKey={`${item.month}-${item.year}`} title={`${monthByNumber(item.month)}/${item.year}`}>
                     <div className="CreditCardCard">
-                        <SetModalAddDebts modalName="Adicionar" head={cards[selectedCardIndex].name} cardId={cards[selectedCardIndex].id} update={updateValues} color={`${(cards[selectedCardIndex].color != null && cards[selectedCardIndex].color != '') ? cards[selectedCardIndex].color : "#6F87E1"}`}></SetModalAddDebts>
+                        
+                        <SetModalAddDebts modalName="Adicionar" head={titleCard} cardId={cards[selectedCardIndex].id} update={updateValues} color={`${(cards[selectedCardIndex].color != null && cards[selectedCardIndex].color != '') ? cards[selectedCardIndex].color : "#6F87E1"}`}></SetModalAddDebts>
                         <div style={{ marginLeft: '20px' }}>
-                            <Table  borderless striped responsive striped hover variant="white" size="lg">
+                            <Table  borderless striped responsive hover variant="white" size="lg">
                                 <thead>
                                     <tr className="trr">
                                         <th>Nome</th>

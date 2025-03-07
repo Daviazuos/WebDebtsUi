@@ -47,7 +47,7 @@ export default function CardLayout() {
 
     const provisionedValue = valueTotal - sumAllValue.items?.reduce(function (prev, cur) {
         return prev + cur.value;
-    }, 0);
+    }, 0).toFixed(2);
 
     localStorage.setItem("provisionedValue", provisionedValue);
 

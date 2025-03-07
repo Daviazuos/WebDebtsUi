@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { Card, Table, Image } from "react-bootstrap";
+import { Card, Table, Image, Modal, Button } from "react-bootstrap";
 import imageEmpty from '../../assets/empty.png'
 
 
 import { axiosInstance } from "../../api";
 import { Endpoints } from "../../api/endpoints";
 
-import { addLeadingZeros, decimalAdjust } from "../../utils/valuesFormater";
+import { addLeadingZeros, decimalAdjust, decimalAdjustWithoutPoint } from "../../utils/valuesFormater";
 
 import "./Dashboard.css";
 import CustomCard from "../../components/customCard/CustomCard";
@@ -15,6 +15,8 @@ import CardApexGraphicPie from "../../components/cardGraphicPie/CardApexGraphicP
 import CardApexGraphicByDay from "../../components/cardGraphic/CardApexGraphicByDay";
 import CustomCardSize from "../../components/customCardSize/CustomCardSize";
 import { addOrRemoveMonth, monthByNumber } from "../../utils/dateFormater";
+import DebtList from "../../components/form/form";
+import FloatingButtonWithModal from "../../components/floatingButton/floatingButton";
 
 
 export default function Dashboard() {
@@ -27,9 +29,12 @@ export default function Dashboard() {
   const [category, setCategory] = useState(null);
   const [debts, setDebts] = useState([])
   const [cards, setCards] = useState([])
+  const [drafts, setDrafts] = useState([])
+  const [show, setShow] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-
-
+  const [transformAddDebt, setTransformAddDebt] = useState(false);
+  const [draftSelected, setDraftSelected] = useState(null);
+  const [deletedDraft, setDeletedDraft] = useState(false);
 
   useEffect(() => {
     axiosInstance.get(Endpoints.debt.filterInstallments(1, 9999, '', month, year, '', '', '', '', null))
@@ -130,11 +135,39 @@ export default function Dashboard() {
       })
   }, [month])
 
+  useEffect(() => {
+    axiosInstance.get(Endpoints.debt.getDraftsDebtsByUser())
+      .then(res => {
+        setDrafts(res.data);
+        if (res.data.length === 0) {
+          setShow(false)
+        }
+        else {
+          setShow(true)
+        }
+      })
+  }, [transformAddDebt, deletedDraft])
+
+  let lis_drafts = []
+
+  for (const item in drafts) {
+    lis_drafts.push(<tr key={item.id}>
+      <td>{drafts[item].name}</td>
+      <td>R$ {decimalAdjustWithoutPoint(drafts[item].value)}</td>
+      <td>{drafts[item].card.name}</td>
+      <td><i className="fas fa-arrow-down" onClick={() => {
+        setTransformAddDebt(!transformAddDebt)
+        setDraftSelected({ value: decimalAdjustWithoutPoint(drafts[item].value), cardId: drafts[item].card.id, name: drafts[item].name, date: drafts[item].date, draftId: drafts[item].id })
+      }}></i></td>
+      <td><i className="fas fa-trash" onClick={() => deleteDraft(drafts[item].id, false)}></i></td>
+    </tr>)
+  }
+
   let minDate = new Date()
   let minCreditCard = ''
   let closureDate = 0
 
-  if (isLoading == false && cards[0]?.closureDate) {
+  if (isLoading === false && cards[0]?.closureDate) {
     minDate = cards[0].closureDate > cards[0].dueDate ? new Date(year, month - 2, cards[0].closureDate) : new Date(year, month - 1, cards[0].closureDate)
     for (const card in cards) {
       let closingDate = cards[card].closureDate > cards[card].dueDate ? new Date(year, month - 2, cards[card].closureDate) : new Date(year, month - 1, cards[card].closureDate)
@@ -158,9 +191,23 @@ export default function Dashboard() {
   const valorPorDia = valorDisponivel / diasRestantes;
 
   let day = `Valor por dia`
-  let text = `${diasRestantes} dias referente ao cartão ${minCreditCard} que fecha dia ${closureDate}/${addLeadingZeros(month-1, 2)}`
+  let text = `${diasRestantes} dias referente ao cartão ${minCreditCard} que fecha dia ${closureDate}/${addLeadingZeros(month - 1, 2)}`
 
   let showPerDay = dataHoje < dataFechamento || dataHoje > dataFechamento && dataHoje.getMonth() == dataFechamento.getMonth()
+
+  function deleteDraft(id, transform = true) {
+    axiosInstance.delete(Endpoints.debt.deleteDraft(id))
+      .then(res => {
+        if (transform) {
+          setTransformAddDebt(!transformAddDebt)
+        }
+        setDeletedDraft(!deletedDraft)
+      })
+  }
+
+  function updateValues(id) {
+    deleteDraft(id)
+  }
 
   return (
     <div>
@@ -169,7 +216,7 @@ export default function Dashboard() {
           <div className="valuePerDay">
             <CustomCardSize
               title={day}
-              children={decimalAdjust(valorPorDia > 0 ? valorPorDia: 0.00)}
+              children={decimalAdjust(valorPorDia > 0 ? valorPorDia : 0.00)}
               icon="fas fa-calendar-day success fa-2x"
               text={text}
               size='380px'
@@ -196,7 +243,7 @@ export default function Dashboard() {
               text=""
               size='380px'
             ></CustomCardSize>
-            
+
           </div>}
         <Card className="graphicPagePie">
           <CardApexGraphicPie></CardApexGraphicPie>
@@ -239,8 +286,8 @@ export default function Dashboard() {
             <div style={{ marginLeft: '148px', marginRight: '160px', marginTop: '30px' }}>
               <Image src={imageEmpty} rounded></Image>
             </div> :
-            <div style={{ maxWidth: '570px'}}>
-              <Table  borderless striped responsive hover variant="black" className="tableTotal" size="sm">
+            <div style={{ maxWidth: '570px' }}>
+              <Table borderless striped responsive hover variant="black" className="tableTotal" size="sm">
                 <thead>
                   <tr>
                     <th>Nome</th>
@@ -255,6 +302,35 @@ export default function Dashboard() {
             </div>
           }
         </Card>
+        <Modal
+          show={show}
+          onHide={() => setShow(false)}
+          size="lg"
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
+          backdrop="static"
+        >
+          <Modal.Header closeButton>
+            <Modal.Title id="contained-modal-title-vcenter">
+              Compras vindas do APP
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            {transformAddDebt ? <DebtList draftId={draftSelected?.draftId} update={updateValues} cardId={draftSelected?.cardId} data={draftSelected}></DebtList> :
+              <Table borderless striped responsive hover variant="black">
+                <thead>
+                  <tr>
+                    <th>Nome</th>
+                    <th>Valor</th>
+                    <th>Cartão</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {lis_drafts}
+                </tbody>
+              </Table>}
+          </Modal.Body>
+        </Modal>
       </div>
     </div>);
 };

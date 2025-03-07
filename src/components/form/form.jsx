@@ -145,8 +145,8 @@ export default function DebtList(props) {
     event.preventDefault();
     const addDebts = {
       name: name || props.data?.name,
-      value: values[0],
-      values: [...values], // Envia todos os valores da lista para a API
+      value: values[0] || parseFloat(props.data?.value.replace(',', '.')),
+      values: values[0] != '' ? [...values] : [parseFloat(props.data?.value.replace(',', '.'))], // Envia todos os valores da lista para a API
       date: date || props.data?.date,
       numberOfInstallments: numberOfInstallments || props.data?.numberOfInstallments,
       debtInstallmentType: debtInstallmentType || props.data?.debtInstallmentType,
@@ -164,7 +164,7 @@ export default function DebtList(props) {
       }) : axiosInstance.post(Endpoints.card.addValues(props.cardId), addDebts).then(response => {
         setIsLoading(false)
         setSharedValue(!sharedValue);
-        props.update()
+        props.update(props.draftId)
       }).catch(err => {
         setOnError(!onError);
         setIsLoading(false)
@@ -198,7 +198,7 @@ export default function DebtList(props) {
           <Form.Group className="inputGroup" key={index}>
             <Form.Label>Valor</Form.Label>
             <div style={{ display: 'flex' }}>
-              <MaskedFormControl currency="BRL" required="true" name={`value${index}`} value={value} onChange={(event, value, maskedValue) => valueChange(event, value, maskedValue, index)} placeholder="Entre com o valor total" />
+              <MaskedFormControl currency="BRL" required="true" defaultValue={props.data?.value} name={`value${index}`} value={value} onChange={(event, value, maskedValue) => valueChange(event, value, maskedValue, index)} placeholder="Entre com o valor total" />
               {(index !== 0) ? <Button variant="danger" onClick={() => removeFieldValue(index)}>-</Button> : ""}
             </div>
           </Form.Group>

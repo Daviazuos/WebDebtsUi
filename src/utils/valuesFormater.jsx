@@ -13,6 +13,14 @@ export function decimalAdjust(value) {
 
 }
 
+export function decimalAdjustWithoutPoint(value) {
+  if (value.toString().includes('.')) {
+    return decimalAdjust(value);
+  }
+  return (value / 100).toFixed(2).replace('.', ',');
+  
+}
+
 export function converteMoedaFloat(valor){
   if(valor === ""){
      valor =  0;

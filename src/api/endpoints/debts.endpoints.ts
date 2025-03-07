@@ -77,4 +77,11 @@ export class DebtsEndpoints extends AbstractEndpoints {
     return url
   }
 
+  getDraftsDebtsByUser() {
+    return `${this.getURL()}/GetDraftsDebtsByUser`;
+  }
+
+  deleteDraft(id: string) {
+    return `${this.getURL()}/DeleteDraftsDebtsById?Id=${id}`;
+  }
 }

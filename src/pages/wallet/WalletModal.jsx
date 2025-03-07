@@ -100,13 +100,13 @@ export default class ModalInstallments extends React.Component {
             date: this.state.month || this.state.wallet.month,
             numberOfInstallments: this.state.numberOfInstallments || this.state.wallet.numberOfInstallments,
             walletInstallmentType: this.state.walletInstallmentType || this.state.wallet.walletInstallmentType,
-            responsiblePartyId: this.state.responsibleParty || this.state.wallet.responsibleParty.value
+            responsiblePartyId: this.state.checked ? (this.state.responsibleParty || null) : null
         } : {
             name: this.state.name || this.state.wallet.name,
             value: this.state.value || this.state.wallet.value,
             walletStatus: this.state.walletStatus || this.state.wallet.walletStatus,
-            responsiblePartyId: this.state.responsibleParty || this.state.wallet.responsibleParty.value
-        }
+            responsiblePartyId: this.state.checked ? (this.state.responsibleParty || null) : null
+        };    
 
         if (this.props.value) {
             axiosInstance.put(Endpoints.wallet.put(this.props.value), editWallet).then(response => {
@@ -124,7 +124,6 @@ export default class ModalInstallments extends React.Component {
     }
 
     render() {
-        console.log(this.state.listResponsibleParty)
         return (
             <Modal
                 {...this.props}

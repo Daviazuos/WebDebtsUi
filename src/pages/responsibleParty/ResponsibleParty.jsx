@@ -76,7 +76,7 @@ export default function ResponsibleParty() {
   const [month, setMonth] = React.useState(localStorage.getItem("month"))
   const [modalShow, setModalShow] = React.useState(false);
 
-
+  console.log(month)
   useEffect(() => {
     axiosInstance.get(Endpoints.debt.getDebtresponsibleParties(month, year, undefined))
       .then(res => {
@@ -91,7 +91,7 @@ export default function ResponsibleParty() {
                     <td>R$ {decimalAdjust(valueItem?.installments[0]?.value)}</td>
                   </tr>
                 )
-              })} title='Valores a Receber'></SeeData></td>
+              })} title='Valores a Pagar'></SeeData></td>
               <td className="td1">R$ {decimalAdjust(item.walletValue)} <SeeData tdData={item.walletAppModels.map(valueItem => {
                 return (
                   <tr>
@@ -104,7 +104,7 @@ export default function ResponsibleParty() {
           )
         }));
       })
-  }, [])
+  }, [month])
 
   useEffect(() => {
     axiosInstance.get(Endpoints.responsibleParty.getByUser())

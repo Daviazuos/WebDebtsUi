@@ -82,7 +82,7 @@ export default function Debts() {
   }, [])
 
   useEffect(() => {
-    axiosInstance.get(Endpoints.debt.filter(pageNumber, 10, origin, name, type, category, null))
+    axiosInstance.get(Endpoints.debt.filter(pageNumber, 16, origin, name, type, category, null))
       .then(res => {
         setDebts(res.data)
       })
