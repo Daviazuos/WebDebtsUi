@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as FaIcons from 'react-icons/fa';
 import * as AiIcons from 'react-icons/ai';
 import { Link } from 'react-router-dom';
@@ -19,6 +19,8 @@ import "./Sidebar.css"
 
 function Sidebar(props) {
     const [sidebar, setSidebar] = useState(false);
+    const [toggled, setToggled] = useState(false);
+
     const today = new Date();
     const actualMonth = String(today.getMonth() + 1).padStart(2, '0');
 
@@ -47,9 +49,22 @@ function Sidebar(props) {
         refreshPage()
     }
 
-    const showSidebar = () => setSidebar(!sidebar);
+    const showSidebar = () => setToggled(!toggled);
 
-    var arr = JSON.parse( localStorage.getItem('user') );
+    var arr = JSON.parse(localStorage.getItem('user'));
+
+    useEffect(() => {
+        const handleResize = () => {
+            if (window.innerWidth <= 768) {
+                setToggled(false); // ou true, dependendo do comportamento desejado
+            }
+        };
+
+        window.addEventListener('resize', handleResize);
+        handleResize(); // chama uma vez para pegar o tamanho inicial
+
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     return (
         <div>
@@ -58,9 +73,8 @@ function Sidebar(props) {
             </div>
             <ProSidebar
                 breakPoint="md"
-                collapsed={sidebar}
-                toggled={!sidebar} // Atualizar conforme o estado
-                onToggle={() => setSidebar(!sidebar)} // Atualiza o estado ao alternar
+                toggled={toggled}
+                onToggle={(value) => setToggled(value)}
             >
                 <SidebarHeader>
                     <div
@@ -76,8 +90,8 @@ function Sidebar(props) {
                         }}
                     >
                         {sidebar === true ?
-                            <><FaIcons.FaBars onClick={showSidebar} /></> : <>
-                                <h4>Web Debts <AiIcons.AiOutlineClose onClick={showSidebar} /></h4>
+                            <><FaIcons.FaBars/></> : <>
+                                <h4>Web Debts</h4>
                                 <div className='userName'>{arr.name}</div>
                             </>}
 

@@ -1,171 +1,89 @@
-import React from "react";
-import { Card } from "react-bootstrap";
-import "./CardGraphic.css"
+import React, { useEffect, useState } from "react";
+import ReactApexChart from "react-apexcharts";
 import { axiosInstance } from "../../api";
 import { Endpoints } from "../../api/endpoints";
-import ReactApexChart from "react-apexcharts";
 import { decimalAdjust } from "../../utils/valuesFormater";
-import { getLessMonthByMonth, getLessMonthYearByMonth, monthByNumber } from "../../utils/dateFormater";
+import { getLessMonthYearByMonth, monthByNumber } from "../../utils/dateFormater";
 
+export default function CardApexGraphicByDay() {
+    const [labels, setLabels] = useState([]);
+    const [valuesData, setValuesData] = useState([]);
 
-export default class CardApexGraphicByDay extends React.Component {
-    state = {
-        labels: [],
-        valuesData: [],
-    }
+    const month = localStorage.getItem("month");
+    const year = localStorage.getItem("year");
 
-    componentDidMount() {
-        let labels = [];
-        let values = [];
-        let categories = [];
-        let months = Array.from(Array(4).keys()).reverse();
-        const nameMap = {};
-    
-        const promises = months.map(index => {
-            let month_year = getLessMonthYearByMonth(
-                parseInt(localStorage.getItem("month")),
-                index,
-                localStorage.getItem("year")
+    useEffect(() => {
+        const fetchData = async () => {
+            const months = Array.from(Array(4).keys()).reverse();
+            const monthYearList = months.map(index => 
+                getLessMonthYearByMonth(parseInt(month), index, year)
             );
-            labels.push(monthByNumber(month_year[0]));
-    
-            return axiosInstance.get(Endpoints.debt.getDebtCategories(month_year[0], month_year[1], undefined))
-                .then(res => {
-                    categories = res.data;
-    
-                    for (const item of categories) {
+
+            const newLabels = [];
+            const nameMap = {};
+
+            for (const [monthNumber, yearNumber] of monthYearList) {
+                newLabels.push(monthByNumber(monthNumber));
+
+                try {
+                    const res = await axiosInstance.get(
+                        Endpoints.debt.getDebtCategories(monthNumber, yearNumber, undefined)
+                    );
+
+                    res.data.forEach(item => {
                         if (!nameMap[item.name]) {
-                            nameMap[item.name] = {
-                                name: item.name,
-                                data: []
-                            };
-                            values.push(nameMap[item.name]);
+                            nameMap[item.name] = { name: item.name, data: [] };
                         }
                         nameMap[item.name].data.push(item.value);
-                    }
-                });
-        });
-    
-        Promise.all(promises).then(() => {
-            // Flatten the data array for sorting
-            let flattenedValues = [];
-            for (const value of values) {
-                const sum = value.data.reduce((acc, cur) => acc + cur, 0); // Sum the data array
-                flattenedValues.push({ name: value.name, total: sum, data: value.data });
+                    });
+                } catch (error) {
+                    console.error("Erro ao buscar categorias", error);
+                }
             }
-    
-            // Sort by total descending and take the top 10
-            flattenedValues.sort((a, b) => b.total - a.total);
-            const topTenValues = flattenedValues.slice(0, 10);
-    
-            // Prepare final values array
-            const finalValues = topTenValues.map(item => ({
-                name: item.name,
-                data: item.data
+
+            const processedValues = Object.values(nameMap).map(item => ({
+                ...item,
+                total: item.data.reduce((acc, cur) => acc + cur, 0)
             }));
-    
-            this.setState({ labels: labels });
-            this.setState({ valuesData: finalValues });
-        }).catch(error => {
-            console.error("Error fetching debt categories", error);
-        });
-    }
-    
 
+            processedValues.sort((a, b) => b.total - a.total);
+            const top10 = processedValues.slice(0, 10);
 
-    render() {
-        const graphic = {
-
-            series: this.state.valuesData,
-            options: {
-                chart: {
-                    height: 350,
-                    type: 'line',
-                },
-                dataLabels: {
-                    enabled: true,
-                    formatter: function (val, opts) {
-                        return "R$ " + decimalAdjust(val);
-                    },
-                    style: {
-                        fontSize: "10px",
-                        fontFamily: "Helvetica, Arial, sans-serif",
-                        fontWeight: "bold"
-                    }
-                },
-                stroke: {
-                    curve: 'straight'
-                },
-                title: {
-                    text: 'Top categorias',
-                    align: 'left'
-                },
-                grid: {
-                    row: {
-                        colors: ['#f3f3f3', 'transparent'],
-                        opacity: 0.5
-                    },
-                },
-                responsive: [
-                    {
-                        breakpoint: 1024, // Tablets ou telas intermediárias
-                        options: {
-                            chart: {
-                                width: '100%' // Ajusta a largura para o container pai
-                            },
-                            legend: {
-                                position: 'bottom', // Mova a legenda para baixo
-                                fontSize: '10px', // Reduza o tamanho da fonte
-                            },
-                        }
-                    },
-                    {
-                        breakpoint: 768, // Dispositivos móveis maiores
-                        options: {
-                            chart: {
-                                width: '90%', // Reduz ainda mais a largura
-                            },
-                            legend: {
-                                position: 'bottom',
-                                fontSize: '8px', // Fonte menor
-                            },
-                        }
-                    },
-                    {
-                        breakpoint: 480, // Dispositivos móveis pequenos
-                        options: {
-                            chart: {
-                                width: '100%', // Largura completa do container
-                            },
-                            legend: {
-                                position: 'bottom',
-                                fontSize: '6px', // Fonte ainda menor
-                            },
-                            dataLabels: {
-                                enabled: false, // Desativa labels para economizar espaço
-                            }
-                        }
-                    }
-                ],
-                xaxis: {
-                    categories: this.state.labels,
-                },
-
-                yaxis: {
-                    labels: {
-                        formatter: function (value) {
-                            return "R$ " + decimalAdjust(value);
-                        }
-                    },
-                },
-            },
-
-
+            setLabels(newLabels);
+            setValuesData(top10.map(({ name, data }) => ({ name, data })));
         };
 
-        return (
-            <ReactApexChart options={graphic.options} series={graphic.series} type="line" height={350} width={955} />
-        )
-    }
-}
+        fetchData();
+    }, [month, year]);
 
+    console.log(valuesData)
+
+    const graphic = {
+        series: valuesData,
+        options: {
+            chart: { height: 350, type: 'line' },
+            dataLabels: {
+                enabled: true,
+                formatter: (val) => `R$ ${decimalAdjust(val)}`,
+                style: { fontSize: "10px", fontWeight: "bold" }
+            },
+            stroke: { curve: 'straight' },
+            title: { text: 'Top categorias', align: 'left' },
+            xaxis: { categories: labels },
+            yaxis: {
+                labels: {
+                    formatter: (value) => `R$ ${decimalAdjust(value)}`
+                }
+            },
+            responsive: [
+                { breakpoint: 1024, options: { chart: { width: '100%' }, legend: { position: 'bottom', fontSize: '10px' } } },
+                { breakpoint: 768, options: { chart: { width: '90%' }, legend: { position: 'bottom', fontSize: '8px' } } },
+                { breakpoint: 480, options: { chart: { width: '100%' }, legend: { position: 'bottom', fontSize: '6px' }, dataLabels: { enabled: false } } },
+            ]
+        }
+    };
+
+    return (
+        <ReactApexChart options={graphic.options} series={graphic.series} type="line" height={350} width={955} />
+    );
+}
