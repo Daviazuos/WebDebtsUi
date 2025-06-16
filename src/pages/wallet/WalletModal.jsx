@@ -103,12 +103,12 @@ export default class ModalInstallments extends React.Component {
             date: this.state.month || this.state.wallet.month,
             numberOfInstallments: this.state.numberOfInstallments || this.state.wallet.numberOfInstallments,
             walletInstallmentType: this.state.walletInstallmentType || this.state.wallet.walletInstallmentType,
-            responsiblePartyId: this.state.checked ? (this.state.responsibleParty || null) : null
+            responsiblePartyId: this.state.responsibleParty || this.state.wallet.responsiblePartyId
         } : {
             name: this.state.name || this.state.wallet.name,
             value: this.state.value || this.state.wallet.value,
             walletStatus: this.state.walletStatus || this.state.wallet.walletStatus,
-            responsiblePartyId: this.state.checked ? (this.state.responsibleParty || null) : null
+            responsiblePartyId: this.state.responsibleParty || this.state.wallet.responsiblePartyId,
         };
 
         if (this.props.value) {

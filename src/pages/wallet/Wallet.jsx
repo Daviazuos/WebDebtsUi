@@ -151,7 +151,7 @@ export default function Wallet() {
                         id="custom-switch"
                         label={walletInstallmentStatusTransform(itemWallet.walletInstallments[0].receivedStatus)}
                         checked={itemWallet.walletInstallments[0].receivedStatus}
-                        onClick={() => EditWalletStatus(itemWallet.name, itemWallet.value, !itemWallet.walletInstallments[0].receivedStatus, itemWallet.date, itemWallet.installmentId)}
+                        onClick={() => EditWalletStatus(itemWallet.name, itemWallet.value, !itemWallet.walletInstallments[0].receivedStatus, itemWallet.date, itemWallet.walletInstallments[0].id)}
                       />
                     </Form>
                   </td>
