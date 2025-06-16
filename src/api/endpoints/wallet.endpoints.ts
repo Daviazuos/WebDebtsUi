@@ -16,6 +16,10 @@ export class WalletsEndpoinst extends AbstractEndpoints {
     return `${this.getURL()}/GetWallets?month=${month}&year=${year}`;
   }
 
+  getResponsiblePartyWallets(month: string, year: string) {
+    return `${this.getURL()}/GetResponsiblePartiesWallets?month=${month}&year=${year}`;
+  }
+
   put(id: string) {
     return `${this.getURL()}/UpdateWallet?Id=${id}`;
   }

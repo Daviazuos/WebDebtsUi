@@ -26,11 +26,12 @@ export default class WalletModalEdit extends React.Component {
     }
 
     componentDidMount() {
+        if (this.props.value !== undefined) {
         axiosInstance.get(Endpoints.wallet.getById(this.props.value))
             .then(res => {
                 const wallet = res.data
                 this.setState({ wallet })
-            })
+            })}
     }
 
     nameChange = event => {

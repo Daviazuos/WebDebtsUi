@@ -34,5 +34,14 @@
 @media (max-width: 768px) {
     #customCard {
         width: 325px;
+        height: 50px;
+    }
+
+    #fontColorsTitle {
+        font-size: 8px;
+    }
+    
+    #fontColors {
+        font-size: 10px;
     }
 }

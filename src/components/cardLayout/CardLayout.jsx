@@ -51,7 +51,7 @@ export default function CardLayout() {
 
     localStorage.setItem("provisionedValue", provisionedValue);
 
-    let balanceColor = provisionedValue < 0? "fas fa-balance-scale red fa-2x":"fas fa-balance-scale success fa-2x"
+    let balanceColor = provisionedValue < 0? "fas fa-balance-scale red custom-icon":"fas fa-balance-scale success custom-icon"
 
 
     const sumAll = sumAllValue.items?.reduce(function (prev, cur) {
@@ -93,14 +93,14 @@ export default function CardLayout() {
                 <CustomCardSize
                     title="Entradas"
                     children={decimalAdjust(valueTotal)}
-                    icon="fas fa-hand-holding-usd success fa-1x"
+                    icon="fas fa-hand-holding-usd success custom-icon"
                     size={cardSize}
                 >
                 </CustomCardSize>
                 <CustomCardSize
                     title="Saídas"
                     children={decimalAdjust(sumAll)}
-                    icon="fas fa-hand-holding-usd red fa-2x"
+                    icon="fas fa-hand-holding-usd red custom-icon"
                     size={cardSize}
                 >
                 </CustomCardSize>
@@ -114,19 +114,18 @@ export default function CardLayout() {
                 <CustomCardSize
                     title="Valor pago"
                     children={decimalAdjust(paidValue)}
-                    icon="fas fa-check success fa-2x"
+                    icon="fas fa-check success custom-icon"
                     size={cardSize}
                 >
                 </CustomCardSize>
                 <CustomCardSize
                     title="Valor a pagar"
                     children={decimalAdjust(sumAll - paidValue)}
-                    icon="fas fa-times red fa-2x"
+                    icon="fas fa-times red custom-icon"
                     size={cardSize}
                     className="toPay"
                 >
                 </CustomCardSize>
-
             </div>
         </div>
     )

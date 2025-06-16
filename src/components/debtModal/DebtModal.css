@@ -17,3 +17,23 @@
 .custom-btn {
     background-color: #1A4173;
 }
+
+
+
+@media (max-width: 768px) {
+    .debtModal {
+        flex-direction: column;
+    }
+
+    .chartProgress {
+        margin-left: 0;
+    }
+
+    .buttonsModal {
+        margin-top: 20px;
+    }
+
+    .mb-3 {
+        margin-bottom: 20px;
+    }
+}

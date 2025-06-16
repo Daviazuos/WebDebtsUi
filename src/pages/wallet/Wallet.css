@@ -4,7 +4,7 @@
     height: 600px;
 }
 
-.walletGroup{
+.walletGroup {
     display: flex;
 }
 
@@ -14,14 +14,31 @@
 
 .walletTable {
     cursor: default;
-    text-align: center; /* Centraliza horizontalmente */
-    vertical-align: middle; /* Centraliza verticalmente */
+    text-align: center;
+    /* Centraliza horizontalmente */
+    vertical-align: middle;
+    /* Centraliza verticalmente */
 }
 
+.pending {
+    margin-left: 30px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
 
+.pending .textPending {
+    font-size: 9px;
+    margin-left: 5px;
+}
+
+.accordionName {
+    font-size: 15px;
+    font-weight: bold;
+}
 
 @media(max-width: 900px) {
-    .walletGroup{
+    .walletGroup {
         flex-flow: column-reverse;
     }
 
@@ -32,5 +49,15 @@
 
     .walletTable {
         font-size: 8px;
+    }
+
+    .cardGroup {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .accordionName {
+        font-size: 9px;
+        font-weight: bold;
     }
 }

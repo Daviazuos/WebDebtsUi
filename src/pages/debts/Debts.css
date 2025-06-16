@@ -60,4 +60,11 @@
         flex-flow: column;
         
     }
+    .td1 {
+        font-size: 8px;
+    }
+
+    .tr {
+        font-size: 8px;
+    }
 }

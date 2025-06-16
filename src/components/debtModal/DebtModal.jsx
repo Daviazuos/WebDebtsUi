@@ -104,10 +104,10 @@ export default function DebtModal(props) {
     const lis_instalments = installments.map(item => { // Change here, use installments directly
         return (
             <tr key={item.id}>
-                <td>
+                <td className="td1">
                     {item.installmentNumber === 0 ? "Fixa" : item.installmentNumber}
                 </td>
-                <td>
+                <td className="td1">
                     {editMode[item.id] ? (
                         <input
                             type="text"
@@ -118,7 +118,7 @@ export default function DebtModal(props) {
                         `R$ ${decimalAdjust(item.value)}`
                     )}
                 </td>
-                <td>{editMode[item.id] ? (
+                <td className="td1">{editMode[item.id] ? (
                     <input
                         type="date"
                         value={item.date.split('T')[0]}
@@ -128,8 +128,8 @@ export default function DebtModal(props) {
                     `${dateAdjust(item.date)}`
                 )}
                 </td>
-                <td>{statusTransform(item.status)}</td>
-                <td>
+                <td className="td1">{statusTransform(item.status)}</td>
+                <td className="td1">
                     {!editMode[item.id] ? (
                         // Edit icon when not in edit mode
                         <>
@@ -258,7 +258,7 @@ export default function DebtModal(props) {
                                     <div className="installmentModal">
                                         <Table borderless striped responsive hover variant="white" size="lg">
                                             <thead>
-                                                <tr className="trr">
+                                                <tr className="tr">
                                                     <th>Parcela</th>
                                                     <th>Valor</th>
                                                     <th>Data</th>

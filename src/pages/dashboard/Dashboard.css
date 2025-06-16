@@ -12,6 +12,7 @@
     grid-row-end: 3;
     padding: 5px;
     max-width: 780px;
+    border-color: #FFFFFF !important;
 } 
 
 .graphicPagePie {
@@ -20,6 +21,7 @@
     grid-row-start: 2;
     grid-row-end: 4;
     padding: 5px;
+    border-color: #FFFFFF !important;
 }
 
 .valuePerDay {
@@ -42,6 +44,7 @@
 
 .categorieTable {
     padding: 10px;
+    border-color: #FFFFFF !important;
 }
 
 .tableTotal {
@@ -86,6 +89,7 @@
     grid-row-start: 4;
     grid-row-end: 6;
     padding: 5px;
+    border-color: #FFFFFF !important;
 }
 
 .finishingInstallments {
@@ -101,7 +105,11 @@
 .modal-backdrop {
     backdrop-filter: blur(5px); /* Aplica o desfoque no fundo */
     background-color: rgba(0, 0, 0, 0.5) !important; /* Fundo escurecido */
-  }
+}
+
+.custom-icon {
+    font-size: 2rem;
+}
   
 
 @media (max-width: 768px) {
@@ -131,5 +139,13 @@
 
     .card {
         margin-left: 0px;
+    }
+
+    .custom-icon {
+        font-size: 1rem;
+    }
+
+    .finishingInstallments {
+        font-size: 10px;
     }
 }

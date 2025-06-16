@@ -1,9 +1,21 @@
-.graphicName{
+.graphicName {
     margin: 10px;
 }
 
-.cardDashPie{
+.cardDashPie {
     margin: 10px;
     padding: 5px;
     width: 600px;
+}
+
+.skeletonCard {
+    width: 770px;
+    height: 400px;
+}
+
+@media (max-width: 768px) {
+    .skeletonCard {
+        width: 352px;
+        height: 374px;
+    }
 }

@@ -29,11 +29,14 @@ export default class ModalInstallments extends React.Component {
     }
 
     componentDidMount() {
-        axiosInstance.get(Endpoints.wallet.getById(this.props.value))
-            .then(res => {
-                const wallet = res.data
-                this.setState({ wallet })
-            })
+        console.log(this.props.value)
+        if (this.props.value !== undefined) {
+            axiosInstance.get(Endpoints.wallet.getById(this.props.value))
+                .then(res => {
+                    const wallet = res.data
+                    this.setState({ wallet })
+                })
+        }
 
         axiosInstance.get(Endpoints.responsibleParty.getByUser())
             .then(res => {
@@ -106,7 +109,7 @@ export default class ModalInstallments extends React.Component {
             value: this.state.value || this.state.wallet.value,
             walletStatus: this.state.walletStatus || this.state.wallet.walletStatus,
             responsiblePartyId: this.state.checked ? (this.state.responsibleParty || null) : null
-        };    
+        };
 
         if (this.props.value) {
             axiosInstance.put(Endpoints.wallet.put(this.props.value), editWallet).then(response => {
@@ -170,19 +173,11 @@ export default class ModalInstallments extends React.Component {
                                 <Form.Control name='numberOfInstallments' type="number" onChange={this.numberOfInstallmentsChange} placeholder="Entre com o quantidade de parcelas" defaultValue={this.state.wallet.numberOfInstallments} />
                             </Form.Group> : ""}
                         <p></p>
-                        <Form.Check
-                            type="checkbox"
-                            id="custom-switch"
-                            label="Vincular a uma pessoa?"
-                            onChange={this.checkChange}
-                        />
-                        {(this.state.checked === true) ?  <Form.Group className="inputGroup">
-                            <Form.Control name='responsibleParty' onChange={this.responsiblePartyChange} as="select">
-                                {this.state.listResponsibleParty}
-                            </Form.Control>
-                        </Form.Group>: ''}
+                        <Form.Label>Vincular a uma pessoa</Form.Label>
+                        <Form.Control required="true" name='responsibleParty' onChange={this.responsiblePartyChange} as="select">
+                            {this.state.listResponsibleParty}
+                        </Form.Control>
                         <p></p>
-                       
                         <Button variant="dark" type="submit"> {this.props.value ? 'Atualizar' : 'Adicionar'} </Button>
                     </Form>
                 </Modal.Body>

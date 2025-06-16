@@ -48,4 +48,12 @@
     #fontColorsSize {
         font-size: 10px;
     }
+
+    #textSize {
+        display: none;
+    }
+
+    #fontColorsTextSize {
+        font-size: 6px;
+    }
 }

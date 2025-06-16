@@ -21,7 +21,7 @@ export default (props) => {
               <div class="media-body" id="tittleSize">
                 <span id="fontColorsTitleSize">{props.title}</span>
                 <h2 class="mr-2" id="fontColorsSize">R$ {props.children}</h2>
-                {text}
+                <div id="textSize">{text}</div>
               </div>
             </div>
           </div>

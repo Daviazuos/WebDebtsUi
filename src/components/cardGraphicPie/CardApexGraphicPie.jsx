@@ -88,6 +88,11 @@ export default function CardApexGraphicPie(props) {
                                         position: 'bottom',
                                         fontSize: '8px', // Fonte menor
                                     },
+                                    title: {
+                                        style: {
+                                            fontSize: "10px",
+                                        }
+                                    }
                                 }
                             },
                             {
@@ -135,11 +140,11 @@ export default function CardApexGraphicPie(props) {
                     options={graphic.options}
                     series={graphic.series}
                     type="donut"
-                    width={770}
+                    width={765}
                     height={500}
                 />
             ) : (
-                <div style={{ width: 770, height: 400 }}>
+                <div className="skeletonCard">
                     <i
                         style={{
                             display: "flex",

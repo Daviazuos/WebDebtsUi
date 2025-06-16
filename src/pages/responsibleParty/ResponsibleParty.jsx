@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import 'react-circular-progressbar/dist/styles.css';
 
-import { Accordion, Button, Card, Modal, Table } from "react-bootstrap";
+import { Button, Card, Modal, Table } from "react-bootstrap";
 import { decimalAdjust } from "../../utils/valuesFormater";
 import "./ResponsibleParty.css"
 import { axiosInstance } from "../../api";
@@ -28,11 +28,6 @@ function SetModalAddResponsibleParty(props) {
 
 function SeeData(props) {
   const [modalShow, setModalShow] = React.useState(false);
-
-  function updateValuesv2() {
-    setModalShow(false)
-  }
-
   return (
     <>
       <i className="fas fa-search fa-sm" onClick={() => setModalShow(true)} style={{ cursor: 'pointer', color: '#B3B8D4' }}></i>
@@ -70,13 +65,10 @@ function SeeData(props) {
 
 export default function ResponsibleParty() {
   const [data, setData] = React.useState(undefined);
-  const [responsiblePartyList, setResponsiblePartyList] = React.useState(undefined);
   const [dataRP, setDataRP] = React.useState(undefined);
   const [year, setYear] = React.useState(localStorage.getItem("year"))
   const [month, setMonth] = React.useState(localStorage.getItem("month"))
-  const [modalShow, setModalShow] = React.useState(false);
 
-  console.log(month)
   useEffect(() => {
     axiosInstance.get(Endpoints.debt.getDebtresponsibleParties(month, year, undefined))
       .then(res => {
@@ -91,7 +83,7 @@ export default function ResponsibleParty() {
                     <td>R$ {decimalAdjust(valueItem?.installments[0]?.value)}</td>
                   </tr>
                 )
-              })} title='Valores a Pagar'></SeeData></td>
+              })} title={`Valores a Pagar - R$ ${decimalAdjust(item.debtValue)}`}></SeeData></td>
               <td className="td1">R$ {decimalAdjust(item.walletValue)} <SeeData tdData={item.walletAppModels.map(valueItem => {
                 return (
                   <tr>
@@ -99,7 +91,7 @@ export default function ResponsibleParty() {
                     <td>R$ {decimalAdjust(valueItem.value)}</td>
                   </tr>
                 )
-              })} title='Valores a Receber'></SeeData></td>
+              })} title={`Valores a Receber - R$ ${decimalAdjust(item.walletValue)}`}></SeeData></td>
             </tr>
           )
         }));

@@ -115,11 +115,11 @@ export default function Dashboard() {
       if (debts.items[item].numberOfInstallments === debts.items[item].installments[installment].installmentNumber
       ) {
         lis_instalments.push(<tr key={item.id}>
-          <td>{debts.items[item].name}</td>
-          <td>
+          <td className='td1'>{debts.items[item].name}</td>
+          <td className='td1'>
             R$ {decimalAdjust(debts.items[item].installments[installment].value)}
           </td>
-          <td>{debts.items[item].installments[installment].installmentNumber}/{debts.items[item].numberOfInstallments}</td>
+          <td className='td1'>{debts.items[item].installments[installment].installmentNumber}/{debts.items[item].numberOfInstallments}</td>
         </tr>)
         totalFinishing += debts.items[item].installments[installment].value
       }
@@ -217,31 +217,31 @@ export default function Dashboard() {
             <CustomCardSize
               title={day}
               children={decimalAdjust(valorPorDia > 0 ? valorPorDia : 0.00)}
-              icon="fas fa-calendar-day success fa-2x"
+              icon="fas fa-calendar-day success custom-icon"
               text={text}
-              size='380px'
+              size='385px'
             ></CustomCardSize>
             <CustomCardSize
               title={`Parcelamentos acabando`}
               children={decimalAdjust(totalFinishing)}
-              icon="fas fa-calendar-check success fa-2x"
+              icon="fas fa-calendar-check success custom-icon"
               text=""
-              size='380px'
+              size='385px'
             ></CustomCardSize>
           </div> : <div className="valuePerDay">
             <CustomCardSize
               title={day}
               children="0.00"
-              icon="fas fa-calendar-day success fa-2x"
+              icon="fas fa-calendar-day success custom-icon"
               text=""
-              size='380px'
+              size='385px'
             ></CustomCardSize>
             <CustomCardSize
               title={`Parcelamentos acabando`}
               children={decimalAdjust(totalFinishing)}
-              icon="fas fa-calendar-check success fa-2x"
+              icon="fas fa-calendar-check success custom-icon"
               text=""
-              size='380px'
+              size='385px'
             ></CustomCardSize>
 
           </div>}
@@ -251,25 +251,25 @@ export default function Dashboard() {
         <Card className="cardDash">
           <CardApexGraphic></CardApexGraphic>
         </Card>
-        <div style={{ display: "flex" }} className="cardsValues">
+        <div style={{ display: "flex", padding: '0px' }} className="cardsValues">
           <CustomCard
             title="Fixas"
             children={decimalAdjust(fixed)}
-            icon="far fa-calendar blue fa-2x"
+            icon="far fa-calendar blue custom-icon"
             data={fixedValue}
           >
           </CustomCard>
           <CustomCard
             title="Simples"
             children={decimalAdjust(simple)}
-            icon="fas fa-coins blue fa-2x"
+            icon="fas fa-coins blue custom-icon"
             data={simpleValue}
           >
           </CustomCard>
           <CustomCard
             title="Parceladas"
             children={decimalAdjust(installment)}
-            icon="fas fa-credit-card blue fa-2x"
+            icon="fas fa-credit-card blue custom-icon"
             data={installmentValue}
           >
           </CustomCard>
@@ -289,7 +289,7 @@ export default function Dashboard() {
             <div style={{ maxWidth: '570px' }}>
               <Table borderless striped responsive hover variant="black" className="tableTotal" size="sm">
                 <thead>
-                  <tr>
+                  <tr className='tr'>
                     <th>Nome</th>
                     <th>Valor</th>
                     <th>Parcela</th>
