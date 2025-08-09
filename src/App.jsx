@@ -17,6 +17,7 @@ import Goals from "./pages/goals/Goals";
 import CreditCardSelected from "./pages/creditCardSelected/CreditCardSelected";
 import { GlobalProvider } from "./services/local-storage-event";
 import ResponsibleParty from "./pages/responsibleParty/ResponsibleParty";
+import GanttGraphic from "./components/ganttGraphic/GanttGraphic";
 
 export function logout() {
     localStorage.removeItem("user");
@@ -39,6 +40,7 @@ export function isLogged() {
                     <Route path="/Goals" component={Goals} />
                     <Route path="/ResponsibleParty" component={ResponsibleParty} />
                     <Route path="/CreditCardSelected/:cardId" component={CreditCardSelected} />
+                    <Route path="/InstallmentsDash" component={GanttGraphic} />
                 </div>
             </Layout>
         )

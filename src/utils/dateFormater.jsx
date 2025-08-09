@@ -59,6 +59,11 @@ export function addMonthsToDate(date, months) {
   return dateParsed;
 }
 
+export function addMonthsToDateReturnDate(date, months) {
+  const dateParsed = new Date(date)
+  return new Date(dateParsed.setMonth(dateParsed.getMonth() + parseInt(months -1)));
+}
+
 export function addMonthsToMonth(month, months) { 
   if (month == 12) {
     return 1

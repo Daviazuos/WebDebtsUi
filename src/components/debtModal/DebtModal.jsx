@@ -198,6 +198,8 @@ export default function DebtModal(props) {
             <Modal
                 show={modalShow}
                 size='lg'
+                fullscreen="md-down"
+                className="modalCustom"
                 aria-labelledby="contained-modal-title-vcenter"
                 onHide={() => setModalShow(false)}
             >
@@ -216,7 +218,7 @@ export default function DebtModal(props) {
                                 <Tab key={'Detalhes'} eventKey={'Detalhes'} title={'Detalhes'}>
                                     <div className="debtModal">
                                         <Container>
-                                            <Form>
+                                            <Form className="formModal">
                                                 <Form.Group className="mb-3" controlId="formBasicEmail">
                                                     <Form.Label>Valor Total</Form.Label>
                                                     <Form.Control disabled type="text" defaultValue={`R$ ${decimalAdjust(debt?.value)}`} />
