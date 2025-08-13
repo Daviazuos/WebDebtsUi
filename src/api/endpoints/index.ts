@@ -4,6 +4,7 @@ import { WalletsEndpoinst } from '../endpoints/wallet.endpoints';
 import { SpendingCeiling } from '../endpoints/spendingCeiling.endpoints';
 import { UserEndpoints } from './user.endpoints';
 import { ResponsibleParty } from './responsibleParty.endpoints';
+import { Planner } from './planner.endpoint';
 
 export class Endpoints {
   static card = new CardsEndpoints();
@@ -12,4 +13,5 @@ export class Endpoints {
   static user = new UserEndpoints();
   static spendingCeiling = new SpendingCeiling();
   static responsibleParty = new ResponsibleParty();
+  static planer = new Planner()
 }

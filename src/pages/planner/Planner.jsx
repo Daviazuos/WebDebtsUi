@@ -14,33 +14,19 @@ import { Endpoints } from '../../api/endpoints';
 import { axiosInstance } from '../../api';
 import MaskedFormControl from '../../utils/maskedInputs';
 import { decimalAdjust } from '../../utils/valuesFormater';
-
-
-const FREQUENCIA_CONFIG = {
-  diario: 30,
-  semanal: 4,
-  quinzenal: 2,
-  mensal: 1
-};
+import { translateFrequency } from '../../utils/utils';
 
 export default function Planner() {
   const [planejamento, setPlanejamento] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [frequencia, setFrequencia] = useState('semanal');
+  const [year, setYear] = useState(localStorage.getItem('year'));
+  const [month, setMonth] = useState(localStorage.getItem('month'));
 
   const [novaCategoria, setNovaCategoria] = useState('');
   const [novoValor, setNovoValor] = useState('');
   const [blocoSelecionado, setBlocoSelecionado] = useState(null);
   const [list_categories, setlist_categories] = useState([]);
-
-  const gerarBlocos = (frequencia) => {
-    const quantidade = FREQUENCIA_CONFIG[frequencia] || 1;
-    return Array.from({ length: quantidade }, (_, index) => ({
-      id: index + 1,
-      categorias: []
-    }));
-  };
-
 
   useEffect(() => {
     axiosInstance.get(Endpoints.debt.getCategories())
@@ -49,7 +35,7 @@ export default function Planner() {
 
         const lis = categories.map(item => {
           return (
-            <option value={item.name}>{item.name}</option>
+            <option value={item.id}>{item.name}</option>
           )
         })
         lis.unshift(<option value="">Escolha uma categoria</option>)
@@ -58,11 +44,28 @@ export default function Planner() {
   }, [])
 
   const handleAdicionarPlanejamento = () => {
-    const novoPlanejamento = {
-      frequencia,
-      blocos: gerarBlocos(frequencia)
-    };
-    setPlanejamento(novoPlanejamento);
+    const requestData = {
+      frequency: frequencia,
+      month: month,
+      year: year
+    }
+
+    axiosInstance.post(Endpoints.planer.add(), requestData).then(res => {
+      setPlanejamento({
+        frequencia: translateFrequency(res.data.frequency),
+        blocos: res.data.plannerFrequencies.map((freq, index) => ({
+          id: freq.id,
+          idBloco: index + 1,
+          categorias: freq.plannerCategories.map(cat => ({
+            nome: cat.name,
+            orcado: cat.budgetedAmount,
+            gasto: 0
+          }))
+        }))
+      });
+    }).catch(err => {
+      console.error('Erro ao criar planejamento:', err);
+    });
     setShowModal(false);
   };
 
@@ -72,40 +75,86 @@ export default function Planner() {
     setNovoValor('');
   };
 
-  const handleAdicionarCategoria = () => {
-    if (!novaCategoria || !novoValor) return;
+  // const handleAdicionarCategoria = () => {
+  //   if (!novaCategoria || !novoValor) return;
 
-    const novaCat = {
-      nome: novaCategoria,
-      orcado: Number(novoValor),
-      gasto: 0
+  //   const novaCat = {
+  //     nome: novaCategoria,
+  //     orcado: Number(novoValor),
+  //     gasto: 0
+  //   };
+
+  //   console.log('Adicionando categoria:', novaCat);
+
+  //   const atualizado = { ...planejamento };
+
+  //   atualizado.blocos = atualizado.blocos.map((bloco) => {
+  //     const jaExiste = bloco.categorias.some(cat => cat.nome === novaCategoria);
+  //     if (!jaExiste) {
+  //       return {
+  //         ...bloco,
+  //         categorias: [...bloco.categorias, { ...novaCat }]
+  //       };
+  //     }
+  //     return bloco;
+  //   });
+
+  //   setPlanejamento(atualizado);
+  //   setNovaCategoria('');
+  //   setNovoValor('');
+  //   setBlocoSelecionado(null);
+  // };
+
+  const handleAdicionarCategoria = () => {
+    if (!novaCategoria || !novoValor || !blocoSelecionado) return;
+
+    const bloco = planejamento.blocos.find((b) => b.id === blocoSelecionado);
+    if (!bloco) return;
+
+    const plannerFrequencyId = bloco.id; // ID do bloco selecionado
+    const payload = {
+      debtCategoryId: novaCategoria,
+      budgetedValue: Number(novoValor),
     };
 
-    console.log(novaCat)
+    axiosInstance
+      .put(Endpoints.planer.AddCategory(plannerFrequencyId), payload)
+      .then((res) => {
+        console.log('Categoria adicionada com sucesso:', res.data);
 
-    const atualizado = { ...planejamento };
-
-    // Adiciona em todos os blocos, menos se já existir essa categoria
-    atualizado.blocos = atualizado.blocos.map((bloco) => {
-      const jaExiste = bloco.categorias.some(cat => cat.nome === novaCategoria);
-      if (!jaExiste) {
-        return {
-          ...bloco,
-          categorias: [...bloco.categorias, { ...novaCat }]
+        const novaCat = {
+          nome: novaCategoria,
+          orcado: Number(novoValor),
+          gasto: 0,
         };
-      }
-      return bloco;
-    });
 
-    setPlanejamento(atualizado);
-    setNovaCategoria('');
-    setNovoValor('');
-    setBlocoSelecionado(null);
+        const atualizado = { ...planejamento };
+        atualizado.blocos = atualizado.blocos.map((bloco) => {
+          if (bloco.id === blocoSelecionado) {
+            const jaExiste = bloco.categorias.some((cat) => cat.nome === novaCategoria);
+            if (!jaExiste) {
+              return {
+                ...bloco,
+                categorias: [...bloco.categorias, { ...novaCat }],
+              };
+            }
+          }
+          return bloco;
+        });
+
+        setPlanejamento(atualizado);
+        setNovaCategoria('');
+        setNovoValor('');
+        setBlocoSelecionado(null);
+      })
+      .catch((err) => {
+        console.error('Erro ao adicionar categoria:', err);
+      });
   };
 
   return (
     <>
-      <div style={{display: 'flex', flexDirection: 'column'}}>
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
         <span id="PagesTitle">Planejamento Mensal</span>
         <p></p>
         {!planejamento && (
@@ -127,10 +176,10 @@ export default function Planner() {
               value={frequencia}
               onChange={(e) => setFrequencia(e.target.value)}
             >
-              <option value="diario">Diário</option>
-              <option value="semanal">Semanal</option>
-              <option value="quinzenal">Quinzenal</option>
-              <option value="mensal">Mensal</option>
+              <option value="daily">Diário</option>
+              <option value="weekly">Semanal</option>
+              <option value="biweekly">Quinzenal</option>
+              <option value="monthly">Mensal</option>
             </Form.Select>
           </Form.Group>
         </Modal.Body>
@@ -171,7 +220,7 @@ export default function Planner() {
       {/* Exibição de Blocos */}
       {planejamento && (
         <Row>
-          {planejamento.blocos.map((bloco, blocoIdx) => (
+          {planejamento.blocos.map((bloco) => (
             <Col md={6} key={bloco.id} className="mb-4">
               <Card>
                 <Card.Header className="d-flex justify-content-between align-items-center">
@@ -184,7 +233,7 @@ export default function Planner() {
                   <Button
                     variant="outline-primary"
                     size="sm"
-                    onClick={() => handleAbrirModalCategoria(blocoIdx)}
+                    onClick={() => handleAbrirModalCategoria(bloco.id)}
                   >
                     + Categoria
                   </Button>
