@@ -22,6 +22,7 @@ export default function Planner() {
   const [frequencia, setFrequencia] = useState('semanal');
   const [year, setYear] = useState(localStorage.getItem('year'));
   const [month, setMonth] = useState(localStorage.getItem('month'));
+  const [categoryName, setCategoryName] = useState('');
 
   const [novaCategoria, setNovaCategoria] = useState('');
   const [novoValor, setNovoValor] = useState('');
@@ -35,7 +36,7 @@ export default function Planner() {
 
         const lis = categories.map(item => {
           return (
-            <option value={item.id}>{item.name}</option>
+            <option value={item.id} data-nome={item.name}>{item.name}</option>
           )
         })
         lis.unshift(<option value="">Escolha uma categoria</option>)
@@ -75,81 +76,52 @@ export default function Planner() {
     setNovoValor('');
   };
 
-  // const handleAdicionarCategoria = () => {
-  //   if (!novaCategoria || !novoValor) return;
+  const handleAdicionarCategoria = async () => {
+    if (!novaCategoria || !novoValor) return;
 
-  //   const novaCat = {
-  //     nome: novaCategoria,
-  //     orcado: Number(novoValor),
-  //     gasto: 0
-  //   };
+    const blocos = planejamento.blocos;
+    const promises = blocos.map((bloco) => {
+      const plannerFrequencyId = bloco.id;
+      const payload = {
+        debtCategoryId: novaCategoria,
+        budgetedValue: Number(novoValor),
+      };
+      return axiosInstance.put(Endpoints.planer.AddCategory(plannerFrequencyId), payload);
+    });
 
-  //   console.log('Adicionando categoria:', novaCat);
+    try {
+      await Promise.all(promises);
 
-  //   const atualizado = { ...planejamento };
+      // Atualiza o planejamento após todas as requisições
+      const novaCat = {
+        nome: categoryName,
+        orcado: Number(novoValor),
+        gasto: 0
+      };
 
-  //   atualizado.blocos = atualizado.blocos.map((bloco) => {
-  //     const jaExiste = bloco.categorias.some(cat => cat.nome === novaCategoria);
-  //     if (!jaExiste) {
-  //       return {
-  //         ...bloco,
-  //         categorias: [...bloco.categorias, { ...novaCat }]
-  //       };
-  //     }
-  //     return bloco;
-  //   });
+      console.log(novaCat);
 
-  //   setPlanejamento(atualizado);
-  //   setNovaCategoria('');
-  //   setNovoValor('');
-  //   setBlocoSelecionado(null);
-  // };
-
-  const handleAdicionarCategoria = () => {
-    if (!novaCategoria || !novoValor || !blocoSelecionado) return;
-
-    const bloco = planejamento.blocos.find((b) => b.id === blocoSelecionado);
-    if (!bloco) return;
-
-    const plannerFrequencyId = bloco.id; // ID do bloco selecionado
-    const payload = {
-      debtCategoryId: novaCategoria,
-      budgetedValue: Number(novoValor),
-    };
-
-    axiosInstance
-      .put(Endpoints.planer.AddCategory(plannerFrequencyId), payload)
-      .then((res) => {
-        console.log('Categoria adicionada com sucesso:', res.data);
-
-        const novaCat = {
-          nome: novaCategoria,
-          orcado: Number(novoValor),
-          gasto: 0,
-        };
-
-        const atualizado = { ...planejamento };
-        atualizado.blocos = atualizado.blocos.map((bloco) => {
-          if (bloco.id === blocoSelecionado) {
-            const jaExiste = bloco.categorias.some((cat) => cat.nome === novaCategoria);
-            if (!jaExiste) {
-              return {
-                ...bloco,
-                categorias: [...bloco.categorias, { ...novaCat }],
-              };
-            }
-          }
-          return bloco;
-        });
-
-        setPlanejamento(atualizado);
-        setNovaCategoria('');
-        setNovoValor('');
-        setBlocoSelecionado(null);
-      })
-      .catch((err) => {
-        console.error('Erro ao adicionar categoria:', err);
+      const atualizado = { ...planejamento };
+      atualizado.blocos = atualizado.blocos.map((bloco) => {
+        const jaExiste = bloco.categorias.some((cat) => cat.nome === categoryName);
+        if (!jaExiste) {
+          return {
+            ...bloco,
+            categorias: [...bloco.categorias, { ...novaCat }],
+          };
+        }
+        return bloco;
       });
+
+      setPlanejamento(atualizado);
+      setNovaCategoria('');
+      setNovoValor('');
+      setBlocoSelecionado(null);
+    } catch (err) {
+      console.error('Erro ao adicionar categoria:', err);
+    }
+
+    console.log(novaCategoria)
   };
 
   return (
@@ -199,7 +171,13 @@ export default function Planner() {
             <Form.Label>Categoria</Form.Label>
             <Form.Select
               value={novaCategoria}
-              onChange={(e) => setNovaCategoria(e.target.value)}
+              onChange={(e) => {
+                setNovaCategoria(e.target.value);
+                // Se quiser pegar o nome da categoria selecionada:
+                const selectedOption = e.target.options[e.target.selectedIndex];
+                // Você pode salvar esse nome em outro state se quiser
+                setCategoryName(selectedOption.getAttribute('data-nome'));
+              }}
             >
               {list_categories}
             </Form.Select>
