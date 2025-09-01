@@ -17,7 +17,7 @@ import MaskedFormControl from '../../utils/maskedInputs';
 import { decimalAdjust } from '../../utils/valuesFormater';
 import { translateFrequency } from '../../utils/utils';
 import dayjs from 'dayjs'; // Instale: npm install dayjs
-import { dateAdjust, formatDate } from '../../utils/dateFormater';
+import { dateAdjust, dateFromDatetime, formatDate, formatDateBrazilian } from '../../utils/dateFormater';
 
 export default function Planner() {
   const [planejamento, setPlanejamento] = useState(null);
@@ -239,10 +239,10 @@ export default function Planner() {
     const bloco = blocoAtualizado.blocos.find(bloco => bloco.id === plannerFrequencyId);
     if (!bloco) return;
     if (field === 'start') {
-      bloco.start = valor;
+      bloco.start = valor + 'T00:00:00';
     }
     if (field === 'end') {
-      bloco.end = valor;
+      bloco.end = valor + 'T00:00:00';
     }
     setPlanejamento(blocoAtualizado);
   }
@@ -273,6 +273,7 @@ export default function Planner() {
       start: bloco.start,
       end: bloco.end,
     };
+    console.log(blocoAtualizado)
     axiosInstance.put(Endpoints.planer.updateFrequency(plannerFrequencyId), payload)
       .then(() => {
         setPlanejamento(blocoAtualizado);
@@ -489,6 +490,15 @@ export default function Planner() {
         </Row>
       </>
 
+      <Button
+        size="sm"
+        onClick={() => handleAbrirModalCategoria(1)}
+        style={{ marginLeft: '10px' ,backgroundColor: "#1A4173", borderColor: "#1A4173" }} 
+        variant='dark'
+      >
+        + Categoria
+      </Button>
+
       {/* Exibição de Blocos */}
       {planejamento && (
         <Row>
@@ -506,25 +516,16 @@ export default function Planner() {
                   <>
                     {editModeFrequency[bloco.id] ? (
                       <>
-                        <Form.Control required="true" name='date' type="date" onChange={(e) => handleEditChangeFrequency(e, bloco.id, 'start')} defaultValue={dateAdjust(bloco.start)}  />
-                        <Form.Control required="true" name='date' type="date" onChange={(e) => handleEditChangeFrequency(e, bloco.id, 'end')} defaultValue={dateAdjust(bloco.end)}  />
+                        <Form.Control required="true" name='date' type="date" onChange={(e) => handleEditChangeFrequency(e, bloco.id, 'start')} defaultValue={dateFromDatetime(bloco.start)} />
+                        <Form.Control required="true" name='date' type="date" onChange={(e) => handleEditChangeFrequency(e, bloco.id, 'end')} defaultValue={dateFromDatetime(bloco.end)} />
                         <i className="fas fa-check" onClick={() => handleSaveEditFrequency(bloco.id)} style={{ cursor: 'pointer', marginRight: '5px' }}></i>
                       </>
                     ) : (
                       <>
-                        {formatDate(bloco.start)} - {formatDate(bloco.end)}
+                        {formatDateBrazilian(bloco.start)} - {formatDateBrazilian(bloco.end)}
                       </>
                     )}
                   </>
-
-
-                  <Button
-                    variant="outline-primary"
-                    size="sm"
-                    onClick={() => handleAbrirModalCategoria(bloco.id)}
-                  >
-                    + Categoria
-                  </Button>
                   <i className="fas fa-pencil-alt" onClick={() => toggleEditModeFrequency(bloco.id)} style={{ cursor: 'pointer', marginLeft: '5px' }}></i>
                   <i className="fas fa-trash" onClick={() => handleDeletePlannerFrequency(bloco.id)} style={{ cursor: 'pointer', marginLeft: '5px' }}></i>
                 </Card.Header>

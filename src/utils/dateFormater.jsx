@@ -88,3 +88,25 @@ export function addOrRemoveMonth(number, month) {
   }
   return response 
 }
+
+export function dateFromDatetime(t) {
+  if (t != null){
+      const dateParsed = new Date(t)
+      const date = ('0' + dateParsed.getDate()).slice(-2);
+      const month = ('0' + (dateParsed.getMonth() + 1)).slice(-2);
+      const year = dateParsed.getFullYear();
+      return `${year}-${month}-${date}`;
+  }
+}
+
+export function formatDateBrazilian(date) {
+  var d = new Date(date),
+      month = '' + (d.getMonth() + 1),
+      day = '' + d.getDate(),
+      year = d.getFullYear();
+  if (month.length < 2)
+      month = '0' + month;
+  if (day.length < 2)
+      day = '0' + day;    
+  return [day, month, year].join('/');
+}
