@@ -1,3 +1,4 @@
+import { Endpoints } from '.';
 import { AbstractEndpoints } from './abstract.endpoints';
 
 export class DebtsEndpoints extends AbstractEndpoints {
@@ -12,8 +13,13 @@ export class DebtsEndpoints extends AbstractEndpoints {
     return `${this.getURL()}/GetDebtById?Id=${id}`;
   }
 
-  getDebtCategories(month: string, year: string, cardId: string | null) {
-    const url = (cardId === undefined) ? `${this.getURL()}/GetDebtCategories?Month=${month}&Year=${year}` : `${this.getURL()}/GetDebtCategories?Month=${month}&Year=${year}&CardId=${cardId}`
+  getDebtCategories(month: string, year: string, cardId: string | null, startDate?: string | null, finishDate?: string | null) {
+    let url = (cardId === undefined) ? `${this.getURL()}/GetDebtCategories?Month=${month}&Year=${year}` : 
+                                         `${this.getURL()}/GetDebtCategories?Month=${month}&Year=${year}&CardId=${cardId}`
+    if (startDate && finishDate) {
+      url = url.concat(`&StartDate=${startDate}&EndDate=${finishDate}`)
+    }
+    
     return url
   }
 

@@ -109,6 +109,11 @@ function Sidebar(props) {
                             Finanças<Link to="/financial" />
                         </MenuItem>
                         <MenuItem
+                            icon={<FaIcons.FaBalanceScale />}
+                        >
+                            Planejamento<Link to="/planner" />
+                        </MenuItem>
+                        <MenuItem
                             icon={<FaIcons.FaHandHoldingUsd />}
                         >
                             Dívidas<Link to="/debts" />

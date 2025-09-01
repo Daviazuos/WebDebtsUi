@@ -19,4 +19,24 @@ export class Planner extends AbstractEndpoints {
   AddCategory(plannerFrequencyId: string) {
     return `${this.getURL()}/frequency/${plannerFrequencyId}/categories`;
   }
+
+  getByMonthYear(month: number, year: number) {
+    return `${this.getURL()}/user/month/${month}/year/${year}`;
+  }
+
+  updateCategory(plannerCategoryId: string) {
+    return `${this.getURL()}/category/${plannerCategoryId}/budget`;
+  }
+
+  deleteCategory(plannerCategoryId: string) {
+    return `${this.getURL()}/category/${plannerCategoryId}`;
+  }
+
+  deleteFrequency(plannerFrequencyId: string) {
+    return `${this.getURL()}/frequency/${plannerFrequencyId}`;
+  }
+
+  updateFrequency(plannerFrequencyId: string) {
+    return `${this.getURL()}/frequency/${plannerFrequencyId}/dates`;
+  }
 }

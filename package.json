@@ -12,6 +12,7 @@
     "apexcharts": "^4.5.0",
     "axios": "^0.21.1",
     "bootstrap": "5.3.3",
+    "dayjs": "^1.11.18",
     "express": "^4.17.2",
     "express-favicon": "^2.0.1",
     "jwt-decode": "^3.1.2",
