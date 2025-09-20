@@ -54,8 +54,8 @@ export function addYearsToDate(date, years) {
   return formatDate(dateParsed.setFullYear(dateParsed.getFullYear() + parseInt(years)));
 }
 
-export function addMonthsToDate(date, months) {
-  const dateParsed = moment(date).add(parseInt(months), 'months').format('DD/MM/YYYY');
+export function addMonthsToDate(date, months, format='DD/MM/YYYY') {
+  const dateParsed = moment(date).add(parseInt(months), 'months').format(format);
   return dateParsed;
 }
 

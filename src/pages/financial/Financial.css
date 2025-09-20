@@ -52,13 +52,18 @@
     position: absolute;
     color: #333;
     margin-top: 6px;
+
+    white-space: nowrap;
+    width: 29em;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .debt-value {
     text-align: right;
     font-size: 18px;
     font-weight: bold;
-    color: #546E7A;    
+    color: #546E7A;
     margin-top: 13px;
 }
 
@@ -158,9 +163,11 @@
         height: 700px;
         padding: 10px;
     }
-    
+
     .debt-name {
         font-size: 12px;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
 }
