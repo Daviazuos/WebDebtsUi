@@ -11,6 +11,8 @@ import { monthByNumber } from "../../utils/dateFormater";
 import { refreshPage } from "../../utils/utils";
 import { useGlobalContext } from "../../services/local-storage-event";
 import CustomCardSize from "../customCardSize/CustomCardSize";
+import { PieChart } from "lucide-react";
+import { useProvisionedValue } from "../../context/ProvisionedValueContext";
 
 
 export default function CardLayout() {
@@ -19,6 +21,7 @@ export default function CardLayout() {
     const [month, setMonth] = useState(localStorage.getItem("month"))
     const [year, setYear] = useState(localStorage.getItem("year"))
     const { sharedValue } = useGlobalContext();
+    const { provisionedValue, setProvisionedValue } = useProvisionedValue();
 
     useEffect(() => {
         axiosInstance.get(Endpoints.wallet.getEnable(month, year))
@@ -45,13 +48,14 @@ export default function CardLayout() {
         return prev + cur.value;
     }, 0);
 
-    const provisionedValue = valueTotal - sumAllValue.items?.reduce(function (prev, cur) {
-        return prev + cur.value;
-    }, 0).toFixed(2);
+    useEffect(() => {
+        const calculatedValue = valueTotal - (sumAllValue.items?.reduce((prev, cur) => prev + cur.value, 0) || 0);
+        setProvisionedValue(Number(calculatedValue.toFixed(2)));
+    }, [valueTotal, sumAllValue, setProvisionedValue]);
 
-    localStorage.setItem("provisionedValue", provisionedValue);
+    const provisionedValueToShow = provisionedValue || 0;
 
-    let balanceColor = provisionedValue < 0? "fas fa-balance-scale red custom-icon":"fas fa-balance-scale success custom-icon"
+    let balanceColor = provisionedValueToShow < 0 ? "fas fa-balance-scale red custom-icon" : "fas fa-balance-scale success custom-icon"
 
 
     const sumAll = sumAllValue.items?.reduce(function (prev, cur) {
@@ -71,12 +75,12 @@ export default function CardLayout() {
                 localStorage.setItem("year", parseInt(year) + 1);
                 localStorage.setItem("month", 1)
             } else {
-                localStorage.setItem("month", parseInt(month)+1);
+                localStorage.setItem("month", parseInt(month) + 1);
 
             }
         }
         refreshPage()
-        
+
     }
 
     let cardSize = "310px"
@@ -84,10 +88,21 @@ export default function CardLayout() {
 
     return (
         <div className="containerWallet">
-            <div id="linha">
+            {/* <div id="linha">
                 <i onClick={() => selectNewMonth("left")} style={{cursor: 'pointer', color: '#B3B8D4'}} class={"fas fa-chevron-left"}></i> 
                 <div style={{minWidth: '250px', display: 'flex', justifyContent: 'center'}}>{monthByNumber(month)} - {year}</div>
                 <i style={{cursor: 'pointer', color: '#B3B8D4'}} onClick={() => selectNewMonth("right")} class={"fas fa-chevron-right"}></i>
+            </div> */}
+            <div className="flex items-center gap-2">
+                <PieChart className="h-8 w-8 text-primary" />
+                <div>
+                    <h1 className="text-2xl font-bold">Planejamento Financeiro</h1>
+                    <div className="flex items-center gap-4">
+                        <i onClick={() => selectNewMonth("left")} style={{ cursor: 'pointer', color: '#B3B8D4' }} class={"fas fa-chevron-left"}></i>
+                        <p className="text-sm text-muted-foreground capitalize">{monthByNumber(month)} {year}</p>
+                        <i style={{ cursor: 'pointer', color: '#B3B8D4' }} onClick={() => selectNewMonth("right")} class={"fas fa-chevron-right"}></i>
+                    </div>
+                </div>
             </div>
             <div className="walletCards">
                 <CustomCardSize
@@ -106,7 +121,7 @@ export default function CardLayout() {
                 </CustomCardSize>
                 <CustomCardSize
                     title="Saldo Atual"
-                    children={decimalAdjust(provisionedValue)}
+                    children={decimalAdjust(provisionedValueToShow)}
                     icon={balanceColor}
                     size={cardSize}
                 >

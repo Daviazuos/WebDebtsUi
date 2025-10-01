@@ -95,7 +95,7 @@ export default function Planner() {
   useEffect(() => {
     if (updated === false) return;
     planejamento.blocos.forEach(bloco => {
-      axiosInstance.get(Endpoints.debt.getDebtCategories(month, year, undefined, bloco.start, bloco.end))
+      axiosInstance.get(Endpoints.debt.getDebtCategories(month, year, null, bloco.start, bloco.end))
         .then(res => {
           const lis = res.data.map(item => {
             return ({ name: item.name, valueTotal: item.value })

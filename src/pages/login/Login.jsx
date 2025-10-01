@@ -6,10 +6,11 @@ import React from "react";
 import "./Login.css"
 import { refreshPage } from "../../utils/utils";
 import LoadingButton from '../../components/loadingButton/LoadingButton';
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 
 export default function Login(props) {
+    const navigate = useNavigate();
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [isLoading, setIsLoading] = React.useState(false);
@@ -39,7 +40,7 @@ export default function Login(props) {
                 localStorage.setItem("user", JSON.stringify(response.data));
                 localStorage.setItem("month", actualMonth);
                 localStorage.setItem("year", actualYear);
-                props.history.push("/");
+                navigate("/");
                 setIsLoading(false)
                 refreshPage()
             }).catch(err => {

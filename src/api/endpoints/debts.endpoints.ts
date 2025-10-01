@@ -13,7 +13,7 @@ export class DebtsEndpoints extends AbstractEndpoints {
     return `${this.getURL()}/GetDebtById?Id=${id}`;
   }
 
-  getDebtCategories(month: string, year: string, cardId: string | null, startDate?: string | null, finishDate?: string | null) {
+  getDebtCategories(month: string | null, year: string | null, cardId: string | null, startDate?: string | null, finishDate?: string | null) {
     let url = (cardId === undefined) ? `${this.getURL()}/GetDebtCategories?Month=${month}&Year=${year}` : 
                                          `${this.getURL()}/GetDebtCategories?Month=${month}&Year=${year}&CardId=${cardId}`
     if (startDate && finishDate) {

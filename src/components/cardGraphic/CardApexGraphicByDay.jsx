@@ -12,7 +12,7 @@ export default function CardApexGraphicByDay() {
     const month = localStorage.getItem("month");
 
     const fetchMonthData = async (month, year) => {
-        const response = await axiosInstance.get(Endpoints.debt.getDebtCategories(month, year, undefined));
+        const response = await axiosInstance.get(Endpoints.debt.getDebtCategories(month, year));
         return response.data;
     };
 

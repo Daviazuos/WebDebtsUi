@@ -12,7 +12,7 @@ import {
     SidebarFooter,
     SidebarContent,
 } from "react-pro-sidebar";
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import "./Sidebar.css"
 
 
@@ -26,11 +26,11 @@ function Sidebar(props) {
     const [month, setMonth] = React.useState(localStorage.getItem("month") ? localStorage.getItem("month") : actualMonth)
     const [year, setYear] = React.useState(localStorage.getItem("year"));
 
-    const history = useHistory();
+    const navigate = useNavigate();
 
     function logout() {
         localStorage.removeItem("user");
-        history.push('/')
+        navigate('/');
         refreshPage()
     }
 

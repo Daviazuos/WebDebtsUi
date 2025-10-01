@@ -52,7 +52,7 @@
     position: absolute;
     color: #333;
     margin-top: 6px;
-
+    text-align: justify;
     white-space: nowrap;
     width: 29em;
     overflow: hidden;

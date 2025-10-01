@@ -6,7 +6,7 @@ import Register from "./pages/register/Register";
 import CreditCard from "./pages/creditCard/CreditCard";
 import authService from "./services/auth.service";
 import { monthByNumber } from "./utils/dateFormater";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Navbar from './components/navbar/Navbar'
 import Dashboard from "./pages/dashboard/Dashboard";
 import Context from "./context/Context";
@@ -17,8 +17,9 @@ import Goals from "./pages/goals/Goals";
 import CreditCardSelected from "./pages/creditCardSelected/CreditCardSelected";
 import { GlobalProvider } from "./services/local-storage-event";
 import ResponsibleParty from "./pages/responsibleParty/ResponsibleParty";
-import GanttGraphic from "./components/ganttGraphic/GanttGraphic";
 import Planner from "./pages/planner/Planner";
+import PlannerV2 from "./pages/plannerV2/Planner";
+import { ProvisionedValueProvider } from "./context/ProvisionedValueContext";
 
 export function logout() {
     localStorage.removeItem("user");
@@ -26,37 +27,19 @@ export function logout() {
     localStorage.removeItem("year");
 }
 
-
-export function isLogged() {
+function PrivateRoutes({ children }) {
     const user = authService.getCurrentUser();
-    if (user) {
-        return (
-            <Layout>
-                <div className="app2">
-                    <Route exact path="/" component={Dashboard} />
-                    <Route path="/Debts" component={Debts} />
-                    <Route path="/Cards" component={CreditCard} />
-                    <Route path="/Financial" component={Financial} />
-                    <Route path="/Wallet" component={Wallet} />
-                    <Route path="/Goals" component={Goals} />
-                    <Route path="/ResponsibleParty" component={ResponsibleParty} />
-                    <Route path="/CreditCardSelected/:cardId" component={CreditCardSelected} />
-                    <Route path="/InstallmentsDash" component={GanttGraphic} />
-                    <Route path="/Planner" component={Planner} />
-                </div>
-            </Layout>
-        )
+    if (!user) {
+        logout();
+        return <Navigate to="/sign-in" replace />;
     }
-    else {
-        logout()
-        return (
-            <div>
-                <Route exact path="/sign-in" component={Login} />
-                <Route exact path="/" component={Login} />
-                <Route path="/Register" component={Register} />
+    return (
+        <Layout>
+            <div className="app2">
+                {children}
             </div>
-        )
-    }
+        </Layout>
+    );
 }
 
 export default function App() {
@@ -64,12 +47,34 @@ export default function App() {
     return (
         <GlobalProvider>
             <Router>
-                <Switch>
-                    <Context.Provider value={[isAltered, setIsAltered]}>
-                        {isLogged()}
-                    </Context.Provider>
-                </Switch>
+                <Context.Provider value={[isAltered, setIsAltered]}>
+                    <ProvisionedValueProvider>
+                        <Routes>
+                            {/* Rotas públicas */}
+                            <Route path="/sign-in" element={<Login />} />
+                            <Route path="/Register" element={<Register />} />
+                            {/* Rotas privadas */}
+                            <Route path="/*" element={
+                                <PrivateRoutes>
+                                    <Routes>
+                                        <Route path="/" element={<Dashboard />} />
+                                        <Route path="/Debts" element={<Debts />} />
+                                        <Route path="/Cards" element={<CreditCard />} />
+                                        <Route path="/Financial" element={<Financial />} />
+                                        <Route path="/Wallet" element={<Wallet />} />
+                                        <Route path="/Goals" element={<Goals />} />
+                                        <Route path="/ResponsibleParty" element={<ResponsibleParty />} />
+                                        <Route path="/CreditCardSelected/:cardId" element={<CreditCardSelected />} />
+                                        <Route path="/Planner" element={<Planner />} />
+                                        <Route path="/PlannerV2" element={<PlannerV2 />} />
+                                    </Routes>
+                                </PrivateRoutes>
+                            } />
+                        </Routes>
+                    </ProvisionedValueProvider>
+                </Context.Provider>
             </Router>
-        </GlobalProvider>)
+        </GlobalProvider>
+    );
 }
 

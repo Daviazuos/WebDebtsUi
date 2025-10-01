@@ -20,7 +20,7 @@ export class Planner extends AbstractEndpoints {
     return `${this.getURL()}/frequency/${plannerFrequencyId}/categories`;
   }
 
-  getByMonthYear(month: number, year: number) {
+  getByMonthYear(month: string | null, year: string | null) {
     return `${this.getURL()}/user/month/${month}/year/${year}`;
   }
 

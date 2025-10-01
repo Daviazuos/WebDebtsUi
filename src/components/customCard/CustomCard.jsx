@@ -3,8 +3,7 @@ import DashModal from "../../pages/dashboard/DashModal";
 import "./CustomCard.css"
 
 
-// eslint-disable-next-line import/no-anonymous-default-export
-export default (props) => {
+const CustomCard = (props) => {
   const [modalShow, setModalShow] = React.useState(false);
 
   return (
@@ -34,3 +33,5 @@ export default (props) => {
     </div>
   );
 };
+
+export default CustomCard;
