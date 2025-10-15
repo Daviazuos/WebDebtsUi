@@ -83,7 +83,7 @@ export default function CardLayout() {
 
     }
 
-    let cardSize = "310px"
+    let cardSize = "295px"
 
 
     return (

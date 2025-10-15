@@ -13,7 +13,6 @@ import { Endpoints } from '../../api/endpoints';
 import { translateFrequency } from '../../utils/utils';
 import { useProvisionedValue } from "../../context/ProvisionedValueContext";
 
-// Mock data interfaces (replace with your actual API types)
 interface Category {
   id: string;
   nome: string;
@@ -41,7 +40,6 @@ export default function PlannerV2() {
   const { provisionedValue } = useProvisionedValue();
 
 
-  // State management
   const [planejamento, setPlanejamento] = useState<Planning | null>(null);
   const [showPlannerModal, setShowPlannerModal] = useState(false);
   const [showCategoryModal, setShowCategoryModal] = useState(false);
@@ -50,14 +48,12 @@ export default function PlannerV2() {
   const [month, setMonth] = useState(localStorage.getItem('month'));
   const [provisionedValueState] = useState(Number(localStorage.getItem('provisionedValue')));
 
-  // Category modal state
   const [novaCategoria, setNovaCategoria] = useState('');
   const [novoValor, setNovoValor] = useState('');
   const [categoryName, setCategoryName] = useState('');
   const [blocoSelecionado, setBlocoSelecionado] = useState<string | null>(null);
   const [listCategories, setListCategories] = useState<{ id: string; name: string }[]>([]);
 
-  // Fetch categories from API
   useEffect(() => {
     axiosInstance.get(Endpoints.debt.getCategories())
       .then(res => {
@@ -66,7 +62,6 @@ export default function PlannerV2() {
   }, [])
 
 
-  // Mock planning data
   useEffect(() => {
     axiosInstance.get(Endpoints.planer.getByMonthYear(month, year))
       .then((res) => {

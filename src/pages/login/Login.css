@@ -19,7 +19,10 @@
 .loginContainer .cardLogin .signButton {
     background-color: #0070D2;
     color: white;
+}
 
+.loginContainer .cardLogin .cardBodyLogin {
+    padding: 20px;
 }
 
 .register {

@@ -53,7 +53,7 @@ export default function Login(props) {
         <Container className="loginContainer">
             <Card className="cardLogin">
                 <Card.Img variant="top" src={image} />
-                <Card.Body>
+                <Card.Body className="cardBodyLogin">
                     <Form onSubmit={handleSubmit}>
                         <Form.Group className='formLogin'>
                             <Form.Label>Usuário</Form.Label>

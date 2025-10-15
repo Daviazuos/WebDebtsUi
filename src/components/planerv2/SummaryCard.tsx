@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/ca
 import { Badge } from "../../components/ui/badge";
 import { TrendingUp, TrendingDown, DollarSign, PiggyBank } from "lucide-react";
 import { cn } from "../../lib/utils";
+import CustomCardSize from "../customCardSize/CustomCardSize";
 
 interface SummaryData {
   [categoryName: string]: {
@@ -49,6 +50,7 @@ export function SummaryCard({ planejamento, provisionedValue }: SummaryCardProps
   const balanco = (provisionedValue ?? 0) - (totalOrcado - totalGasto);
   const percentualGasto = totalOrcado > 0 ? (totalGasto / totalOrcado) * 100 : 0;
   const isOverBudget = totalGasto > totalOrcado;
+  const cardSize = 290;
 
   return (
     <Card className="w-full mb-6 border-primary/20 shadow-premium">
@@ -60,23 +62,31 @@ export function SummaryCard({ planejamento, provisionedValue }: SummaryCardProps
       </CardHeader>
       <CardContent>
         {/* Métricas principais */}
+
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-          <div className="p-4 rounded-lg bg-card/50 border">
+          {/* <div className="p-4 rounded-lg bg-card/50 border">
             <div className="flex items-center gap-2 mb-2">
               <DollarSign className="h-4 w-4 text-info" />
               <span className="text-sm font-medium">Total Orçado</span>
             </div>
             <p className="text-2xl font-bold text-info">{formatCurrency(totalOrcado)}</p>
-          </div>
-          
-          <div className="p-4 rounded-lg bg-card/50 border">
+          </div> */}
+          <CustomCardSize
+            title="Total Orçado"
+            children={formatCurrency(totalOrcado)}
+            icon="fas fa-hand-holding-usd success custom-icon"
+            size={cardSize}
+          >
+          </CustomCardSize>
+
+          {/* <div className="p-4 rounded-lg bg-card/50 border">
             <div className="flex items-center gap-2 mb-2">
               <TrendingDown className="h-4 w-4 text-warning" />
               <span className="text-sm font-medium">Total Gasto</span>
             </div>
             <p className="text-2xl font-bold text-warning">{formatCurrency(totalGasto)}</p>
           </div>
-          
+
           <div className="p-4 rounded-lg bg-card/50 border">
             <div className="flex items-center gap-2 mb-2">
               <TrendingUp className={cn("h-4 w-4", balanco >= 0 ? "text-success" : "text-destructive")} />
@@ -89,7 +99,7 @@ export function SummaryCard({ planejamento, provisionedValue }: SummaryCardProps
               {formatCurrency(balanco)}
             </p>
           </div>
-          
+
           <div className="p-4 rounded-lg bg-card/50 border">
             <div className="flex items-center gap-2 mb-2">
               <div className="h-4 w-4 rounded-full bg-primary" />
@@ -101,7 +111,7 @@ export function SummaryCard({ planejamento, provisionedValue }: SummaryCardProps
                 {isOverBudget ? "Acima" : "Dentro"}
               </Badge>
             </div>
-          </div>
+          </div> */}
         </div>
 
         {/* Lista de categorias */}
@@ -111,7 +121,7 @@ export function SummaryCard({ planejamento, provisionedValue }: SummaryCardProps
             {Object.entries(resumo).map(([nome, val]) => {
               const categoryProgress = val.orcado > 0 ? (val.gasto / val.orcado) * 100 : 0;
               const isOverCategory = val.gasto > val.orcado;
-              
+
               return (
                 <div key={nome} className="flex items-center justify-between p-3 rounded-lg bg-card/30 border">
                   <div className="flex-1">
