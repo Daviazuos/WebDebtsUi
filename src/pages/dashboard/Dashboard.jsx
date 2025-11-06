@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Card, Table, Image, Modal, Button } from "react-bootstrap";
 import imageEmpty from '../../assets/empty.png'
 
@@ -18,6 +18,8 @@ import { addOrRemoveMonth, monthByNumber } from "../../utils/dateFormater";
 import DebtList from "../../components/form/form";
 import FloatingButtonWithModal from "../../components/floatingButton/floatingButton";
 import GanttGraphic from "../../components/ganttGraphic/GanttGraphic";
+import DashModal from "./DashModal";
+import UpcomingBill from "../../components/cardCommingBills/CardCommingBills";
 
 
 export default function Dashboard() {
@@ -28,7 +30,7 @@ export default function Dashboard() {
   const [simpleValue, setSimpleValue] = useState([]);
   const [installmentValue, setInstallmentValue] = useState([]);
   const [category, setCategory] = useState(null);
-  const [debts, setDebts] = useState([])
+  const [debts, setDebts] = useState({ items: [] })
   const [cards, setCards] = useState([])
   const [drafts, setDrafts] = useState([])
   const [show, setShow] = useState(false);
@@ -36,6 +38,11 @@ export default function Dashboard() {
   const [transformAddDebt, setTransformAddDebt] = useState(false);
   const [draftSelected, setDraftSelected] = useState(null);
   const [deletedDraft, setDeletedDraft] = useState(false);
+  const [list_instalments, setListInstalments] = useState([]);
+  const [totalFinishing, setTotalFinishing] = useState(0.00);
+  const [installmentTable, setInstallmentTable] = useState(<div></div>);
+  const [fixedTable, setFixedTable] = useState(<div></div>);
+  const [simpleTable, setSimpleTable] = useState(<div></div>);
 
   useEffect(() => {
     axiosInstance.get(Endpoints.debt.filterInstallments(1, 9999, '', month, year, '', '', '', '', null))
@@ -53,6 +60,28 @@ export default function Dashboard() {
     axiosInstance.get(Endpoints.debt.filterInstallments(1, 9999, '', month, year, 'Fixed', '', '', '', null))
       .then(res => {
         setFixedValue(res.data)
+        const fixedTr = (res.data.items?.map(item => {
+          return (
+            <tr key={item.id}>
+              <td>{item.debtName}</td>
+              <td>{item.category}</td>
+              <td>R$ {decimalAdjust(item.value)}</td>
+            </tr>
+          )
+        })
+        )
+        setFixedTable(<Table striped borderless hover size="sm" responsive>
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Categoria</th>
+              <th>Valor</th>
+            </tr>
+          </thead>
+          <tbody>
+            {fixedTr}
+          </tbody>
+        </Table>)
       })
   }, [month])
 
@@ -62,6 +91,26 @@ export default function Dashboard() {
     axiosInstance.get(Endpoints.debt.filterWDate(1, 9999, '', '', 'Installment', '', false, `${year}-${month}-01T00:00:00`, `${year}-${month}-${lastDayFromMonth}T23:59:59`))
       .then(res => {
         setDebts(res.data);
+        const lis_instalments = [];
+        let totalFinishingSum = 0.00;
+        const items = res.data.items;
+        items.forEach(debtItem => {
+          (debtItem.installments || []).forEach(inst => {
+            if (debtItem.numberOfInstallments === inst.installmentNumber) {
+              lis_instalments.push(
+                <tr key={debtItem.id}>
+                  <td>{debtItem.name}</td>
+                  <td>R$ {decimalAdjust(inst.value)}</td>
+                  <td>{inst.installmentNumber}/{debtItem.numberOfInstallments}</td>
+                </tr>
+              );
+              totalFinishingSum += inst.value || 0;
+            }
+          });
+        });
+
+        setListInstalments(lis_instalments);
+        setTotalFinishing(totalFinishingSum);
       })
   }, [month])
 
@@ -73,6 +122,28 @@ export default function Dashboard() {
     axiosInstance.get(Endpoints.debt.filterInstallments(1, 9999, '', month, year, 'Simple', '', '', '', null))
       .then(res => {
         setSimpleValue(res.data)
+        const simpleTr = (res.data.items?.map(item => {
+          return (
+            <tr key={item.id}>
+              <td>{item.debtName}</td>
+              <td>{item.category}</td>
+              <td>R$ {decimalAdjust(item.value)}</td>
+            </tr>
+          )
+        })
+        )
+        setSimpleTable(<Table striped borderless hover size="sm" responsive>
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Categoria</th>
+              <th>Valor</th>
+            </tr>
+          </thead>
+          <tbody>
+            {simpleTr}
+          </tbody>
+        </Table>)
       })
   }, [month])
 
@@ -85,7 +156,33 @@ export default function Dashboard() {
     axiosInstance.get(Endpoints.debt.filterInstallments(1, 9999, '', month, year, 'Installment', '', '', '', null))
       .then(res => {
         setInstallmentValue(res.data)
-      })
+        const installmentTr = (res.data.items?.map(item => {
+          return (
+            <tr key={item.id}>
+              <td>{item.debtName}</td>
+              <td>{item.category}</td>
+              <td>R$ {decimalAdjust(item.value)}</td>
+            </tr>
+          )
+
+        })
+        )
+        setInstallmentTable(<Table striped borderless hover size="sm" responsive>
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Categoria</th>
+              <th>Valor</th>
+            </tr>
+          </thead>
+          <tbody>
+            {installmentTr}
+          </tbody>
+        </Table>)
+      }
+
+      )
+
   }, [month])
 
   const installment = installmentValue.items?.reduce(function (prev, cur) {
@@ -107,25 +204,6 @@ export default function Dashboard() {
         setCategory(lis)
       })
   }, [month])
-
-  let lis_instalments = []
-  let totalFinishing = 0.00
-
-  for (const item in debts.items) {
-    for (const installment in debts.items[item].installments) {
-      if (debts.items[item].numberOfInstallments === debts.items[item].installments[installment].installmentNumber
-      ) {
-        lis_instalments.push(<tr key={item.id}>
-          <td className='td1'>{debts.items[item].name}</td>
-          <td className='td1'>
-            R$ {decimalAdjust(debts.items[item].installments[installment].value)}
-          </td>
-          <td className='td1'>{debts.items[item].installments[installment].installmentNumber}/{debts.items[item].numberOfInstallments}</td>
-        </tr>)
-        totalFinishing += debts.items[item].installments[installment].value
-      }
-    }
-  }
 
   useEffect(() => {
     setIsLoading(true)
@@ -186,15 +264,6 @@ export default function Dashboard() {
   let provisionedValue = localStorage.getItem("provisionedValue");
 
   const dataFechamento = minDate
-  const valorDisponivel = provisionedValue
-  const diffMilissegundos = dataFechamento - calculateDate;
-  const diasRestantes = Math.ceil(diffMilissegundos / (1000 * 60 * 60 * 24));
-  const valorPorDia = valorDisponivel / diasRestantes;
-
-  let day = `Valor por dia`
-  let text = `${diasRestantes} dias referente ao cartão ${minCreditCard} que fecha dia ${closureDate}/${addLeadingZeros(month - 1, 2)}`
-
-  let showPerDay = dataHoje < dataFechamento || dataHoje > dataFechamento && dataHoje.getMonth() == dataFechamento.getMonth()
 
   function deleteDraft(id, transform = true) {
     axiosInstance.delete(Endpoints.debt.deleteDraft(id))
@@ -210,42 +279,11 @@ export default function Dashboard() {
     deleteDraft(id)
   }
 
+
+
   return (
     <div>
       <div className="graphics">
-        {showPerDay ?
-          <div className="valuePerDay">
-            <CustomCardSize
-              title={day}
-              children={decimalAdjust(valorPorDia > 0 ? valorPorDia : 0.00)}
-              icon="fas fa-calendar-day success custom-icon"
-              text={text}
-              size='385px'
-            ></CustomCardSize>
-            <CustomCardSize
-              title={`Parcelamentos acabando`}
-              children={decimalAdjust(totalFinishing)}
-              icon="fas fa-calendar-check success custom-icon"
-              text=""
-              size='385px'
-            ></CustomCardSize>
-          </div> : <div className="valuePerDay">
-            <CustomCardSize
-              title={day}
-              children="0.00"
-              icon="fas fa-calendar-day success custom-icon"
-              text=""
-              size='385px'
-            ></CustomCardSize>
-            <CustomCardSize
-              title={`Parcelamentos acabando`}
-              children={decimalAdjust(totalFinishing)}
-              icon="fas fa-calendar-check success custom-icon"
-              text=""
-              size='385px'
-            ></CustomCardSize>
-
-          </div>}
         <Card className="graphicPagePie">
           <CardApexGraphicPie></CardApexGraphicPie>
         </Card>
@@ -257,21 +295,21 @@ export default function Dashboard() {
             title="Fixas"
             children={decimalAdjust(fixed)}
             icon="far fa-calendar blue custom-icon"
-            data={fixedValue}
+            table={fixedTable}
           >
           </CustomCard>
           <CustomCard
             title="Simples"
             children={decimalAdjust(simple)}
             icon="fas fa-coins blue custom-icon"
-            data={simpleValue}
+            table={simpleTable}
           >
           </CustomCard>
           <CustomCard
             title="Parceladas"
             children={decimalAdjust(installment)}
             icon="fas fa-credit-card blue custom-icon"
-            data={installmentValue}
+            table={installmentTable}
           >
           </CustomCard>
         </div>
@@ -279,29 +317,6 @@ export default function Dashboard() {
       <div className="analitics">
         <Card className="outsByDay">
           <CardApexGraphicByDay></CardApexGraphicByDay>
-        </Card>
-        <Card className='categorieTable'>
-          <text className="finishingInstallments">Parcelamentos acabando</text>
-          <p></p>
-          {lis_instalments.length === 0 ?
-            <div style={{ marginLeft: '148px', marginRight: '160px', marginTop: '30px' }}>
-              <Image src={imageEmpty} rounded></Image>
-            </div> :
-            <div style={{ maxWidth: '570px' }}>
-              <Table borderless striped responsive hover variant="black" className="tableTotal" size="sm">
-                <thead>
-                  <tr className='tr'>
-                    <th>Nome</th>
-                    <th>Valor</th>
-                    <th>Parcela</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {lis_instalments}
-                </tbody>
-              </Table>
-            </div>
-          }
         </Card>
         <Modal
           show={show}

@@ -5,7 +5,7 @@
 }
 
 .custom-icon {
-    font-size: 2rem;
+    font-size: 1.5rem !important;
 }
 
 #linha {
@@ -20,10 +20,6 @@
 @media (max-width: 768px) {
     #linha {
         margin-left: 10%;
-    }
-
-    .toPay {
-        display: none;
     }
 
     .custom-icon {

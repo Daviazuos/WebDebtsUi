@@ -93,38 +93,42 @@ export default function CreditCardSelected({ match }, props) {
     }, [year])
 
     useEffect(() => {
-        // Alteração: Carregar múltiplos cartões e configurar o estado dos cartões
         axiosInstance.get(Endpoints.card.filterCards(1, 9999, null, selectedDate.split('-')[0], selectedDate.split('-')[1], false))
             .then(res => {
-                setCards(res.data.items); // Armazena todos os cartões
-                const cardIndex = res.data.items.findIndex(card => card.id === cardId);
-                setSelectedCardIndex(cardIndex >= 0 ? cardIndex : 0); // Inicia com o primeiro cartão selecionado
+                const items = res.data.items || [];
+                setCards(items);
+                const cardIndex = items.findIndex(card => card.id === cardId);
+                setSelectedCardIndex(cardIndex >= 0 ? cardIndex : 0);
 
-                // Novo Map para armazenar o valor total por cartão
-                const cardClosingDate = new Map();
+                const cardClosingDateVariable = new Map();
                 const cardValue = new Map();
 
+                items.forEach(card => {
+                    const closingDate = card.closureDate > card.dueDate
+                        ? `${addLeadingZeros(card.closureDate, 2)}/${addLeadingZeros(selectedDate.split('-')[0] - 1, 2)}/${selectedDate.split('-')[1]}`
+                        : `${addLeadingZeros(card.closureDate, 2)}/${addLeadingZeros(selectedDate.split('-')[0], 2)}/${selectedDate.split('-')[1]}`;
 
-                // Iterar sobre todos os cartões
-                res.data.items.forEach(card => {
-                    let closingDate = card.closureDate > card.dueDate ? `${addLeadingZeros(card.closureDate, 2)}/${addLeadingZeros(selectedDate.split('-')[0] - 1, 2)}/${selectedDate.split('-')[1]}` : `${addLeadingZeros(card.closureDate, 2)}/${addLeadingZeros(selectedDate.split('-')[0], 2)}/${selectedDate.split('-')[1]}`
-                    cardClosingDate.set(card.id, { closingDate: closingDate });
-                    let value = 0.00
-                    card.debts.forEach(debt => {
-                        value = value + ((debt?.installments[0]?.value == undefined) ? 0.00 : debt?.installments[0]?.value)
-                    })
-                    cardValue.set(card.id, { totalValue: value })
-                    
-                    setCardMonthValue(cardValue)
+                    cardClosingDateVariable.set(card.id, { closingDate });
+
+                    let value = 0.00;
+                    (card.debts || []).forEach(debt => {
+                        value += Number(debt?.installments?.[0]?.value || 0);
+                    });
+                    cardValue.set(card.id, { totalValue: value });
                 });
 
-
-
-                setCardClosingDate(cardClosingDate)
-                setUpdateStatus(false)
-                setLoading(false)
+                setCardMonthValue(cardValue);
+                setCardClosingDate(cardClosingDateVariable);
+                setUpdateStatus(false);
+            })
+            .catch(() => {
+                setCards([]);
+            })
+            .finally(() => {
+                setLoading(false);
             });
-    }, [updateStatus, changingMonth]);
+
+    }, [updateStatus, changingMonth, selectedDate, cardId]);
 
     // Função para selecionar o cartão ao clicar
     const selectCard = (index, cardId) => {
@@ -154,23 +158,24 @@ export default function CreditCardSelected({ match }, props) {
         setKey(selectedTab);
     };
 
-    let tab_lis = ""
-    if (!loading) {
+    const selectedCard = cards[selectedCardIndex] || {};
+    let tab_lis = "";
+    if (!loading && cards.length > 0) {
         tab_lis = months.map(item => {
             let titleCard = (
                 <div>
-                  <p>{cards[selectedCardIndex].name}</p>
-                  <p style={{fontSize: '12px'}}>Fechamento {cardClosingDate.get(cards[selectedCardIndex].id).closingDate}</p>
+                    <p>{selectedCard.name}</p>
+                    <p style={{ fontSize: '12px' }}>Fechamento {cardClosingDate?.get(selectedCard.id)?.closingDate}</p>
                 </div>
-              );
+            );
 
             return (
                 <Tab className="CreditCardSelectedTab" eventKey={`${item.month}-${item.year}`} title={`${monthByNumber(item.month)}/${item.year}`}>
                     <div className="CreditCardCard">
-                        
-                        <SetModalAddDebts modalName="Adicionar" head={titleCard} cardId={cards[selectedCardIndex].id} update={updateValues} color={`${(cards[selectedCardIndex].color != null && cards[selectedCardIndex].color != '') ? cards[selectedCardIndex].color : "#6F87E1"}`}></SetModalAddDebts>
+
+                        <SetModalAddDebts modalName="Adicionar" head={titleCard} cardId={selectedCard.id} update={updateValues} color={`${(selectedCard.color != null && selectedCard.color != '') ? selectedCard.color : "#6F87E1"}`}></SetModalAddDebts>
                         <div style={{ marginLeft: '20px' }}>
-                            <Table  borderless striped responsive hover variant="white" size="lg">
+                            <Table borderless striped responsive hover variant="white" size="lg">
                                 <thead>
                                     <tr className="trr">
                                         <th>Nome</th>
@@ -195,7 +200,7 @@ export default function CreditCardSelected({ match }, props) {
 
     return (
         <>
-            {loading === true ? <i className="fas fa-spinner fa-spin"></i> :
+            {loading ? <i className="fas fa-spinner fa-spin"></i> :
                 <>
                     {/* Cartões empilhados */}
                     <div className="card-stack-container">
@@ -226,10 +231,10 @@ export default function CreditCardSelected({ match }, props) {
                                             </div>
                                             <div id='textCard' class="mt-auto fw-bold d-flex align-items-center justify-content-between">
                                                 <div className="creditBody">
-                                                    <p id="cardText" class="m-0">Fechamento {cardClosingDate.get(card.id).closingDate}</p>
+                                                    <p id="cardText" class="m-0">Fechamento {cardClosingDate?.get(card.id)?.closingDate}</p>
                                                     <p id="cardText" class="m-0">Vencimento {addLeadingZeros(card.dueDate, 2)}/{selectedDate.replace('-', '/')}</p>
                                                 </div>
-                                                <h5 id="cardText" class="m-0">R$ {decimalAdjust(cardMonthValue.get(card.id)?.totalValue)}</h5>
+                                                <h5 id="cardText" class="m-0">R$ {decimalAdjust(cardMonthValue.get(card.id)?.totalValue || 0)}</h5>
                                             </div>
                                             <div style={{ display: 'flex', marginTop: '40px', marginLeft: '0px' }}>
                                             </div>

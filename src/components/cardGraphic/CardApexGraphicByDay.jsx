@@ -21,7 +21,7 @@ export default function CardApexGraphicByDay() {
         const year = parseInt(localStorage.getItem("year"));
 
         const fetchData = async () => {
-            const months = Array.from(Array(4).keys()).reverse(); // Últimos 4 meses
+            const months = Array.from(Array(8).keys()).reverse(); // Últimos 4 meses
             const allMonthsData = [];
 
             for (const index of months) {
@@ -63,7 +63,7 @@ export default function CardApexGraphicByDay() {
         }));
 
         flattenedValues.sort((a, b) => b.total - a.total);
-        const topTenValues = flattenedValues.slice(0, 10);
+        const topTenValues = flattenedValues.slice(0, 8);
 
         setLabels(labels);
         setValuesData(topTenValues.map(({ name, data }) => ({ name, data })));
@@ -149,6 +149,6 @@ export default function CardApexGraphicByDay() {
     };
 
     return (
-        <ReactApexChart options={graphic.options} series={graphic.series} type="line" height={350} width={955} />
+        <ReactApexChart options={graphic.options} series={graphic.series} type="line" height={350} width={1555} />
     );
 }

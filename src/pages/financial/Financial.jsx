@@ -13,6 +13,7 @@ import { refreshPage } from "../../utils/utils";
 import PaginationComponent from "../../components/customPagination/paginationComponent";
 import ModalNextMonth from "../../components/Modals/ModalNextMonth";
 import { buildStyles, CircularProgressbar } from "react-circular-progressbar";
+import UpcomingBill from "../../components/cardCommingBills/CardCommingBills";
 
 
 function SetStatus(id, status, date) {
@@ -262,6 +263,11 @@ export default function Financial() {
               setCurrentPage={setPageCardNumber}
               alwaysShown={false}
             /> : ""}
+        </Card>
+        <Card className='cardFinancialTable'>
+          <div>
+          <UpcomingBill />
+        </div>
         </Card>
       </div>
     </>)

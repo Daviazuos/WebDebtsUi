@@ -11,7 +11,7 @@ export default (props) => {
 
   return (
     <div className={props.className}>
-      <div class="card" id="customCardSize" style={{width: props.size, height: '100px'}} onClick={() => setModalShow(true)}>
+      <div class="card" id="customCardSize" style={{width: props.size, height: props.height || '100px'}} onClick={() => setModalShow(true)}>
         <div class="card-content">
           <div class="card-body cleartfix">
             <div class="media align-items-stretch">
@@ -27,11 +27,11 @@ export default (props) => {
           </div>
         </div>
       </div>
-      {(props.data !== undefined)?
+      {(props.table !== undefined)?
       <DashModal
         show={modalShow}
         onHide={() => setModalShow(false)}
-        data={props.data?.items}
+        table={props.table}
         head={props.title}
       />:""}
     </div>

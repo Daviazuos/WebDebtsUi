@@ -29,7 +29,6 @@
     margin: 5px;
     display: flex;
     justify-content: space-between;
-    width: 700px;
     height: 70px;
     background-color: #fff;
     border: 1px solid #ddd;
@@ -54,7 +53,7 @@
     margin-top: 6px;
 
     white-space: nowrap;
-    width: 29em;
+    width: 70%;
     overflow: hidden;
     text-overflow: ellipsis;
 }
