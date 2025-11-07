@@ -17,9 +17,7 @@ import CustomCardSize from "../../components/customCardSize/CustomCardSize";
 import { addOrRemoveMonth, monthByNumber } from "../../utils/dateFormater";
 import DebtList from "../../components/form/form";
 import FloatingButtonWithModal from "../../components/floatingButton/floatingButton";
-import GanttGraphic from "../../components/ganttGraphic/GanttGraphic";
 import DashModal from "./DashModal";
-import UpcomingBill from "../../components/cardCommingBills/CardCommingBills";
 
 
 export default function Dashboard() {

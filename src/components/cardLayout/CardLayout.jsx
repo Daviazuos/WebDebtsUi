@@ -108,7 +108,7 @@ export default function CardLayout() {
 
     }
 
-    let cardSize = "251px"
+    let cardSize = "252px"
     let cardHeight = "70px"
 
     const tableFinishingDebts = (
@@ -135,7 +135,7 @@ export default function CardLayout() {
             </div>
             <div className="walletCards">
                 <CustomCardSize
-                    title="Entradas"
+                    title="Receitas"
                     children={decimalAdjust(valueTotal)}
                     icon="fas fa-hand-holding-usd success custom-icon"
                     size={cardSize}
@@ -143,7 +143,7 @@ export default function CardLayout() {
                 >
                 </CustomCardSize>
                 <CustomCardSize
-                    title="Saídas"
+                    title="Despesas"
                     children={decimalAdjust(sumAll)}
                     icon="fas fa-hand-holding-usd red custom-icon"
                     size={cardSize}
