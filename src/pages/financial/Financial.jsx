@@ -161,9 +161,10 @@ export default function Financial() {
           <div className="installment-text">{installmentText}</div>
           <div className="debt-value">R$ {decimalAdjust(item.value)}</div>
           <div className="debt-date">{dateAdjust(item.date)}</div>
+          {item.numberOfInstallments === 0 && item.installmentNumber === 0 ? <div></div> :
           <div className="progress-bar-custom">
-            <div className="progress-bar-fill" style={{ width: item.numberOfInstallments === 0 ? '0%' : `${(item.installmentNumber / item.numberOfInstallments) * 100}%` }}></div> {/* Ajuste a largura conforme necessário */}
-          </div>
+            <div className="progress-bar-fill" style={{ width: item.numberOfInstallments === 0 ? '0%' : `${(item.installmentNumber / item.numberOfInstallments) * 100}%` }}></div>
+          </div>}
         </div>
         <SetModalPaid
           disabled={false}

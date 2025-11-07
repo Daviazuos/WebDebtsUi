@@ -17,7 +17,6 @@ import Goals from "./pages/goals/Goals";
 import CreditCardSelected from "./pages/creditCardSelected/CreditCardSelected";
 import { GlobalProvider } from "./services/local-storage-event";
 import ResponsibleParty from "./pages/responsibleParty/ResponsibleParty";
-import GanttGraphic from "./components/ganttGraphic/GanttGraphic";
 import Planner from "./pages/planner/Planner";
 
 export function logout() {
@@ -41,7 +40,6 @@ export function isLogged() {
                     <Route path="/Goals" component={Goals} />
                     <Route path="/ResponsibleParty" component={ResponsibleParty} />
                     <Route path="/CreditCardSelected/:cardId" component={CreditCardSelected} />
-                    <Route path="/InstallmentsDash" component={GanttGraphic} />
                     <Route path="/Planner" component={Planner} />
                 </div>
             </Layout>

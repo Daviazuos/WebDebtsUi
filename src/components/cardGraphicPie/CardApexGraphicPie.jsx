@@ -4,7 +4,7 @@ import { axiosInstance } from "../../api";
 import { Endpoints } from "../../api/endpoints";
 import ReactApexChart from "react-apexcharts";
 import { decimalAdjust } from "../../utils/valuesFormater";
-import { Card, CardBody } from "react-bootstrap";
+import { Card, CardBody, Table } from "react-bootstrap";
 import DashModal from "../../pages/dashboard/DashModal";
 
 export default function CardApexGraphicPie(props) {
@@ -45,7 +45,16 @@ export default function CardApexGraphicPie(props) {
                                 dataPointSelection: (event, chartContext, config) => {
                                     const selectedCategory = categoriesList[config.dataPointIndex];
                                     setTittle(config.w.config.labels[config.dataPointIndex])
-                                    setModalData(selectedCategory.installmentsPerCategory); // Armazena os itens da categoria
+                                    setModalData((selectedCategory.installmentsPerCategory.map(item => {
+                                              return (
+                                                <tr key={item.id}>
+                                                  <td>{item.debtName}</td>
+                                                  <td>{item.category}</td>
+                                                  <td>R$ {decimalAdjust(item.value)}</td>
+                                                </tr>
+                                              )
+                                            })
+                                            )); // Armazena os itens da categoria
                                     setModalShow(true); // Abre a modal
                                 },
                                 mounted: (chart) => {
@@ -127,12 +136,25 @@ export default function CardApexGraphicPie(props) {
             });
     }, [month, year, props.cardId]);
 
+    let categoryTable = (<Table striped borderless hover size="sm" responsive>
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Categoria</th>
+              <th>Valor</th>
+            </tr>
+          </thead>
+          <tbody>
+            {modalData}
+          </tbody>
+        </Table>)
+
     return (
         <>
             <DashModal
                 show={modalShow}
                 onHide={() => setModalShow(false)}
-                data={modalData} // Passa os dados para a modal
+                table={categoryTable} // Passa os dados para a modal
                 head={title}
             />
             {graphic !== null ? (

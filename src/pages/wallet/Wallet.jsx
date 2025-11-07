@@ -108,10 +108,11 @@ export default function Wallet() {
     let hasPending = item.walletAppModels.some(walletAppModel =>
       walletAppModel.walletInstallments.some(installment => !installment.receivedStatus)
     );
+    let sumNotReceivedStatus = item.walletAppModels.reduce((acc, curr) => acc + (curr.walletInstallments[0].receivedStatus ? 0 : curr.walletInstallments[0].value), 0);
     let showPending = hasPending === true ?
       <div className="pending">
         <i className="fas fa-exclamation-triangle red"></i>
-        <div className="textPending">valores a receber</div></div> : '';
+        <div className="textPending">R${decimalAdjust(sumNotReceivedStatus)} a receber</div></div> : '';
 
     let accordionName = <div className="accordionName">{`${item.name} - R$ ${decimalAdjust(item.value)}`}</div>
     return (

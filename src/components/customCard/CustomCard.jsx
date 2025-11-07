@@ -1,6 +1,7 @@
 import React from "react";
 import DashModal from "../../pages/dashboard/DashModal";
 import "./CustomCard.css"
+import { decimalAdjust } from "../../utils/valuesFormater";
 
 
 // eslint-disable-next-line import/no-anonymous-default-export
@@ -24,11 +25,11 @@ export default (props) => {
           </div>
         </div>
       </div>
-      {(props.data !== undefined)?
+      {(props.table !== undefined)?
       <DashModal
         show={modalShow}
         onHide={() => setModalShow(false)}
-        data={props.data?.items}
+        table={props.table}
         head={props.title}
       />:""}
     </div>

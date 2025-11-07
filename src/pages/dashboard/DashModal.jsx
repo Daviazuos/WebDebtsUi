@@ -5,17 +5,6 @@ import { decimalAdjust } from "../../utils/valuesFormater";
 import "./DashModal.css"
 
 export default function DashModal(props) {
-    const lis = props.data?.map(item => {
-        return (
-            <tr key={item.id}>
-                <td>{item.debtName}</td>
-                <td>{item.category}</td>
-                <td>R$ {decimalAdjust(item.value)}</td>
-            </tr>
-        )
-
-    })
-
     return (
         <div onClick={e => e.stopPropagation()}>
             <Modal
@@ -31,18 +20,7 @@ export default function DashModal(props) {
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Table striped borderless hover size="sm" responsive>
-                        <thead>
-                            <tr>
-                                <th>Nome</th>
-                                <th>Categoria</th>
-                                <th>Valor</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {lis}
-                        </tbody>
-                    </Table>
+                    {props.table}
                 </Modal.Body>
             </Modal>
         </div>
