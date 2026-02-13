@@ -30,7 +30,7 @@ export default function CardApexGraphic() {
                     dataDebts.push(installments[value].debtValue)
                     dataWallet.push(installments[value].walletValue)
                 }
-                
+
                 setGraphic({
                     series: [{
                         name: "Dívidas",
@@ -45,6 +45,10 @@ export default function CardApexGraphic() {
                         chart: {
                             height: 350,
                             type: 'line',
+                            zoom: {
+                                enabled: true,
+                                allowMouseWheelZoom: false
+                            },
                             events: {
                                 mounted: (chart) => {
                                     chart.windowResizeHandler();

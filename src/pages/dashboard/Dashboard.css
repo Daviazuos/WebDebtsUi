@@ -84,10 +84,20 @@
 
 .outsByDay {
     display: block;
-    grid-column-start: 2;
-    grid-column-end: 5;
+    grid-column-start: 1;
+    grid-column-end: 3;
     grid-row-start: 4;
     grid-row-end: 6;
+    padding: 5px;
+    border-color: #FFFFFF !important;
+}
+
+.commingBillsCard {
+    grid-column-start: 3;
+    grid-column-end: 6;
+    grid-row-start: 4;
+    grid-row-end: 6;
+    width: 28%;
     padding: 5px;
     border-color: #FFFFFF !important;
 }
@@ -110,7 +120,6 @@
 .custom-icon {
     font-size: 2rem;
 }
-  
 
 @media (max-width: 768px) {
     .graphics {
@@ -147,5 +156,11 @@
 
     .finishingInstallments {
         font-size: 10px;
+    }
+
+    .commingBillsCard {
+        width: 100%;
+        grid-column-start: 1;
+        grid-column-end: 6;
     }
 }
