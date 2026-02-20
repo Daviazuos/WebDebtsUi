@@ -1,0 +1,390 @@
+/* Invoice Reconciliation Modal Styles */
+
+.invoice-reconciliation-modal .modal-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-bottom: 2px solid #667eea;
+}
+
+.invoice-reconciliation-modal .modal-title {
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.invoice-reconciliation-modal .modal-header .btn-close {
+  filter: brightness(0) invert(1);
+}
+
+.invoice-reconciliation-modal .modal-body {
+  padding: 2rem;
+  background-color: #f8f9fa;
+}
+
+.invoice-reconciliation-modal .form-control-lg {
+  font-size: 1.1rem;
+  padding: 0.75rem 1rem;
+  border: 2px solid #e0e0e0;
+  transition: all 0.3s ease;
+}
+
+.invoice-reconciliation-modal .form-control-lg:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+}
+
+/* Summary Cards */
+.invoice-reconciliation-modal .summary-card {
+  border: none;
+  border-radius: 12px;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.invoice-reconciliation-modal .summary-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.invoice-reconciliation-modal .summary-card .card-body {
+  padding: 1.5rem 1rem;
+}
+
+.invoice-reconciliation-modal .summary-label {
+  font-size: 0.875rem;
+  color: #6c757d;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 0.5rem;
+}
+
+.invoice-reconciliation-modal .summary-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #667eea;
+}
+
+.invoice-reconciliation-modal .display-text {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #667eea;
+  margin-top: 0.5rem;
+}
+
+.invoice-reconciliation-modal .display-text.text-primary {
+  color: #0d6efd;
+}
+
+.invoice-reconciliation-modal .display-text.text-success {
+  color: #198754;
+}
+
+.invoice-reconciliation-modal .display-text.text-warning {
+  color: #ffc107;
+}
+
+.invoice-reconciliation-modal .display-text.text-danger {
+  color: #dc3545;
+}
+
+/* Alerts */
+.invoice-reconciliation-modal .alert {
+  border: none;
+  border-left: 4px solid;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.invoice-reconciliation-modal .alert-success {
+  background-color: #d1e7dd;
+  border-left-color: #198754;
+  color: #0f5132;
+}
+
+.invoice-reconciliation-modal .alert-warning {
+  background-color: #fff3cd;
+  border-left-color: #ffc107;
+  color: #664d03;
+}
+
+.invoice-reconciliation-modal .alert-danger {
+  background-color: #f8d7da;
+  border-left-color: #dc3545;
+  color: #842029;
+}
+
+.invoice-reconciliation-modal .alert-info {
+  background-color: #cfe2ff;
+  border-left-color: #0d6efd;
+  color: #084298;
+}
+
+/* Tabs */
+.invoice-reconciliation-modal .nav-tabs {
+  border-bottom: 2px solid #e9ecef;
+  gap: 0.5rem;
+}
+
+.invoice-reconciliation-modal .nav-tabs .nav-link {
+  color: #6c757d;
+  border: none;
+  border-bottom: 3px solid transparent;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  margin-bottom: -2px;
+}
+
+.invoice-reconciliation-modal .nav-tabs .nav-link:hover {
+  color: #667eea;
+  border-bottom-color: #667eea;
+}
+
+.invoice-reconciliation-modal .nav-tabs .nav-link.active {
+  color: #667eea;
+  background-color: transparent;
+  border-bottom-color: #667eea;
+}
+
+/* Tab Content */
+.invoice-reconciliation-modal .tab-content {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Tables */
+.invoice-reconciliation-modal .table {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+.invoice-reconciliation-modal .table thead {
+  background-color: #f8f9fa;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.invoice-reconciliation-modal .table thead th {
+  font-weight: 600;
+  color: #495057;
+  padding: 1rem;
+  text-transform: uppercase;
+  font-size: 0.875rem;
+  letter-spacing: 0.5px;
+  border: none;
+}
+
+.invoice-reconciliation-modal .table tbody td {
+  padding: 1rem;
+  vertical-align: middle;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.invoice-reconciliation-modal .table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.invoice-reconciliation-modal .table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+.invoice-reconciliation-modal .table tfoot {
+  background-color: #f8f9fa;
+  border-top: 2px solid #dee2e6;
+}
+
+.invoice-reconciliation-modal .table tfoot tr {
+  font-weight: 600;
+  color: #667eea;
+}
+
+.invoice-reconciliation-modal .table tfoot td {
+  padding: 1rem;
+}
+
+/* Checklist */
+.invoice-reconciliation-modal .checklist-container {
+  background-color: white;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.invoice-reconciliation-modal .checklist-item {
+  padding: 0.75rem;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.invoice-reconciliation-modal .checklist-item:hover {
+  background-color: #f8f9fa;
+}
+
+.invoice-reconciliation-modal .checklist-label {
+  cursor: pointer;
+  margin-bottom: 0;
+}
+
+.invoice-reconciliation-modal .checklist-label input[type='checkbox'] {
+  cursor: pointer;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-top: 0.3rem;
+}
+
+.invoice-reconciliation-modal .checklist-label input[type='checkbox']:checked {
+  background-color: #667eea;
+  border-color: #667eea;
+}
+
+/* Badge */
+.invoice-reconciliation-modal .badge {
+  font-size: 0.85rem;
+  padding: 0.35rem 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.invoice-reconciliation-modal .badge.bg-primary {
+  background-color: #667eea !important;
+}
+
+.invoice-reconciliation-modal .badge.bg-danger {
+  background-color: #dc3545 !important;
+}
+
+.invoice-reconciliation-modal .badge.bg-info {
+  background-color: #0dcaf0 !important;
+}
+
+/* Buttons */
+.invoice-reconciliation-modal .modal-footer {
+  background-color: white;
+  border-top: 1px solid #e9ecef;
+  gap: 0.5rem;
+}
+
+.invoice-reconciliation-modal .btn {
+  padding: 0.6rem 1.5rem;
+  font-weight: 600;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.invoice-reconciliation-modal .btn-secondary {
+  background-color: #6c757d;
+  color: white;
+}
+
+.invoice-reconciliation-modal .btn-secondary:hover {
+  background-color: #5a6268;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.invoice-reconciliation-modal .btn-success {
+  background-color: #198754;
+  color: white;
+}
+
+.invoice-reconciliation-modal .btn-success:hover {
+  background-color: #157347;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Card Styles */
+.invoice-reconciliation-modal .card {
+  border: none;
+  border-radius: 8px;
+  background: white;
+}
+
+.invoice-reconciliation-modal .card-body {
+  padding: 1.25rem;
+}
+
+/* Scrollbar Styling */
+.invoice-reconciliation-modal .checklist-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.invoice-reconciliation-modal .checklist-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.invoice-reconciliation-modal .checklist-container::-webkit-scrollbar-thumb {
+  background: #667eea;
+  border-radius: 4px;
+}
+
+.invoice-reconciliation-modal .checklist-container::-webkit-scrollbar-thumb:hover {
+  background: #5568d3;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .invoice-reconciliation-modal .modal-body {
+    padding: 1.5rem;
+  }
+
+  .invoice-reconciliation-modal .summary-value {
+    font-size: 1.5rem;
+  }
+
+  .invoice-reconciliation-modal .display-text {
+    font-size: 1.25rem;
+  }
+
+  .invoice-reconciliation-modal .nav-tabs {
+    flex-wrap: wrap;
+  }
+
+  .invoice-reconciliation-modal .nav-link {
+    font-size: 0.9rem;
+    padding: 0.5rem 0.75rem;
+  }
+}
+
+/* Animation for duplicate card */
+.invoice-reconciliation-modal .card {
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Form Label Styles */
+.invoice-reconciliation-modal .form-label {
+  color: #495057;
+  margin-bottom: 0.75rem;
+  font-size: 0.95rem;
+}
+
+.invoice-reconciliation-modal .form-text {
+  color: #6c757d !important;
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+}

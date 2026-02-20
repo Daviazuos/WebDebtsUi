@@ -8,6 +8,7 @@ import { addLeadingZeros, decimalAdjust } from "../../utils/valuesFormater";
 import { CustomPagination } from "../../components/customPagination/customPagination";
 import CardApexGraphicPie from "../../components/cardGraphicPie/CardApexGraphicPie";
 import ModalAddDebts from "../../components/modal/modalDebts";
+import { InvoiceReconciliationModal } from "../../components/invoiceReconciliation";
 import "./CreditCardSelected.css"
 
 function SetModalAddDebts(props) {
@@ -57,6 +58,8 @@ export default function CreditCardSelected({ match }, props) {
     const [months, setMonths] = useState([])
     const [updateStatus, setUpdateStatus] = useState(false)
     const [cardId, setCardId] = useState(match.params.cardId)
+    const [showInvoiceModal, setShowInvoiceModal] = useState(false)
+    const [allInstallments, setAllInstallments] = useState([])
 
 
     const pageChange = event => {
@@ -72,6 +75,16 @@ export default function CreditCardSelected({ match }, props) {
             axiosInstance.get(Endpoints.debt.filterInstallments(pageNumber, 13, '', selectedDate.split('-')[0], selectedDate.split('-')[1], '', '', '', cardId, null))
                 .then(res => {
                     setInstallments(res.data);
+                })
+            setUpdateStatus(false)
+        }
+    }, [pageNumber, selectedDate, updateStatus, cardId])
+
+    useEffect(() => {
+        if (cardId != undefined) {
+            axiosInstance.get(Endpoints.debt.filterInstallments(1, 9999, '', selectedDate.split('-')[0], selectedDate.split('-')[1], '', '', '', cardId, null))
+                .then(res => {
+                    setAllInstallments(res.data);
                 })
             setUpdateStatus(false)
         }
@@ -172,8 +185,12 @@ export default function CreditCardSelected({ match }, props) {
             return (
                 <Tab className="CreditCardSelectedTab" eventKey={`${item.month}-${item.year}`} title={`${monthByNumber(item.month)}/${item.year}`}>
                     <div className="CreditCardCard">
-
-                        <SetModalAddDebts modalName="Adicionar" head={titleCard} cardId={selectedCard.id} update={updateValues} color={`${(selectedCard.color != null && selectedCard.color != '') ? selectedCard.color : "#6F87E1"}`}></SetModalAddDebts>
+                        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                            <SetModalAddDebts modalName="Adicionar" head={titleCard} cardId={selectedCard.id} update={updateValues} color={`${(selectedCard.color != null && selectedCard.color != '') ? selectedCard.color : "#6F87E1"}`}></SetModalAddDebts>
+                            <Button variant='custom' style={{ marginLeft: '0px', color: 'black', borderColor: 'black' }} className='btn-custom' onClick={() => setShowInvoiceModal(true)}>
+                                <i className="fas fa-receipt"></i> Conferir Fatura
+                            </Button>
+                        </div>
                         <div style={{ marginLeft: '20px' }}>
                             <Table borderless striped responsive hover variant="white" size="lg">
                                 <thead>
@@ -255,6 +272,17 @@ export default function CreditCardSelected({ match }, props) {
                             {tab_lis}
                         </Tabs>
                     </Card>
+                    <InvoiceReconciliationModal
+                        show={showInvoiceModal}
+                        handleClose={() => setShowInvoiceModal(false)}
+                        transactions={allInstallments.items || []}
+                        totalLancado={cardMonthValue.get(selectedCard.id)?.totalValue || 0}
+                        valueKey="value"
+                        dateKey="date"
+                        nameKey="debtName"
+                        idKey="id"
+                        statusKey="status"
+                    />
                 </>
             }
         </>
