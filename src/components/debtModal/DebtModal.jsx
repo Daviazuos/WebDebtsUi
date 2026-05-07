@@ -128,7 +128,19 @@ export default function DebtModal(props) {
                     `${dateAdjust(item.date)}`
                 )}
                 </td>
-                <td className="td1">{statusTransform(item.status)}</td>
+                <td className="td1">
+                    {editMode[item.id] ? (
+                        <select
+                            value={item.status}
+                            onChange={(e) => handleEditChange(e, item.id, 'status')}
+                        >
+                            <option value="NotPaid">Pendente</option>
+                            <option value="Paid">Pago</option>
+                        </select>
+                    ) : (
+                    `${statusTransform(item.status)}`
+                    )}
+                </td>
                 <td className="td1">
                     {!editMode[item.id] ? (
                         // Edit icon when not in edit mode

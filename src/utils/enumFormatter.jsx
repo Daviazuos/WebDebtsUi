@@ -3,7 +3,7 @@ export function statusTransform(status) {
         return 'Pago'
     }
     else {
-        return 'A pagar'
+        return 'Pendente'
     }
 }
 

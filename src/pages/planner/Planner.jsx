@@ -613,9 +613,11 @@ export default function Planner() {
 
                         </div>
 
+                        <div style={{ fontSize: '0.6rem', marginBottom: '0.4rem', color: '#333' }}>
+                          R$ {cat.gasto} / R$ {decimalAdjust(cat.orcado)} - sobra R$ {decimalAdjust(cat.orcado - cat.gasto)}
+                        </div>
                         <ProgressBar
                           now={(cat.gasto / cat.orcado) * 100}
-                          label={`R$ ${cat.gasto} / R$ ${decimalAdjust(cat.orcado)} sobra R$ ${decimalAdjust(cat.orcado - cat.gasto)}`}
                           className="mt-1"
                           variant={cat.gasto > cat.orcado ? "danger" : "success"}
                         />
