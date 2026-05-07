@@ -18,6 +18,7 @@ import { addOrRemoveMonth, monthByNumber } from "../../utils/dateFormater";
 import DebtList from "../../components/form/form";
 import FloatingButtonWithModal from "../../components/floatingButton/floatingButton";
 import DashModal from "./DashModal";
+import UpcomingBill from "../../components/cardCommingBills/CardCommingBills";
 
 
 export default function Dashboard() {
@@ -315,6 +316,9 @@ export default function Dashboard() {
       <div className="analitics">
         <Card className="outsByDay">
           <CardApexGraphicByDay></CardApexGraphicByDay>
+        </Card>
+        <Card className="commingBillsCard">
+          <UpcomingBill></UpcomingBill>
         </Card>
         <Modal
           show={show}

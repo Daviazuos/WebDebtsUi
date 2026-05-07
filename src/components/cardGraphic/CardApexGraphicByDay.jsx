@@ -75,6 +75,10 @@ export default function CardApexGraphicByDay() {
             chart: {
                 height: 350,
                 type: 'line',
+                zoom: {
+                    enabled: true,
+                    allowMouseWheelZoom: false
+                },
             },
             dataLabels: {
                 enabled: true,
@@ -149,6 +153,6 @@ export default function CardApexGraphicByDay() {
     };
 
     return (
-        <ReactApexChart options={graphic.options} series={graphic.series} type="line" height={350} width={1555} />
+        <ReactApexChart options={graphic.options} series={graphic.series} type="line" height={350} width={1100} />
     );
 }

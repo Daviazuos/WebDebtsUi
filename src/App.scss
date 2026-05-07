@@ -190,3 +190,14 @@ body {
   }
 }
 
+.progress-bar-visible-text {
+  .progress-bar {
+    color: #000 !important;
+    font-weight: 600;
+    text-shadow: 
+      0 0 3px #fff,
+      0 0 5px #fff,
+      1px 1px 2px rgba(255, 255, 255, 0.8);
+  }
+}
+

@@ -90,4 +90,8 @@ export class DebtsEndpoints extends AbstractEndpoints {
   deleteDraft(id: string) {
     return `${this.getURL()}/DeleteDraftsDebtsById?Id=${id}`;
   }
+
+  getUpcomingDebts(daysAhead: string, daysAgo: string) {
+    return `${this.getURL()}/Upcoming?daysAhead=${daysAhead}&daysAgo=${daysAgo}`;
+  }
 }
