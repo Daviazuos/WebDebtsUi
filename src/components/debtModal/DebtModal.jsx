@@ -61,6 +61,7 @@ export default function DebtModal(props) {
     const [installmentNumber, setInstallmentNumber] = useState('-')
 
     const [editMode, setEditMode] = useState({});
+    const [confirmDelete, setConfirmDelete] = useState({});
 
     const pageChange = event => {
         setPageNumber(event.target.text);
@@ -97,6 +98,12 @@ export default function DebtModal(props) {
                         initialEditModeState[installment.id] = false;
                     });
                     setEditMode(initialEditModeState);
+                    // Initialize confirm delete state for each installment
+                    const initialConfirmDeleteState = {};
+                    res.data.items.forEach(installment => {
+                        initialConfirmDeleteState[installment.id] = false;
+                    });
+                    setConfirmDelete(initialConfirmDeleteState);
                 })
         }
     }, [props.id, pageNumber, modalShow])
@@ -143,11 +150,17 @@ export default function DebtModal(props) {
                 </td>
                 <td className="td1">
                     {!editMode[item.id] ? (
-                        // Edit icon when not in edit mode
-                        <>
-                            <i className="fas fa-pencil-alt" onClick={() => toggleEditMode(item.id)} style={{ cursor: 'pointer', marginRight: '5px' }}></i>
-                            <i className="fas fa-trash" onClick={() => handleDeleteInstallment(item.id)} style={{ cursor: 'pointer', marginRight: '5px' }}></i>
-                        </>
+                        confirmDelete[item.id] ? (
+                            <>
+                                <i className="fas fa-check" onClick={() => { handleDeleteInstallment(item.id); setConfirmDelete(prev => ({...prev, [item.id]: false})) }} style={{ cursor: 'pointer', marginRight: '5px' }}></i>
+                                <i className="fas fa-times" onClick={() => setConfirmDelete(prev => ({...prev, [item.id]: false}))} style={{ cursor: 'pointer', marginRight: '5px' }}></i>
+                            </>
+                        ) : (
+                            <>
+                                <i className="fas fa-pencil-alt" onClick={() => toggleEditMode(item.id)} style={{ cursor: 'pointer', marginRight: '5px' }}></i>
+                                <i className="fas fa-trash" onClick={() => setConfirmDelete(prev => ({...prev, [item.id]: true}))} style={{ cursor: 'pointer', marginRight: '5px' }}></i>
+                            </>
+                        )
                     ) : (
                         // Check icon when in edit mode
                         <i className="fas fa-check" onClick={() => handleSaveEdit(item.id)} style={{ cursor: 'pointer', marginRight: '5px' }}></i>

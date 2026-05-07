@@ -40,4 +40,13 @@
     .formModal {
         font-size: 10px;
     }
+
+    .installmentModal .td1 i {
+        font-size: 12px;
+        margin: 8px;
+    }
+
+    .installmentModal .td1 {
+        padding: 10px;
+    }
 }
