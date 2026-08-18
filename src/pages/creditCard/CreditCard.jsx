@@ -94,13 +94,20 @@ export default function CardCredit() {
     const [showZeros, setShowZeros] = useState(false);
 
     useEffect(() => {
-        setLoading(true)
-        axiosInstance.get(Endpoints.card.filterCards(1, 9999, null, month, year, false))
+        setLoading(true);
+        setCards([]);
+
+        axiosInstance.get(Endpoints.card.filterCards(1, 9999, null, month, year, showZeros))
             .then(res => {
-                setCards(res.data.items);
+                setCards(res.data.items || []);
             })
-        setLoading(false)
-    }, [month])
+            .catch(() => {
+                setCards([]);
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+    }, [month, showZeros, year]);
 
     const filtered_list = cards.filter(item => {
         let cardValue = 0.00
@@ -128,8 +135,8 @@ export default function CardCredit() {
             }
         }
 
-        let closingDate = item.closureDate > item.dueDate? `${addLeadingZeros(item.closureDate, 2)}/${addLeadingZeros(month-1, 2)}/${year}` : `${addLeadingZeros(item.closureDate, 2)}/${addLeadingZeros(month, 2)}/${year}`
-        
+        let closingDate = item.closureDate > item.dueDate ? `${addLeadingZeros(item.closureDate, 2)}/${addLeadingZeros(month - 1, 2)}/${year}` : `${addLeadingZeros(item.closureDate, 2)}/${addLeadingZeros(month, 2)}/${year}`
+
         return (
             <div class="debit-card card-2 mb-4" style={{ backgroundColor: `${(item.color != null && item.color != '') ? item.color : "#6F87E1"}` }} id="creditCardBlock">
                 <div class="d-flex flex-column h-100"> <label class="d-block">
@@ -157,29 +164,37 @@ export default function CardCredit() {
         )
     })
 
-    const handleChange=(e)=>{
+    const handleChange = (e) => {
         setShowZeros(!showZeros)
-         
-     }
+    }
 
     return (
         <div className="containerCardPage">
             <span id="PagesTitle">Cartões</span>
-            <Form className="switchButton">
-                <Form.Check
-                    type="switch"
-                    id="custom-switch"
-                    label="Apenas com valor"
-                    defaultChecked
-                    onChange={handleChange}
-                />
+            <div className="d-flex align-items-center mb-3">
+                <SetModalAddCard name={'Adicionar novo cartão'} modalName="Adicionar" simbol="fas fa-plus" className="modalButton"></SetModalAddCard>
+                <Form className="switchButton">
+                    <Form.Check
+                        type="switch"
+                        id="custom-switch"
+                        label="Mostrar todos"
+                        defaultChecked={false}
+                        onChange={handleChange}
+                    />
 
-            </Form>
-            {loading ? <i class="fas fa-spinner fa-spin"></i> :
-                <div class="cardCredit card px-4" id='cardCredit'>
+                </Form>
+            </div>
+            {loading ? (
+                <div className="d-flex justify-content-center align-items-center py-5" aria-live="polite">
+                    <div className="spinner-border text-primary" role="status" style={{ width: '3rem', height: '3rem' }}>
+                        <span className="visually-hidden">Carregando...</span>
+                    </div>
+                </div>
+            ) : (
+                <div className="cardCredit card px-4" id='cardCredit'>
                     {lis}
-                </div>}
-            <SetModalAddCard name={'Adicionar novo cartão'} modalName="Adicionar" simbol="fas fa-plus" className="modalButton"></SetModalAddCard>
+                </div>
+            )}
         </div>)
 }
 
