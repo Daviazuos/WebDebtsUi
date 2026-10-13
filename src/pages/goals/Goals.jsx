@@ -1,9 +1,6 @@
 import React, { useEffect } from "react";
 
-import { CircularProgressbar } from 'react-circular-progressbar';
-import 'react-circular-progressbar/dist/styles.css';
-
-import { Button, Card, Table } from "react-bootstrap";
+import { Button, Table } from "react-bootstrap";
 import CustomModal from "../../components/customModal/CustomModal";
 import ModalGoals from "../../components/goalsModal/modalGoals";
 import { decimalAdjust } from "../../utils/valuesFormater";
@@ -19,9 +16,9 @@ function AddGoalsModal(props) {
   const [modalShow, setModalShow] = React.useState(false);
   return (
     <>
-      <Button size="sm" className={props.className} style={{ backgroundColor: "#1A4173", borderColor: "#1A4173" }} variant='dark' onClick={() => setModalShow(true)}>
-        <i className={props.simbol}></i> {props.modalName}
-      </Button>
+      <button type="button" className="goalsAddButton" onClick={() => setModalShow(true)}>
+        <i className={props.simbol} aria-hidden="true"></i> {props.modalName}
+      </button>
 
       <ModalGoals
         show={modalShow}
@@ -68,7 +65,7 @@ export default function Goals() {
 
   const lis = data.items.map(item => {
     return (
-      <tr>
+      <tr key={item.id}>
         <td className="td1">{item.name}</td>
         <td className="td1">R$ {decimalAdjust(item.value)}</td>
         <td className="td1">{dateAdjust(item.date)}</td>
@@ -79,10 +76,25 @@ export default function Goals() {
 
 
   return (
-    <div>
-      <span id="PagesTitle">Metas</span>
-      <Card className='cardTable'>
-        <Table  borderless striped responsive hover variant="white" className="tableFinancial" size="sm">
+    <main className="goalsPage">
+      <header className="goalsPageHeader">
+        <div>
+          <span className="goalsEyebrow">FINANÇAS / OBJETIVOS</span>
+          <h1>Metas</h1>
+          <p>Organize seus objetivos e acompanhe os valores planejados.</p>
+        </div>
+        <AddGoalsModal modalName="Adicionar meta" simbol="fas fa-plus" />
+      </header>
+
+      <section className="goalsPanel">
+        <header className="goalsPanelHeader">
+          <div>
+            <span className="goalsPanelIcon"><i className="fas fa-bullseye" aria-hidden="true"></i></span>
+            <div><h2>Objetivos cadastrados</h2><p>{data.items.length} {data.items.length === 1 ? "meta ativa" : "metas ativas"}</p></div>
+          </div>
+        </header>
+        <div className="goalsTableWrap">
+        <Table borderless responsive hover className="goalsTable" size="sm">
           <thead>
             <tr>
               <th>Nome</th>
@@ -92,11 +104,13 @@ export default function Goals() {
             </tr>
           </thead>
           <tbody>
-            {lis}
+            {lis.length ? lis : (
+              <tr><td className="goalsEmptyState" colSpan="4">Você ainda não cadastrou metas.</td></tr>
+            )}
           </tbody>
         </Table>
-      </Card>
-      <AddGoalsModal modalName="Adicionar" simbol="fas fa-plus" className="modalButton"></AddGoalsModal>
-    </div>
+        </div>
+      </section>
+    </main>
   )
 }

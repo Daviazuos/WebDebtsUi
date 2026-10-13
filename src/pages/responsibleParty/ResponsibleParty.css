@@ -1,56 +1,317 @@
-
-#cardGoal{
-    position: relative;
-    display: flex;
-    flex-direction: row;
-    min-width: 0;
-    flex-wrap: wrap;
+.app main.peoplePage {
+  --people-ink: #25282b;
+  --people-muted: #777d85;
+  --people-border: #e5e7eb;
+  --people-violet: #5840d8;
+  --people-violet-soft: #f0edff;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 1440px;
+  min-width: 0;
+  margin: 0 auto;
+  padding: 28px clamp(16px, 3vw, 36px) 40px;
+  color: var(--people-ink);
 }
 
-.cardGoal .debit-card {
-    min-width: 295px;
-    min-height: 180px;
-    padding: 15px;
-    border-radius: 5px;
-    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-    
+.app main .peoplePageHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin: 0 0 20px;
+  border: 0;
 }
 
-.cardGoal .card-2 {
-    border-color: black;
-    margin-top: 10px;
-    margin-left: 5px;
-    margin-right: 5px;
-    margin-bottom: 5px;
+.peopleEyebrow {
+  color: var(--people-violet);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .08em;
 }
 
-.cardGoal .text-white {
-    font-size: 25px
+.app main .peoplePageHeader h1 {
+  margin: 5px 0 3px;
+  transform: none;
+  color: var(--people-ink);
+  font-size: 27px;
+  font-weight: 700;
+  line-height: 1.2;
 }
 
-.cardGoal .m-0 {
-    color: black;
+.peoplePageHeader p {
+  margin: 0;
+  color: var(--people-muted);
+  font-size: 13px;
 }
 
-.cardGoal .creditBody {
+.app main .peopleAddButton {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 9px;
+  padding: 0 16px;
+  border: 1px solid #4930c4;
+  border-radius: 9px;
+  background: #5037ce;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  line-height: 1;
+  appearance: none;
+  cursor: pointer;
+  box-shadow: none;
+  transition: background .18s ease, border-color .18s ease, box-shadow .18s ease;
+}
+
+.app main .peopleAddButton:hover,
+.app main .peopleAddButton:focus-visible {
+  border-color: #3f28ad;
+  background: #3f28ad;
+  color: #fff;
+}
+
+.peopleAddButton:focus-visible {
+  outline: 3px solid rgba(115, 92, 230, .18);
+  outline-offset: 2px;
+}
+
+.peoplePanel {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--people-border);
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(37, 40, 43, .025);
+}
+
+.peoplePanelHeader {
+  display: flex;
+  min-height: 68px;
+  align-items: center;
+  padding: 13px 17px;
+  border-bottom: 1px solid #edf0f3;
+}
+
+.peoplePanelHeader > div {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
+.peoplePanelIcon {
+  display: inline-flex;
+  width: 36px;
+  height: 36px;
+  flex: 0 0 36px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: var(--people-violet-soft);
+  color: var(--people-violet);
+  font-size: 14px;
+}
+
+.peoplePanelHeader h2 {
+  margin: 0 0 3px;
+  color: var(--people-ink);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.peoplePanelHeader p {
+  margin: 0;
+  color: var(--people-muted);
+  font-size: 11px;
+}
+
+.peopleTableWrap {
+  width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+}
+
+.peopleTable {
+  min-width: 760px;
+  margin: 0;
+  color: var(--people-ink);
+  font-size: 13px;
+  vertical-align: middle;
+}
+
+.peopleTable thead th {
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--people-border);
+  color: var(--people-muted);
+  font-size: 10px;
+  font-weight: 600;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.peopleTable tbody td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #f0f1f3;
+  color: #454a51;
+  white-space: nowrap;
+}
+
+.peopleTable tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.peopleTable tbody tr:hover td {
+  background: #fcfbff;
+}
+
+.peopleTable tbody td:first-child {
+  color: var(--people-ink);
+  font-weight: 600;
+}
+
+.peopleTable tbody td:nth-child(2),
+.peopleTable tbody td:nth-child(3) {
+  font-weight: 700;
+}
+
+.peopleStatusCell {
+  width: 160px;
+}
+
+.peopleStatus {
+  display: inline-flex;
+  min-height: 25px;
+  align-items: center;
+  padding: 0 9px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.peopleStatus--pending {
+  background: #fff4e8;
+  color: #a76a27;
+}
+
+.peopleStatus--paid {
+  background: #e9f6ed;
+  color: #348c59;
+}
+
+.peopleStatus--empty {
+  background: #f3f4f6;
+  color: #737983;
+}
+
+.peopleDetailsButton {
+  display: inline-flex;
+  width: 31px;
+  height: 31px;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid #e3defd;
+  border-radius: 8px;
+  background: #faf9ff;
+  color: var(--people-violet);
+  cursor: pointer;
+  transition: background .15s ease, border-color .15s ease, color .15s ease;
+}
+
+.peopleDetailsButton:hover,
+.peopleDetailsButton:focus-visible {
+  border-color: #d1c9ff;
+  background: var(--people-violet-soft);
+  color: #3f28ad;
+}
+
+.peopleDetailsButton:focus-visible {
+  outline: 2px solid rgba(115, 92, 230, .18);
+  outline-offset: 2px;
+}
+
+.peopleEmptyState {
+  height: 160px;
+  color: var(--people-muted) !important;
+  text-align: center;
+}
+
+.peopleCreateModal .modal-content {
+  overflow: hidden;
+  border: 1px solid var(--people-border);
+  border-radius: 12px;
+  box-shadow: 0 16px 48px rgba(27, 30, 36, .18);
+}
+
+.peopleCreateModal .modal-body {
+  padding: 20px;
+}
+
+.peopleCreateModal .modal-body .form-label {
+  color: #4c5158;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.peopleCreateModal .modal-body .form-control {
+  min-height: 42px;
+  border-color: #d9dde3;
+  border-radius: 8px;
+  box-shadow: none;
+  font-size: 13px;
+}
+
+.peopleCreateModal .modal-body .form-control:focus {
+  border-color: #735ce6;
+  box-shadow: 0 0 0 3px rgba(115, 92, 230, .12);
+}
+
+.peopleCreateModal .modal-body > .btn-dark {
+  min-height: 39px;
+  border: 1px solid #4930c4;
+  border-radius: 8px;
+  background: #5037ce;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+@media (max-width: 600px) {
+  .app main.peoplePage {
+    padding: 20px 14px 30px;
+  }
+
+  .app main .peoplePageHeader {
+    align-items: flex-start;
+  }
+
+  .app main .peoplePageHeader h1 {
+    font-size: 23px;
+  }
+
+  .peoplePageHeader p {
+    max-width: 245px;
+    line-height: 1.4;
+  }
+
+  .app main .peopleAddButton {
+    min-height: 40px;
+    gap: 7px;
+    padding: 0 11px;
     font-size: 11px;
+    white-space: nowrap;
+  }
+
+  .peoplePanelHeader {
+    padding: 12px;
+  }
+
+  .peopleTable {
+    min-width: 700px;
+  }
 }
 
-.modalButton {
-    margin: 10px;
-}
-
-#cardText {
-    color: rgb(0, 0, 0);
-}
-
-.CircularProgressbar .CircularProgressbar-text {
-    fill: #3e98c7;
-    font-size: 10px;
-    dominant-baseline: middle;
-    text-anchor: middle;
-}
-
-.ResponsibleModalButton {
-    margin-left: 10px;
+@media (max-width: 380px) {
+  .app main .peoplePageHeader {
+    flex-direction: column;
+  }
 }

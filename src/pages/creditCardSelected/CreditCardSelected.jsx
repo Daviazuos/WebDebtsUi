@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button, Form, Card, Tab, Table, Tabs, Accordion } from "react-bootstrap";
 import { axiosInstance } from "../../api";
 import { Endpoints } from "../../api/endpoints";
@@ -60,6 +60,28 @@ export default function CreditCardSelected({ match }, props) {
     const [cardId, setCardId] = useState(match.params.cardId)
     const [showInvoiceModal, setShowInvoiceModal] = useState(false)
     const [allInstallments, setAllInstallments] = useState([])
+    const cardStackContainerRef = useRef(null);
+    const [cardStackAvailableWidth, setCardStackAvailableWidth] = useState(0);
+
+    useEffect(() => {
+        const container = cardStackContainerRef.current;
+        if (!container || typeof ResizeObserver === "undefined") return undefined;
+
+        const observer = new ResizeObserver(entries => {
+            const width = Math.round(entries[0]?.contentRect.width || 0);
+            setCardStackAvailableWidth(currentWidth => currentWidth === width ? currentWidth : width);
+        });
+        observer.observe(container);
+
+        return () => observer.disconnect();
+    }, []);
+
+    const cardStackStep = cards.length > 1 && cardStackAvailableWidth > 310
+        ? (cardStackAvailableWidth - 310) / (cards.length - 1)
+        : 50;
+    const cardStackWidth = cards.length > 0
+        ? 310 + Math.max(0, cards.length - 1) * cardStackStep
+        : 0;
 
 
     const pageChange = event => {
@@ -200,8 +222,8 @@ export default function CreditCardSelected({ match }, props) {
                                 <i className="fas fa-receipt"></i> Conferir Fatura
                             </Button>
                         </div>
-                        <div style={{ marginLeft: '20px' }}>
-                            <Table borderless striped responsive hover variant="white" size="lg">
+                        <div className="creditInstallmentsTableWrap">
+                            <Table borderless striped responsive hover className="creditInstallmentsTable" size="sm">
                                 <thead>
                                     <tr className="trr">
                                         <th>Nome</th>
@@ -215,7 +237,9 @@ export default function CreditCardSelected({ match }, props) {
                                     {lis_instalments}
                                 </tbody>
                             </Table>
-                            <CustomPagination currentPage={installments.currentPage} totalItems={installments.totalItems} totalPages={installments.totalPages} onChange={pageChange}></CustomPagination>
+                            <div className="creditInstallmentsPagination">
+                                <CustomPagination currentPage={installments.currentPage} totalItems={installments.totalItems} totalPages={installments.totalPages} onChange={pageChange}></CustomPagination>
+                            </div>
                         </div>
                     </div>
                 </Tab>
@@ -229,15 +253,12 @@ export default function CreditCardSelected({ match }, props) {
             {loading ? <i className="fas fa-spinner fa-spin"></i> :
                 <>
                     {/* Cartões empilhados */}
-                    <div className="card-stack-container">
+                    <div className="card-stack-container" ref={cardStackContainerRef}>
+                        <div className="card-stack" style={{ width: `${cardStackWidth}px` }}>
                         {cards.map((card, index) => (
-                            <div className={`cardCreditSelected px-4 ${selectedCardIndex === index ? 'selected' : ''}`} id='cardCreditSelected' style={{
-                                position: 'relative', marginBottom: "-115px", display: 'flex', flexDirection: 'row'
-                            }}>
+                            <div key={card.id} className={`cardCreditSelected ${selectedCardIndex === index ? 'selected' : ''}`} style={{ left: `${index * cardStackStep}px` }}>
                                 <div className={`debit-card card-2 mb-4 ${selectedCardIndex === index ? 'selected' : ''}`} onClick={() => selectCard(index, card.id)} style={{
                                     backgroundColor: `${card.color !== null && card.color !== '' ? card.color : "#6F87E1"}`,
-                                    position: 'absolute',
-                                    left: `${index * 50}px`,
                                     zIndex: selectedCardIndex === index
                                         ? cards.length
                                         : index < selectedCardIndex
@@ -269,6 +290,7 @@ export default function CreditCardSelected({ match }, props) {
                                 </div >
                             </div>
                         ))}
+                        </div>
                     </div>
                     <Card style={{ zIndex: 2, borderColor: `${(cards[selectedCardIndex].color != null && cards[selectedCardIndex].color != '') ? cards[selectedCardIndex].color : "#6F87E1"}`, borderWidth: '6px', padding: '10px' }}>
                         <Tabs

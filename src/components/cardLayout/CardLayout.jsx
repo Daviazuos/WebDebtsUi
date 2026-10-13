@@ -128,10 +128,27 @@ export default function CardLayout() {
 
     return (
         <div className="containerWallet">
-            <div id="linha">
-                <i onClick={() => selectNewMonth("left")} style={{ cursor: 'pointer', color: '#B3B8D4' }} class={"fas fa-chevron-left"}></i>
-                <div style={{ minWidth: '250px', display: 'flex', justifyContent: 'center' }}>{monthByNumber(month)} - {year}</div>
-                <i style={{ cursor: 'pointer', color: '#B3B8D4' }} onClick={() => selectNewMonth("right")} class={"fas fa-chevron-right"}></i>
+            <div className="periodSelector" aria-label="Selecionar período">
+                <button
+                    type="button"
+                    className="periodNavigationButton"
+                    aria-label="Mês anterior"
+                    onClick={() => selectNewMonth("left")}
+                >
+                    <i className="fas fa-chevron-left" aria-hidden="true"></i>
+                </button>
+                <div className="periodLabel">
+                    <span>{monthByNumber(month)}</span>
+                    <strong>{year}</strong>
+                </div>
+                <button
+                    type="button"
+                    className="periodNavigationButton"
+                    aria-label="Próximo mês"
+                    onClick={() => selectNewMonth("right")}
+                >
+                    <i className="fas fa-chevron-right" aria-hidden="true"></i>
+                </button>
             </div>
             <div className="walletCards">
                 <CustomCardSize

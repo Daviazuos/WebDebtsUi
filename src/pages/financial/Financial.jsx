@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 
-import { Card, Button, Table, Form } from "react-bootstrap";
+import { Button, Table, Form } from "react-bootstrap";
 import "./Financial.css"
 
 import { axiosInstance } from "../../api";
@@ -37,9 +37,16 @@ function SetModalPaid(props) {
 
   return (
     <>
-      <div className={`indicator ${props.status === 'Paid' ? '' : 'unpaid'}`} onClick={props.status === 'Paid' ? '' : () => setModalShow(!modalShow)}>
-        <span className="icon">{props.status === 'Paid' ? '\u2714' : '\u26A0'}</span> {/* Ícone de alerta ou check */}
-      </div>
+      <button
+        type="button"
+        className={`indicator ${props.status === 'Paid' ? 'isPaid' : 'unpaid'}`}
+        aria-label={props.status === 'Paid' ? `${props.name} pago` : `Registrar pagamento de ${props.name}`}
+        title={props.status === 'Paid' ? 'Pago' : 'Registrar pagamento'}
+        disabled={props.status === 'Paid'}
+        onClick={() => setModalShow(true)}
+      >
+        <i className={`fas ${props.status === 'Paid' ? 'fa-check' : 'fa-exclamation'}`} aria-hidden="true"></i>
+      </button>
 
       <ModalPaid
         value={props.value}
@@ -155,12 +162,14 @@ export default function Financial() {
     }
 
     return (
-      <div className="card-financial">
+      <article className="card-financial" key={item.id}>
         <div className="card-content-financial">
           <div className="debt-name">{item.debtName}</div>
           <div className="installment-text">{installmentText}</div>
-          <div className="debt-value">R$ {decimalAdjust(item.value)}</div>
-          <div className="debt-date">{dateAdjust(item.date)}</div>
+          <div className="financialEntryDetails">
+            <div className="debt-date">{dateAdjust(item.date)}</div>
+            <div className="debt-value">R$ {decimalAdjust(item.value)}</div>
+          </div>
           {item.numberOfInstallments === 0 && item.installmentNumber === 0 ? <div></div> :
           <div className="progress-bar-custom">
             <div className="progress-bar-fill" style={{ width: item.numberOfInstallments === 0 ? '0%' : `${(item.installmentNumber / item.numberOfInstallments) * 100}%` }}></div>
@@ -180,7 +189,7 @@ export default function Financial() {
           amount={item.value}
           status={item.status}>
         </SetModalPaid>
-      </div>
+      </article>
     )
   })
 
@@ -199,13 +208,15 @@ export default function Financial() {
     }
 
     return (
-        <div className="card-financial">
+      <article className="card-financial financialCardEntry" key={item.id}>
           <div className="card-background" style={{ '--corFundo': item.color }}></div>
           <div className="card-content-financial">
             <div className="debt-name">{item.name}</div>
             <div className="installment-text">Cartão de crédito</div>
-            <div className="debt-value">R$ {decimalAdjust(cardValue)}</div>
-            <div className="debt-date">{item.dueDate}/{addLeadingZeros(month, 2)}/{year}</div>
+            <div className="financialEntryDetails">
+              <div className="debt-date">Vence {addLeadingZeros(item.dueDate, 2)}/{addLeadingZeros(month, 2)}/{year}</div>
+              <div className="debt-value">R$ {decimalAdjust(cardValue)}</div>
+            </div>
 
           </div>
            <SetModalPaid 
@@ -223,47 +234,80 @@ export default function Financial() {
               classname='btn btn-danger'
               status={cardStatus}>
             </SetModalPaid>
-        </div >
+        </article >
     )
   })
 
   return (
-    <>
-      <span id="PagesTitle">Finanças</span>
-      <div className="selectorPaid">
-        <Form.Group className="mb-3">
-          <Form.Control type="search" id="typeSearch" as="select" onChange={statusChange}>
-            <option value="">Filtrar por status</option>
+    <main className="financialPage">
+      <header className="financialPageHeader">
+        <div>
+          <span className="financialEyebrow">FINANÇAS / MOVIMENTAÇÕES</span>
+          <h1>Finanças</h1>
+          <p>Acompanhe pagamentos e vencimentos do período.</p>
+        </div>
+      </header>
+
+      <section className="financialToolbar" aria-label="Filtros de movimentações">
+        <div>
+          <span className="financialToolbarLabel">Movimentações</span>
+          <span className="financialToolbarHint">Filtre os lançamentos pelo status de pagamento</span>
+        </div>
+        <Form.Group className="financialStatusFilter">
+          <Form.Label htmlFor="typeSearch">Status</Form.Label>
+          <Form.Control id="typeSearch" as="select" value={paidStatus} onChange={statusChange}>
+            <option value="">Todos os status</option>
             <option value="Paid">Pago</option>
             <option value="NotPaid">Não pago</option>
           </Form.Control>
         </Form.Group>
-      </div>
+      </section>
+
       <div className="financialTables">
-        <Card className='cardFinancialTable'>
-          {debtTableData}
-          <p></p>
-          {(financial.totalItems !== undefined) ?
-            <PaginationComponent
-              itemsCount={financial.totalItems}
-              itemsPerPage={7}
-              currentPage={financial.currentPage}
-              setCurrentPage={setPageNumber}
-              alwaysShown={false}
-            /> : ""}
-        </Card>
-        <Card className='cardFinancialTable'>
-          {cardTableData}
-          <p></p>
-          {(cardPaginationData.totalItems !== undefined) ?
-            <PaginationComponent
-              itemsCount={cardPaginationData.totalItems}
-              itemsPerPage={7}
-              currentPage={cardPaginationData.currentPage}
-              setCurrentPage={setPageCardNumber}
-              alwaysShown={false}
-            /> : ""}
-        </Card>
+        <section className="financialPanel">
+          <header className="financialPanelHeader">
+            <span className="financialPanelIcon"><i className="fas fa-receipt" aria-hidden="true"></i></span>
+            <div><h2>Despesas simples</h2><p>Lançamentos fora do cartão de crédito</p></div>
+            <span className="financialPanelCount">{financial.totalItems || 0}</span>
+          </header>
+          <div className="financialEntries">
+            {debtTableData?.length ? debtTableData : <div className="financialEmptyState">Nenhuma despesa encontrada.</div>}
+          </div>
+          <footer className="financialPanelFooter">
+            {financial.totalItems !== undefined && (
+              <PaginationComponent
+                itemsCount={financial.totalItems}
+                itemsPerPage={7}
+                currentPage={financial.currentPage}
+                setCurrentPage={setPageNumber}
+                alwaysShown={false}
+              />
+            )}
+          </footer>
+        </section>
+
+        <section className="financialPanel">
+          <header className="financialPanelHeader">
+            <span className="financialPanelIcon financialPanelIcon--card"><i className="fas fa-credit-card" aria-hidden="true"></i></span>
+            <div><h2>Faturas de cartão</h2><p>Resumo dos cartões no período</p></div>
+            <span className="financialPanelCount">{cardPaginationData.totalItems || 0}</span>
+          </header>
+          <div className="financialEntries">
+            {cardTableData?.length ? cardTableData : <div className="financialEmptyState">Nenhuma fatura encontrada.</div>}
+          </div>
+          <footer className="financialPanelFooter">
+            {cardPaginationData.totalItems !== undefined && (
+              <PaginationComponent
+                itemsCount={cardPaginationData.totalItems}
+                itemsPerPage={7}
+                currentPage={cardPaginationData.currentPage}
+                setCurrentPage={setPageCardNumber}
+                alwaysShown={false}
+              />
+            )}
+          </footer>
+        </section>
       </div>
-    </>)
+    </main>
+  )
 };

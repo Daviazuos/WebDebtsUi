@@ -1,24 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { Accordion, Button, Card, Form, Table } from "react-bootstrap";
+import { Accordion, Form, Table } from "react-bootstrap";
 import { axiosInstance } from "../../api";
 import { Endpoints } from "../../api/endpoints";
 import { decimalAdjust } from "../../utils/valuesFormater";
-import WalletModal from "./WalletModal"
-
+import ReactApexChart from "react-apexcharts";
+import WalletModal from "./WalletModal";
 import "./Wallet.css";
 import WalletModalDelete from "./WalletDeleteModal";
-import { debtInstallmentTransform, walletInstallmentStatusTransform, walletStatusTransform } from "../../utils/enumFormatter";
+import { debtInstallmentTransform, walletInstallmentStatusTransform } from "../../utils/enumFormatter";
 import WalletModalEdit from "./WalletModalEdit";
-import CustomCard from "../../components/customCard/CustomCard";
-import { refreshPage } from "../../utils/utils";
-import CustomCardSize from "../../components/customCardSize/CustomCardSize";
-
 
 function SetModalDelete(props) {
   const [modalShow, setModalShow] = React.useState(false);
   return (
     <>
-      <i className={props.simbol} onClick={() => setModalShow(true)}></i> {props.modalName}
+      <button type="button" className="walletIconButton" aria-label={`Excluir ${props.name}`} onClick={() => setModalShow(true)}>
+        <i className={props.simbol} aria-hidden="true"></i>
+      </button>
       <WalletModalDelete
         value={props.value}
         show={modalShow}
@@ -34,7 +32,9 @@ function SetModal(props) {
   const [modalShow, setModalShow] = React.useState(false);
   return (
     <>
-      <i className={props.simbol} onClick={() => setModalShow(true)}></i> {props.modalName}
+      <button type="button" className="walletIconButton" aria-label={`Editar ${props.name}`} onClick={() => setModalShow(true)}>
+        <i className={props.simbol} aria-hidden="true"></i>
+      </button>
       <WalletModalEdit
         value={props.value}
         show={modalShow}
@@ -49,9 +49,9 @@ function SetModalAdd(props) {
   const [modalShow, setModalShow] = React.useState(false);
   return (
     <>
-      <Button size="sm" className={props.className} style={{ backgroundColor: "#1A4173", borderColor: "#1A4173" }} variant='dark' onClick={() => setModalShow(true)}>
-        <i className={props.simbol}></i> {props.modalName}
-      </Button>
+      <button type="button" className="walletAddButton" onClick={() => setModalShow(true)}>
+        <i className={props.simbol} aria-hidden="true"></i> {props.modalName}
+      </button>
       <WalletModal
         value={props.value}
         show={modalShow}
@@ -64,135 +64,220 @@ function SetModalAdd(props) {
 
 export default function Wallet() {
   const [wallets, setWallets] = useState([]);
-  const [month, setMonth] = useState(localStorage.getItem("month"))
-  const [year, setYear] = useState(localStorage.getItem("year"))
-  const [status, setStatus] = useState(false)
-  const [walletInstallments, setWalletInstallments] = useState([])
+  const currentDate = new Date();
+  const [month] = useState(Number(localStorage.getItem("month")) || currentDate.getMonth() + 1);
+  const [year] = useState(Number(localStorage.getItem("year")) || currentDate.getFullYear());
+  const [status, setStatus] = useState(false);
+  const [monthlyChart, setMonthlyChart] = useState(null);
+  const [chartLoading, setChartLoading] = useState(true);
 
-  function EditWalletStatus(name, value, walletStatus, date, id) {
-    const editWallet = {
-      ReceivedStatus: walletStatus,
-    }
+  function EditWalletStatus(walletStatus, id) {
+    const editWallet = { ReceivedStatus: walletStatus };
     axiosInstance.put(Endpoints.wallet.putInstallment(id), editWallet).then(res => {
-      setStatus(!status)
-    }
-    )
+      setStatus(currentStatus => !currentStatus);
+    });
   }
 
   useEffect(() => {
     axiosInstance.get(Endpoints.wallet.getResponsiblePartyWallets(month, year))
       .then(res => {
-        setWallets(res.data);
-        let walletInstallmentsTemp = [];
+        setWallets(Array.isArray(res.data) ? res.data : []);
+      });
+  }, [month, year, status])
 
-        for (let wallet of res.data) {
-          for (let walletAppModel of wallet.walletAppModels) {
-            walletInstallmentsTemp.push({
-              ...walletAppModel.walletInstallments[0],
-            });
+  useEffect(() => {
+    let isCurrent = true;
+    setChartLoading(true);
+
+    const periods = Array.from({ length: 6 }, (_, index) => {
+      const date = new Date(year, month - 1 - (5 - index), 1);
+      return {
+        month: date.getMonth() + 1,
+        year: date.getFullYear(),
+        label: date.toLocaleDateString("pt-BR", { month: "short" }).replace(".", "")
+      };
+    });
+
+    Promise.all(periods.map(period =>
+      axiosInstance.get(Endpoints.wallet.getResponsiblePartyWallets(period.month, period.year))
+    )).then(responses => {
+      if (!isCurrent) return;
+
+      const people = new Map();
+      responses.forEach((response, monthIndex) => {
+        (Array.isArray(response.data) ? response.data : []).forEach(person => {
+          const key = person.id || person.responsiblePartyId || person.name;
+          if (!people.has(key)) {
+            people.set(key, { name: person.name, data: Array(6).fill(0) });
           }
-        }
-        setWalletInstallments(walletInstallmentsTemp);
-      })
-  }, [month, status])
 
-  const toReceiveValue = walletInstallments.filter(({ receivedStatus }) => receivedStatus === false).reduce(function (prev, cur) {
-    return prev + cur.value;
-  }, 0);
+          const monthValue = (person.walletAppModels || []).reduce((total, wallet) => {
+            const installment = wallet.walletInstallments?.[0];
+            return total + (Number(installment?.value) || 0);
+          }, 0);
+          people.get(key).data[monthIndex] += monthValue;
+        });
+      });
 
-  const receivedValue = walletInstallments.filter(({ receivedStatus }) => receivedStatus === true).reduce(function (prev, cur) {
-    return prev + cur.value;
-  }, 0);
+      const series = Array.from(people.values()).map(person => ({
+        name: person.name,
+        data: person.data
+      }));
 
-  const lis = wallets.map(item => {
-    let hasPending = item.walletAppModels.some(walletAppModel =>
-      walletAppModel.walletInstallments.some(installment => !installment.receivedStatus)
-    );
-    let sumNotReceivedStatus = item.walletAppModels.reduce((acc, curr) => acc + (curr.walletInstallments[0].receivedStatus ? 0 : curr.walletInstallments[0].value), 0);
-    let showPending = hasPending === true ?
-      <div className="pending">
-        <i className="fas fa-exclamation-triangle red"></i>
-        <div className="textPending">R${decimalAdjust(sumNotReceivedStatus)} a receber</div></div> : '';
+      setMonthlyChart({
+        categories: periods.map(period => period.label),
+        series
+      });
+    }).catch(() => {
+      if (isCurrent) setMonthlyChart({ categories: periods.map(period => period.label), series: [] });
+    }).finally(() => {
+      if (isCurrent) setChartLoading(false);
+    });
 
-    let accordionName = <div className="accordionName">{`${item.name} - R$ ${decimalAdjust(item.value)}`}</div>
-    return (
-      <Accordion.Item eventKey={item.name}>
-        <Accordion.Header>{accordionName}{showPending}</Accordion.Header>
-        <Accordion.Body>
-          <Table borderless striped responsive hover variant="black" size="sm">
-            <thead>
-              <tr className="walletTable">
-                <th>Nome</th>
-                <th>Valor</th>
-                <th>Tipo</th>
-                <th>Parcelas</th>
-                <th>Ação</th>
-              </tr>
-            </thead>
-            <tbody>
-              {item.walletAppModels.map(itemWallet => {
-                return (<tr key={itemWallet.id} className="walletTable">
-                  <td>{itemWallet.name}</td>
-                  <td>
-                    R$ {decimalAdjust(itemWallet.walletInstallments[0].value)}
-                  </td>
-                  <td>
-                    {debtInstallmentTransform(itemWallet.walletInstallmentType)}
-                  </td>
-                  {(itemWallet.walletInstallmentType === 'Installment') ?
-                    <td>
-                      {itemWallet.walletInstallments[0].installmentNumber}/{itemWallet.numberOfInstallments}
-                    </td> : <td> 1/1</td>}
-                  <td className='tdd'>
-                    {<SetModal value={itemWallet.id} name={itemWallet.name} modalName="" simbol="fas fa-edit" className='btn btn-primary'></SetModal>}{" "}
-                    {<SetModalDelete size="sm" className="btn btn-danger" simbol="fa fa-trash" modalName="" value={itemWallet}>Apagar</SetModalDelete>}{" "}
-                    <Form>
-                      <Form.Check
-                        type="switch"
-                        id="custom-switch"
-                        label={walletInstallmentStatusTransform(itemWallet.walletInstallments[0].receivedStatus)}
-                        checked={itemWallet.walletInstallments[0].receivedStatus}
-                        onClick={() => EditWalletStatus(itemWallet.name, itemWallet.value, !itemWallet.walletInstallments[0].receivedStatus, itemWallet.date, itemWallet.walletInstallments[0].id)}
-                      />
-                    </Form>
-                  </td>
-                </tr>)
-              })}
+    return () => { isCurrent = false; };
+  }, [month, year]);
 
-            </tbody>
-          </Table>
+  const walletEntries = wallets.flatMap(person =>
+    (person.walletAppModels || []).map(wallet => ({ person, wallet, installment: wallet.walletInstallments?.[0] }))
+  ).filter(entry => entry.installment);
+  const toReceiveValue = walletEntries
+    .filter(({ installment }) => !installment.receivedStatus)
+    .reduce((total, { installment }) => total + (Number(installment.value) || 0), 0);
+  const receivedValue = walletEntries
+    .filter(({ installment }) => installment.receivedStatus)
+    .reduce((total, { installment }) => total + (Number(installment.value) || 0), 0);
+  const totalValue = toReceiveValue + receivedValue;
 
-        </Accordion.Body>
-      </Accordion.Item>
-    )
-  })
-
+  const chartOptions = {
+    chart: { type: "bar", toolbar: { show: false }, fontFamily: "inherit" },
+    colors: ["#5840d8", "#3b9d63", "#4d91b8", "#d38a4a", "#c35f78", "#6c78ad"],
+    plotOptions: { bar: { horizontal: false, columnWidth: "52%", borderRadius: 3 } },
+    dataLabels: { enabled: false },
+    stroke: { show: true, width: 2, colors: ["transparent"] },
+    xaxis: { categories: monthlyChart?.categories || [], axisBorder: { show: false }, axisTicks: { show: false } },
+    yaxis: {
+      labels: {
+        formatter: value => new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 }).format(value)
+      }
+    },
+    tooltip: { y: { formatter: value => `R$ ${decimalAdjust(value)}` } },
+    grid: { borderColor: "#edf0f3", strokeDashArray: 4 },
+    legend: { position: "bottom", fontSize: "13px", markers: { radius: 4 } },
+    noData: { text: "Sem entradas neste período" },
+    responsive: [{ breakpoint: 600, options: { legend: { fontSize: "11px", itemMargin: { horizontal: 8 } }, plotOptions: { bar: { columnWidth: "68%" } } } }]
+  };
 
   return (
-    <div>
-      <span id="PagesTitle">Carteira</span>
-      <div className="walletGroup">
-        <Card className="cardWallet">
-          <Accordion defaultActiveKey="0">
-            {lis}
-          </Accordion>
-        </Card>
-        <div className="cardGroup">
-          <CustomCardSize
-            title="Recebido"
-            children={decimalAdjust(receivedValue)}
-            icon="fas fa-arrow-down success custom-icon"
-            data={700.00}
-            size={260}></CustomCardSize>
-          <CustomCardSize
-            title="A receber"
-            children={decimalAdjust(toReceiveValue)}
-            icon="fas fa-arrow-down red custom-icon"
-            data={700.00}
-            size={260}></CustomCardSize>
+    <main className="walletPage">
+      <header className="walletPageHeader">
+        <div>
+          <span className="walletEyebrow">FINANÇAS / ENTRADAS</span>
+          <h1>Carteira</h1>
+          <p>Acompanhe os valores recebidos e previstos por pessoa.</p>
         </div>
-      </div>
-      {<SetModalAdd name={'Adicionar'} modalName="Adicionar" simbol="fas fa-plus" className="modalButton"></SetModalAdd>}{" "}
-    </div>
+        <SetModalAdd name="Adicionar entrada" modalName="Adicionar entrada" simbol="fas fa-plus" />
+      </header>
+
+      <section className="walletMetrics" aria-label="Resumo das entradas">
+        <div className="walletMetric">
+          <span className="walletMetricIcon received"><i className="fas fa-arrow-down" aria-hidden="true" /></span>
+          <div><span>Recebido</span><strong>R$ {decimalAdjust(receivedValue)}</strong></div>
+        </div>
+        <div className="walletMetric">
+          <span className="walletMetricIcon pending"><i className="fas fa-hourglass-half" aria-hidden="true" /></span>
+          <div><span>A receber</span><strong>R$ {decimalAdjust(toReceiveValue)}</strong></div>
+        </div>
+        <div className="walletMetric walletMetricTotal">
+          <span className="walletMetricIcon total"><i className="fas fa-wallet" aria-hidden="true" /></span>
+          <div><span>Total do período</span><strong>R$ {decimalAdjust(totalValue)}</strong></div>
+        </div>
+      </section>
+
+      <section className="walletPanel walletChartPanel">
+        <div className="walletPanelHeader">
+          <div>
+            <span className="walletSectionIcon"><i className="fas fa-chart-column" aria-hidden="true" /></span>
+            <div><h2>Entradas por pessoa</h2><p>Comparativo mensal dos últimos seis meses</p></div>
+          </div>
+          <span className="walletPeriodLabel">{String(month).padStart(2, "0")}/{year}</span>
+        </div>
+        {chartLoading ? (
+          <div className="walletChartState"><i className="fas fa-spinner fa-spin" aria-hidden="true" /> Carregando gráfico...</div>
+        ) : monthlyChart?.series.length ? (
+          <ReactApexChart options={chartOptions} series={monthlyChart.series} type="bar" height={320} />
+        ) : (
+          <div className="walletChartState">Ainda não há entradas para comparar neste período.</div>
+        )}
+      </section>
+
+      <section className="walletPanel walletPeoplePanel">
+        <div className="walletPanelHeader">
+          <div>
+            <span className="walletSectionIcon"><i className="fas fa-users" aria-hidden="true" /></span>
+            <div><h2>Lançamentos</h2><p>Entradas do período por pessoa</p></div>
+          </div>
+          <span className="walletCount">{wallets.length} {wallets.length === 1 ? "pessoa" : "pessoas"}</span>
+        </div>
+        {wallets.length ? (
+          <Accordion className="walletAccordion">
+            {wallets.map((person, index) => {
+              const entries = person.walletAppModels || [];
+              const pendingValue = entries.reduce((total, wallet) => {
+                const installment = wallet.walletInstallments?.[0];
+                return total + (!installment?.receivedStatus ? Number(installment?.value) || 0 : 0);
+              }, 0);
+
+              return (
+                <Accordion.Item eventKey={String(index)} key={person.id || person.name}>
+                  <Accordion.Header>
+                    <span className="walletPersonHeading">
+                      <span className="walletPersonAvatar">{person.name?.charAt(0)?.toUpperCase() || "?"}</span>
+                      <span className="walletPersonName">{person.name}</span>
+                      <span className="walletPersonTotal">R$ {decimalAdjust(person.value || 0)}</span>
+                      {pendingValue > 0 && <span className="walletPendingBadge">R$ {decimalAdjust(pendingValue)} a receber</span>}
+                    </span>
+                  </Accordion.Header>
+                  <Accordion.Body>
+                    <Table responsive className="walletEntriesTable" borderless>
+                      <thead><tr><th>Entrada</th><th>Valor</th><th>Tipo</th><th>Parcelas</th><th>Status e ações</th></tr></thead>
+                      <tbody>
+                        {entries.map(wallet => {
+                          const installment = wallet.walletInstallments?.[0];
+                          if (!installment) return null;
+
+                          return (
+                            <tr key={wallet.id}>
+                              <td data-label="Entrada">{wallet.name}</td>
+                              <td data-label="Valor" className="walletEntryValue">R$ {decimalAdjust(installment.value)}</td>
+                              <td data-label="Tipo">{debtInstallmentTransform(wallet.walletInstallmentType)}</td>
+                              <td data-label="Parcelas">{wallet.walletInstallmentType === "Installment" ? `${installment.installmentNumber}/${wallet.numberOfInstallments}` : "1/1"}</td>
+                              <td data-label="Status e ações" className="walletActionsCell">
+                                <Form.Check
+                                  type="switch"
+                                  id={`wallet-received-${installment.id}`}
+                                  label={walletInstallmentStatusTransform(installment.receivedStatus)}
+                                  checked={Boolean(installment.receivedStatus)}
+                                  onChange={() => EditWalletStatus(!installment.receivedStatus, installment.id)}
+                                />
+                                <span className="walletActionButtons">
+                                  <SetModal value={wallet.id} name={wallet.name} modalName="" simbol="fas fa-pen" />
+                                  <SetModalDelete value={wallet} name={wallet.name} modalName="" simbol="fas fa-trash" />
+                                </span>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </Table>
+                  </Accordion.Body>
+                </Accordion.Item>
+              );
+            })}
+          </Accordion>
+        ) : (
+          <div className="walletEmptyState"><i className="fas fa-inbox" aria-hidden="true" /><span>Nenhuma entrada cadastrada neste período.</span></div>
+        )}
+      </section>
+    </main>
   )
 }

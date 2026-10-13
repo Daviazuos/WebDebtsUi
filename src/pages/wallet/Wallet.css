@@ -1,63 +1,545 @@
-.cardWallet {
-    padding: 10PX;
-    width: 1305px !important;
-    height: 600px;
+.app main.walletPage {
+  --wallet-ink: #25282b;
+  --wallet-muted: #777d85;
+  --wallet-border: #e5e7eb;
+  --wallet-violet: #5840d8;
+  --wallet-violet-soft: #f0edff;
+  --wallet-green: #348c59;
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 28px clamp(16px, 3vw, 36px) 40px;
+  color: var(--wallet-ink);
 }
 
-.walletGroup {
-    display: flex;
+.walletPageHeader,
+.walletPanelHeader,
+.walletPanelHeader > div,
+.walletMetric,
+.walletPersonHeading,
+.walletActionsCell,
+.walletActionButtons {
+  display: flex;
+  align-items: center;
 }
 
-.cardWallet .allValue {
-    margin: auto;
+.app main .walletPageHeader {
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 22px;
+  border-bottom: 0;
 }
 
-.walletTable {
-    cursor: default;
-    text-align: center;
-    /* Centraliza horizontalmente */
-    vertical-align: middle;
-    /* Centraliza verticalmente */
+.app main .walletPageHeader h1 {
+  transform: none;
 }
 
-.pending {
-    margin-left: 30px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+.walletEyebrow {
+  color: var(--wallet-violet);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .08em;
 }
 
-.pending .textPending {
+.walletPageHeader h1 {
+  margin: 5px 0 3px;
+  font-size: 27px;
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+.walletPageHeader p,
+.walletPanelHeader p {
+  margin: 0;
+  color: var(--wallet-muted);
+  font-size: 13px;
+}
+
+.app main .walletPage .walletAddButton {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 9px;
+  padding: 0 17px;
+  border: 1px solid #4930c4;
+  border-radius: 9px;
+  appearance: none;
+  background: #5037ce;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  transition: background .18s ease, border-color .18s ease, box-shadow .18s ease;
+}
+
+.app main .walletPage .walletAddButton:hover,
+.app main .walletPage .walletAddButton:focus-visible {
+  border-color: #3f28ad;
+  background: #3f28ad;
+  color: #fff;
+}
+
+.app main .walletPage .walletAddButton:focus-visible {
+  outline: 3px solid rgba(115, 92, 230, .2);
+  outline-offset: 2px;
+}
+
+.walletMetrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-bottom: 18px;
+  border: 1px solid var(--wallet-border);
+  border-radius: 12px;
+  background: #fff;
+}
+
+.walletMetric {
+  min-width: 0;
+  gap: 13px;
+  padding: 18px 22px;
+}
+
+.walletMetric + .walletMetric {
+  border-left: 1px solid var(--wallet-border);
+}
+
+.walletMetricIcon,
+.walletSectionIcon,
+.walletPersonAvatar {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+}
+
+.walletMetricIcon {
+  width: 39px;
+  height: 39px;
+  border-radius: 11px;
+  font-size: 15px;
+}
+
+.walletMetricIcon.received {
+  background: #e9f6ed;
+  color: var(--wallet-green);
+}
+
+.walletMetricIcon.pending {
+  background: #fff4e8;
+  color: #bd782e;
+}
+
+.walletMetricIcon.total {
+  background: var(--wallet-violet-soft);
+  color: var(--wallet-violet);
+}
+
+.walletMetric > div {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.walletMetric > div span {
+  color: var(--wallet-muted);
+  font-size: 12px;
+}
+
+.walletMetric strong {
+  overflow-wrap: anywhere;
+  font-size: 18px;
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+.walletPanel {
+  margin-bottom: 18px;
+  border: 1px solid var(--wallet-border);
+  border-radius: 12px;
+  background: #fff;
+}
+
+.walletPanelHeader {
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 20px;
+  border-bottom: 1px solid #edf0f3;
+}
+
+.walletPanelHeader > div {
+  min-width: 0;
+  gap: 11px;
+}
+
+.walletSectionIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--wallet-violet-soft);
+  color: var(--wallet-violet);
+  font-size: 14px;
+}
+
+.walletPanelHeader h2 {
+  margin: 0 0 3px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.walletPanelHeader p {
+  font-size: 12px;
+}
+
+.walletPeriodLabel,
+.walletCount {
+  flex: 0 0 auto;
+  color: var(--wallet-muted);
+  font-size: 12px;
+}
+
+.walletChartPanel > .apexcharts-canvas {
+  margin: 0 auto;
+}
+
+.walletChartPanel .apexcharts-canvas {
+  max-width: 100%;
+}
+
+.walletChartPanel > .apexcharts-canvas,
+.walletChartPanel > div:not(.walletPanelHeader):not(.walletChartState) {
+  padding: 10px 16px 2px;
+}
+
+.walletChartState,
+.walletEmptyState {
+  display: flex;
+  min-height: 170px;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 24px;
+  color: var(--wallet-muted);
+  font-size: 13px;
+  text-align: center;
+}
+
+.walletEmptyState {
+  flex-direction: column;
+}
+
+.walletEmptyState i {
+  color: #a7abb2;
+  font-size: 24px;
+}
+
+.walletAccordion {
+  --bs-accordion-border-color: #edf0f3;
+  --bs-accordion-border-radius: 0;
+  --bs-accordion-inner-border-radius: 0;
+  --bs-accordion-btn-focus-box-shadow: 0 0 0 3px rgba(115, 92, 230, .12);
+}
+
+.walletAccordion .accordion-item {
+  border: 0;
+  border-bottom: 1px solid #edf0f3;
+}
+
+.walletAccordion .accordion-item:last-child {
+  border-bottom: 0;
+}
+
+.walletAccordion .accordion-button {
+  min-height: 68px;
+  padding: 12px 20px;
+  background: #fff;
+  color: var(--wallet-ink);
+  box-shadow: none;
+}
+
+.walletAccordion .accordion-button:not(.collapsed) {
+  background: #fcfbff;
+  color: var(--wallet-ink);
+}
+
+.walletAccordion .accordion-button::after {
+  width: 14px;
+  height: 14px;
+  background-size: 14px;
+}
+
+.walletPersonHeading {
+  width: 100%;
+  min-width: 0;
+  gap: 12px;
+  padding-right: 12px;
+}
+
+.walletPersonAvatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: #e9f6ed;
+  color: var(--wallet-green);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.walletPersonName {
+  overflow: hidden;
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 14px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.walletPersonTotal {
+  flex: 0 0 auto;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.walletPendingBadge {
+  flex: 0 0 auto;
+  padding: 5px 8px;
+  border-radius: 6px;
+  background: #fff4e8;
+  color: #a76a27;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.walletAccordion .accordion-body {
+  padding: 0 20px 14px;
+}
+
+.walletEntriesTable {
+  margin: 0;
+  color: var(--wallet-ink);
+  font-size: 13px;
+  vertical-align: middle;
+}
+
+.walletEntriesTable thead th {
+  padding: 12px 10px;
+  border-bottom: 1px solid var(--wallet-border);
+  color: var(--wallet-muted);
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.walletEntriesTable tbody td {
+  padding: 13px 10px;
+  border-bottom: 1px solid #f0f1f3;
+}
+
+.walletEntriesTable tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.walletEntryValue {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.walletActionsCell {
+  justify-content: space-between;
+  gap: 12px;
+  min-width: 225px;
+}
+
+.walletActionsCell .form-check {
+  margin: 0;
+  white-space: nowrap;
+}
+
+.walletActionsCell .form-check-input:checked {
+  border-color: var(--wallet-green);
+  background-color: var(--wallet-green);
+}
+
+.walletActionsCell .form-check-label {
+  color: #5c626a;
+  font-size: 12px;
+}
+
+.walletActionButtons {
+  gap: 12px;
+  color: #737983;
+}
+
+.walletIconButton {
+  display: inline-flex;
+  width: 30px;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  transition: color .15s ease;
+}
+
+.walletIconButton:hover,
+.walletIconButton:focus-visible {
+  background: var(--wallet-violet-soft);
+  color: var(--wallet-violet);
+}
+
+@media (max-width: 720px) {
+  .app main.walletPage {
+    padding: 20px 14px 30px;
+  }
+
+  .walletMetrics {
+    grid-template-columns: 1fr;
+  }
+
+  .walletMetric {
+    padding: 13px 16px;
+  }
+
+  .walletMetric + .walletMetric {
+    border-top: 1px solid var(--wallet-border);
+    border-left: 0;
+  }
+
+  .walletMetricIcon {
+    width: 35px;
+    height: 35px;
+  }
+
+  .walletMetric strong {
+    font-size: 16px;
+  }
+
+  .walletPanelHeader {
+    padding: 15px;
+  }
+
+  .walletAccordion .accordion-button {
+    padding: 11px 14px;
+  }
+
+  .walletAccordion .accordion-body {
+    padding: 0 14px 12px;
+  }
+
+  .walletPersonHeading {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .walletPersonName {
+    flex-basis: calc(100% - 52px);
+  }
+
+  .walletPersonTotal {
+    margin-left: 42px;
+  }
+
+  .walletPendingBadge {
     font-size: 10px;
-    margin-left: 5px;
+  }
 }
 
-.accordionName {
-    font-size: 15px;
-    font-weight: bold;
+@media (max-width: 520px) {
+  .app main .walletPageHeader {
+    align-items: flex-start;
+  }
+
+  .app main .walletPageHeader h1 {
+    font-size: 23px;
+  }
+
+  .walletPageHeader p {
+    max-width: 240px;
+    line-height: 1.4;
+  }
+
+  .app main .walletPage .walletAddButton {
+    min-height: 40px;
+    padding: 0 12px;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  .walletPanelHeader h2 {
+    font-size: 14px;
+  }
+
+  .walletPanelHeader p {
+    max-width: 210px;
+    line-height: 1.35;
+  }
+
+  .walletPeriodLabel,
+  .walletCount {
+    font-size: 10px;
+  }
+
+  .walletEntriesTable thead {
+    display: none;
+  }
+
+  .walletEntriesTable,
+  .walletEntriesTable tbody,
+  .walletEntriesTable tr,
+  .walletEntriesTable td {
+    display: block;
+    width: 100%;
+  }
+
+  .walletEntriesTable tbody tr {
+    padding: 10px 0;
+    border-bottom: 1px solid #edf0f3;
+  }
+
+  .walletEntriesTable tbody tr:last-child {
+    border-bottom: 0;
+  }
+
+  .walletEntriesTable tbody td {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 5px 2px;
+    border: 0;
+    text-align: right;
+  }
+
+  .walletEntriesTable tbody td::before {
+    content: attr(data-label);
+    color: var(--wallet-muted);
+    font-size: 11px;
+    text-align: left;
+  }
+
+  .walletActionsCell {
+    min-width: 0;
+  }
+
+  .walletActionsCell::before {
+    align-self: center;
+  }
 }
 
-@media(max-width: 900px) {
-    .walletGroup {
-        flex-flow: column-reverse;
-    }
+@media (max-width: 380px) {
+  .app main .walletPageHeader {
+    flex-direction: column;
+  }
 
-    .cardWallet {
-        width: 350px !important;
-        height: 600px;
-    }
+  .walletPersonTotal {
+    margin-left: 0;
+  }
 
-    .walletTable {
-        font-size: 8px;
-    }
-
-    .cardGroup {
-        display: flex;
-        flex-direction: row;
-    }
-
-    .accordionName {
-        font-size: 9px;
-        font-weight: bold;
-    }
+  .walletPendingBadge {
+    margin-left: 42px;
+  }
 }

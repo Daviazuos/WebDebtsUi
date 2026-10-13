@@ -1,58 +1,117 @@
-#customCardSize {
-    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-    margin: 5px;
-    margin-right: 0px;
-    /* background-image: linear-gradient(160deg, #bedef1 0%, #b3f1ea 100%); */
-    cursor: pointer;
-    background-color: #FFFFFF;
-    border-color: #FFFFFF;
-    min-height: 70px;
+.summaryCard {
     display: flex;
+    width: 100%;
+    min-width: 0;
+    min-height: var(--summary-card-height, 78px);
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    border: 1px solid #e5e7eb;
+    border-radius: 11px;
+    background: #fff;
+    color: #25282b;
+    text-align: left;
+    cursor: pointer;
+    transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+}
+
+.summaryCard:hover {
+    border-color: #d8d1ff;
+    box-shadow: 0 5px 16px rgba(37, 40, 43, .07);
+    transform: translateY(-1px);
+}
+
+.summaryCard:focus-visible {
+    outline: 3px solid rgba(115, 92, 230, .2);
+    outline-offset: 2px;
+}
+
+.summaryCardIcon {
+    display: inline-flex;
+    width: 38px;
+    height: 38px;
+    flex: 0 0 38px;
+    align-items: center;
     justify-content: center;
-}
-
-#fontColorsSize {
-    font-size: 16px;
-    font-weight: 700;
-    color: #546E7A;
-}
-
-#tittleSize {
-    margin-left: 15px;
-}
-
-#fontColorsTitleSize {
+    border-radius: 10px;
     font-size: 15px;
-    font-weight: 600;
-    color: #888eac;
 }
 
-#fontColorsTextSize {
+.summaryCardIcon--accent {
+    background: #f0edff;
+    color: #5840d8;
+}
+
+.summaryCardIcon--positive {
+    background: #e9f6ed;
+    color: #348c59;
+}
+
+.summaryCardIcon--negative {
+    background: #fff0ef;
+    color: #d64c45;
+}
+
+.summaryCardIcon i {
+    color: inherit !important;
+}
+
+.summaryCardContent {
+    display: flex;
+    min-width: 0;
+    flex: 1 1 auto;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.summaryCardTitle {
+    overflow: hidden;
+    color: #777d85;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.2;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.summaryCardValue {
+    overflow-wrap: anywhere;
+    color: #25282b;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.25;
+}
+
+.summaryCardDescription,
+.summaryCardText {
+    color: #777d85;
     font-size: 10px;
-    font-weight: 600;
-    color: #888eac;
+    font-weight: 500;
 }
 
 @media (max-width: 768px) {
-    #customCardSize {
-        width: 170px !important;
-        height: 30px !important;
-        margin: 3px;
+    .summaryCard {
+        min-height: 66px;
+        gap: 9px;
+        padding: 9px 10px;
     }
 
-    #fontColorsTitleSize {
-        font-size: 8px;
+    .summaryCardIcon {
+        width: 32px;
+        height: 32px;
+        flex-basis: 32px;
+        font-size: 13px;
     }
 
-    #fontColorsSize {
-        font-size: 10px;
+    .summaryCardTitle {
+        font-size: 11px;
     }
 
-    #textSize {
+    .summaryCardValue {
+        font-size: 13px;
+    }
+
+    .summaryCardDescription {
         display: none;
-    }
-
-    #fontColorsTextSize {
-        font-size: 6px;
     }
 }

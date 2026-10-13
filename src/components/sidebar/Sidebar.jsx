@@ -12,12 +12,11 @@ import {
     SidebarFooter,
     SidebarContent,
 } from "react-pro-sidebar";
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import "./Sidebar.css"
 
 
 function Sidebar(props) {
-    const [sidebar, setSidebar] = useState(false);
     const [toggled, setToggled] = useState(false);
 
     const today = new Date();
@@ -27,6 +26,7 @@ function Sidebar(props) {
     const [year, setYear] = React.useState(localStorage.getItem("year"));
 
     const history = useHistory();
+    const location = useLocation();
 
     function logout() {
         localStorage.removeItem("user");
@@ -50,7 +50,8 @@ function Sidebar(props) {
 
     const showSidebar = () => setToggled(!toggled);
 
-    var arr = JSON.parse(localStorage.getItem('user'));
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const userName = user?.name || 'Minha conta';
 
     useEffect(() => {
         const handleResize = () => {
@@ -66,74 +67,78 @@ function Sidebar(props) {
     }, []);
 
     return (
-        <div>
-            <div className="toggle-button">
-                <FaIcons.FaBars onClick={showSidebar} />
-            </div>
+        <div className="sidebarShell">
+            <button type="button" className="toggle-button" aria-label="Abrir navegação" onClick={showSidebar}>
+                <FaIcons.FaBars aria-hidden="true" />
+            </button>
             <ProSidebar
+                className="appSidebar"
                 breakPoint="md"
                 toggled={toggled}
                 onToggle={(value) => setToggled(value)}
             >
                 <SidebarHeader>
-                    <div
-                        style={{
-                            padding: "24px",
-                            textTransform: "uppercase",
-                            fontWeight: "bold",
-                            fontSize: 14,
-                            letterSpacing: "1px",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            whiteSpace: "nowrap",
-                        }}
-                    >
-                        {sidebar === true ?
-                            <><FaIcons.FaBars/></> : <>
-                                <h4>Web Debts</h4>
-                                <div className='userName'>{arr.name}</div>
-                            </>}
-
+                    <div className="sidebarBrand">
+                        <span className="sidebarBrandMark"><FaIcons.FaWallet aria-hidden="true" /></span>
+                        <div className="sidebarBrandText">
+                            <strong>Web Debts</strong>
+                            <span>CONTROLE FINANCEIRO</span>
+                        </div>
+                    </div>
+                    <div className="sidebarAccount">
+                        <span className="sidebarAccountAvatar">{userName.charAt(0).toUpperCase()}</span>
+                        <div className="sidebarAccountText">
+                            <span>Conta</span>
+                            <strong title={userName}>{userName}</strong>
+                        </div>
                     </div>
                 </SidebarHeader>
                 <SidebarContent>
                     <Menu iconShape="circle">
                         <MenuItem
+                            active={location.pathname === '/'}
                             icon={<FaIcons.FaHouseUser />}
                         >
                             Dashboard<Link to="/" />
                         </MenuItem>
                         <MenuItem
+                            active={location.pathname.toLowerCase() === '/financial'}
                             icon={<FaIcons.FaMoneyBillAlt />}
                         >
                             Finanças<Link to="/financial" />
                         </MenuItem>
                         <MenuItem
+                            active={location.pathname.toLowerCase() === '/planner'}
                             icon={<FaIcons.FaBalanceScale />}
                         >
                             Planejamento<Link to="/planner" />
                         </MenuItem>
                         <MenuItem
+                            active={location.pathname.toLowerCase() === '/debts'}
                             icon={<FaIcons.FaHandHoldingUsd />}
                         >
                             Dívidas<Link to="/debts" />
                         </MenuItem>
                         <MenuItem
+                            active={location.pathname.toLowerCase().startsWith('/creditcardselected') || location.pathname.toLowerCase() === '/cards'}
                             icon={<FaIcons.FaCreditCard />}
                         >
                             Cartões<Link to="/cards" />
                         </MenuItem>
                         <MenuItem
+                            active={location.pathname.toLowerCase() === '/wallet'}
                             icon={<FaIcons.FaWallet />}
                         >
                             Carteira<Link to="/wallet" />
                         </MenuItem>
                         <MenuItem
+                            active={location.pathname.toLowerCase() === '/goals'}
                             icon={<FaIcons.FaLightbulb />}
                         >
                             Metas<Link to="/goals" />
                         </MenuItem>
                         <MenuItem
+                            active={location.pathname.toLowerCase() === '/responsibleparty'}
                             icon={<FaIcons.FaUser />}
                         >
                             Pessoas<Link to="/responsibleParty" />
@@ -141,13 +146,14 @@ function Sidebar(props) {
                     </Menu>
                 </SidebarContent>
 
-                <SidebarFooter style={{ textAlign: "center" }}>
-                    <MenuItem>
-                        {!sidebar ? <>
+                <SidebarFooter>
+                    <div className="sidebarFooterContent">
+                        <span className="sidebarFooterLabel">PERÍODO ATIVO</span>
+                        <div className="sidebarPeriodControls">
                             <NavDropdown
+                                className="sidebarPeriodDropdown"
                                 id="nav-dropdown-dark-example"
                                 title={monthByNumber(month)}
-                                menuVariant="dark"
                                 onSelect={handleSelect}
                             >
                                 <NavDropdown.Item eventKey={1}>Janeiro</NavDropdown.Item>
@@ -164,9 +170,9 @@ function Sidebar(props) {
                                 <NavDropdown.Item eventKey={12}>Dezembro</NavDropdown.Item>
                             </NavDropdown>
                             <NavDropdown
+                                className="sidebarPeriodDropdown sidebarYearDropdown"
                                 id="nav-dropdown-dark-example"
                                 title={year}
-                                menuVariant="dark"
                                 onSelect={handleSelectYear}
                             >
                                 <NavDropdown.Item eventKey={2022}>2022</NavDropdown.Item>
@@ -177,9 +183,13 @@ function Sidebar(props) {
                                 <NavDropdown.Item eventKey={2027}>2027</NavDropdown.Item>
                                 <NavDropdown.Item eventKey={2028}>2028</NavDropdown.Item>
                                 <NavDropdown.Item eventKey={2029}>2029</NavDropdown.Item>
-                            </NavDropdown> </> : <FaIcons.FaCalendarAlt />}
-                        <p onClick={logout} >Sair</p>
-                    </MenuItem>
+                            </NavDropdown>
+                        </div>
+                        <button type="button" className="sidebarLogout" onClick={logout}>
+                            <FaIcons.FaSignOutAlt aria-hidden="true" />
+                            <span>Sair da conta</span>
+                        </button>
+                    </div>
                 </SidebarFooter>
             </ProSidebar>
         </div>

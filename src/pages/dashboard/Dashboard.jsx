@@ -1,23 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { Card, Table, Image, Modal, Button } from "react-bootstrap";
-import imageEmpty from '../../assets/empty.png'
+import { Table, Modal } from "react-bootstrap";
 
 
 import { axiosInstance } from "../../api";
 import { Endpoints } from "../../api/endpoints";
 
-import { addLeadingZeros, decimalAdjust, decimalAdjustWithoutPoint } from "../../utils/valuesFormater";
+import { decimalAdjust, decimalAdjustWithoutPoint } from "../../utils/valuesFormater";
 
 import "./Dashboard.css";
 import CustomCard from "../../components/customCard/CustomCard";
 import CardApexGraphic from "../../components/cardGraphic/CardApexGraphic";
 import CardApexGraphicPie from "../../components/cardGraphicPie/CardApexGraphicPie";
 import CardApexGraphicByDay from "../../components/cardGraphic/CardApexGraphicByDay";
-import CustomCardSize from "../../components/customCardSize/CustomCardSize";
 import { addOrRemoveMonth, monthByNumber } from "../../utils/dateFormater";
 import DebtList from "../../components/form/form";
-import FloatingButtonWithModal from "../../components/floatingButton/floatingButton";
-import DashModal from "./DashModal";
 import UpcomingBill from "../../components/cardCommingBills/CardCommingBills";
 
 
@@ -281,45 +277,74 @@ export default function Dashboard() {
 
 
   return (
-    <div>
-      <div className="graphics">
-        <Card className="graphicPagePie">
-          <CardApexGraphicPie></CardApexGraphicPie>
-        </Card>
-        <Card className="cardDash">
-          <CardApexGraphic></CardApexGraphic>
-        </Card>
-        <div style={{ display: "flex", padding: '0px' }} className="cardsValues">
-          <CustomCard
-            title="Fixas"
-            children={decimalAdjust(fixed)}
-            icon="far fa-calendar blue custom-icon"
-            table={fixedTable}
-          >
-          </CustomCard>
-          <CustomCard
-            title="Simples"
-            children={decimalAdjust(simple)}
-            icon="fas fa-coins blue custom-icon"
-            table={simpleTable}
-          >
-          </CustomCard>
-          <CustomCard
-            title="Parceladas"
-            children={decimalAdjust(installment)}
-            icon="fas fa-credit-card blue custom-icon"
-            table={installmentTable}
-          >
-          </CustomCard>
+    <div className="dashboardPage">
+      <header className="dashboardHeader">
+        <div>
+          <span className="dashboardEyebrow">VISÃO GERAL</span>
+          <h1>Dashboard</h1>
+          <p>Resumo financeiro e movimentações do período.</p>
         </div>
+      </header>
+
+      <div className="dashboardOverviewGrid">
+        <section className="dashboardPanel dashboardTrendPanel">
+          <div className="dashboardPanelHeader">
+            <span className="dashboardPanelIcon"><i className="fas fa-chart-line" aria-hidden="true"></i></span>
+            <div><h2>Movimentação por mês</h2><p>Comparativo entre dívidas e recebimentos</p></div>
+          </div>
+          <CardApexGraphic />
+        </section>
+
+        <section className="dashboardPanel dashboardCategoryPanel">
+          <div className="dashboardPanelHeader">
+            <span className="dashboardPanelIcon"><i className="fas fa-chart-pie" aria-hidden="true"></i></span>
+            <div><h2>Despesas por categoria</h2><p>Distribuição das despesas no período</p></div>
+          </div>
+          <CardApexGraphicPie />
+        </section>
+
+        <section className="dashboardMetricsPanel" aria-label="Totais por tipo de despesa">
+          <div className="dashboardMetricsHeader">
+            <span className="dashboardPanelIcon"><i className="fas fa-layer-group" aria-hidden="true"></i></span>
+            <div><h2>Despesas por tipo</h2><p>Selecione um indicador para ver os lançamentos</p></div>
+          </div>
+          <div className="dashboardMetrics">
+            <CustomCard
+              title="Fixas"
+              children={decimalAdjust(fixed)}
+              icon="far fa-calendar"
+              table={fixedTable}
+            />
+            <CustomCard
+              title="Simples"
+              children={decimalAdjust(simple)}
+              icon="fas fa-coins"
+              table={simpleTable}
+            />
+            <CustomCard
+              title="Parceladas"
+              children={decimalAdjust(installment)}
+              icon="fas fa-credit-card"
+              table={installmentTable}
+            />
+          </div>
+        </section>
       </div>
-      <div className="analitics">
-        <Card className="outsByDay">
-          <CardApexGraphicByDay></CardApexGraphicByDay>
-        </Card>
-        <Card className="commingBillsCard">
-          <UpcomingBill></UpcomingBill>
-        </Card>
+
+      <div className="dashboardAnalyticsGrid">
+        <section className="dashboardPanel dashboardDailyPanel">
+          <div className="dashboardPanelHeader">
+            <span className="dashboardPanelIcon"><i className="fas fa-chart-area" aria-hidden="true"></i></span>
+            <div><h2>Despesas por categoria</h2><p>Evolução nos últimos meses</p></div>
+          </div>
+          <CardApexGraphicByDay />
+        </section>
+        <section className="dashboardPanel dashboardUpcomingPanel">
+          <UpcomingBill />
+        </section>
+      </div>
+
+      <div className="dashboardModalHost">
         <Modal
           show={show}
           onHide={() => setShow(false)}

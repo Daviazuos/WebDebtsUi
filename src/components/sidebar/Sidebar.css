@@ -1,24 +1,301 @@
-.toggle-button {
-    display: none;
-    position: fixed;
-    top: 10px;
-    left: 10px;
-    z-index: 1000;
-    background-color: #fff;
-    border: none;
-    padding: 10px;
+.sidebarShell {
+    position: relative;
+    z-index: 20;
+    flex: 0 0 248px;
+    width: 248px;
+    min-width: 248px;
+    height: 100vh;
+}
+
+.sidebarShell .appSidebar,
+.sidebarShell .appSidebar.pro-sidebar {
+    width: 248px;
+    min-width: 248px;
+    height: 100vh;
+    color: #59606b;
+    font-family: inherit;
+}
+
+.sidebarShell .appSidebar > .pro-sidebar-inner {
+    overflow: visible;
+    border-right: 1px solid #e6e8ee;
+    background: #fff;
+    box-shadow: 3px 0 14px rgba(37, 40, 43, .035);
+}
+
+.sidebarShell .appSidebar .pro-sidebar-layout {
+    min-height: 100%;
+}
+
+.sidebarShell .appSidebar .pro-sidebar-header {
+    padding: 22px 17px 15px;
+    border-bottom: 1px solid #edf0f3;
+}
+
+.sidebarBrand {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 0 3px 18px;
+}
+
+.sidebarBrandMark {
+    display: inline-flex;
+    width: 38px;
+    height: 38px;
+    flex: 0 0 38px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 11px;
+    background: #f0edff;
+    color: #5840d8;
+    font-size: 16px;
+}
+
+.sidebarBrandText,
+.sidebarAccountText {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+}
+
+.sidebarBrandText strong {
+    color: #25282b;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.sidebarBrandText span {
+    margin-top: 4px;
+    color: #858b95;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: .08em;
+}
+
+.sidebarAccount {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 10px;
+    border: 1px solid #edf0f3;
+    border-radius: 9px;
+    background: #fafbfc;
+}
+
+.sidebarAccountAvatar {
+    display: inline-flex;
+    width: 31px;
+    height: 31px;
+    flex: 0 0 31px;
+    align-items: center;
+    justify-content: center;
     border-radius: 50%;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+    background: #e9f6ed;
+    color: #348c59;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.sidebarAccountText span {
+    color: #858b95;
+    font-size: 10px;
+}
+
+.sidebarAccountText strong {
+    overflow: hidden;
+    max-width: 155px;
+    margin-top: 2px;
+    color: #343941;
+    font-size: 12px;
+    font-weight: 600;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.sidebarShell .appSidebar .pro-sidebar-content {
+    padding: 13px 10px;
+}
+
+.sidebarShell .appSidebar .pro-menu {
+    padding: 0;
+}
+
+.sidebarShell .appSidebar .pro-menu > ul > .pro-menu-item {
+    margin: 3px 0;
+}
+
+.sidebarShell .appSidebar .pro-menu > ul > .pro-menu-item > .pro-inner-item {
+    min-height: 42px;
+    padding: 0 11px;
+    border-radius: 8px;
+    color: #5f6671;
+    font-size: 13px;
+    font-weight: 500;
+    transition: background .15s ease, color .15s ease;
+}
+
+.sidebarShell .appSidebar .pro-menu > ul > .pro-menu-item > .pro-inner-item:hover {
+    background: #f6f4ff;
+    color: #5037ce;
+}
+
+.sidebarShell .appSidebar .pro-menu > ul > .pro-menu-item.active > .pro-inner-item {
+    background: #f0edff;
+    color: #5037ce;
+    font-weight: 600;
+}
+
+.sidebarShell .appSidebar .pro-menu .pro-icon-wrapper {
+    width: 30px;
+    min-width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    border-radius: 8px;
+    background: transparent;
+}
+
+.sidebarShell .appSidebar .pro-menu .pro-icon-wrapper .pro-icon {
+    color: #858b95;
+    font-size: 15px;
+}
+
+.sidebarShell .appSidebar .pro-menu > ul > .pro-menu-item.active .pro-icon-wrapper .pro-icon,
+.sidebarShell .appSidebar .pro-menu > ul > .pro-menu-item > .pro-inner-item:hover .pro-icon-wrapper .pro-icon {
+    color: #5840d8;
+}
+
+.sidebarShell .appSidebar .pro-sidebar-footer {
+    padding: 15px 13px 18px;
+    border-top: 1px solid #edf0f3;
+}
+
+.sidebarFooterContent {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+.sidebarFooterLabel {
+    padding: 0 2px;
+    color: #858b95;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: .08em;
+}
+
+.sidebarPeriodControls {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 78px;
+    gap: 7px;
+}
+
+.sidebarShell .sidebarPeriodDropdown > .dropdown-toggle {
+    display: flex;
+    width: 100%;
+    min-height: 36px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 10px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background: #fff;
+    color: #4c5158;
+    font-size: 11px;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.sidebarShell .sidebarPeriodDropdown > .dropdown-toggle::after {
+    margin-left: 6px;
+}
+
+.sidebarShell .sidebarPeriodDropdown > .dropdown-toggle:hover,
+.sidebarShell .sidebarPeriodDropdown > .dropdown-toggle:focus-visible {
+    border-color: #d8d1ff;
+    background: #faf9ff;
+    color: #5037ce;
+}
+
+.sidebarShell .sidebarPeriodDropdown .dropdown-menu {
+    z-index: 1100;
+    max-height: 250px;
+    overflow-y: auto;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    box-shadow: 0 8px 22px rgba(37, 40, 43, .12);
+}
+
+.sidebarShell .sidebarPeriodDropdown .dropdown-item {
+    color: #4c5158;
+    font-size: 12px;
+}
+
+.sidebarShell .sidebarPeriodDropdown .dropdown-item:hover,
+.sidebarShell .sidebarPeriodDropdown .dropdown-item:focus {
+    background: #f0edff;
+    color: #5037ce;
+}
+
+.sidebarLogout {
+    display: flex;
+    min-height: 37px;
+    align-items: center;
+    gap: 9px;
+    padding: 0 10px;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: #707781;
+    font-size: 12px;
+    text-align: left;
     cursor: pointer;
 }
 
-.userName {
-    font-size: 11px;
+.sidebarLogout:hover,
+.sidebarLogout:focus-visible {
+    background: #fff0ef;
+    color: #c64b45;
+}
+
+.toggle-button {
+    display: none;
 }
 
 @media (max-width: 768px) {
+    .sidebarShell {
+        position: absolute;
+        inset: 0 auto 0 0;
+        width: 0;
+        min-width: 0;
+        height: 0;
+    }
+
+    .sidebarShell .appSidebar,
+    .sidebarShell .appSidebar.pro-sidebar {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        z-index: 1050;
+    }
+
     .toggle-button {
-        display: block;
+        position: fixed;
+        top: 12px;
+        left: 12px;
+        z-index: 1040;
+        display: inline-flex;
+        width: 40px;
+        height: 40px;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        background: #fff;
+        color: #5840d8;
+        box-shadow: 0 3px 12px rgba(37, 40, 43, .1);
+        cursor: pointer;
     }
 }
-

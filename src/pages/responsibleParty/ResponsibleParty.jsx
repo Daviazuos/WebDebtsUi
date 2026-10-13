@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import 'react-circular-progressbar/dist/styles.css';
 
-import { Button, Card, Modal, Table } from "react-bootstrap";
+import { Table } from "react-bootstrap";
 import { decimalAdjust } from "../../utils/valuesFormater";
 import "./ResponsibleParty.css"
 import { axiosInstance } from "../../api";
@@ -16,8 +16,11 @@ function SetModalAddResponsibleParty(props) {
 
   return (
     <div className="ResponsibleModalButton">
-      <Button variant="outline-secondary" onClick={() => setModalShow(true)}>Adicionar <i className="fas fa-plus"></i> </Button>
+      <button type="button" className="peopleAddButton" onClick={() => setModalShow(true)}>
+        <i className="fas fa-plus" aria-hidden="true"></i> Adicionar pessoa
+      </button>
       <ResponsiblePartyModal
+        className="peopleCreateModal"
         show={modalShow}
         onHide={() => setModalShow(false)}
         refresh={() => setRefreshResponsibleParty(true)}
@@ -62,10 +65,25 @@ export default function ResponsibleParty() {
 
 
   return (
-    <div>
-      <span id="PagesTitle">Valor por pessoa</span>
-      <Card className='cardTable'>
-        <Table borderless striped responsive hover variant="white" className="tableFinancial" size="sm">
+    <main className="peoplePage">
+      <header className="peoplePageHeader">
+        <div>
+          <span className="peopleEyebrow">FINANÇAS / RELACIONAMENTOS</span>
+          <h1>Pessoas</h1>
+          <p>Visualize os valores vinculados a cada pessoa.</p>
+        </div>
+        <SetModalAddResponsibleParty modalName="Adicionar pessoa" dataTable={dataRP} />
+      </header>
+
+      <section className="peoplePanel">
+        <header className="peoplePanelHeader">
+          <div>
+            <span className="peoplePanelIcon"><i className="fas fa-users" aria-hidden="true"></i></span>
+            <div><h2>Resumo por pessoa</h2><p>{data.length} {data.length === 1 ? "pessoa" : "pessoas"}</p></div>
+          </div>
+        </header>
+        <div className="peopleTableWrap">
+        <Table borderless responsive hover className="peopleTable" size="sm">
           <thead>
             <tr>
               <th className="td1">Nome</th>
@@ -81,24 +99,30 @@ export default function ResponsibleParty() {
                 <td className="td1">{item.name}</td>
                 <td className="td1">R$ {decimalAdjust(item.debtValue)}</td>
                 <td className="td1">R$ {decimalAdjust(item.walletValue)}</td>
-                <td className="td1">{item.debtsAppModel && item.debtsAppModel.length > 0 ? (item.debtsAppModel.some(debt => debt.installments && debt.installments.some(inst => inst.status !== 'Paid')) ? 'Pendente' : 'Pago') : 'Nada a pagar'}</td>
+                <td className="peopleStatusCell">
+                  <span className={`peopleStatus ${item.debtsAppModel?.length ? (item.debtsAppModel.some(debt => debt.installments?.some(inst => inst.status !== 'Paid')) ? 'peopleStatus--pending' : 'peopleStatus--paid') : 'peopleStatus--empty'}`}>
+                    {item.debtsAppModel?.length ? (item.debtsAppModel.some(debt => debt.installments?.some(inst => inst.status !== 'Paid')) ? 'Pendente' : 'Pago') : 'Nada a pagar'}
+                  </span>
+                </td>
                 <td className="td1">
-                  <i className="fas fa-search fa-lg" onClick={() => { setSelectedRP(item); setModalShow(true); }} style={{cursor: 'pointer', color: '#B3B8D4'}}></i>
+                  <button type="button" className="peopleDetailsButton" aria-label={`Ver detalhes de ${item.name}`} onClick={() => { setSelectedRP(item); setModalShow(true); }}>
+                    <i className="fas fa-arrow-right" aria-hidden="true"></i>
+                  </button>
                 </td>
               </tr>
             ))}
+            {!data.length && <tr><td className="peopleEmptyState" colSpan="5">Nenhuma pessoa cadastrada.</td></tr>}
           </tbody>
         </Table>
-      </Card>
+        </div>
 
-      <SetModalAddResponsibleParty modalName="Adicionar" simbol="fas fa-plus" dataTable={dataRP}></SetModalAddResponsibleParty>
-
+      </section>
       <ResponsiblePartyDetailsModal
         show={modalShow}
         onHide={() => setModalShow(false)}
         responsibleParty={selectedRP}
         refresh={refreshData}
       />
-    </div>
+    </main>
   )
 }

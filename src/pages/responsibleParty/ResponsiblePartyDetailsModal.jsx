@@ -56,7 +56,7 @@ function ResponsiblePartyDetailsModal({ show, onHide, responsibleParty, refresh 
             </span>
           </div>
 
-          <button className="rp-close" onClick={onHide}>×</button>
+          <button type="button" className="rp-close" aria-label="Fechar detalhes da pessoa" onClick={onHide}>×</button>
         </div>
 
         {/* RESUMO */}

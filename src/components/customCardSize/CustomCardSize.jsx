@@ -6,34 +6,38 @@ import "./CustomCardSize.css"
 // eslint-disable-next-line import/no-anonymous-default-export
 export default (props) => {
   const [modalShow, setModalShow] = React.useState(false);
-
-  let text = props.text ? <span id="fontColorsTextSize">{props.text}</span> : ''
+  const iconTone = props.icon?.includes("red")
+    ? "negative"
+    : props.icon?.includes("success")
+      ? "positive"
+      : "accent";
+  const text = props.text ? <span className="summaryCardText">{props.text}</span> : null;
 
   return (
-    <div className={props.className}>
-      <div class="card" id="customCardSize" style={{width: props.size, height: props.height || '100px'}} onClick={() => setModalShow(true)}>
-        <div class="card-content">
-          <div class="card-body cleartfix">
-            <div class="media align-items-stretch">
-              <div class="align-self-center">
-                <i class={props.icon} style={{color: "#1a4173"}}></i>
-              </div>
-              <div class="media-body" id="tittleSize">
-                <span id="fontColorsTitleSize">{props.title}</span>
-                <h2 class="mr-2" id="fontColorsSize">R$ {props.children}</h2>
-                <div id="textSize">{text}</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      {(props.table !== undefined)?
-      <DashModal
-        show={modalShow}
-        onHide={() => setModalShow(false)}
-        table={props.table}
-        head={props.title}
-      />:""}
+    <div className={props.className || ""}>
+      <button
+        type="button"
+        className="summaryCard"
+        style={{ "--summary-card-height": props.height || "78px" }}
+        onClick={() => setModalShow(true)}
+      >
+        <span className={`summaryCardIcon summaryCardIcon--${iconTone}`} aria-hidden="true">
+          <i className={props.icon}></i>
+        </span>
+        <span className="summaryCardContent">
+          <span className="summaryCardTitle">{props.title}</span>
+          <strong className="summaryCardValue">R$ {props.children}</strong>
+          {text && <span className="summaryCardDescription">{text}</span>}
+        </span>
+      </button>
+      {props.table !== undefined && (
+        <DashModal
+          show={modalShow}
+          onHide={() => setModalShow(false)}
+          table={props.table}
+          head={props.title}
+        />
+      )}
     </div>
   );
 };

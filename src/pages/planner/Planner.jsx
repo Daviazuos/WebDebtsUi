@@ -18,6 +18,7 @@ import { decimalAdjust } from '../../utils/valuesFormater';
 import { translateFrequency } from '../../utils/utils';
 import dayjs from 'dayjs'; // Instale: npm install dayjs
 import { addMonthsToDate, addMonthsToDateNoChangeFormat, dateAdjust, dateFromDatetime, formatDate, formatDateBrazilian } from '../../utils/dateFormater';
+import './Planner.css';
 
 export default function Planner() {
   const [planejamento, setPlanejamento] = useState(null);
@@ -404,20 +405,24 @@ export default function Planner() {
   };
 
   return (
-    <>
-      <div style={{ display: 'flex', flexDirection: 'column' }}>
-        <span id="PagesTitle">Planejamento Mensal</span>
-        <p></p>
+    <main className="plannerPage">
+      <header className="plannerPageHeader">
+        <div>
+          <span className="plannerEyebrow">FINANÇAS / ORGANIZAÇÃO</span>
+          <h1>Planejamento mensal</h1>
+          <p>Distribua seu orçamento por período e acompanhe seus gastos.</p>
+        </div>
         {!planejamento && (
-          <Button variant="success" className="mb-4" onClick={() => setShowModal(true)}>
-            Adicionar Planejamento
-          </Button>
+          <button type="button" className="plannerPrimaryButton" onClick={() => setShowModal(true)}>
+            <i className="fas fa-plus" aria-hidden="true"></i>
+            Criar planejamento
+          </button>
         )}
-      </div>
+      </header>
 
 
       {/* Modal de Frequência */}
-      <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+      <Modal className="plannerModal" show={showModal} onHide={() => setShowModal(false)} centered>
         <Modal.Header closeButton>
           <Modal.Title>Selecionar Frequência</Modal.Title>
         </Modal.Header>
@@ -436,13 +441,13 @@ export default function Planner() {
           </Form.Group>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowModal(false)}>Cancelar</Button>
-          <Button variant="primary" onClick={handleAdicionarPlanejamento}>Confirmar</Button>
+          <button type="button" className="plannerModalActionButton plannerModalActionButton--secondary" onClick={() => setShowModal(false)}>Cancelar</button>
+          <button type="button" className="plannerModalActionButton plannerModalActionButton--primary" onClick={handleAdicionarPlanejamento}>Confirmar</button>
         </Modal.Footer>
       </Modal>
 
       {/* Modal de Adicionar Categoria */}
-      <Modal show={blocoSelecionado !== undefined} onHide={() => setBlocoSelecionado(null)} centered>
+      <Modal className="plannerModal" show={blocoSelecionado !== undefined} onHide={() => setBlocoSelecionado(null)} centered>
         <Modal.Header closeButton>
           <Modal.Title>Adicionar Categoria</Modal.Title>
         </Modal.Header>
@@ -470,20 +475,27 @@ export default function Planner() {
           </Form.Group>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => setBlocoSelecionado(undefined)}>Cancelar</Button>
-          <Button variant="primary" onClick={handleAdicionarCategoria}>Adicionar</Button>
+          <button type="button" className="plannerModalActionButton plannerModalActionButton--secondary" onClick={() => setBlocoSelecionado(undefined)}>Cancelar</button>
+          <button type="button" className="plannerModalActionButton plannerModalActionButton--primary" onClick={handleAdicionarCategoria}>Adicionar</button>
         </Modal.Footer>
       </Modal>
 
       <>
         {/* Card de Resumo */}
-        <Row>
-          <Col md={12} className="mb-4">
-            <Card bg="light">
-              <Card.Header>
-                <strong>Resumo do Mês</strong>
+        <Row className="plannerSummaryRow">
+          <Col md={12}>
+            <Card className="plannerSummaryPanel">
+              <Card.Header className="plannerPanelHeader">
+                <div className="plannerSectionTitle">
+                  <span className="plannerPanelIcon"><i className="fas fa-chart-pie" aria-hidden="true"></i></span>
+                  <div><strong>Resumo do mês</strong><span>Orçamento e gastos agrupados por categoria</span></div>
+                </div>
+                <button type="button" className="plannerSecondaryButton" onClick={() => handleAbrirModalCategoria(null)}>
+                  <i className="fas fa-plus" aria-hidden="true"></i>
+                  Categoria em todos
+                </button>
               </Card.Header>
-              <Card.Body>
+              <Card.Body className="plannerSummaryBody">
                 {!planejamento?.blocos ? '' : (() => {
                   // Agrupa categorias e soma orçado/gasto
                   const resumo = {};
@@ -500,7 +512,7 @@ export default function Planner() {
                   });
                   return (
                     <>
-                      <Table borderless striped responsive hover variant="white" size="sm">
+                      <Table borderless responsive className="plannerSummaryTable" size="sm">
                         <thead>
                           <tr>
                             <th>Categoria</th>
@@ -516,12 +528,12 @@ export default function Planner() {
                               <td>R$ {decimalAdjust(val.gasto)}</td>
                             </tr>
                           ))}
-                          <tr style={{ fontWeight: 'bold' }}>
+                          <tr className="plannerSummaryTotal">
                             <td>Total</td>
                             <td>R$ {decimalAdjust(totalOrcado)}</td>
                             <td>R$ {decimalAdjust(totalGasto)}</td>
                           </tr>
-                          <tr style={{ fontWeight: 'bold', color: '#198754' }}>
+                          <tr className="plannerSummaryBalance">
                             <td>Balanço</td>
                             <td colSpan={2}>
                               R$ {decimalAdjust(Number(localStorage.getItem('provisionedValue')) - (totalOrcado - totalGasto))}
@@ -538,22 +550,13 @@ export default function Planner() {
         </Row>
       </>
 
-      <Button
-        size="sm"
-        onClick={() => handleAbrirModalCategoria(null)}
-        style={{ marginLeft: '10px', backgroundColor: "#1A4173", borderColor: "#1A4173" }}
-        variant='dark'
-      >
-        + Categoria em todos
-      </Button>
-
       {/* Exibição de Blocos */}
       {planejamento && (
-        <Row>
+        <Row className="plannerBlocksGrid">
           {planejamento.blocos.map((bloco) => (
-            <Col md={6} key={bloco.id} className="mb-4">
-              <Card>
-                <Card.Header className="d-flex justify-content-between align-items-center">
+            <Col md={6} key={bloco.id} className="plannerBlockColumn">
+              <Card className="plannerBlockCard">
+                <Card.Header className="plannerBlockHeader">
                   <span>
                     {planejamento.frequencia === 'mensal' && 'Mês inteiro'}
                     {planejamento.frequencia === 'semanal' && `Semana ${bloco.id}`}
@@ -566,8 +569,8 @@ export default function Planner() {
                       <>
                         <Form.Control required="true" name='date' type="date" onChange={(e) => handleEditChangeFrequency(e, bloco.id, 'start')} defaultValue={dateFromDatetime(bloco.start)} />
                         <Form.Control required="true" name='date' type="date" onChange={(e) => handleEditChangeFrequency(e, bloco.id, 'end')} defaultValue={dateFromDatetime(bloco.end)} />
-                        <i className="fas fa-check" onClick={() => handleSaveEditFrequency(bloco.id)} style={{ cursor: 'pointer', marginRight: '5px' }}></i>
-                        <i className="fas fa-times" onClick={() => toggleEditModeFrequency(bloco.id)} style={{ cursor: 'pointer', marginRight: '5px' }}></i>
+                        <button type="button" className="plannerIconButton" aria-label="Salvar período" onClick={() => handleSaveEditFrequency(bloco.id)}><i className="fas fa-check" aria-hidden="true"></i></button>
+                        <button type="button" className="plannerIconButton" aria-label="Cancelar edição do período" onClick={() => toggleEditModeFrequency(bloco.id)}><i className="fas fa-times" aria-hidden="true"></i></button>
                       </>
                     ) : (
                       <>
@@ -575,23 +578,22 @@ export default function Planner() {
                       </>
                     )}
                   </>
-                  <i className="fas fa-pencil-alt" onClick={() => toggleEditModeFrequency(bloco.id)} style={{ cursor: 'pointer', marginLeft: '5px' }}></i>
-                  <i className="fas fa-trash" onClick={() => handleDeletePlannerFrequency(bloco.id)} style={{ cursor: 'pointer', marginLeft: '5px' }}></i>
-                  <Button
-                    size="sm"
+                  <button type="button" className="plannerIconButton" aria-label="Editar frequência" onClick={() => toggleEditModeFrequency(bloco.id)}><i className="fas fa-pen" aria-hidden="true"></i></button>
+                  <button type="button" className="plannerIconButton plannerIconButton--danger" aria-label="Excluir frequência" onClick={() => handleDeletePlannerFrequency(bloco.id)}><i className="fas fa-trash" aria-hidden="true"></i></button>
+                  <button
+                    type="button"
+                    className="plannerAddCategoryButton"
                     onClick={() => handleAbrirModalCategoria(bloco.id)}
-                    style={{ marginLeft: '10px', backgroundColor: "#1A4173", borderColor: "#1A4173" }}
-                    variant='dark'
                   >
                     + Categoria
-                  </Button>
+                  </button>
                 </Card.Header>
-                <Card.Body>
+                <Card.Body className="plannerBlockBody">
                   {bloco.categorias.length === 0 ? (
                     <p className="text-muted">Nenhuma categoria adicionada.</p>
                   ) : (
                     bloco.categorias.map((cat, catIdx) => (
-                      <div key={catIdx} className="mb-3">
+                      <div key={catIdx} className="plannerCategoryRow">
                         <div style={{ display: 'flex', alignItems: 'baseline' }}>
                           {editMode[cat.id] ? (
                             <>
@@ -601,13 +603,13 @@ export default function Planner() {
                                 value={cat.orcado}
                                 onChange={(e) => handleEditChange(e, cat.id, 'value')}
                               />
-                              <i className="fas fa-check" onClick={() => handleSaveEdit(cat.id)} style={{ cursor: 'pointer', marginRight: '5px' }}></i>
+                              <button type="button" className="plannerIconButton" aria-label="Salvar orçamento" onClick={() => handleSaveEdit(cat.id)}><i className="fas fa-check" aria-hidden="true"></i></button>
                             </>
                           ) : (
                             <>
                               <Form.Label>{cat.nome} - R$ {decimalAdjust(cat.orcado)}</Form.Label>
-                              <i className="fas fa-pencil-alt" onClick={() => toggleEditMode(cat.id)} style={{ cursor: 'pointer', marginLeft: '5px' }}></i>
-                              <i className="fas fa-trash" onClick={() => handleDeletePlannerCategory(cat.id)} style={{ cursor: 'pointer', marginLeft: '5px' }}></i>
+                              <button type="button" className="plannerIconButton" aria-label={`Editar ${cat.nome}`} onClick={() => toggleEditMode(cat.id)}><i className="fas fa-pen" aria-hidden="true"></i></button>
+                              <button type="button" className="plannerIconButton plannerIconButton--danger" aria-label={`Excluir ${cat.nome}`} onClick={() => handleDeletePlannerCategory(cat.id)}><i className="fas fa-trash" aria-hidden="true"></i></button>
                             </>
                           )}
 
@@ -617,8 +619,8 @@ export default function Planner() {
                           R$ {cat.gasto} / R$ {decimalAdjust(cat.orcado)} - sobra R$ {decimalAdjust(cat.orcado - cat.gasto)}
                         </div>
                         <ProgressBar
-                          now={(cat.gasto / cat.orcado) * 100}
-                          className="mt-1"
+                          now={cat.orcado > 0 ? Math.min((cat.gasto / cat.orcado) * 100, 100) : 0}
+                          className="plannerProgress"
                           variant={cat.gasto > cat.orcado ? "danger" : "success"}
                         />
                       </div>
@@ -630,6 +632,6 @@ export default function Planner() {
           ))}
         </Row>
       )}
-    </>
+    </main>
   );
 }

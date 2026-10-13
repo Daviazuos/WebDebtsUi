@@ -1,23 +1,23 @@
 .rp-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(15, 23, 42, 0.35);
-  backdrop-filter: blur(3px);
   z-index: 1050;
   display: flex;
   justify-content: flex-end;
+  background: rgba(27, 30, 36, .34);
+  backdrop-filter: blur(3px);
 }
 
 .rp-drawer {
-  width: 420px;
+  box-sizing: border-box;
+  width: min(460px, 100vw);
   height: 100%;
-  background: #ffffff;
-  padding: 24px;
-  box-shadow: -8px 0 24px rgba(0,0,0,0.08);
   overflow-y: auto;
-  animation: slideIn 0.25s ease;
-  border-top-left-radius: 16px;
-  border-bottom-left-radius: 16px;
+  padding: 24px;
+  border-left: 1px solid #e5e7eb;
+  background: #fff;
+  box-shadow: -10px 0 28px rgba(37, 40, 43, .12);
+  animation: slideIn .22s ease;
 }
 
 @keyframes slideIn {
@@ -28,94 +28,181 @@
 .rp-header {
   display: flex;
   align-items: center;
-  gap: 16px;
-  margin-bottom: 24px;
+  gap: 13px;
+  margin: 0 -24px 20px;
+  padding: 0 24px 18px;
+  border-bottom: 1px solid #edf0f3;
 }
 
 .rp-avatar {
-  width: 52px;
-  height: 52px;
-  background: #16a34a;
-  color: white;
-  border-radius: 50%;
   display: flex;
+  width: 46px;
+  height: 46px;
+  flex: 0 0 46px;
   align-items: center;
   justify-content: center;
-  font-size: 22px;
+  border-radius: 13px;
+  background: #e9f6ed;
+  color: #348c59;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.rp-header h4 {
+  color: #25282b;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.rp-balance-positive,
+.rp-balance-negative {
+  font-size: 12px;
   font-weight: 600;
 }
 
 .rp-balance-positive {
-  color: #16a34a;
-  font-weight: 600;
+  color: #348c59;
 }
 
 .rp-balance-negative {
-  color: #dc2626;
-  font-weight: 600;
+  color: #c64b45;
 }
 
 .rp-close {
+  display: inline-flex;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  align-items: center;
+  justify-content: center;
   margin-left: auto;
-  border: none;
-  background: transparent;
-  font-size: 22px;
+  border: 1px solid #e5e7eb;
+  border-radius: 9px;
+  background: #fff;
+  color: #656b74;
+  font-size: 20px;
   cursor: pointer;
 }
 
+.rp-close:hover,
+.rp-close:focus-visible {
+  border-color: #d8d1ff;
+  background: #f0edff;
+  color: #5840d8;
+}
+
 .rp-summary {
-  display: flex;
-  gap: 16px;
-  margin-bottom: 24px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 22px;
 }
 
 .rp-summary-card {
-  flex: 1;
-  background: #f1f5f9;
-  padding: 16px;
-  border-radius: 12px;
   display: flex;
+  min-width: 0;
   flex-direction: column;
+  gap: 5px;
+  padding: 14px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.rp-summary-card span {
+  color: #777d85;
+  font-size: 11px;
 }
 
 .rp-summary-card strong {
-  font-size: 18px;
-  margin-top: 4px;
+  overflow-wrap: anywhere;
+  color: #25282b;
+  font-size: 16px;
+  font-weight: 700;
 }
 
 .rp-section {
-  margin-bottom: 24px;
+  margin-bottom: 22px;
 }
 
 .rp-section h6 {
-  margin-bottom: 12px;
-  font-weight: 600;
+  margin: 0 0 10px;
+  color: #25282b;
+  font-size: 13px;
+  font-weight: 700;
 }
 
 .rp-item {
-  background: #f8fafc;
-  padding: 14px;
-  border-radius: 12px;
-  margin-bottom: 10px;
   display: flex;
-  justify-content: space-between;
+  min-width: 0;
   align-items: center;
-  transition: 0.2s;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 8px;
+  padding: 12px;
+  border: 1px solid #edf0f3;
+  border-radius: 9px;
+  background: #fff;
+  transition: border-color .15s ease, background .15s ease;
 }
 
 .rp-item:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  border-color: #d8d1ff;
+  background: #fcfbff;
+}
+
+.rp-item > div,
+.rp-item > span {
+  overflow: hidden;
+  color: #454a51;
+  font-size: 12px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+}
+
+.rp-item strong {
+  flex: 0 0 auto;
+  color: #25282b;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
 }
 
 .rp-item small {
   display: block;
-  font-size: 12px;
-  color: #64748b;
+  margin-top: 3px;
+  color: #777d85;
+  font-size: 10px;
+  font-weight: 400;
 }
 
 .rp-payall-btn {
   width: 100%;
-  border-radius: 999px !important;
-  padding: 10px;
+  min-height: 42px;
+  border: 1px solid #4930c4 !important;
+  border-radius: 8px !important;
+  background: #5037ce !important;
+  color: #fff !important;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.rp-payall-btn:hover,
+.rp-payall-btn:focus-visible {
+  border-color: #3f28ad !important;
+  background: #3f28ad !important;
+}
+
+@media (max-width: 520px) {
+  .rp-drawer {
+    width: 100vw;
+    padding: 18px;
+    border-left: 0;
+    border-radius: 0;
+  }
+
+  .rp-header {
+    margin: 0 -18px 18px;
+    padding: 0 18px 15px;
+  }
 }

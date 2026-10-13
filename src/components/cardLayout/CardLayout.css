@@ -1,28 +1,95 @@
+.containerWallet {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 1440px;
+    margin: 0 auto 8px;
+    padding: 0 clamp(16px, 3vw, 36px);
+}
+
 .containerWallet .walletCards {
-    display: flex;
-    flex-flow: row wrap;
-    margin-left: 5px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 205px), 1fr));
+    gap: 10px;
+    width: 100%;
+    margin: 0;
 }
 
 .custom-icon {
     font-size: 1.5rem !important;
 }
 
-#linha {
-    width: 100%;
-    margin-left: 10px;
-    font-size: 30px;
-    display: flex;
-    flex-direction: row;
+.periodSelector {
+    display: inline-flex;
+    min-height: 42px;
     align-items: center;
+    gap: 8px;
+    margin: 0 0 14px;
+}
+
+.periodLabel {
+    display: flex;
+    min-width: 190px;
+    align-items: baseline;
+    justify-content: center;
+    gap: 7px;
+    color: #25282b;
+    font-size: 21px;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.periodLabel strong {
+    color: #777d85;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.periodNavigationButton {
+    display: inline-flex;
+    width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 1px solid #e5e7eb;
+    border-radius: 9px;
+    background: #fff;
+    color: #5840d8;
+    cursor: pointer;
+    transition: border-color .15s ease, background .15s ease, color .15s ease;
+}
+
+.periodNavigationButton:hover,
+.periodNavigationButton:focus-visible {
+    border-color: #d8d1ff;
+    background: #f0edff;
+    color: #3f28ad;
+}
+
+.periodNavigationButton:focus-visible {
+    outline: 3px solid rgba(115, 92, 230, .16);
+    outline-offset: 2px;
 }
 
 @media (max-width: 768px) {
-    #linha {
-        margin-left: 10%;
-    }
-
     .custom-icon {
         font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .periodLabel {
+        min-width: 0;
+        font-size: 18px;
+    }
+
+    .periodLabel strong {
+        font-size: 14px;
+    }
+
+    .containerWallet .walletCards {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
     }
 }

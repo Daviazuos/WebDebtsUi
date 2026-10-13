@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./CardGraphicPie.css";
 import { axiosInstance } from "../../api";
 import { Endpoints } from "../../api/endpoints";
@@ -9,12 +9,42 @@ import DashModal from "../../pages/dashboard/DashModal";
 
 export default function CardApexGraphicPie(props) {
     const [graphic, setGraphic] = useState(null);
+    const [containerWidth, setContainerWidth] = useState(0);
+    const chartContainerRef = useRef(null);
     const [year, setYear] = useState(localStorage.getItem("year"));
     const [modalShow, setModalShow] = useState(false);
     const [modalData, setModalData] = useState([]); // Para armazenar os dados da modal
     const [title, setTittle] = useState('')
 
     let month = props?.month === undefined ? localStorage.getItem("month") : props?.month;
+
+    useEffect(() => {
+        const container = chartContainerRef.current;
+        if (!container || typeof ResizeObserver === "undefined") return undefined;
+
+        const observer = new ResizeObserver(entries => {
+            const width = Math.round(entries[0]?.contentRect.width || 0);
+            setContainerWidth(currentWidth => currentWidth === width ? currentWidth : width);
+        });
+        observer.observe(container);
+
+        return () => observer.disconnect();
+    }, []);
+
+    const chartHeight = containerWidth
+        ? Math.round(Math.min(390, Math.max(280, containerWidth * 0.7)))
+        : 350;
+    const chartOptions = graphic ? {
+        ...graphic.options,
+        legend: {
+            ...graphic.options.legend,
+            position: containerWidth < 560 ? "bottom" : "right",
+            fontSize: containerWidth < 560 ? "10px" : "11px",
+            height: containerWidth < 560 ? 88 : chartHeight - 24,
+            itemMargin: { horizontal: 5, vertical: 3 }
+        },
+        responsive: []
+    } : null;
 
     useEffect(() => {
         const labelsList = [];
@@ -39,7 +69,6 @@ export default function CardApexGraphicPie(props) {
                     },
                     options: {
                         chart: {
-                            width: 280,
                             type: "donut",
                             events: {
                                 dataPointSelection: (event, chartContext, config) => {
@@ -68,10 +97,7 @@ export default function CardApexGraphicPie(props) {
                             fontSize: '12px',
                             position: 'right'
                         },
-                        title: {
-                            text: `Percentual por categorias`,
-                            align: 'left'
-                        },
+                        title: { text: '' },
                         responsive: [
                             {
                                 breakpoint: 1024, // Tablets ou telas intermediárias
@@ -157,27 +183,21 @@ export default function CardApexGraphicPie(props) {
                 table={categoryTable} // Passa os dados para a modal
                 head={title}
             />
-            {graphic !== null ? (
-                <ReactApexChart
-                    options={graphic.options}
-                    series={graphic.series}
-                    type="donut"
-                    width={765}
-                    height={500}
-                />
-            ) : (
-                <div className="skeletonCard">
-                    <i
-                        style={{
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            marginTop: "210px"
-                        }}
-                        className="fas fa-spinner fa-spin gray fa-4x"
+            <div ref={chartContainerRef} className="categoryChartContainer">
+                {graphic !== null ? (
+                    <ReactApexChart
+                        options={chartOptions}
+                        series={graphic.series}
+                        type="donut"
+                        width={containerWidth || "100%"}
+                        height={chartHeight}
                     />
-                </div>
-            )}
+                ) : (
+                    <div className="skeletonCard">
+                        <i className="fas fa-spinner fa-spin gray fa-4x" aria-hidden="true" />
+                    </div>
+                )}
+            </div>
         </>
     );
 }

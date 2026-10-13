@@ -1,102 +1,307 @@
-#cardCreditSelected {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-    flex-wrap: wrap;
+.card-stack-container {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 218px;
+  margin: 0 0 5px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: #c9c4e5 transparent;
 }
 
-.cardCreditSelected .debit-card:hover {
-    transition: all 0.3s ease !important; /* Suaviza a transição */
-    transform: translateY(-42px) scale(1.05) !important; /* Sobe e aumenta levemente */
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2) !important; /* Adiciona uma sombra suave */
+.card-stack {
+  position: relative;
+  height: 210px;
+  margin-inline: auto;
 }
 
-.cardCreditSelected .debit-card {
-    min-width: 300px;
-    min-height: 190px;
-    padding: 15px;
-    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-    width: 300px;
-    height: 200px;
-    position: absolute;
-    border-radius: 15px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+.card-stack-container::-webkit-scrollbar {
+  height: 6px;
 }
 
-.cardCreditSelected .card-2 {
-    border-color: black;
-    margin-top: 10px;
-    margin-left: 5px;
-    margin-right: 5px;
-    margin-bottom: 5px;
-}
-
-.cardCreditSelected .text-white {
-    font-size: 25px
-}
-
-.cardCreditSelected .m-0 {
-    color: black;
-}
-
-.cardCreditSelected .creditBody {
-    font-size: 11px;
-}
-
-.modalButton {
-    margin: 10px;
-}
-
-#cardText {
-    color: white !important;
-}
-
-.cardForm {
-    margin-left: 15px;
-    margin-top: 15px;
+.card-stack-container::-webkit-scrollbar-thumb {
+  border-radius: 99px;
+  background: #c9c4e5;
 }
 
 .cardCreditSelected {
-    position: relative;
-    margin-bottom: 100px;
+  position: absolute;
+  top: 0;
+  width: 50px;
+  min-width: 50px;
+  height: 210px;
+  margin: 0;
+  padding: 0;
 }
 
-.card-stack-container {
-    position: relative;
-    height: 300px; /* Ajuste conforme necessário */
-    width: 100%;
-    margin-bottom: -115px;
-    z-index: 2;
-    display: flex;
-    flex-direction: row;
+.cardCreditSelected .debit-card {
+  position: absolute !important;
+  top: 10px;
+  left: 0;
+  width: 310px;
+  min-width: 310px;
+  height: 192px;
+  min-height: 192px;
+  margin: 0 !important;
+  padding: 17px 18px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, .32) !important;
+  border-radius: 15px;
+  background-image: linear-gradient(135deg, rgba(255, 255, 255, .18), rgba(255, 255, 255, 0) 43%, rgba(15, 20, 40, .3));
+  box-shadow: 0 8px 20px rgba(37, 40, 43, .16);
+  cursor: pointer;
+  transition: transform .22s ease, box-shadow .22s ease, filter .22s ease;
 }
 
-@media(max-width: 900px) {
-    .card-stack-container {
-        flex-direction: column;
-        margin-bottom: -200px;
-        margin-top: 10px;
-        margin-left: 20px;
-    }
+.cardCreditSelected .debit-card::before {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, rgba(255, 255, 255, .1), transparent 50%);
+  content: "";
+  pointer-events: none;
+}
 
-    .card-stack-container .cardCreditSelected {
-        display: none !important;
-      }
-    
-      .card-stack-container .cardCreditSelected.selected {
-        display: flex !important;
-      }
+.cardCreditSelected .debit-card:hover {
+  z-index: 1000 !important;
+  transform: translateY(-8px) scale(1.025) !important;
+  box-shadow: 0 15px 28px rgba(37, 40, 43, .25), 0 0 0 2px rgba(255, 255, 255, .55);
+  filter: brightness(1.05) saturate(1.04);
+}
 
-      .debit-card.card-2.mb-4.selected {
-        left: 0 !important;
-      }
+.cardCreditSelected .debit-card.selected {
+  z-index: 999 !important;
+  transform: translateY(-4px) scale(1) !important;
+  box-shadow: 0 12px 25px rgba(37, 40, 43, .2), 0 0 0 3px rgba(88, 64, 216, .24);
+}
 
-      .CreditCardSelectedTable {
-        font-size: 8px;
-      }
+.cardCreditSelected .debit-card .d-flex,
+.cardCreditSelected .debit-card label,
+.cardCreditSelected .debit-card #textCard {
+  position: relative;
+  z-index: 1;
+}
 
-      #controlled-tab-example {
-        font-size: 10px;
-      }
+.cardCreditSelected .debit-card h3 {
+  max-width: 250px;
+  overflow: hidden;
+  margin: 0;
+  color: #fff !important;
+  font-size: 17px;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cardCreditSelected .debit-card #textCard {
+  min-height: 70px;
+  align-items: flex-end;
+  margin-top: 30px;
+}
+
+.cardCreditSelected .debit-card .creditBody {
+  display: grid;
+  gap: 4px;
+  color: rgba(255, 255, 255, .83);
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.cardCreditSelected .debit-card .creditBody p,
+.cardCreditSelected .debit-card h5 {
+  color: #fff !important;
+}
+
+.cardCreditSelected .debit-card h5 {
+  font-size: 16px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.cardCreditSelected .debit-card #textCard > div:first-child::before {
+  display: block;
+  width: 35px;
+  height: 24px;
+  margin-bottom: 9px;
+  border: 1px solid rgba(91, 71, 30, .4);
+  border-radius: 5px;
+  background: linear-gradient(135deg, #f3dda0, #c9a75d);
+  content: "";
+}
+
+.card-stack-container + .card {
+  position: relative;
+  z-index: 3;
+  min-width: 0;
+  padding: 14px !important;
+  border: 1px solid #e5e7eb !important;
+  border-top: 3px solid var(--active-card-color, #5840d8) !important;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(37, 40, 43, .035);
+}
+
+#controlled-tab-example {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 3px;
+  margin: 0 0 14px !important;
+  overflow-x: auto;
+  border-bottom: 1px solid #e5e7eb;
+  scrollbar-width: thin;
+}
+
+#controlled-tab-example .nav-link {
+  flex: 0 0 auto;
+  padding: 9px 12px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: 7px 7px 0 0;
+  background: transparent;
+  color: #646a72;
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+#controlled-tab-example .nav-link:hover {
+  background: #faf9ff;
+  color: #5840d8;
+}
+
+#controlled-tab-example .nav-link.active {
+  border-bottom-color: #5840d8;
+  background: #faf9ff;
+  color: #5037ce;
+  font-weight: 700;
+}
+
+.CreditCardCard {
+  min-width: 0;
+  padding: 2px 4px 4px;
+}
+
+.CreditCardCard > div:first-child {
+  display: flex !important;
+  flex-wrap: wrap;
+  gap: 8px !important;
+  align-items: center;
+  margin: 0 0 13px !important;
+}
+
+.creditModalCardTitle {
+  display: grid;
+  gap: 3px;
+}
+
+.creditModalCardTitle strong {
+  color: #25282b;
+  font-size: 14px;
+}
+
+.creditModalCardTitle span {
+  color: #777d85;
+  font-size: 11px;
+}
+
+.creditInstallmentsTable {
+  min-width: 640px;
+  margin: 0;
+  color: #25282b;
+  font-size: 12px;
+  vertical-align: middle;
+}
+
+.creditInstallmentsTable thead th {
+  padding: 12px;
+  border-bottom: 1px solid #e5e7eb;
+  background: #fcfcfd;
+  color: #777d85;
+  font-size: 10px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.creditInstallmentsTable tbody td {
+  padding: 12px;
+  border-bottom: 1px solid #f0f1f3;
+  color: #454a51;
+}
+
+.creditInstallmentsTable tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.creditInstallmentsTableWrap {
+  width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  border: 1px solid #edf0f3;
+  border-radius: 9px;
+}
+
+.creditInstallmentsPagination {
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+}
+
+.CreditCardSelectedTable {
+  font-size: 12px;
+}
+
+@media (max-width: 760px) {
+  .card-stack-container {
+    height: 212px;
+    margin-bottom: 5px;
+  }
+
+  .card-stack {
+    height: 204px;
+  }
+
+  .cardCreditSelected .debit-card {
+    width: 290px;
+    min-width: 290px;
+    height: 184px;
+    min-height: 184px;
+  }
+
+  .cardCreditSelected .debit-card #textCard {
+    margin-top: 24px;
+  }
+
+  .card-stack-container + .card {
+    padding: 10px !important;
+  }
+
+  .CreditCardCard {
+    padding-inline: 0;
+  }
+}
+
+@media (max-width: 420px) {
+  .card-stack-container {
+    height: 205px;
+  }
+
+  .card-stack {
+    height: 197px;
+  }
+
+  .cardCreditSelected .debit-card {
+    width: min(280px, calc(100vw - 64px));
+    min-width: min(280px, calc(100vw - 64px));
+    padding: 14px;
+  }
+
+  .cardCreditSelected .debit-card h3 {
+    max-width: 205px;
+    font-size: 15px;
+  }
+
+  .cardCreditSelected .debit-card #textCard {
+    margin-top: 20px;
+  }
 }

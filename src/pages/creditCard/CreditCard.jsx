@@ -4,7 +4,7 @@ import { axiosInstance } from "../../api";
 import "./CreditCard.css"
 import { Link } from 'react-router-dom';
 import { addLeadingZeros, decimalAdjust } from "../../utils/valuesFormater";
-import { Button, Form } from "react-bootstrap";
+import { Form } from "react-bootstrap";
 
 import CreditCardModal from "./CreditCardModal";
 import ModalDelete from "../../components/modalDelete/ModalDelete";
@@ -14,9 +14,10 @@ function SetModalAddCard(props) {
     const [modalShow, setModalShow] = React.useState(false);
     return (
         <>
-            <Button size="sm" className={props.className} style={{ backgroundColor: "#1A4173", borderColor: "#1A4173" }} variant='dark' onClick={() => setModalShow(true)}>
-                <i className={props.simbol}></i> {props.modalName}
-            </Button>
+            <button type="button" className="creditAddButton" onClick={() => setModalShow(true)}>
+                <i className={props.simbol} aria-hidden="true"></i>
+                <span>{props.modalName}</span>
+            </button>
             <CreditCardModal
                 value={props.value}
                 show={modalShow}
@@ -32,9 +33,9 @@ function SetModalEditCard(props) {
     const [modalShow, setModalShow] = React.useState(false);
     return (
         <>
-            <Button style={{ margin: '0px', color: 'white' }} className='btn-custom' variant='custom' onClick={() => setModalShow(true)}>
-                <i className={props.simbol}></i> {props.modalName}
-            </Button>
+            <button type="button" className="creditIconAction" aria-label={`Editar ${props.name}`} title="Editar cartão" onClick={() => setModalShow(true)}>
+                <i className={props.simbol} aria-hidden="true"></i>
+            </button>
 
             <CreditCardEditModal
                 value={props.value}
@@ -53,17 +54,11 @@ function SetModalEditCard(props) {
 
 
 function SetModalCredDebts(props) {
-    const [modalShow, setModalShow] = React.useState(false);
     return (
-        <>
-            {
-                <Link to={`/CreditCardSelected/${props.value}`}>
-                    <Button style={{ margin: '0px', color: 'white' }} className='btn-custom' variant='custom' onClick={() => setModalShow(true)}>
-                        <i className={props.simbol}></i> {props.modalName}
-                    </Button>
-                </Link>
-            }
-        </>
+        <Link className="creditDetailsButton" to={`/CreditCardSelected/${props.value}`}>
+            <span>Ver lançamentos</span>
+            <i className={props.simbol} aria-hidden="true"></i>
+        </Link>
     );
 }
 
@@ -72,9 +67,9 @@ function SetModalDelete(props) {
     const [modalShow, setModalShow] = React.useState(false);
     return (
         <>
-            <Button style={{ margin: '0px', color: 'white' }} className='btn-custom' variant='custom' onClick={() => setModalShow(true)}>
-                <i className="fa fa-trash"></i> {props.modalName}
-            </Button>
+            <button type="button" className="creditIconAction creditIconAction--danger" aria-label={`Excluir ${props.name}`} title="Excluir cartão" onClick={() => setModalShow(true)}>
+                <i className="fas fa-trash" aria-hidden="true"></i>
+            </button>
             <ModalDelete
                 show={modalShow}
                 onHide={() => setModalShow(false)}
@@ -109,58 +104,47 @@ export default function CardCredit() {
             });
     }, [month, showZeros, year]);
 
-    const filtered_list = cards.filter(item => {
-        let cardValue = 0.00
+    const getCardValue = item => (item?.debts || []).reduce((total, debt) => {
+        return total + (Number(debt?.installments?.[0]?.value) || 0);
+    }, 0);
 
-        for (const debt in item?.debts) {
-            if (item?.debts[debt]?.installments[0]?.value !== undefined) {
-                cardValue = cardValue + item?.debts[debt]?.installments[0]?.value
-            }
-        }
-
-        if (cardValue !== 0.00) {
-            return item;
-        }
-        else if (showZeros === true) {
-            return item;
-        }
-    })
+    const filtered_list = cards.filter(item => getCardValue(item) !== 0 || showZeros);
 
     const lis = filtered_list.map(item => {
-        let cardValue = 0.00
-
-        for (const debt in item?.debts) {
-            if (item?.debts[debt]?.installments[0]?.value !== undefined) {
-                cardValue = cardValue + item?.debts[debt]?.installments[0]?.value
-            }
-        }
+        const cardValue = getCardValue(item);
 
         let closingDate = item.closureDate > item.dueDate ? `${addLeadingZeros(item.closureDate, 2)}/${addLeadingZeros(month - 1, 2)}/${year}` : `${addLeadingZeros(item.closureDate, 2)}/${addLeadingZeros(month, 2)}/${year}`
 
         return (
-            <div class="debit-card card-2 mb-4" style={{ backgroundColor: `${(item.color != null && item.color != '') ? item.color : "#6F87E1"}` }} id="creditCardBlock">
-                <div class="d-flex flex-column h-100"> <label class="d-block">
-                    <div class="d-flex position-relative">
-                        <div>
-                            <h3 class="text-white fw-bold">{item.name}</h3>
-                        </div>
+            <article className="creditCardItem" key={item.id} style={{ "--credit-card-accent": item.color || "#5840d8" }}>
+                <div className="creditCardItemHeader">
+                    <span className="creditCardMark" aria-hidden="true"><i className="fas fa-credit-card"></i></span>
+                    <span className="creditCardType">CARTÃO DE CRÉDITO</span>
+                    <i className="fas fa-wifi creditCardContactless" aria-hidden="true"></i>
+                    <div className="creditCardActions">
+                        <SetModalEditCard id={item.id} name={item.name} color={item.color} dueDate={item.dueDate} closureDate={item.closureDate} simbol="fas fa-pen" />
+                        <SetModalDelete id={item.id} name={item.name} />
                     </div>
-                    <div id='textCard' class="mt-auto fw-bold d-flex align-items-center justify-content-between">
-                        <div className="creditBody">
-                            <p id="cardText" class="m-0">Fechamento {closingDate}</p>
-                            <p id="cardText" class="m-0">Vencimento {addLeadingZeros(item.dueDate, 2)}/{addLeadingZeros(month, 2)}/{year}</p>
-                        </div>
-                        <h5 id="cardText" class="m-0">R$ {decimalAdjust(cardValue)}</h5>
-                    </div>
-                    <p></p>
-                    <div style={{ display: 'flex', flexDirection: 'row' }}>
-                        {<SetModalCredDebts value={item.id} name={item.name} modalName="" month={month} simbol="fas fa-search" totalValue={decimalAdjust(cardValue)}></SetModalCredDebts>}{" "}
-                        {<SetModalDelete id={item.id}></SetModalDelete>}
-                        {<SetModalEditCard id={item.id} name={item.name} color={item.color} dueDate={item.dueDate} closureDate={item.closureDate} simbol="fas fa-edit" className="modalButton"></SetModalEditCard>}
-                    </div>
-                </label>
                 </div>
-            </div >
+
+                <div className="creditCardIdentity">
+                    <h2>{item.name}</h2>
+                </div>
+
+                <span className="creditCardChip" aria-hidden="true"><i className="fas fa-sim-card"></i></span>
+
+                <div className="creditCardAmount">
+                    <span>Fatura do período</span>
+                    <strong>R$ {decimalAdjust(cardValue)}</strong>
+                </div>
+
+                <div className="creditCardDates">
+                    <div><span>Fechamento</span><strong>{closingDate}</strong></div>
+                    <div><span>Vencimento</span><strong>{addLeadingZeros(item.dueDate, 2)}/{addLeadingZeros(month, 2)}/{year}</strong></div>
+                </div>
+
+                <SetModalCredDebts value={item.id} simbol="fas fa-arrow-right" />
+            </article>
         )
     })
 
@@ -169,33 +153,46 @@ export default function CardCredit() {
     }
 
     return (
-        <div className="containerCardPage">
-            <span id="PagesTitle">Cartões</span>
-            <div className="d-flex align-items-center mb-3">
-                <SetModalAddCard name={'Adicionar novo cartão'} modalName="Adicionar" simbol="fas fa-plus" className="modalButton"></SetModalAddCard>
-                <Form className="switchButton">
+        <main className="creditCardsPage">
+            <header className="creditCardsHeader">
+                <div>
+                    <span className="creditCardsEyebrow">FINANÇAS / CRÉDITO</span>
+                    <h1>Cartões</h1>
+                    <p>Acompanhe suas faturas e os cartões cadastrados.</p>
+                </div>
+                <SetModalAddCard name="Adicionar novo cartão" modalName="Adicionar cartão" simbol="fas fa-plus" />
+            </header>
+
+            <div className="creditCardsToolbar">
+                <span className="creditCardsCount">{filtered_list.length} {filtered_list.length === 1 ? "cartão" : "cartões"}</span>
+                <Form className="creditCardsFilter">
                     <Form.Check
                         type="switch"
-                        id="custom-switch"
-                        label="Mostrar todos"
-                        defaultChecked={false}
+                        id="show-all-credit-cards"
+                        label="Mostrar cartões sem fatura"
+                        checked={showZeros}
                         onChange={handleChange}
                     />
-
                 </Form>
             </div>
             {loading ? (
-                <div className="d-flex justify-content-center align-items-center py-5" aria-live="polite">
-                    <div className="spinner-border text-primary" role="status" style={{ width: '3rem', height: '3rem' }}>
+                <div className="creditCardsState" aria-live="polite">
+                    <div className="spinner-border" role="status">
                         <span className="visually-hidden">Carregando...</span>
                     </div>
                 </div>
             ) : (
-                <div className="cardCredit card px-4" id='cardCredit'>
-                    {lis}
-                </div>
+                filtered_list.length ? (
+                    <section className="creditCardsGrid" aria-label="Cartões cadastrados">{lis}</section>
+                ) : (
+                    <div className="creditCardsState">
+                        <i className="fas fa-credit-card" aria-hidden="true"></i>
+                        <strong>Nenhum cartão neste período</strong>
+                        <span>Adicione um cartão ou habilite a exibição dos cartões sem fatura.</span>
+                    </div>
+                )
             )}
-        </div>)
+        </main>)
 }
 
 

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Button, Card, Container, Table, Form, Modal } from "react-bootstrap";
+import { Table, Form } from "react-bootstrap";
 import ModalAddDebts from "../../components/modal/modalDebts";
 import { Endpoints } from '../../api/endpoints';
 import { axiosInstance } from "../../api";
@@ -25,9 +25,9 @@ function SetModal(props) {
 
   return (
     <>
-      <Button size="sm" className={props.className} style={{ backgroundColor: "#1A4173", borderColor: "#1A4173" }} variant='dark' onClick={() => setModalShow(true)}>
-        <i className={props.simbol}></i> {props.modalName}
-      </Button>
+      <button type="button" className="debtsAddButton" onClick={() => setModalShow(true)}>
+        <i className={props.simbol} aria-hidden="true"></i> {props.modalName}
+      </button>
 
       <ModalAddDebts
         show={modalShow}
@@ -109,10 +109,24 @@ export default function Debts() {
   })
 
   return (
-    <div>
-      <span id="PagesTitle">Dívidas</span>
-      <Card className="cardTable">
-        <Form className="filters">
+    <main className="debtsPage">
+      <header className="debtsPageHeader">
+        <div>
+          <span className="debtsEyebrow">FINANÇAS / COMPROMISSOS</span>
+          <h1>Dívidas</h1>
+          <p>Consulte, filtre e acompanhe seus compromissos financeiros.</p>
+        </div>
+        <SetModal modalName="Adicionar dívida" simbol="fas fa-plus" />
+      </header>
+
+      <section className="debtsPanel">
+        <header className="debtsPanelHeader">
+          <div>
+            <span className="debtsPanelIcon"><i className="fas fa-list-ul" aria-hidden="true"></i></span>
+            <div><h2>Lançamentos</h2><p>{debts.totalItems || 0} registros encontrados</p></div>
+          </div>
+        </header>
+        <Form className="debtsFilters" aria-label="Filtros de dívidas">
           <Form.Group>
             <Form.Control type="search" placeholder="Filtrar por Nome" id="search" onChange={nameChange} />
           </Form.Group>
@@ -137,7 +151,8 @@ export default function Debts() {
             </Form.Control>
           </Form.Group>
         </Form>
-        <Table  borderless striped responsive hover variant="black" className="table" size="sm">
+        <div className="debtsTableWrap">
+        <Table borderless responsive hover className="debtsTable" size="sm">
           <thead>
             <tr className='tr'>
               <th>Nome</th>
@@ -153,18 +168,20 @@ export default function Debts() {
             </tr>
           </thead>
           <tbody>
-            {lis}
+            {lis?.length ? lis : (
+              <tr><td className="debtsEmptyState" colSpan="10">Nenhuma dívida encontrada com esses filtros.</td></tr>
+            )}
           </tbody>
         </Table>
+        </div>
         {(debts.totalItems !== undefined) ?
-          <PaginationComponent
+          <div className="debtsPagination"><PaginationComponent
             itemsCount={debts.totalItems}
             itemsPerPage={10}
             currentPage={debts.currentPage}
             setCurrentPage={setPageNumber}
             alwaysShown={false}
-          /> : ""}
-      </Card>
-      <SetModal modalName="Adicionar" simbol="fas fa-plus" className="modalButton"></SetModal>
-    </div>);
+          /></div> : ""}
+      </section>
+    </main>);
 };

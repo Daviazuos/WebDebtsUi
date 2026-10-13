@@ -94,10 +94,7 @@ export default function CardApexGraphicByDay() {
             stroke: {
                 curve: 'straight'
             },
-            title: {
-                text: 'Top categorias',
-                align: 'left'
-            },
+            title: { text: '' },
             grid: {
                 row: {
                     colors: ['#f3f3f3', 'transparent'],
@@ -153,6 +150,6 @@ export default function CardApexGraphicByDay() {
     };
 
     return (
-        <ReactApexChart options={graphic.options} series={graphic.series} type="line" height={350} width={1100} />
+        <ReactApexChart options={graphic.options} series={graphic.series} type="line" height={350} width="100%" />
     );
 }

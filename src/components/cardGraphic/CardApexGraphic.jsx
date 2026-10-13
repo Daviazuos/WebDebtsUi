@@ -69,10 +69,7 @@ export default function CardApexGraphic() {
                         stroke: {
                             curve: 'straight'
                         },
-                        title: {
-                            text: 'Movimentação por mês',
-                            align: 'left'
-                        },
+                        title: { text: '' },
                         grid: {
                             row: {
                                 colors: ['#f3f3f3', 'transparent'],
@@ -145,7 +142,7 @@ export default function CardApexGraphic() {
     return (
         <>
             {graphic !== null ? (
-                <ReactApexChart options={graphic.options} series={graphic.series} type="line" height={400} width={750} />) : (
+                <ReactApexChart options={graphic.options} series={graphic.series} type="line" height={350} width="100%" />) : (
                 <div className="skeletonCard">
                     <i
                         style={{

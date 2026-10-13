@@ -5,17 +5,23 @@
 .cardDashPie {
     margin: 10px;
     padding: 5px;
-    width: 600px;
 }
 
 .skeletonCard {
-    width: 770px;
-    height: 400px;
+    display: grid;
+    width: 100%;
+    min-width: 0;
+    min-height: 280px;
+    place-items: center;
 }
 
-@media (max-width: 768px) {
-    .skeletonCard {
-        width: 352px;
-        height: 374px;
-    }
+.categoryChartContainer {
+    width: 100%;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.categoryChartContainer .apexcharts-canvas,
+.categoryChartContainer svg {
+    max-width: 100%;
 }
