@@ -29,6 +29,7 @@ export default function DebtList(props) {
   const [onError, setOnError] = React.useState(false)
   const [check, setCheck] = React.useState(false)
   const { sharedValue, setSharedValue } = useGlobalContext();
+  const [valueType, setValueType] = useState('total');
 
   function SetModal(props) {
     const [modalShow, setModalShow] = React.useState(false);
@@ -75,10 +76,13 @@ export default function DebtList(props) {
     setDate(event.target.value)
   }
   const installmentsChange = event => {
-    setNumberOfInstallments(event.target.value)
+    setNumberOfInstallments(event.target.value);
   }
   const typeChange = event => {
     setDebtInstallmentType(event.target.value)
+    if (event.target.value !== "0") {
+      setValueType('total')
+    }
   }
   const categoryChange = event => {
     setCategory(event.target.value)
@@ -90,10 +94,10 @@ export default function DebtList(props) {
   const checkChange = event => {
     if (event.target.checked) {
       setCheck(true)
-  } else {
+    } else {
       setCheck(false)
-  }
-    
+    }
+
   }
 
   useEffect(() => {
@@ -143,10 +147,30 @@ export default function DebtList(props) {
   function handleSubmit(event) {
     setIsLoading(true)
     event.preventDefault();
+    const installmentCount = Math.max(
+      parseInt(numberOfInstallments || props.data?.numberOfInstallments, 10) || 1,
+      1
+    );
+    const isInstallmentPurchase =
+      (debtInstallmentType || debtInstallmentTypeToNumber(props.data?.debtInstallmentType)) === "0";
+    const enteredValues = values.map((value, index) => {
+      const parsedValue = Number(value);
+      if (Number.isFinite(parsedValue) && parsedValue !== 0) {
+        return parsedValue;
+      }
+
+      return index === 0
+        ? parseFloat(String(props.data?.value || '').replace(',', '.')) || 0
+        : 0;
+    });
+    const selectedValues = isInstallmentPurchase && valueType === 'total'
+      ? enteredValues.map(value => value / installmentCount)
+      : enteredValues;
+    const selectedValue = selectedValues[0];
     const addDebts = {
       name: name || props.data?.name,
-      value: values[0] || parseFloat(props.data?.value.replace(',', '.')),
-      values: values[0] != '' ? [...values] : [parseFloat(props.data?.value.replace(',', '.'))], // Envia todos os valores da lista para a API
+      value: selectedValue,
+      values: selectedValues,
       date: date || props.data?.date,
       numberOfInstallments: numberOfInstallments || props.data?.numberOfInstallments,
       debtInstallmentType: debtInstallmentType || props.data?.debtInstallmentType,
@@ -182,74 +206,397 @@ export default function DebtList(props) {
     }
   }
 
+  const isInstallment = debtInstallmentType === "0" || debtInstallmentTypeToNumber(props.data?.debtInstallmentType) === "0";
+
+  const formatCurrency = value => {
+    const numericValue = Number(value) || 0;
+
+    return numericValue.toLocaleString('pt-BR', {
+      style: 'currency',
+      currency: 'BRL'
+    });
+  };
+
+  const currentTotalValue =
+    parseFloat(values[0]) ||
+    parseFloat(String(props.data?.value || '').replace(',', '.')) ||
+    0;
+
+  const currentInstallments = parseInt(numberOfInstallments, 10) || 1;
+
+  const calculatedInstallment =
+    currentInstallments > 0
+      ? currentTotalValue / currentInstallments
+      : 0;
+
+  const selectedType =
+    debtInstallmentType ||
+    debtInstallmentTypeToNumber(props.data?.debtInstallmentType);
+
+  const isInstallmentType = selectedType === "0";
+
   return (
     <>
-      <Alert show={onError} variant="danger">
+      <Alert show={onError} variant="danger" className="formAlert">
         Erro ao salvar {props.error}
       </Alert>
+
       <Form onSubmit={handleSubmit} className="AddForm">
-        <Form.Group className="inputGroup">
-          <Form.Label>Nome</Form.Label>
-          <Form.Control required="true" name="name" onChange={nameChange} placeholder="Entre com o nome" defaultValue={props.data?.name} />
-        </Form.Group>
 
-        {/* Renderiza campos de valor dinamicamente */}
-        {values.map((value, index) => (
-          <Form.Group className="inputGroup" key={index}>
-            <Form.Label>Valor</Form.Label>
-            <div style={{ display: 'flex' }}>
-              <MaskedFormControl currency="BRL" required="true" defaultValue={props.data?.value} name={`value${index}`} value={value} onChange={(event, value, maskedValue) => valueChange(event, value, maskedValue, index)} placeholder="Entre com o valor total" />
-              {(index !== 0) ? <Button variant="danger" onClick={() => removeFieldValue(index)}>-</Button> : ""}
+        <section className="formSection">
+          <div className="sectionHeader">
+            <div className="sectionIcon">
+              <i className="fas fa-shopping-bag"></i>
             </div>
+            <div>
+              <h3>Compra</h3>
+              <span>Informações básicas da compra</span>
+            </div>
+          </div>
+
+          <div className="formGrid formGridPurchase">
+            <Form.Group className="inputGroup">
+              <Form.Label>Nome da compra</Form.Label>
+              <Form.Control
+                required
+                name="name"
+                onChange={nameChange}
+                placeholder="Ex.: COBASI POA IPIRANGA"
+                defaultValue={props.data?.name}
+              />
+            </Form.Group>
+
+            <Form.Group className="inputGroup">
+              <Form.Label>Categoria</Form.Label>
+              <div className="selectorWithAction">
+                <Form.Control
+                  required
+                  name="category"
+                  onChange={categoryChange}
+                  as="select"
+                  defaultValue={props.data?.category}
+                >
+                  {list_categories}
+                </Form.Control>
+
+                <SetModal
+                  modalName="Adicionar"
+                  simbol="fas fa-plus"
+                  classname="modalButton"
+                />
+              </div>
+            </Form.Group>
+          </div>
+        </section>
+
+        <section className="formSection">
+          <div className="sectionHeader">
+            <div className="sectionIcon">
+              <i className="fas fa-credit-card"></i>
+            </div>
+            <div>
+              <h3>Pagamento</h3>
+              <span>Defina como essa compra será lançada</span>
+            </div>
+          </div>
+
+          <div className="formGrid paymentGrid">
+            <Form.Group className="inputGroup">
+              <Form.Label>Tipo de pagamento</Form.Label>
+
+              <div className="paymentTypeSelector" role="radiogroup">
+                <button
+                  type="button"
+                  className={`paymentTypeOption ${selectedType === "2" ? "active" : ""}`}
+                  onClick={() => {
+                    setDebtInstallmentType("2");
+                    setValueType("total");
+                  }}
+                >
+                  <i className="fas fa-check"></i>
+                  À vista
+                </button>
+
+                <button
+                  type="button"
+                  className={`paymentTypeOption ${selectedType === "0" ? "active" : ""}`}
+                  onClick={() => {
+                    setDebtInstallmentType("0");
+                    setValueType("total");
+                  }}
+                >
+                  <i className="fas fa-calendar-check"></i>
+                  Parcelado
+                </button>
+
+                <button
+                  type="button"
+                  className={`paymentTypeOption ${selectedType === "1" ? "active" : ""}`}
+                  onClick={() => {
+                    setDebtInstallmentType("1");
+                    setValueType("total");
+                  }}
+                >
+                  <i className="fas fa-sync-alt"></i>
+                  Fixo
+                </button>
+              </div>
+            </Form.Group>
+
+            {isInstallmentType && (
+              <Form.Group className="inputGroup">
+                <Form.Label>Número de parcelas</Form.Label>
+
+                <div className="installmentControl">
+                  <button
+                    type="button"
+                    aria-label="Diminuir número de parcelas"
+                    onClick={() => {
+                      const next = Math.max(1, currentInstallments - 1);
+                      setNumberOfInstallments(String(next));
+                    }}
+                  >
+                    −
+                  </button>
+
+                  <span>{currentInstallments}</span>
+
+                  <button
+                    type="button"
+                    aria-label="Aumentar número de parcelas"
+                    onClick={() => {
+                      const next = currentInstallments + 1;
+                      setNumberOfInstallments(String(next));
+                    }}
+                  >
+                    +
+                  </button>
+                </div>
+
+                <Form.Control
+                  className="installmentHiddenInput"
+                  name="numberOfInstallments"
+                  type="number"
+                  min="1"
+                  required
+                  value={numberOfInstallments === "0" ? "" : numberOfInstallments}
+                  onChange={installmentsChange}
+                  aria-label="Número de parcelas"
+                />
+              </Form.Group>
+            )}
+          </div>
+
+          <Form.Group className="inputGroup valueGroup">
+            <Form.Label>Valor</Form.Label>
+
+            {isInstallmentType && (
+              <div className="valueTabs" role="radiogroup">
+                <button
+                  type="button"
+                  className={`valueTab ${valueType === "total" ? "active" : ""}`}
+                  onClick={() => setValueType("total")}
+                >
+                  <i className="fas fa-check-circle"></i>
+                  Valor total
+                </button>
+
+                <button
+                  type="button"
+                  className={`valueTab ${valueType === "divided" ? "active" : ""}`}
+                  onClick={() => setValueType("divided")}
+                >
+                  Valor da parcela
+                </button>
+              </div>
+            )}
+
+            <div className="valueInputWrapper">
+              <span className="currencyPrefix">R$</span>
+              <MaskedFormControl
+                currency="BRL"
+                required
+                defaultValue={props.data?.value}
+                name="value0"
+                value={values[0]}
+                onChange={(event, value) =>
+                  valueChange(event, value, null, 0)
+                }
+                placeholder="0,00"
+              />
+            </div>
+
+            {isInstallmentType && (
+              (valueType === "divided" ?
+                 <div className="installmentHint">
+                <i className="fas fa-calculator"></i>
+                <span>
+                  Dividido em {currentInstallments} parcela(s) de{" "}
+                  <strong>{formatCurrency(currentTotalValue)}</strong>
+                  {" "}e somando o valor total de <strong>{formatCurrency((currentInstallments * currentTotalValue))}</strong>
+                </span>
+              </div> :
+              <div className="installmentHint">
+                <i className="fas fa-calculator"></i>
+                <span>
+                  Dividido em {currentInstallments} parcela(s) de{" "}
+                  <strong>{formatCurrency(calculatedInstallment)}</strong>
+                </span>
+              </div>
+            ))}
           </Form.Group>
-        ))}
-        <Button variant="outline-secondary" onClick={addFieldValue}><i className="fas fa-plus"></i> Adicionar mais Valores</Button> {/* Botão para adicionar campos de valor */}
 
-        <Form.Group className="inputGroup">
-          <Form.Label>Data</Form.Label>
-          <Form.Control required="true" name='date' type="date" onChange={dateChange} placeholder="Entre com o data" defaultValue={props.data?.date.split('T')[0]} />
-        </Form.Group>
-        <Form.Group className="inputGroup">
-          <Form.Label>Categoria</Form.Label>
-          <div className="categorySelector">
-            <Form.Control required="true" name='category' onChange={categoryChange} as="select" defaultValue={props.data?.category}>
-              {list_categories}
-            </Form.Control>
-            <SetModal modalName="Adicionar" simbol="fas fa-plus" className="modalButton"></SetModal>
+          {values.length > 1 && (
+            <div className="additionalValues">
+              {values.slice(1).map((value, index) => {
+                const realIndex = index + 1;
+
+                return (
+                  <div className="additionalValueRow" key={realIndex}>
+                    <MaskedFormControl
+                      currency="BRL"
+                      required
+                      value={value}
+                      name={`value${realIndex}`}
+                      onChange={(event, newValue) =>
+                        valueChange(event, newValue, null, realIndex)
+                      }
+                      placeholder="0,00"
+                    />
+
+                    <Button
+                      variant="outline-danger"
+                      type="button"
+                      onClick={() => removeFieldValue(realIndex)}
+                      aria-label="Remover valor"
+                    >
+                      <i className="fas fa-trash"></i>
+                    </Button>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          <button
+            type="button"
+            className="addValueButton"
+            onClick={addFieldValue}
+          >
+            <i className="fas fa-plus"></i>
+            Adicionar outro valor
+          </button>
+        </section>
+
+        {isInstallmentType && (
+          <div className="purchaseSummary">
+            <div className="summaryIcon">
+              <i className="fas fa-receipt"></i>
+            </div>
+
+            <div className="summaryContent">
+              <span className="summaryTitle">Resumo da compra</span>
+
+              <div className="summaryData">
+                {valueType === "divided" ? (
+                  <span className="summaryInstallmentText">
+                    Dividido em {currentInstallments} parcela(s) de{" "}
+                    <strong>{formatCurrency(currentTotalValue)}</strong>
+                    {" "}e somando o valor total de{" "}
+                    <strong>{formatCurrency(currentInstallments * currentTotalValue)}</strong>
+                  </span>
+                ) : (
+                  <>
+                    <div>
+                      <span>Total da compra</span>
+                      <strong>{formatCurrency(currentTotalValue)}</strong>
+                    </div>
+
+                    <div>
+                      <span>Parcelas</span>
+                      <strong>
+                        {currentInstallments}x de{" "}
+                        {formatCurrency(calculatedInstallment)}
+                      </strong>
+                    </div>
+                  </>
+                )}
+              </div>
+            </div>
           </div>
-        </Form.Group>
-        {props.cardId === null ? <Form.Check
-          type="checkbox"
-          id="custom-switch"
-          label="Vincular a uma pessoa?"
-          onChange={checkChange}
-        /> : ''}
-        
-        {(check === true) ? <Form.Group className="inputGroup">
-          <div className="ResponsiblePartySelector">
-            <Form.Control required="true" name='responsibleParty' onChange={responsiblePartyChange} as="select">
-              {list_responsibleParty}
-            </Form.Control>
-            <SetModalAddResponsibleParty modalName="Adicionar" simbol="fas fa-plus" className="modalButton"></SetModalAddResponsibleParty>
+        )}
+
+        <section className="formSection">
+          <div className="sectionHeader">
+            <div className="sectionIcon">
+              <i className="fas fa-calendar-alt"></i>
+            </div>
+            <div>
+              <h3>Data</h3>
+              <span>Quando essa compra aconteceu?</span>
+            </div>
           </div>
-        </Form.Group> : ''}
-        
-        <Form.Group className="inputGroup">
-          <Form.Label>Tipo de débito</Form.Label>
-          <Form.Control required="true" as="select" name='debtInstallmentType' onChange={typeChange} defaultValue={debtInstallmentTypeToNumber(props.data?.debtInstallmentType)}>
-            <option>Selecione o Tipo de debito</option>
-            <option value="0">Parcelado</option>
-            <option value="1">Fixo</option>
-            <option value="2">Simples</option>
-          </Form.Control>
-        </Form.Group>
-        {(debtInstallmentType === "0" || debtInstallmentTypeToNumber(props.data?.debtInstallmentType) == "0") ?
+
           <Form.Group className="inputGroup">
-            <Form.Label>Quantidade de Parcelas</Form.Label>
-            <Form.Control name='numberOfInstallments' type="number" onChange={installmentsChange} placeholder="Entre com o quantidade de parcelas" defaultValue={props.data?.numberOfInstallments} />
-          </Form.Group> : ""}
+            <Form.Label>Data da compra</Form.Label>
+            <Form.Control
+              required
+              name="date"
+              type="date"
+              onChange={dateChange}
+              defaultValue={props.data?.date?.split('T')[0]}
+            />
+          </Form.Group>
+        </section>
 
-        <LoadingButton variant="dark" type="submit" name="Adicionar" isLoading={isLoading}></LoadingButton>
+        {props.cardId === null && (
+          <section className="responsibleSection">
+            <Form.Check
+              type="switch"
+              id="custom-switch"
+              label="Vincular esta compra a uma pessoa"
+              onChange={checkChange}
+            />
+
+            {check && (
+              <div className="selectorWithAction responsibleSelector">
+                <Form.Control
+                  required
+                  name="responsibleParty"
+                  onChange={responsiblePartyChange}
+                  as="select"
+                >
+                  {list_responsibleParty}
+                </Form.Control>
+
+                <SetModalAddResponsibleParty
+                  modalName="Adicionar"
+                  simbol="fas fa-plus"
+                  classname="Button"
+                />
+              </div>
+            )}
+          </section>
+        )}
+
+        <div className="formFooter">
+          <Button
+            type="button"
+            variant="light"
+            className="cancelButton"
+            onClick={props.onHide}
+          >
+            Cancelar
+          </Button>
+
+          <LoadingButton
+            variant="dark"
+            type="submit"
+            name="Adicionar compra"
+            isLoading={isLoading}
+            className="submitButton"
+          />
+        </div>
       </Form>
     </>
   );

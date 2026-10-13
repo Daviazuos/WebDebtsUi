@@ -324,6 +324,7 @@ export default function Dashboard() {
           show={show}
           onHide={() => setShow(false)}
           size="lg"
+          className="purchaseModal"
           aria-labelledby="contained-modal-title-vcenter"
           centered
           backdrop="static"

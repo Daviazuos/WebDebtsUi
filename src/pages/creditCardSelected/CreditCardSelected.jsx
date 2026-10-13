@@ -106,17 +106,26 @@ export default function CreditCardSelected({ match }, props) {
     }, [year])
 
     useEffect(() => {
-        axiosInstance.get(Endpoints.card.filterCards(1, 9999, null, selectedDate.split('-')[0], selectedDate.split('-')[1], false))
+        axiosInstance.get(Endpoints.card.filterCards(1, 9999, null, selectedDate.split('-')[0], selectedDate.split('-')[1], true))
             .then(res => {
                 const items = res.data.items || [];
-                setCards(items);
-                const cardIndex = items.findIndex(card => card.id === cardId);
-                setSelectedCardIndex(cardIndex >= 0 ? cardIndex : 0);
-
                 const cardClosingDateVariable = new Map();
                 const cardValue = new Map();
 
-                items.forEach(card => {
+                const filteredItems = items.filter(card => {
+                    let value = 0.00;
+                    (card.debts || []).forEach(debt => {
+                        value += Number(debt?.installments?.[0]?.value || 0);
+                    });
+
+                    return value !== 0 || String(card.id) === String(cardId);
+                });
+
+                setCards(filteredItems);
+                const cardIndex = filteredItems.findIndex(card => String(card.id) === String(cardId));
+                setSelectedCardIndex(cardIndex >= 0 ? cardIndex : 0);
+
+                filteredItems.forEach(card => {
                     const closingDate = card.closureDate > card.dueDate
                         ? `${addLeadingZeros(card.closureDate, 2)}/${addLeadingZeros(selectedDate.split('-')[0] - 1, 2)}/${selectedDate.split('-')[1]}`
                         : `${addLeadingZeros(card.closureDate, 2)}/${addLeadingZeros(selectedDate.split('-')[0], 2)}/${selectedDate.split('-')[1]}`;

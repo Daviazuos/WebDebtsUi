@@ -1,25 +1,706 @@
-.categorySelector{
-    display: flex;
-}
-
-.ResponsiblePartySelector{
-    display: flex;
-}
-
+/* =========================================================
+   Formulário de lançamento de compra
+   ========================================================= */
 
 .AddForm {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  color: #25282b;
+}
+
+.formAlert {
+  margin-bottom: 0;
+  border-radius: 12px;
+}
+
+.formSection {
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 22px;
+  background: #fff;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.sectionIcon {
+  width: 40px;
+  height: 40px;
+  flex: 0 0 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: #f0edff;
+  color: #5840d8;
+  font-size: 16px;
+}
+
+.sectionHeader h3 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: .02em;
+  text-transform: uppercase;
+}
+
+.sectionHeader span {
+  display: block;
+  margin-top: 3px;
+  color: #7b8088;
+  font-size: 13px;
+}
+
+.formGrid {
+  display: grid;
+  gap: 18px;
+}
+
+.formGridPurchase {
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr);
+}
+
+.paymentGrid {
+  grid-template-columns: minmax(0, 1fr) minmax(250px, .85fr);
 }
 
 .inputGroup {
-    margin-top: 10px;
-    margin-bottom: 10px;
+  margin: 0;
+  min-width: 0;
+}
+
+.inputGroup > .form-label {
+  display: block;
+  margin-bottom: 8px;
+  color: #4c5158;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.inputGroup .form-control,
+.selectorWithAction .form-control {
+  min-height: 48px;
+  border: 1px solid #d9dde3;
+  border-radius: 10px;
+  box-shadow: none;
+  color: #25282b;
+  transition: border-color .2s, box-shadow .2s;
+}
+
+.inputGroup .form-control:focus,
+.selectorWithAction .form-control:focus {
+  border-color: #735ce6;
+  box-shadow: 0 0 0 3px rgba(115, 92, 230, .12);
+}
+
+.selectorWithAction {
+  display: flex;
+  gap: 10px;
+  min-width: 0;
+}
+
+.selectorWithAction .form-control {
+  flex: 1;
+  min-width: 0;
+}
+
+.modalButton {
+  width: 48px;
+  min-width: 48px;
+  min-height: 48px;
+  padding: 0;
+  border-radius: 10px;
+  font-size: 17px;
+}
+
+.paymentTypeSelector,
+.valueTabs {
+  display: flex;
+  width: 100%;
+  padding: 3px;
+  border: 1px solid #dfe2e7;
+  border-radius: 11px;
+  background: #fafafa;
+  gap: 3px;
+}
+
+.paymentTypeOption,
+.valueTab {
+  flex: 1;
+  min-height: 42px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #565b63;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: .2s ease;
+}
+
+.paymentTypeOption i,
+.valueTab i {
+  margin-right: 7px;
+}
+
+.paymentTypeOption:hover,
+.valueTab:hover {
+  background: #f1efff;
+  color: #5840d8;
+}
+
+.paymentTypeOption.active,
+.valueTab.active {
+  background: #eeeaff;
+  color: #5840d8;
+  font-weight: 600;
+}
+
+.installmentControl {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 48px;
+  padding: 0 8px;
+  border: 1px solid #d9dde3;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.installmentControl button {
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #565b63;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.installmentControl button:hover {
+  background: #f1efff;
+  color: #5840d8;
+}
+
+.installmentControl span {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.installmentHiddenInput {
+  position: absolute;
+  width: 1px !important;
+  height: 1px !important;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.valueGroup {
+  margin-top: 2px;
+}
+
+.valueTabs {
+  margin-bottom: 10px;
+}
+
+.valueInputWrapper {
+  position: relative;
+}
+
+.valueInputWrapper .form-control {
+  min-height: 58px;
+  padding-left: 48px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.currencyPrefix {
+  position: absolute;
+  z-index: 2;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #777d85;
+  font-size: 15px;
+  pointer-events: none;
+}
+
+.installmentHint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 9px;
+  color: #646a72;
+  font-size: 13px;
+}
+
+.installmentHint i {
+  color: #3b9d63;
+}
+
+.installmentHint strong {
+  color: #2f985d;
+}
+
+.addValueButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  margin-top: 12px;
+  padding: 9px 13px;
+  border: 1px dashed #c9cdd4;
+  border-radius: 9px;
+  background: transparent;
+  color: #626870;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.addValueButton:hover {
+  border-color: #735ce6;
+  color: #5840d8;
+  background: #faf9ff;
+}
+
+.additionalValues {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.additionalValueRow {
+  display: flex;
+  gap: 8px;
+}
+
+.additionalValueRow .form-control {
+  flex: 1;
+}
+
+.additionalValueRow .btn {
+  width: 46px;
+}
+
+.purchaseSummary {
+  display: flex;
+  gap: 14px;
+  padding: 18px;
+  border: 1px solid #ddd8ff;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #faf9ff, #f6f4ff);
+}
+
+.summaryIcon {
+  width: 38px;
+  height: 38px;
+  flex: 0 0 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: #eeeaff;
+  color: #5840d8;
+}
+
+.summaryContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.summaryTitle {
+  display: block;
+  margin-bottom: 13px;
+  color: #5840d8;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.summaryData {
+  display: flex;
+  gap: 50px;
+}
+
+.summaryData > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.summaryData span {
+  color: #777d85;
+  font-size: 12px;
+}
+
+.summaryData .summaryInstallmentText {
+  color: #565b63;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.summaryData strong {
+  color: #292c31;
+  font-size: 17px;
+}
+
+.responsibleSection {
+  padding: 16px 18px;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  background: #fafafa;
+}
+
+.responsibleSection .form-check {
+  margin: 0;
+}
+
+.responsibleSection .form-check-label {
+  color: #41464d;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.responsibleSelector {
+  margin-top: 14px;
+}
+
+.formFooter {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+  padding-top: 4px;
+}
+
+.cancelButton,
+.submitButton {
+  min-height: 48px;
+  padding: 0 24px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+.cancelButton {
+  min-width: 130px;
+  border: 1px solid #dfe2e7;
+  background: #fff;
+  color: #454a51;
+}
+
+.cancelButton:hover {
+  background: #f7f7f8;
+  color: #25282b;
+}
+
+.submitButton {
+  min-width: 180px;
 }
 
 @media (max-width: 768px) {
-    .inputGroup {
-        margin-bottom: 40px; /* Ajuste o valor conforme o necessário */
-      }
-      
+  .AddForm {
+    gap: 12px;
+  }
+
+  .formSection {
+    padding: 17px;
+    border-radius: 13px;
+  }
+
+  .formGridPurchase,
+  .paymentGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .sectionHeader {
+    margin-bottom: 16px;
+  }
+
+  .paymentTypeSelector {
+    flex-wrap: wrap;
+  }
+
+  .paymentTypeOption {
+    min-width: calc(50% - 3px);
+  }
+
+  .paymentTypeOption:last-child {
+    min-width: 100%;
+  }
+
+  .summaryData {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .formFooter {
+    position: sticky;
+    bottom: 0;
+    z-index: 5;
+    margin: 0 -17px -17px;
+    padding: 12px 17px;
+    background: rgba(255, 255, 255, .96);
+    border-top: 1px solid #e5e7eb;
+  }
+
+  .cancelButton,
+  .submitButton {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .formSection {
+    padding: 14px;
+  }
+
+  .sectionIcon {
+    width: 36px;
+    height: 36px;
+    flex-basis: 36px;
+  }
+
+  .paymentTypeOption {
+    min-width: 100%;
+  }
+
+  .valueTabs {
+    flex-direction: column;
+  }
+
+  .valueTab {
+    min-height: 40px;
+  }
+
+  .formFooter {
+    margin-left: -14px;
+    margin-right: -14px;
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+}
+
+/* Responsividade do modal de compra */
+.AddForm {
+  width: 100%;
+  min-width: 0;
+}
+
+.purchaseModal .modal-dialog {
+  width: min(920px, calc(100vw - 32px));
+  max-width: 920px;
+  margin: 16px auto;
+}
+
+.purchaseModal .modal-content {
+  max-height: calc(100dvh - 32px);
+  overflow: hidden;
+  border: 0;
+  border-radius: 18px;
+}
+
+.purchaseModal .modal-header {
+  flex: 0 0 auto;
+  padding: 18px 22px;
+}
+
+.purchaseModal .modal-title,
+.sectionHeader span,
+.installmentHint,
+.summaryData strong {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.purchaseModal .modal-body {
+  min-height: 0;
+  padding: 22px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.paymentTypeOption,
+.valueTab {
+  min-width: 0;
+  padding-inline: 10px;
+}
+
+@media (max-width: 768px) {
+  .purchaseModal .modal-dialog {
+    width: calc(100vw - 20px);
+    margin: 10px auto;
+  }
+
+  .purchaseModal .modal-content {
+    max-height: calc(100dvh - 20px);
+    border-radius: 14px;
+  }
+
+  .purchaseModal .modal-header,
+  .purchaseModal .modal-body {
+    padding: 16px;
+  }
+
+  .formFooter {
+    box-shadow: 0 -8px 18px rgba(37, 40, 43, .06);
+  }
+}
+
+@media (max-width: 480px) {
+  .purchaseModal .modal-dialog {
+    width: 100%;
+    height: 100dvh;
+    margin: 0;
+  }
+
+  .purchaseModal .modal-content {
+    height: 100dvh;
+    max-height: 100dvh;
+    border-radius: 0;
+  }
+
+  .purchaseModal .modal-header {
+    padding: 14px;
+  }
+
+  .purchaseModal .modal-body {
+    padding: 12px;
+  }
+
+  .formSection {
+    padding: 13px;
+  }
+
+  .sectionHeader {
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .sectionHeader h3 {
+    font-size: 14px;
+  }
+
+  .selectorWithAction {
+    gap: 8px;
+  }
+
+  .purchaseSummary {
+    gap: 10px;
+    padding: 14px;
+  }
+
+  .summaryData strong {
+    font-size: 15px;
+  }
+
+  .formFooter {
+    flex-direction: column-reverse;
+    align-items: stretch;
+    margin: 0 -13px -13px;
+    padding: 12px 13px max(12px, env(safe-area-inset-bottom));
+  }
+
+  .cancelButton,
+  .submitButton,
+  .addValueButton {
+    width: 100%;
+  }
+}
+
+@media (max-width: 360px) {
+  .paymentTypeSelector,
+  .valueTabs {
+    flex-direction: column;
+  }
+
+  .paymentTypeOption,
+  .paymentTypeOption:last-child {
+    width: 100%;
+    min-width: 100%;
+  }
+
+  .purchaseSummary {
+    flex-direction: column;
+  }
+}
+
+@media (max-height: 600px) and (min-width: 481px) {
+  .purchaseModal .modal-dialog {
+    margin-top: 8px;
+    margin-bottom: 8px;
+  }
+
+  .purchaseModal .modal-content {
+    max-height: calc(100dvh - 16px);
+  }
+}
+
+/* Responde à largura real do modal, mesmo quando o viewport é grande. */
+.purchaseModal .modal-body {
+  container-type: inline-size;
+}
+
+@container (max-width: 680px) {
+  .AddForm .formGridPurchase,
+  .AddForm .paymentGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .AddForm .paymentTypeSelector {
+    flex-wrap: wrap;
+  }
+
+  .AddForm .paymentTypeOption {
+    min-width: calc(50% - 3px);
+  }
+
+  .AddForm .paymentTypeOption:last-child {
+    min-width: 100%;
+  }
+
+  .AddForm .summaryData {
+    flex-direction: column;
+    gap: 12px;
+  }
+}
+
+@container (max-width: 430px) {
+  .AddForm .formSection {
+    padding: 13px;
+  }
+
+  .AddForm .paymentTypeSelector,
+  .AddForm .valueTabs {
+    flex-direction: column;
+  }
+
+  .AddForm .paymentTypeOption,
+  .AddForm .paymentTypeOption:last-child {
+    width: 100%;
+    min-width: 100%;
+  }
+
+  .AddForm .purchaseSummary {
+    flex-direction: column;
+  }
+
+  .AddForm .formFooter {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+
+  .AddForm .cancelButton,
+  .AddForm .submitButton,
+  .AddForm .addValueButton {
+    width: 100%;
+  }
 }

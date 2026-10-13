@@ -13,6 +13,8 @@ export default function ModalAddDebts(props) {
     <Modal
       show={modalShow ? modalShow : props.show}
       onHide={props.onHide ? props.onHide : () => setModalShow(false)}
+      size="lg"
+      className="purchaseModal"
       aria-labelledby="contained-modal-title-vcenter"
       centered
       fullscreen="md-down"
