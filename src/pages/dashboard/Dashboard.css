@@ -194,7 +194,7 @@
     align-items: stretch;
 }
 
-.dashboardDailyPanel,
+.dashboardTopDebtsPanel,
 .dashboardUpcomingPanel {
     min-width: 0;
 }
@@ -216,9 +216,23 @@
     margin: 0 !important;
 }
 
-.dashboardDailyPanel > .apexcharts-canvas,
 .dashboardTrendPanel > .apexcharts-canvas {
     padding: 8px 12px 4px;
+}
+
+.dashboardTopDebtsPanel > .topDebtsChart {
+    padding: 8px 12px 4px;
+}
+
+.topDebtsEmpty {
+    display: flex;
+    min-height: 320px;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    color: var(--dashboard-muted);
+    font-size: 13px;
+    text-align: center;
 }
 
 .dashboardCategoryPanel .categoryChartContainer {
@@ -234,10 +248,6 @@
     color: var(--dashboard-ink);
     font-size: 15px;
     font-weight: 700;
-}
-
-.dashboardUpcomingPanel > div[style] {
-    max-height: 360px !important;
 }
 
 .dashboardModalHost {
@@ -290,7 +300,8 @@
         grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 
-    .dashboardPanel .skeletonCard {
+    .dashboardPanel .skeletonCard,
+    .topDebtsEmpty {
         height: 280px;
     }
 }

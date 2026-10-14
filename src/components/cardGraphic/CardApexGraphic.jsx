@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Card } from "react-bootstrap";
 import "./CardGraphic.css"
 import { axiosInstance } from "../../api";
 import { Endpoints } from "../../api/endpoints";
 import ReactApexChart from "react-apexcharts";
 import { decimalAdjust } from "../../utils/valuesFormater";
-import { getLessMonthByMonth, getLessMonthYearByMonth } from "../../utils/dateFormater";
+import { getLessMonthYearByMonth } from "../../utils/dateFormater";
 
 
 export default function CardApexGraphic() {
@@ -71,6 +70,7 @@ export default function CardApexGraphic() {
                         },
                         title: { text: '' },
                         grid: {
+                            borderColor: "#edf0f3",
                             row: {
                                 colors: ['#f3f3f3', 'transparent'],
                                 opacity: 0.2
@@ -158,5 +158,3 @@ export default function CardApexGraphic() {
         </>
     )
 }
-
-

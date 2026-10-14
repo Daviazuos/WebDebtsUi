@@ -1,49 +1,138 @@
-.loginContainer {
-    max-width: 400px;
+.loginPage {
+    --login-ink: #25282b;
+    --login-muted: #777d85;
+    --login-border: #e5e7eb;
+    --login-violet: #5840d8;
+    --login-violet-hover: #3f28ad;
+    display: flex;
+    min-height: 100vh;
+    min-height: 100dvh;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 16px;
+    background:
+        radial-gradient(ellipse at 15% 15%, rgba(88, 64, 216, .08), transparent 36%),
+        #f7f7fa;
+    color: var(--login-ink);
 }
 
-.loginContainer .cardLogin {
-    max-width: 350px;
-    left: 50%;
-    top: 50%;
-    position: absolute;
-    cursor: auto;
-    transform: translate(-50%, -50%);
+.loginPage .loginCard {
+    width: 100%;
+    max-width: 420px;
+    overflow: hidden;
+    border: 1px solid var(--login-border);
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 16px 48px rgba(37, 40, 43, .08);
 }
 
-.loginContainer .cardLogin .registerButton {
-    cursor: pointer;
+.loginPage .loginLogo {
+    display: block;
+    width: 210px;
+    max-height: 88px;
+    margin: 28px auto 0;
+    object-fit: contain;
+}
+
+.loginPage .card-body {
+    padding: 24px 32px 30px;
+}
+
+.loginHeading {
+    margin-bottom: 24px;
+    text-align: center;
+}
+
+.loginEyebrow {
+    color: var(--login-violet);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .08em;
+}
+
+.loginHeading h1 {
+    margin: 7px 0 5px;
+    font-size: 23px;
+    font-weight: 700;
+}
+
+.loginHeading p {
+    margin: 0;
+    color: var(--login-muted);
+    font-size: 13px;
+}
+
+.loginPage .loginFormGroup {
+    margin-bottom: 18px;
+}
+
+.loginPage .form-label {
+    margin-bottom: 7px;
+    color: var(--login-ink);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.loginPage .form-control {
+    min-height: 44px;
+    border-color: var(--login-border);
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.loginPage .form-control:focus {
+    border-color: var(--login-violet);
+    box-shadow: 0 0 0 3px rgba(88, 64, 216, .14);
+}
+
+.loginPage .loginSubmit {
+    min-height: 44px;
+    border: 1px solid #4930c4;
+    border-radius: 9px;
+    background: #5037ce;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    transition: background .18s ease, border-color .18s ease, box-shadow .18s ease;
+}
+
+.loginPage .loginSubmit:hover,
+.loginPage .loginSubmit:focus-visible {
+    border-color: var(--login-violet-hover);
+    background: var(--login-violet-hover);
+    color: #fff;
+}
+
+.loginPage .loginSubmit:focus-visible {
+    outline: 3px solid rgba(115, 92, 230, .2);
+    outline-offset: 2px;
+}
+
+.loginRegister {
+    margin-top: 22px;
+    color: var(--login-muted);
+    font-size: 13px;
+    text-align: center;
+}
+
+.loginRegister a {
+    color: var(--login-violet);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.loginRegister a:hover {
+    color: var(--login-violet-hover);
     text-decoration: underline;
 }
 
-.loginContainer .cardLogin .signButton {
-    background-color: #0070D2;
-    color: white;
-
+.loginPage .loginError {
+    margin: 18px 0 0;
+    font-size: 13px;
 }
 
-.register {
-    margin-left: 20px;
-}
-
-.signText {
-    color: #9FA2B4;
-    font-size: 11px;
-
-}
-
-.formLogin {
-    margin-top: 15px;
-    margin-bottom: 15px;
-}
-
-@media (max-width: 768px) {
-    .loginContainer {
-        max-width: 600px;
-    }
-    .loginContainer .cardLogin {
-        max-width: 500px;
-        position: relative;
-        margin-top: 500px !important;
+@media (max-width: 480px) {
+    .loginPage .card-body {
+        padding: 22px 24px 26px;
     }
 }

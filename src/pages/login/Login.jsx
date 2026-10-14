@@ -1,4 +1,4 @@
-import { Container, Card, Form, Button, Spinner, Alert } from 'react-bootstrap';
+import { Container, Card, Form, Alert } from 'react-bootstrap';
 import { axiosInstance } from "../../api";
 import { Endpoints } from "../../api/endpoints";
 import image from '../../assets/webdebts.png'
@@ -49,27 +49,32 @@ export default function Login(props) {
     }
 
     return (
-        <Container className="loginContainer">
-            <Card className="cardLogin">
-                <Card.Img variant="top" src={image} />
+        <Container fluid className="loginPage">
+            <Card className="loginCard">
+                <Card.Img className="loginLogo" variant="top" src={image} alt="WebDebts" />
                 <Card.Body>
+                    <div className="loginHeading">
+                        <h1>Bem-vindo de volta</h1>
+                        <p>Entre na sua conta para acompanhar suas finanças.</p>
+                    </div>
                     <Form onSubmit={handleSubmit}>
-                        <Form.Group className='formLogin'>
+                        <Form.Group className="loginFormGroup" controlId="loginUsername">
                             <Form.Label>Usuário</Form.Label>
-                            <Form.Control required="true" name='username' placeholder="Entre com o usuário" onChange={usernameChange} />
+                            <Form.Control required name="username" autoComplete="username" placeholder="Digite seu usuário" onChange={usernameChange} />
                         </Form.Group>
-                        <Form.Group className='formLogin'>
+                        <Form.Group className="loginFormGroup" controlId="loginPassword">
                             <Form.Label>Senha</Form.Label>
-                            <Form.Control required="true" name='password' type="password" placeholder="Entre com a senha" onChange={passwordChange} />
+                            <Form.Control required name="password" type="password" autoComplete="current-password" placeholder="Digite sua senha" onChange={passwordChange} />
                         </Form.Group>
-                        <div className="d-grid gap-2">
-                            <LoadingButton className="signButton" type="submit" isLoading={isLoading} name="Login"></LoadingButton>
+                        <div className="d-grid">
+                            <LoadingButton className="loginSubmit" type="submit" isLoading={isLoading} name="Entrar" />
                         </div>
                     </Form>
-                    <p></p>
-                    <div className='signText'>Não tem conta ainda? <a className='registerButton' onClick={() => window.location.href = '/register'}>cadastre-se</a></div>
+                    <div className="loginRegister">
+                        Não tem conta ainda? <Link to="/Register">Cadastre-se</Link>
+                    </div>
 
-                    <Alert show={errorMessageShow} variant="red">
+                    <Alert show={errorMessageShow} variant="danger" className="loginError">
                         Erro ao logar!
                     </Alert>
                 </Card.Body>

@@ -11,7 +11,7 @@ import "./Dashboard.css";
 import CustomCard from "../../components/customCard/CustomCard";
 import CardApexGraphic from "../../components/cardGraphic/CardApexGraphic";
 import CardApexGraphicPie from "../../components/cardGraphicPie/CardApexGraphicPie";
-import CardApexGraphicByDay from "../../components/cardGraphic/CardApexGraphicByDay";
+import CardApexGraphicTopDebts from "../../components/cardGraphic/CardApexGraphicTopDebts";
 import { addOrRemoveMonth, monthByNumber } from "../../utils/dateFormater";
 import DebtList from "../../components/form/form";
 import UpcomingBill from "../../components/cardCommingBills/CardCommingBills";
@@ -332,12 +332,12 @@ export default function Dashboard() {
       </div>
 
       <div className="dashboardAnalyticsGrid">
-        <section className="dashboardPanel dashboardDailyPanel">
+        <section className="dashboardPanel dashboardTopDebtsPanel">
           <div className="dashboardPanelHeader">
-            <span className="dashboardPanelIcon"><i className="fas fa-chart-area" aria-hidden="true"></i></span>
-            <div><h2>Despesas por categoria</h2><p>Evolução nos últimos meses</p></div>
+            <span className="dashboardPanelIcon"><i className="fas fa-arrow-up" aria-hidden="true"></i></span>
+            <div><h2>Maiores despesas do período</h2><p>Os cinco lançamentos de maior valor</p></div>
           </div>
-          <CardApexGraphicByDay />
+          <CardApexGraphicTopDebts items={sumAllValue.items || []} />
         </section>
         <section className="dashboardPanel dashboardUpcomingPanel">
           <UpcomingBill />

@@ -1,5 +1,173 @@
-.billCardTitle {
+.billCardHeader {
+    display: flex;
+    min-height: 66px;
+    align-items: center;
+    gap: 11px;
+    margin: -17px -17px 14px;
+    padding: 13px 17px;
+    border-bottom: 1px solid #edf0f3;
+}
+
+.billCardIcon {
+    display: inline-flex;
+    width: 36px;
+    height: 36px;
+    flex: 0 0 36px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: #f0edff;
+    color: #5840d8;
     font-size: 14px;
-    font-weight: 900;
-    font-family: Helvetica, Arial, sans-serif;
+}
+
+.billCardTitle {
+    margin: 0 0 3px;
+    color: #25282b;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.billCardHeader p {
+    margin: 0;
+    color: #777d85;
+    font-size: 12px;
+}
+
+.billCardList {
+    display: grid;
+    max-height: 360px;
+    gap: 9px;
+    overflow-y: auto;
+    padding-right: 3px;
+}
+
+.billCardItem {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: 12px;
+    padding: 11px;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    background: #fff;
+    transition: border-color .16s ease, background .16s ease;
+}
+
+.billCardItem:hover {
+    border-color: #d8d1ff;
+    background: #fcfbff;
+}
+
+.billCardItem.isOverdue {
+    border-color: #f2caca;
+    background: #fff7f7;
+}
+
+.billCardDate {
+    display: flex;
+    width: 44px;
+    height: 48px;
+    flex: 0 0 44px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9px;
+    background: #f0edff;
+    color: #5840d8;
+}
+
+.billCardDate small {
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.billCardDate span {
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.15;
+}
+
+.billCardDetails {
+    min-width: 0;
+    flex: 1 1 auto;
+}
+
+.billCardName {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: 7px;
+    color: #25282b;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.billCardName img {
+    width: 18px;
+    height: 18px;
+    flex: 0 0 18px;
+    object-fit: contain;
+}
+
+.billCardName span,
+.billCardSubtitle,
+.billCardLastCharge {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.billCardSubtitle,
+.billCardLastCharge {
+    color: #777d85;
+    font-size: 11px;
+}
+
+.billCardLastCharge {
+    color: #9a9fa7;
+}
+
+.billCardAmount {
+    flex: 0 0 auto;
+    padding: 5px 8px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background: #fff;
+    color: #25282b;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.billCardItem.isOverdue .billCardAmount {
+    border-color: #f2caca;
+    color: #a63737;
+}
+
+.billCardEmpty {
+    display: flex;
+    min-height: 140px;
+    align-items: center;
+    justify-content: center;
+    color: #777d85;
+    font-size: 13px;
+    text-align: center;
+}
+
+@media (max-width: 520px) {
+    .billCardHeader {
+        margin: -13px -13px 12px;
+        padding: 12px;
+    }
+
+    .billCardItem {
+        gap: 9px;
+        padding: 9px;
+    }
+
+    .billCardAmount {
+        padding: 5px 6px;
+        font-size: 11px;
+    }
 }
