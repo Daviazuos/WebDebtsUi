@@ -1,3 +1,137 @@
 .trr{
     justify-content: center;
 }
+
+.peopleCreateModal .modal-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 18px 20px;
+    border-bottom: 1px solid #edf0f3;
+}
+
+.peopleCreateHeading {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: 11px;
+}
+
+.peopleCreateIcon {
+    display: inline-flex;
+    width: 38px;
+    height: 38px;
+    flex: 0 0 38px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: #f0edff;
+    color: #5840d8;
+    font-size: 15px;
+}
+
+.peopleCreateEyebrow {
+    display: block;
+    margin-bottom: 3px;
+    color: #777d85;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: .08em;
+}
+
+.peopleCreateModal .modal-title {
+    overflow-wrap: anywhere;
+    color: #25282b;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.peopleCreateForm {
+    display: grid;
+    margin-bottom: 18px;
+}
+
+.peopleCreateForm .peopleCreateField {
+    display: grid;
+    gap: 7px;
+    margin: 0;
+}
+
+.peopleCreateForm .form-label {
+    margin: 0;
+    color: #4c5158;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.peopleCreateForm .form-control {
+    min-height: 43px;
+    border-color: #e5e7eb;
+    border-radius: 8px;
+    color: #25282b;
+    font-size: 13px;
+}
+
+.peopleCreateForm .form-control:focus {
+    border-color: #735ce6;
+    box-shadow: 0 0 0 3px rgba(115, 92, 230, .12);
+}
+
+.peopleCreateExistingList {
+    margin-bottom: 18px;
+    padding: 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 9px;
+    background: #fafbfc;
+}
+
+.peopleCreateExistingList h2 {
+    margin: 0 0 8px;
+    color: #4c5158;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.peopleCreateExistingList .table {
+    margin: 0;
+    color: #25282b;
+    font-size: 12px;
+}
+
+.peopleCreateModal .modal-body .peopleCreateSubmit {
+    display: inline-flex;
+    width: 100%;
+    min-height: 43px;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: 1px solid #4930c4;
+    border-radius: 9px;
+    background: #5037ce !important;
+    color: #fff !important;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.peopleCreateModal .modal-body .peopleCreateSubmit:hover,
+.peopleCreateModal .modal-body .peopleCreateSubmit:focus-visible {
+    border-color: #3f28ad;
+    background: #3f28ad !important;
+    color: #fff !important;
+}
+
+.peopleCreateModal .modal-body .peopleCreateSubmit:focus-visible {
+    outline: 3px solid rgba(115, 92, 230, .2);
+    outline-offset: 2px;
+}
+
+@media (max-width: 480px) {
+    .peopleCreateModal .modal-dialog {
+        margin: 12px;
+    }
+
+    .peopleCreateModal .modal-header,
+    .peopleCreateModal .modal-body {
+        padding: 16px;
+    }
+}

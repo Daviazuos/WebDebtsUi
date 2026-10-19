@@ -4,7 +4,7 @@ import { axiosInstance } from "../../api";
 import { Endpoints } from "../../api/endpoints";
 import ReactApexChart from "react-apexcharts";
 import { decimalAdjust } from "../../utils/valuesFormater";
-import { Card, CardBody, Table } from "react-bootstrap";
+import { Table } from "react-bootstrap";
 import DashModal from "../../pages/dashboard/DashModal";
 
 export default function CardApexGraphicPie(props) {
@@ -32,15 +32,15 @@ export default function CardApexGraphicPie(props) {
     }, []);
 
     const chartHeight = containerWidth
-        ? Math.round(Math.min(390, Math.max(280, containerWidth * 0.7)))
-        : 350;
+        ? Math.round(Math.min(420, Math.max(320, containerWidth * 0.82)))
+        : 380;
     const chartOptions = graphic ? {
         ...graphic.options,
         legend: {
             ...graphic.options.legend,
             position: containerWidth < 560 ? "bottom" : "right",
-            fontSize: containerWidth < 560 ? "10px" : "11px",
-            height: containerWidth < 560 ? 88 : chartHeight - 24,
+            fontSize: containerWidth < 560 ? "9px" : "10px",
+            height: containerWidth < 560 ? 76 : chartHeight - 24,
             itemMargin: { horizontal: 5, vertical: 3 }
         },
         responsive: []
@@ -89,6 +89,22 @@ export default function CardApexGraphicPie(props) {
                                 mounted: (chart) => {
                                     chart.windowResizeHandler();
                                   }
+                            }
+                        },
+                        dataLabels: {
+                            enabled: true,
+                            style: {
+                                fontSize: "10px",
+                                fontWeight: 600
+                            },
+                            dropShadow: { enabled: false }
+                        },
+                        plotOptions: {
+                            pie: {
+                                customScale: 1.1,
+                                donut: {
+                                    size: "75%"
+                                }
                             }
                         },
                         labels: labelsList,

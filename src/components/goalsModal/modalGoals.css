@@ -2,3 +2,170 @@
     max-width: 500px;
     margin: 0px;
 }
+
+.goalCreateModal .modal-content {
+    overflow: hidden;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    box-shadow: 0 16px 48px rgba(37, 40, 43, .14);
+}
+
+.goalCreateModal .modal-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 18px 20px;
+    border-bottom: 1px solid #edf0f3;
+}
+
+.goalCreateHeading {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: 11px;
+}
+
+.goalCreateIcon {
+    display: inline-flex;
+    width: 38px;
+    height: 38px;
+    flex: 0 0 38px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: #f0edff;
+    color: #5840d8;
+    font-size: 15px;
+}
+
+.goalCreateEyebrow {
+    display: block;
+    margin-bottom: 3px;
+    color: #777d85;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: .08em;
+}
+
+.goalCreateModal .modal-title {
+    overflow-wrap: anywhere;
+    color: #25282b;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.goalCreateModal .modal-body {
+    padding: 20px;
+}
+
+.goalCreateForm {
+    display: grid;
+    gap: 15px;
+}
+
+.goalCreateForm .goalCreateField {
+    display: grid;
+    gap: 7px;
+    margin: 0;
+}
+
+.goalCreateForm .form-label {
+    margin: 0;
+    color: #4c5158;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.goalCreateForm .form-control:not([type="range"]) {
+    min-height: 43px;
+    border-color: #e5e7eb;
+    border-radius: 8px;
+    color: #25282b;
+    font-size: 13px;
+}
+
+.goalCreateForm .form-control:focus {
+    border-color: #735ce6;
+    box-shadow: 0 0 0 3px rgba(115, 92, 230, .12);
+}
+
+.goalCreateForm .goalTimelineField input[type="range"] {
+    accent-color: #5840d8;
+}
+
+.goalProjection,
+.goalMonthlyAmount {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 14px;
+    border: 1px solid #e5e7eb;
+    border-radius: 9px;
+    background: #faf9ff;
+}
+
+.goalProjection span,
+.goalMonthlyAmount span {
+    color: #777d85;
+    font-size: 11px;
+}
+
+.goalProjection strong,
+.goalMonthlyAmount strong {
+    color: #25282b;
+    font-size: 13px;
+    font-weight: 700;
+    text-align: right;
+}
+
+.goalMonthlyAmount {
+    border-color: #e2ddfb;
+    background: #f5f3ff;
+}
+
+.goalMonthlyAmount strong {
+    color: #5037ce;
+    font-size: 16px;
+    white-space: nowrap;
+}
+
+.goalCreateForm .goalCreateSubmit {
+    --bs-btn-color: #fff;
+    --bs-btn-bg: #5037ce;
+    --bs-btn-border-color: #4930c4;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: #3f28ad;
+    --bs-btn-hover-border-color: #3f28ad;
+    width: 100%;
+    min-height: 43px;
+    border: 1px solid #4930c4;
+    border-radius: 9px;
+    background: #5037ce !important;
+    color: #fff !important;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.goalCreateForm .goalCreateSubmit:hover:not(:disabled),
+.goalCreateForm .goalCreateSubmit:focus-visible:not(:disabled) {
+    border-color: #3f28ad;
+    background: #3f28ad !important;
+    color: #fff !important;
+}
+
+.goalCreateForm .goalCreateSubmit:focus-visible {
+    outline: 3px solid rgba(115, 92, 230, .2);
+    outline-offset: 2px;
+}
+
+@media (max-width: 480px) {
+    .goalCreateModal .modal-dialog {
+        margin: 12px;
+    }
+
+    .goalCreateModal .modal-header,
+    .goalCreateModal .modal-body {
+        padding: 16px;
+    }
+}

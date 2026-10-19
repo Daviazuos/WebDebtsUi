@@ -22,3 +22,99 @@
 #tittle {
     margin-left: 10px;
 }
+
+.dashboardModalHeading {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: 11px;
+}
+
+.dashboardModalIcon {
+    display: inline-flex;
+    width: 38px;
+    height: 38px;
+    flex: 0 0 38px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: #e9f6ed;
+    color: #348c59;
+    font-size: 15px;
+}
+
+.finishingInstallmentsModal .modal-content {
+    overflow: hidden;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    box-shadow: 0 16px 48px rgba(37, 40, 43, .14);
+}
+
+.finishingInstallmentsModal .modal-header {
+    padding: 18px 20px;
+    border-bottom: 1px solid #edf0f3;
+}
+
+.finishingInstallmentsModal .modal-title {
+    color: #25282b;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.finishingInstallmentsModal .modal-body {
+    padding: 12px 20px 20px;
+}
+
+.finishingInstallmentsModal .table {
+    margin: 0;
+    color: #4c5158;
+    font-size: 12px;
+}
+
+.finishingInstallmentsModal .table thead th {
+    padding: 11px 12px;
+    border-bottom: 1px solid #edf0f3;
+    background: #fafbfc;
+    color: #777d85;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.finishingInstallmentsModal .table tbody td {
+    padding: 12px;
+    border-bottom: 1px solid #f0f1f4;
+    vertical-align: middle;
+}
+
+.finishingInstallmentsModal .table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.finishingInstallmentsModal .table tbody td:nth-child(2) {
+    color: #348c59;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.finishingInstallmentsModal .table tbody td:nth-child(3) {
+    color: #5840d8;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+@media (max-width: 480px) {
+    .finishingInstallmentsModal .modal-dialog {
+        margin: 12px;
+    }
+
+    .finishingInstallmentsModal .modal-header {
+        padding: 16px;
+    }
+
+    .finishingInstallmentsModal .modal-body {
+        padding: 8px 12px 12px;
+    }
+}

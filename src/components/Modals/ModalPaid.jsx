@@ -1,9 +1,10 @@
 import React from "react";
-import { Form, Button, Modal } from "react-bootstrap";
+import { Form, Modal } from "react-bootstrap";
 import { axiosInstance } from "../../api";
 import { Endpoints } from '../../api/endpoints';
 import LoadingButton from "../loadingButton/LoadingButton";
 import { decimalAdjust } from "../../utils/valuesFormater";
+import "./ModalPaid.css";
 
 
 export default class ModalPaid extends React.Component {
@@ -38,28 +39,34 @@ export default class ModalPaid extends React.Component {
         return (
             <Modal
                 {...this.props}
+                centered
+                className="paymentModal"
             >
                 <Modal.Header closeButton>
-                    <Modal.Title id="contained-modal-title-vcenter">
-                        {this.props.head}
-                    </Modal.Title>
+                    <div className="paymentModalHeading">
+                        <span className="paymentModalIcon"><i className="fas fa-hand-holding-usd" aria-hidden="true"></i></span>
+                        <div>
+                            <span className="paymentModalEyebrow">REGISTRAR PAGAMENTO</span>
+                            <Modal.Title>{this.props.head}</Modal.Title>
+                        </div>
+                    </div>
                 </Modal.Header>
                 <Modal.Body>
-                    Valor a pagar: R$ {decimalAdjust(this.props.amount)}
-                    <p></p>
+                    <div className="paymentAmount">
+                        <span>Valor a pagar</span>
+                        <strong>R$ {decimalAdjust(this.props.amount)}</strong>
+                    </div>
                     <Form onSubmit={this.handleSubmit}>
-                        <Form.Group>
-                            <Form.Label>Data pagamento</Form.Label>
-                            <Form.Control required="true" name='date' type="date" onChange={this.dateChange} defaultValue={this.state.date} placeholder="Entre com o data" />
+                        <Form.Group className="paymentDateGroup" controlId="paymentDate">
+                            <Form.Label>Data do pagamento</Form.Label>
+                            <Form.Control required name="date" type="date" onChange={this.dateChange} defaultValue={this.state.date} />
                         </Form.Group>
-                        <p></p>
-                        <LoadingButton variant="dark" type="submit" name="Pagar" isLoading={this.state.isLoading}></LoadingButton>
+                        <LoadingButton className="paymentSubmit" type="submit" name="Confirmar pagamento" isLoading={this.state.isLoading} />
                     </Form>
                 </Modal.Body>
             </Modal>
         )
     }
 }
-
 
 

@@ -200,6 +200,8 @@ export default function CardLayout() {
                     size={cardSize}
                     height={cardHeight}
                     table={tableFinishingDebts}
+                    modalClassName="finishingInstallmentsModal"
+                    modalIcon="fas fa-calendar-check"
                 ></CustomCardSize>
             </div>
         </div>

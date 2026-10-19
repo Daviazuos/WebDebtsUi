@@ -1,52 +1,355 @@
-.debtModal {
-    display: flex;
+.debtDetailsTrigger {
+    display: inline-flex;
+    width: 34px;
+    height: 34px;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 1px solid #e3defd;
+    border-radius: 8px;
+    background: #faf9ff;
+    color: #5840d8;
+    cursor: pointer;
+    transition: background .15s ease, border-color .15s ease, color .15s ease;
 }
 
-.chartProgress {
-    display: flex;
-    margin-left: 30px;
-    margin-top: 30px;
+.debtDetailsTrigger:hover,
+.debtDetailsTrigger:focus-visible {
+    border-color: #d1c9ff;
+    background: #f0edff;
+    color: #3f28ad;
 }
 
-.buttonsModal {
+.debtDetailsTrigger:focus-visible {
+    outline: 2px solid rgba(115, 92, 230, .2);
+    outline-offset: 2px;
+}
+
+.debtDetailsModal .modal-content {
+    overflow: hidden;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    box-shadow: 0 16px 48px rgba(37, 40, 43, .14);
+}
+
+.debtDetailsModal .modal-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 18px 20px;
+    border-bottom: 1px solid #edf0f3;
+}
+
+.debtDetailsHeading {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: 11px;
+}
+
+.debtDetailsIcon {
+    display: inline-flex;
+    width: 38px;
+    height: 38px;
+    flex: 0 0 38px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: #f0edff;
+    color: #5840d8;
+    font-size: 15px;
+}
+
+.debtDetailsEyebrow {
+    display: block;
+    margin-bottom: 3px;
+    color: #777d85;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: .08em;
+}
+
+.debtDetailsModal .modal-title {
+    overflow-wrap: anywhere;
+    color: #25282b;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.debtDetailsModal .debtDetailsBody {
+    min-height: 280px;
+    padding: 18px 20px 20px;
+}
+
+.debtDetailsModal .nav-tabs {
+    gap: 5px;
+    margin-bottom: 16px !important;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.debtDetailsModal .nav-tabs .nav-link {
+    padding: 9px 13px;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    border-radius: 7px 7px 0 0;
+    color: #777d85;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.debtDetailsModal .nav-tabs .nav-link:hover {
+    color: #5840d8;
+}
+
+.debtDetailsModal .nav-tabs .nav-link.active {
+    border-bottom-color: #5840d8;
+    background: #faf9ff;
+    color: #5037ce;
+}
+
+.debtDetailsOverview {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 230px;
+    gap: 18px;
+    align-items: stretch;
+}
+
+.debtDetailsFields,
+.debtDetailsProgressPanel {
+    min-width: 0;
+    padding: 0;
+}
+
+.debtDetailsForm {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.debtDetailsForm .debtDetailsField {
+    display: grid;
+    min-width: 0;
+    gap: 6px;
+    margin: 0;
+}
+
+.debtDetailsForm .form-label {
+    margin: 0;
+    color: #777d85;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.debtDetailsForm .form-control {
+    min-height: 40px;
+    border-color: #e5e7eb;
+    border-radius: 8px;
+    background: #fafbfc;
+    color: #25282b;
+    font-size: 12px;
+    font-weight: 600;
+    opacity: 1;
+}
+
+.debtDetailsProgressPanel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    border: 1px solid #e5e7eb;
+    border-radius: 11px;
+    background: #fff;
+}
+
+.debtDetailsProgress {
+    width: min(100%, 150px);
+    aspect-ratio: 1;
+}
+
+.debtDetailsProgressLabel {
+    margin-top: 10px;
+    color: #777d85;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.debtDetailsActions {
     display: flex;
     justify-content: center;
-    margin-top: 30px;
+    gap: 8px;
+    margin-top: 14px;
 }
 
-.custom-btn {
-    background-color: #1A4173;
+.debtDetailsAction {
+    display: inline-flex;
+    width: 36px;
+    height: 36px;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background: #fff;
+    font-size: 13px;
 }
 
+.debtDetailsAction--edit {
+    --bs-btn-color: #5840d8;
+    --bs-btn-bg: #f5f3ff;
+    --bs-btn-border-color: #d8d1ff;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: #5840d8;
+    --bs-btn-hover-border-color: #5840d8;
+    border-color: #d8d1ff;
+    background: #f5f3ff !important;
+    color: #5840d8 !important;
+}
 
+.debtDetailsAction--edit:hover,
+.debtDetailsAction--edit:focus-visible {
+    border-color: #5840d8;
+    background: #5840d8 !important;
+    color: #fff !important;
+}
 
-@media (max-width: 768px) {
-    .debtModal {
-        flex-direction: column;
+.debtDetailsAction--delete {
+    --bs-btn-color: #d64c45;
+    --bs-btn-bg: #fff7f6;
+    --bs-btn-border-color: #f2d3d1;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: #d64c45;
+    --bs-btn-hover-border-color: #d64c45;
+    border-color: #f2d3d1;
+    background: #fff7f6 !important;
+    color: #d64c45 !important;
+}
+
+.debtDetailsAction--delete:hover,
+.debtDetailsAction--delete:focus-visible {
+    border-color: #d64c45;
+    background: #d64c45 !important;
+    color: #fff !important;
+}
+
+.debtDetailsAction:active,
+.debtDetailsAction.show {
+    filter: none !important;
+}
+
+.debtDetailsAction:focus,
+.debtDetailsAction:active:focus {
+    box-shadow: 0 0 0 3px rgba(115, 92, 230, .16) !important;
+}
+
+.debtDetailsAction:focus-visible {
+    outline: 2px solid rgba(115, 92, 230, .2);
+    outline-offset: 2px;
+}
+
+.debtInstallments {
+    min-width: 0;
+}
+
+.debtInstallments .table {
+    margin: 0;
+    color: #4c5158;
+    font-size: 12px;
+    vertical-align: middle;
+}
+
+.debtInstallments .table thead th {
+    padding: 11px 10px;
+    border-bottom: 1px solid #e5e7eb;
+    background: #fafbfc;
+    color: #777d85;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.debtInstallments .table tbody td {
+    padding: 10px;
+    border-bottom: 1px solid #f0f1f4;
+}
+
+.debtInstallments .table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.debtInstallments input,
+.debtInstallments select {
+    min-height: 34px;
+    max-width: 150px;
+    padding: 5px 8px;
+    border: 1px solid #e5e7eb;
+    border-radius: 7px;
+    background: #fff;
+    color: #25282b;
+    font-size: 11px;
+}
+
+.debtInstallments input:focus,
+.debtInstallments select:focus {
+    border-color: #735ce6;
+    outline: 0;
+    box-shadow: 0 0 0 3px rgba(115, 92, 230, .12);
+}
+
+.debtInstallments td:last-child {
+    white-space: nowrap;
+}
+
+.debtInstallments td:last-child i {
+    display: inline-flex;
+    width: 28px;
+    height: 28px;
+    align-items: center;
+    justify-content: center;
+    margin-right: 4px !important;
+    border-radius: 7px;
+    color: #5840d8;
+    cursor: pointer;
+}
+
+.debtInstallments td:last-child i:hover {
+    background: #f0edff;
+}
+
+@media (max-width: 767.98px) {
+    .debtDetailsModal .modal-header {
+        padding: 16px;
     }
 
-    .chartProgress {
-        margin-left: 0;
+    .debtDetailsModal .debtDetailsBody {
+        padding: 14px;
     }
 
-    .buttonsModal {
-        margin-top: 20px;
+    .debtDetailsOverview {
+        grid-template-columns: minmax(0, 1fr);
     }
 
-    .mb-3 {
-        margin-bottom: 20px;
+    .debtDetailsProgressPanel {
+        padding: 14px;
     }
 
-    .formModal {
-        font-size: 10px;
+    .debtDetailsProgress {
+        width: min(100%, 140px);
     }
 
-    .installmentModal .td1 i {
-        font-size: 12px;
-        margin: 8px;
+    .debtInstallments .table {
+        min-width: 630px;
+    }
+}
+
+@media (max-width: 480px) {
+    .debtDetailsForm {
+        grid-template-columns: minmax(0, 1fr);
     }
 
-    .installmentModal .td1 {
-        padding: 10px;
+    .debtDetailsModal .modal-title {
+        font-size: 14px;
     }
 }

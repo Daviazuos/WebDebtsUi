@@ -1,8 +1,5 @@
 import React from "react";
-import { Modal, Card } from "react-bootstrap";
-import EditDebtForm from "../form/editDebtForm";
-
-import Form from "../form/form"
+import { Modal } from "react-bootstrap";
 import AddGoalsForm from "./addGoalsForm";
 import "./modalGoals.css"
 
@@ -16,14 +13,19 @@ export default function ModalGoals(props) {
       size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
+      className="goalCreateModal"
     >
       <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">
-          {props.head}
-        </Modal.Title>
+        <div className="goalCreateHeading">
+          <span className="goalCreateIcon"><i className="fas fa-bullseye" aria-hidden="true"></i></span>
+          <div>
+            <span className="goalCreateEyebrow">FINANÇAS / OBJETIVOS</span>
+            <Modal.Title id="contained-modal-title-vcenter">{props.head}</Modal.Title>
+          </div>
+        </div>
       </Modal.Header>
       <Modal.Body>
-          <AddGoalsForm></AddGoalsForm>
+          <AddGoalsForm />
       </Modal.Body>
     </Modal>
   );

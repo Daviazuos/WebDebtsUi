@@ -120,7 +120,6 @@ export default function CardCredit() {
                 <div className="creditCardItemHeader">
                     <span className="creditCardMark" aria-hidden="true"><i className="fas fa-credit-card"></i></span>
                     <span className="creditCardType">CARTÃO DE CRÉDITO</span>
-                    <i className="fas fa-wifi creditCardContactless" aria-hidden="true"></i>
                     <div className="creditCardActions">
                         <SetModalEditCard id={item.id} name={item.name} color={item.color} dueDate={item.dueDate} closureDate={item.closureDate} simbol="fas fa-pen" />
                         <SetModalDelete id={item.id} name={item.name} />
@@ -130,9 +129,6 @@ export default function CardCredit() {
                 <div className="creditCardIdentity">
                     <h2>{item.name}</h2>
                 </div>
-
-                <span className="creditCardChip" aria-hidden="true"><i className="fas fa-sim-card"></i></span>
-
                 <div className="creditCardAmount">
                     <span>Fatura do período</span>
                     <strong>R$ {decimalAdjust(cardValue)}</strong>

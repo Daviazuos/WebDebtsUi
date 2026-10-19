@@ -31,31 +31,41 @@ export default function ResponsiblePartyModal(props) {
     return (
         <Modal
             {...props}
+            centered
+            className="peopleCreateModal"
         >
+            <Modal.Header closeButton>
+                <div className="peopleCreateHeading">
+                    <span className="peopleCreateIcon"><i className="fas fa-user-plus" aria-hidden="true"></i></span>
+                    <div>
+                        <span className="peopleCreateEyebrow">FINANÇAS / RELACIONAMENTOS</span>
+                        <Modal.Title>{props.head || "Adicionar pessoa"}</Modal.Title>
+                    </div>
+                </div>
+            </Modal.Header>
             <Modal.Body>
-                <Form>
-                    <Form.Group>
+                <Form className="peopleCreateForm">
+                    <Form.Group className="peopleCreateField" controlId="responsiblePartyName">
                         <Form.Label>Nome da pessoa</Form.Label>
-                        <Form.Control required="true" name="name" onChange={nameChange} placeholder="Nome" />
+                        <Form.Control required name="name" onChange={nameChange} placeholder="Digite o nome" />
                     </Form.Group>
                 </Form>
-                <p></p>
                 {props.dataTable !== undefined ?
-                    <div>
-                        <>Pessoa já adicionadas</>
-                        <Table  borderless striped responsive hover variant="white" size="sm">
+                    <div className="peopleCreateExistingList">
+                        <h2>Pessoas já adicionadas</h2>
+                        <Table borderless striped responsive hover size="sm">
                             <tbody>
                                 {props.dataTable}
                             </tbody>
                         </Table>
-                        <p></p>
                     </div>
                     : ""}
 
-                <Button variant="dark" onClick={() => setAddResponsibleParty(true)}>Adicionar</Button>
+                <Button className="peopleCreateSubmit" onClick={() => setAddResponsibleParty(true)}>
+                    <i className="fas fa-plus" aria-hidden="true"></i>
+                    Adicionar pessoa
+                </Button>
             </Modal.Body>
         </Modal>
     )
 }
-
-

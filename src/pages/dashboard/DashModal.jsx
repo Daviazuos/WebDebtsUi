@@ -1,6 +1,5 @@
-import React, { useContext, useEffect } from "react";
-import { Table, Modal, Button } from "react-bootstrap";
-import { decimalAdjust } from "../../utils/valuesFormater";
+import React from "react";
+import { Modal } from "react-bootstrap";
 
 import "./DashModal.css"
 
@@ -15,9 +14,16 @@ export default function DashModal(props) {
                 dialogClassName="GlobalModal"
             >
                 <Modal.Header closeButton>
-                    <Modal.Title id="contained-modal-title-vcenter">
-                        {props.head}
-                    </Modal.Title>
+                    <div className="dashboardModalHeading">
+                        {props.modalIcon && (
+                            <span className="dashboardModalIcon">
+                                <i className={props.modalIcon} aria-hidden="true"></i>
+                            </span>
+                        )}
+                        <Modal.Title id="contained-modal-title-vcenter">
+                            {props.head}
+                        </Modal.Title>
+                    </div>
                 </Modal.Header>
                 <Modal.Body>
                     {props.table}

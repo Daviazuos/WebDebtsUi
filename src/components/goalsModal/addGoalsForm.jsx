@@ -76,18 +76,16 @@ export default function AddGoalsForm(props) {
 
     return (
         <>
-            <Form onSubmit={handleSubmit}>
-                <Form.Group>
+            <Form className="goalCreateForm" onSubmit={handleSubmit}>
+                <Form.Group className="goalCreateField" controlId="goalName">
                     <Form.Label>Nome</Form.Label>
-                    <Form.Control required name="name" onChange={nameChange} placeholder="Entre com o nome" defaultValue={props.data?.name} />
+                    <Form.Control required name="name" onChange={nameChange} placeholder="Ex.: Viagem, reserva de emergência" defaultValue={props.data?.name} />
                 </Form.Group>
-                <p></p>
-                <Form.Group>
+                <Form.Group className="goalCreateField" controlId="goalValue">
                     <Form.Label>Valor total necessário</Form.Label>
-                    <MaskedFormControl currency="BRL" required name='value' onChange={valueChange} placeholder="Entre com o valor total" defaultValue={props.data?.value} />
+                    <MaskedFormControl currency="BRL" required name='value' onChange={valueChange} placeholder="Informe o valor total" defaultValue={props.data?.value} />
                 </Form.Group>
-                <p></p>
-                <Form.Group>
+                <Form.Group className="goalCreateField" controlId="goalDate">
                     <OverlayTrigger
                         key='top'
                         placement='top'
@@ -99,13 +97,14 @@ export default function AddGoalsForm(props) {
                     >
                         <Form.Label>Data início</Form.Label>
                     </OverlayTrigger>
-                    <Form.Control required name='date' defaultValue={date} type="date" onChange={dateChange} placeholder="Entre com o data" />
+                    <Form.Control required name='date' defaultValue={date} type="date" onChange={dateChange} />
                 </Form.Group>
-                <p></p>
-                <Form.Label>{`Previsão de fim: ${(globalValue <= 12) ? addMonthsToDate(date, monthValue) : addYearsToDate(date, yearValue)}`}</Form.Label>
-                <p></p>            
-                <Form.Group>
-                    <Form.Label>{`Tempo para alcançar a meta: ${(globalValue <= 12) ? `${monthValue} meses.` : `${yearValue} anos.`}`}</Form.Label>
+                <div className="goalProjection">
+                    <span>Previsão de conclusão</span>
+                    <strong>{(globalValue <= 12) ? addMonthsToDate(date, monthValue) : addYearsToDate(date, yearValue)}</strong>
+                </div>
+                <Form.Group className="goalCreateField goalTimelineField" controlId="goalTimeline">
+                    <Form.Label>{`Tempo para alcançar a meta: ${(globalValue <= 12) ? `${monthValue} meses` : `${yearValue} anos`}`}</Form.Label>
                     <RangeSlider
                         value={(globalValue <= 12) ? monthValue : yearValue + 12}
                         step={1}
@@ -115,12 +114,11 @@ export default function AddGoalsForm(props) {
                         tooltip={false}
                     />
                 </Form.Group>
-                 <Form.Group>
-                    <Form.Label>{`Total de investimento por mês: R$ ${decimalAdjust(goalValue)}`}</Form.Label>
-                </Form.Group>
-                <p></p>
-
-                <LoadingButton variant="dark" type="submit" name="Adicionar" isLoading={isLoading}></LoadingButton>
+                <div className="goalMonthlyAmount">
+                    <span>Investimento mensal estimado</span>
+                    <strong>R$ {decimalAdjust(goalValue)}</strong>
+                </div>
+                <LoadingButton className="goalCreateSubmit" type="submit" name="Adicionar meta" isLoading={isLoading} />
             </Form>
         </>
     );

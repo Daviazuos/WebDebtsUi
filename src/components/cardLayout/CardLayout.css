@@ -76,6 +76,10 @@
     .custom-icon {
         font-size: 1rem;
     }
+
+    .periodSelector {
+        margin-left: 44px;
+    }
 }
 
 @media (max-width: 480px) {

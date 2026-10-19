@@ -130,23 +130,29 @@ export default class ModalInstallments extends React.Component {
         return (
             <Modal
                 {...this.props}
+                centered
+                className="walletEntryModal"
             >
                 <Modal.Header closeButton>
-                    <Modal.Title id="contained-modal-title-vcenter">
-                        {this.props.head}
-                    </Modal.Title>
+                    <div className="walletEntryHeading">
+                        <span className="walletEntryIcon"><i className="fas fa-wallet" aria-hidden="true"></i></span>
+                        <div>
+                            <span className="walletEntryEyebrow">CARTEIRA / RECEBIMENTOS</span>
+                            <Modal.Title>{this.props.head}</Modal.Title>
+                        </div>
+                    </div>
                 </Modal.Header>
                 <Modal.Body>
-                    <Form onSubmit={this.handleSubmit}>
-                        <Form.Group>
+                    <Form className="walletEntryForm" onSubmit={this.handleSubmit}>
+                        <Form.Group className="walletEntryField" controlId="walletEntryName">
                             <Form.Label>Nome</Form.Label>
-                            <Form.Control name="name" onChange={this.nameChange} placeholder="Nome" defaultValue={this.state.wallet?.name} />
+                            <Form.Control name="name" onChange={this.nameChange} placeholder="Ex.: Salário, aluguel" defaultValue={this.state.wallet?.name} />
                         </Form.Group>
-                        <Form.Group>
+                        <Form.Group className="walletEntryField" controlId="walletEntryValue">
                             <Form.Label>Valor</Form.Label>
                             <MaskedFormControl currency="BRL" required="true" name='value' onChange={this.valueChange} placeholder="Valor" defaultValue={this.state.wallet?.value} />
                         </Form.Group>
-                        <Form.Group>
+                        <Form.Group className="walletEntryField" controlId="walletEntryStatus">
                             <Form.Label>Status de entrada</Form.Label>
                             <Form.Control as="select" name='walletStatus' onChange={this.statusChange} defaultValue={this.state.wallet?.status}>
                                 <option value="4">Á receber</option>
@@ -154,11 +160,11 @@ export default class ModalInstallments extends React.Component {
                                 <option value="2">Recebido</option>
                             </Form.Control>
                         </Form.Group>
-                        <Form.Group>
+                        <Form.Group className="walletEntryField" controlId="walletEntryMonth">
                             <Form.Label>Mês</Form.Label>
                             <Form.Control type="month" onChange={this.monthChange} defaultValue={this.state.wallet?.startAt?.substring(0, 7)} />
                         </Form.Group>
-                        <Form.Group>
+                        <Form.Group className="walletEntryField" controlId="walletEntryType">
                             <Form.Label>Tipo de entrada</Form.Label>
                             <Form.Control required="true" as="select" name='walletInstallmentType' onChange={this.walletInstallmentTypeChange} defaultValue={debtInstallmentTypeToNumber(this.state.wallet.walletInstallmentType)}>
                                 <option>Selecione o Tipo de debito</option>
@@ -168,23 +174,25 @@ export default class ModalInstallments extends React.Component {
                             </Form.Control>
                         </Form.Group>
                         {(this.state.walletInstallmentType === "0" || debtInstallmentTypeToNumber(this.state.wallet.walletInstallmentType) == "0") ?
-                            <Form.Group>
+                            <Form.Group className="walletEntryField" controlId="walletEntryInstallments">
                                 <Form.Label>Quantidade de Parcelas</Form.Label>
                                 <Form.Control name='numberOfInstallments' type="number" onChange={this.numberOfInstallmentsChange} placeholder="Entre com o quantidade de parcelas" defaultValue={this.state.wallet.numberOfInstallments} />
                             </Form.Group> : ""}
-                        <p></p>
-                        <Form.Label>Vincular a uma pessoa</Form.Label>
-                        <Form.Control required="true" name='responsibleParty' onChange={this.responsiblePartyChange} as="select">
-                            {this.state.listResponsibleParty}
-                        </Form.Control>
-                        <p></p>
-                        <Button variant="dark" type="submit"> {this.props.value ? 'Atualizar' : 'Adicionar'} </Button>
+                        <Form.Group className="walletEntryField" controlId="walletEntryResponsibleParty">
+                            <Form.Label>Vincular a uma pessoa</Form.Label>
+                            <Form.Control required="true" name='responsibleParty' onChange={this.responsiblePartyChange} as="select">
+                                {this.state.listResponsibleParty}
+                            </Form.Control>
+                        </Form.Group>
+                        <Button className="walletEntrySubmit" type="submit">
+                            <i className="fas fa-plus" aria-hidden="true"></i>
+                            {this.props.value ? 'Atualizar entrada' : 'Adicionar entrada'}
+                        </Button>
                     </Form>
                 </Modal.Body>
             </Modal>
         )
     }
 }
-
 
 

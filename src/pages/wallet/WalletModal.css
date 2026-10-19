@@ -5,3 +5,135 @@
 .trr{
     justify-content: center;
 }
+
+.walletEntryModal .modal-content {
+    overflow: hidden;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    box-shadow: 0 16px 48px rgba(37, 40, 43, .14);
+}
+
+.walletEntryModal .modal-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 18px 20px;
+    border-bottom: 1px solid #edf0f3;
+}
+
+.walletEntryHeading {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: 11px;
+}
+
+.walletEntryIcon {
+    display: inline-flex;
+    width: 38px;
+    height: 38px;
+    flex: 0 0 38px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: #f0edff;
+    color: #5840d8;
+    font-size: 15px;
+}
+
+.walletEntryEyebrow {
+    display: block;
+    margin-bottom: 3px;
+    color: #777d85;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: .08em;
+}
+
+.walletEntryModal .modal-title {
+    overflow-wrap: anywhere;
+    color: #25282b;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.walletEntryModal .modal-body {
+    padding: 20px;
+}
+
+.walletEntryForm {
+    display: grid;
+    gap: 15px;
+}
+
+.walletEntryForm .walletEntryField {
+    display: grid;
+    gap: 7px;
+    margin: 0;
+}
+
+.walletEntryForm .form-label {
+    margin: 0;
+    color: #4c5158;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.walletEntryForm .form-control {
+    min-height: 43px;
+    border-color: #e5e7eb;
+    border-radius: 8px;
+    color: #25282b;
+    font-size: 13px;
+}
+
+.walletEntryForm .form-control:focus {
+    border-color: #735ce6;
+    box-shadow: 0 0 0 3px rgba(115, 92, 230, .12);
+}
+
+.walletEntryModal .walletEntryForm .walletEntrySubmit {
+    --bs-btn-color: #fff;
+    --bs-btn-bg: #5037ce;
+    --bs-btn-border-color: #4930c4;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: #3f28ad;
+    --bs-btn-hover-border-color: #3f28ad;
+    display: inline-flex;
+    width: 100%;
+    min-height: 43px;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0 17px;
+    border: 1px solid #4930c4;
+    border-radius: 9px;
+    background: #5037ce !important;
+    color: #fff !important;
+    font-size: 13px;
+    font-weight: 600;
+    transition: background .16s ease, border-color .16s ease;
+}
+
+.walletEntryModal .walletEntryForm .walletEntrySubmit:hover,
+.walletEntryModal .walletEntryForm .walletEntrySubmit:focus-visible {
+    border-color: #3f28ad;
+    background: #3f28ad !important;
+    color: #fff !important;
+}
+
+.walletEntryModal .walletEntryForm .walletEntrySubmit:focus-visible {
+    outline: 3px solid rgba(115, 92, 230, .2);
+    outline-offset: 2px;
+}
+
+@media (max-width: 480px) {
+    .walletEntryModal .modal-dialog {
+        margin: 12px;
+    }
+
+    .walletEntryModal .modal-header,
+    .walletEntryModal .modal-body {
+        padding: 16px;
+    }
+}

@@ -16,8 +16,8 @@ function SetModal(props) {
     const [modalShow, setModalShow] = useState(false);
     return (
         <>
-            <Button style={{ margin: '10px' }} className='btn btn-secondary' variant='dark' onClick={() => setModalShow(true)}>
-                <i className={props.simbol}></i> {props.modalName}
+            <Button className="debtDetailsAction debtDetailsAction--edit" aria-label="Editar despesa" title="Editar despesa" onClick={() => setModalShow(true)}>
+                <i className={props.simbol} aria-hidden="true"></i>
             </Button>
 
             <ModalAddDebts
@@ -35,8 +35,8 @@ function SetModalDelete(props) {
     const [modalShow, setModalShow] = useState(false);
     return (
         <>
-            <Button style={{ margin: '10px' }} className='btn btn-danger' variant='dark' onClick={() => setModalShow(true)}>
-                <i className="fa fa-trash"></i> {props.modalName}
+            <Button className="debtDetailsAction debtDetailsAction--delete" aria-label="Excluir despesa" title="Excluir despesa" onClick={() => setModalShow(true)}>
+                <i className="fa fa-trash" aria-hidden="true"></i>
             </Button>
             <ModalDelete
                 show={modalShow}
@@ -219,19 +219,34 @@ export default function DebtModal(props) {
 
     return (
         <>
-            <i className="fas fa-search fa-lg" onClick={() => setModalShow(true)} style={{cursor: 'pointer', color: '#B3B8D4'}}></i>
+            <button
+                type="button"
+                className="debtDetailsTrigger"
+                aria-label="Ver detalhes da despesa"
+                title="Ver detalhes"
+                onClick={() => setModalShow(true)}
+            >
+                <i className="fas fa-search" aria-hidden="true"></i>
+            </button>
             <Modal
                 show={modalShow}
                 size='lg'
                 fullscreen="md-down"
-                className="modalCustom"
+                className="debtDetailsModal"
                 aria-labelledby="contained-modal-title-vcenter"
                 onHide={() => setModalShow(false)}
+                centered
             >
-                <Modal.Header closeButton onHide={() => setModalShow(false)}>
-                    <h2>{debt?.name}</h2>
+                <Modal.Header closeButton>
+                    <div className="debtDetailsHeading">
+                        <span className="debtDetailsIcon"><i className="fas fa-receipt" aria-hidden="true"></i></span>
+                        <div>
+                            <span className="debtDetailsEyebrow">FINANÇAS / DESPESAS</span>
+                            <Modal.Title id="contained-modal-title-vcenter">{debt?.name || "Detalhes da despesa"}</Modal.Title>
+                        </div>
+                    </div>
                 </Modal.Header>
-                <Modal.Body className="modalBodyCustom">
+                <Modal.Body className="debtDetailsBody">
                     {loading === true ? <i className="fas fa-spinner fa-spin"></i> :
                         <Tabs
                             id="controlled-tab-example"
@@ -241,40 +256,41 @@ export default function DebtModal(props) {
                         >
                             {[
                                 <Tab key={'Detalhes'} eventKey={'Detalhes'} title={'Detalhes'}>
-                                    <div className="debtModal">
-                                        <Container>
-                                            <Form className="formModal">
-                                                <Form.Group className="mb-3" controlId="formBasicEmail">
+                                    <div className="debtDetailsOverview">
+                                        <Container className="debtDetailsFields">
+                                            <Form className="debtDetailsForm">
+                                                <Form.Group className="debtDetailsField">
                                                     <Form.Label>Valor Total</Form.Label>
                                                     <Form.Control disabled type="text" defaultValue={`R$ ${decimalAdjust(debt?.value)}`} />
                                                 </Form.Group>
-                                                <Form.Group className="mb-3" controlId="formBasicEmail">
+                                                <Form.Group className="debtDetailsField">
                                                     <Form.Label>Valor Parcela</Form.Label>
                                                     <Form.Control disabled type="text" defaultValue={`R$ ${decimalAdjust(valueMonth)}`} />
                                                 </Form.Group>
-                                                <Form.Group className="mb-3" controlId="formBasicEmail">
+                                                <Form.Group className="debtDetailsField">
                                                     <Form.Label>Parcelas</Form.Label>
                                                     <Form.Control disabled type="text" defaultValue={installmentNumber} />
                                                 </Form.Group>
-                                                <Form.Group className="mb-3" controlId="formBasicEmail">
+                                                <Form.Group className="debtDetailsField">
                                                     <Form.Label>Categoria</Form.Label>
                                                     <Form.Control disabled type="text" defaultValue={debt?.category} />
                                                 </Form.Group>
-                                                <Form.Group className="mb-3" controlId="formBasicEmail">
+                                                <Form.Group className="debtDetailsField">
                                                     <Form.Label>Data Início</Form.Label>
                                                     <Form.Control disabled type="text" defaultValue={dateAdjust(debt?.date)} />
                                                 </Form.Group>
-                                                <Form.Group className="mb-3" controlId="formBasicEmail">
+                                                <Form.Group className="debtDetailsField">
                                                     <Form.Label>Data Fim</Form.Label>
-                                                    <Form.Control disabled type="text" defaultValue={dateAdjust(debt?.installments.at(-1).date)} />
+                                                    <Form.Control disabled type="text" defaultValue={dateAdjust(debt?.installments?.at(-1)?.date)} />
                                                 </Form.Group>
                                             </Form>
                                         </Container>
-                                        <Container>
-                                            <div className="chartProgress" style={{ width: 300, height: 300 }}>
-                                                <CircularProgressbar styles={buildStyles({ pathColor: '#198754', textSize: '10px' })} value={percentual_paid} text={`R$ ${decimalAdjust(paidValue)}`} />
+                                        <Container className="debtDetailsProgressPanel">
+                                            <div className="debtDetailsProgress">
+                                                <CircularProgressbar styles={buildStyles({ pathColor: '#348c59', textSize: '10px' })} value={percentual_paid} text={`R$ ${decimalAdjust(paidValue)}`} />
                                             </div>
-                                            <div className="buttonsModal">
+                                            <span className="debtDetailsProgressLabel">Valor pago</span>
+                                            <div className="debtDetailsActions">
                                                 {<SetModal value={debt?.id} data={debt} name={debt?.name} isPaid={(debt?.debtInstallmentType !== 'Fixed') && (debt?.numberOfInstallments === debt?.paidInstallment)} modalName="" simbol="fas fa-edit" className='btn btn-primary'></SetModal>}{" "}
                                                 {<SetModalDelete id={debt?.id} modalName=""></SetModalDelete>}
                                             </div>
@@ -282,8 +298,8 @@ export default function DebtModal(props) {
                                     </div>
                                 </Tab>,
                                 <Tab key={'Parcelas'} eventKey={'Parcelas'} title={'Parcelas'}>
-                                    <div className="installmentModal">
-                                        <Table borderless striped responsive hover variant="white" size="lg">
+                                    <div className="installmentModal debtInstallments">
+                                        <Table borderless responsive hover size="sm">
                                             <thead>
                                                 <tr className="tr">
                                                     <th>Parcela</th>
