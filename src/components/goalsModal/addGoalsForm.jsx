@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Endpoints } from '../../api/endpoints';
-import { Form } from 'react-bootstrap';
+import { Alert, Form } from 'react-bootstrap';
 import { axiosInstance } from "../../api";
 import MaskedFormControl from "../../utils/maskedInputs";
 import LoadingButton from "../loadingButton/LoadingButton";
@@ -19,15 +19,16 @@ function refreshPage() {
 export default function AddGoalsForm(props) {
     const [name, setName] = useState('');
     const [value, setValue] = useState(0);
-    const [globalValue, setGlobalValue] = useState(0);
+    const [globalValue, setGlobalValue] = useState(1);
     const [yearValue, setYearValue] = useState(1);
     const [monthValue, setMonthValue] = useState(1);
     const [goalValue, setGoalValue] = useState(0.00);
     const [date, setDate] = useState(new Date().toISOString().substring(0, 10));
-    const [numberOfInstallments, setNumberOfInstallments] = useState('0');
-    const [debtInstallmentType, setDebtInstallmentType] = useState(0);
+    const [numberOfInstallments, setNumberOfInstallments] = useState('1');
+    const [debtInstallmentType, setDebtInstallmentType] = useState('0');
     const [category, setCategory] = useState('29dc406d-04a3-4a88-9a94-5c8fb6af0092');
     const [isLoading, setIsLoading] = React.useState(false);
+    const [onError, setOnError] = React.useState(false);
 
 
     const nameChange = event => {
@@ -35,47 +36,59 @@ export default function AddGoalsForm(props) {
     }
     const valueChange = (event, value, maskedValue) => {
         setValue(value)
+        setGoalValue(value / (Number(numberOfInstallments) || 1))
     }
     const dateChange = event => {
         setDate(event.target.value)
     }
 
     const setCalculateGoalValue = event => {
-        setGlobalValue(event.target.value)
+        const selectedValue = Number(event.target.value)
+        setGlobalValue(selectedValue)
             
-        if (event.target.value > 12) {
-            var yearLessMonths = event.target.value - 12
+        if (selectedValue > 12) {
+            const yearLessMonths = selectedValue - 12
             setYearValue(yearLessMonths)
             setGoalValue((value / (yearLessMonths * 12)))
             setNumberOfInstallments(yearLessMonths * 12)
         }
         else {
-            setMonthValue(event.target.value)
-            setGoalValue((value / event.target.value))
-            setNumberOfInstallments(event.target.value)
+            setMonthValue(selectedValue)
+            setGoalValue((value / selectedValue))
+            setNumberOfInstallments(String(selectedValue))
         }
     }
 
     function handleSubmit(event) {
-        setIsLoading(true)
         event.preventDefault();
+        setIsLoading(true)
+        setOnError(false)
+        const installmentCount = Math.max(Number(numberOfInstallments) || 1, 1)
+        const monthlyValue = value / installmentCount
         const addDebts = {
             name: name,
-            value: (value / numberOfInstallments),
+            value: monthlyValue,
+            values: [monthlyValue],
             date: date,
-            numberOfInstallments: numberOfInstallments,
+            numberOfInstallments: String(installmentCount),
             debtInstallmentType: debtInstallmentType,
             CategoryId: category,
             IsGoal: true
         };
-        axiosInstance.post(Endpoints.debt.add(), addDebts).then(response => {
+        axiosInstance.post(Endpoints.debt.add(), addDebts).then(() => {
                 setIsLoading(false)
                 refreshPage()
+            }).catch(() => {
+                setIsLoading(false)
+                setOnError(true)
             })
         }
 
     return (
         <>
+            <Alert show={onError} variant="danger" className="formAlert">
+                Erro ao salvar a meta. Tente novamente.
+            </Alert>
             <Form className="goalCreateForm" onSubmit={handleSubmit}>
                 <Form.Group className="goalCreateField" controlId="goalName">
                     <Form.Label>Nome</Form.Label>
