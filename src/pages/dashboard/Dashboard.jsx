@@ -229,11 +229,23 @@ export default function Dashboard() {
       <td>{drafts[item].name}</td>
       <td>R$ {decimalAdjustWithoutPoint(drafts[item].value)}</td>
       <td>{drafts[item].card.name}</td>
-      <td><i className="fas fa-arrow-down" onClick={() => {
+      <td><button
+        type="button"
+        className="appPurchaseAction appPurchaseAction--add"
+        aria-label={`Adicionar ${drafts[item].name} às despesas`}
+        title="Adicionar às despesas"
+        onClick={() => {
         setTransformAddDebt(!transformAddDebt)
         setDraftSelected({ value: decimalAdjustWithoutPoint(drafts[item].value), cardId: drafts[item].card.id, name: drafts[item].name, date: drafts[item].date, draftId: drafts[item].id })
-      }}></i></td>
-      <td><i className="fas fa-trash" onClick={() => deleteDraft(drafts[item].id, false)}></i></td>
+      }}
+      ><i className="fas fa-arrow-down" aria-hidden="true"></i></button></td>
+      <td><button
+        type="button"
+        className="appPurchaseAction appPurchaseAction--delete"
+        aria-label={`Excluir ${drafts[item].name}`}
+        title="Excluir lançamento importado"
+        onClick={() => deleteDraft(drafts[item].id, false)}
+      ><i className="fas fa-trash" aria-hidden="true"></i></button></td>
     </tr>)
   }
 
@@ -349,19 +361,25 @@ export default function Dashboard() {
           show={show}
           onHide={() => setShow(false)}
           size="lg"
-          className="purchaseModal"
+          className="purchaseModal appPurchaseModal"
           aria-labelledby="contained-modal-title-vcenter"
           centered
           backdrop="static"
         >
           <Modal.Header closeButton>
-            <Modal.Title id="contained-modal-title-vcenter">
-              Compras vindas do APP
-            </Modal.Title>
+            <div className="appPurchaseHeading">
+              <span className="appPurchaseHeadingIcon"><i className="fas fa-mobile-alt" aria-hidden="true"></i></span>
+              <div>
+                <span className="appPurchaseEyebrow">SINCRONIZAÇÃO</span>
+                <Modal.Title id="contained-modal-title-vcenter">
+                  Compras vindas do APP
+                </Modal.Title>
+              </div>
+            </div>
           </Modal.Header>
           <Modal.Body>
             {transformAddDebt ? <DebtList draftId={draftSelected?.draftId} update={updateValues} cardId={draftSelected?.cardId} data={draftSelected}></DebtList> :
-              <Table borderless striped responsive hover variant="black">
+              <Table borderless responsive hover className="appPurchaseTable">
                 <thead>
                   <tr>
                     <th>Nome</th>

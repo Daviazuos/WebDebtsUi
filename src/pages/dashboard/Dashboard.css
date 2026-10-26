@@ -254,6 +254,137 @@
     display: contents;
 }
 
+.appPurchaseModal .modal-content {
+    overflow: hidden;
+    border: 1px solid var(--dashboard-border);
+    border-radius: 14px;
+    box-shadow: 0 16px 48px rgba(37, 40, 43, .14);
+}
+
+.appPurchaseModal .modal-header {
+    display: flex;
+    align-items: center;
+    padding: 17px 20px;
+    border-bottom: 1px solid #edf0f3;
+}
+
+.appPurchaseHeading {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: 11px;
+}
+
+.appPurchaseHeadingIcon {
+    display: inline-flex;
+    width: 38px;
+    height: 38px;
+    flex: 0 0 38px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: var(--dashboard-violet-soft);
+    color: var(--dashboard-violet);
+    font-size: 15px;
+}
+
+.appPurchaseEyebrow {
+    display: block;
+    margin-bottom: 3px;
+    color: var(--dashboard-muted);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: .08em;
+}
+
+.appPurchaseModal .modal-title {
+    color: var(--dashboard-ink);
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.appPurchaseModal .modal-body {
+    padding: 18px 20px 20px;
+}
+
+.appPurchaseTable {
+    margin: 0;
+    color: #454a51;
+    font-size: 13px;
+    vertical-align: middle;
+}
+
+.appPurchaseTable thead th {
+    padding: 11px 12px;
+    border-bottom: 1px solid var(--dashboard-border);
+    color: var(--dashboard-muted);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.appPurchaseTable tbody td {
+    padding: 12px;
+    border-bottom: 1px solid #f0f1f4;
+}
+
+.appPurchaseTable tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.appPurchaseTable tbody td:nth-child(2) {
+    color: var(--dashboard-ink);
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.appPurchaseAction {
+    display: inline-flex;
+    width: 32px;
+    height: 32px;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background: #fff;
+    cursor: pointer;
+    transition: background .15s ease, border-color .15s ease, color .15s ease;
+}
+
+.appPurchaseAction--add {
+    border-color: #d8d1ff;
+    background: #f5f3ff;
+    color: #5840d8;
+}
+
+.appPurchaseAction--add:hover,
+.appPurchaseAction--add:focus-visible {
+    border-color: #5840d8;
+    background: #5840d8;
+    color: #fff;
+}
+
+.appPurchaseAction--delete {
+    border-color: #f2d3d1;
+    background: #fff7f6;
+    color: #d64c45;
+}
+
+.appPurchaseAction--delete:hover,
+.appPurchaseAction--delete:focus-visible {
+    border-color: #d64c45;
+    background: #d64c45;
+    color: #fff;
+}
+
+.appPurchaseAction:focus-visible {
+    outline: 3px solid rgba(115, 92, 230, .18);
+    outline-offset: 2px;
+}
+
 .modal-backdrop {
     backdrop-filter: blur(5px);
     background-color: rgba(0, 0, 0, .5) !important;
@@ -314,6 +445,11 @@
     .dashboardPanelHeader,
     .dashboardMetricsHeader {
         padding: 12px;
+    }
+
+    .appPurchaseModal .modal-header,
+    .appPurchaseModal .modal-body {
+        padding: 14px;
     }
 
     .dashboardPanelHeader h2,

@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/static/css/main.a6392f92.css",
-    "main.js": "/static/js/main.9dd1ba58.js",
+    "main.css": "/static/css/main.cdfad4f7.css",
+    "main.js": "/static/js/main.3474e8cb.js",
     "static/media/webdebts.png": "/static/media/webdebts.eeb187fd0efe629fae84.png",
     "index.html": "/index.html",
-    "main.a6392f92.css.map": "/static/css/main.a6392f92.css.map",
-    "main.9dd1ba58.js.map": "/static/js/main.9dd1ba58.js.map"
+    "main.cdfad4f7.css.map": "/static/css/main.cdfad4f7.css.map",
+    "main.3474e8cb.js.map": "/static/js/main.3474e8cb.js.map"
   },
   "entrypoints": [
-    "static/css/main.a6392f92.css",
-    "static/js/main.9dd1ba58.js"
+    "static/css/main.cdfad4f7.css",
+    "static/js/main.3474e8cb.js"
   ]
 }
