@@ -12,6 +12,7 @@ import { refreshPage } from "../../utils/utils";
 import { useGlobalContext } from "../../services/local-storage-event";
 import ResponsibleParty from "../../pages/responsibleParty/ResponsibleParty";
 import ResponsiblePartyModal from "../../pages/responsibleParty/ResponsiblePartyModal";
+import CategorySuggestion from "../categorySuggestion/CategorySuggestion";
 
 export default function DebtList(props) {
   const [name, setName] = useState('');
@@ -274,7 +275,7 @@ export default function DebtList(props) {
                   name="category"
                   onChange={categoryChange}
                   as="select"
-                  defaultValue={props.data?.category}
+                  value={category || props.data?.category || ''}
                 >
                   {list_categories}
                 </Form.Control>
@@ -285,6 +286,10 @@ export default function DebtList(props) {
                   classname="modalButton"
                 />
               </div>
+              <CategorySuggestion
+                name={name || props.data?.name || ''}
+                onSelect={setCategory}
+              />
             </Form.Group>
           </div>
         </section>

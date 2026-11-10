@@ -27,6 +27,10 @@ export class DebtsEndpoints extends AbstractEndpoints {
     return `${this.getURL()}/GetCategories`;
   }
 
+  suggestCategory(name: string) {
+    return `${this.getURL()}/SuggestCategory?name=${encodeURIComponent(name)}`;
+  }
+
   addCategory() {
     return `${this.getURL()}/CreateCategory`;
   }

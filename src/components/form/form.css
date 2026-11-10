@@ -82,6 +82,39 @@
   font-weight: 500;
 }
 
+.categorySuggestion {
+  margin-top: 8px;
+  min-height: 20px;
+}
+
+.categorySuggestionResult {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  color: #555b64;
+  font-size: 13px;
+}
+
+.categorySuggestionBadge {
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: #f0edff;
+  color: #5840d8;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.categorySuggestionAction {
+  padding: 0;
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.categorySuggestionError {
+  color: #b02a37;
+}
+
 .inputGroup .form-control,
 .selectorWithAction .form-control {
   min-height: 48px;
