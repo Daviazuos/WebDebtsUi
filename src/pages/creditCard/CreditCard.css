@@ -121,6 +121,12 @@
   align-items: stretch;
 }
 
+.creditCardsPagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
 .creditCardItem {
   position: relative;
   display: flex;

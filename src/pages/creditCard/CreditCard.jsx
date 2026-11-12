@@ -9,6 +9,7 @@ import { Form } from "react-bootstrap";
 import CreditCardModal from "./CreditCardModal";
 import ModalDelete from "../../components/modalDelete/ModalDelete";
 import CreditCardEditModal from "./CreditCardEditModal";
+import PaginationComponent from "../../components/customPagination/paginationComponent";
 
 function SetModalAddCard(props) {
     const [modalShow, setModalShow] = React.useState(false);
@@ -84,6 +85,8 @@ function SetModalDelete(props) {
 export default function CardCredit() {
     const [loading, setLoading] = useState(false);
     const [cards, setCards] = useState([]);
+    const [paginationData, setPaginationData] = useState({});
+    const [pageNumber, setPageNumber] = useState(1);
     const [month, setMonth] = useState(localStorage.getItem("month"));
     const [year, setyear] = useState(localStorage.getItem("year"));
     const [showZeros, setShowZeros] = useState(false);
@@ -92,26 +95,24 @@ export default function CardCredit() {
         setLoading(true);
         setCards([]);
 
-        axiosInstance.get(Endpoints.card.filterCards(1, 9999, null, month, year, showZeros))
+        axiosInstance.get(Endpoints.card.monthlySummary(pageNumber, 7, month, year, showZeros))
             .then(res => {
+                setPaginationData(res.data);
                 setCards(res.data.items || []);
             })
             .catch(() => {
+                setPaginationData({});
                 setCards([]);
             })
             .finally(() => {
                 setLoading(false);
             });
-    }, [month, showZeros, year]);
+    }, [month, showZeros, year, pageNumber]);
 
-    const getCardValue = item => (item?.debts || []).reduce((total, debt) => {
-        return total + (Number(debt?.installments?.[0]?.value) || 0);
-    }, 0);
-
-    const filtered_list = cards.filter(item => getCardValue(item) !== 0 || showZeros);
+    const filtered_list = cards;
 
     const lis = filtered_list.map(item => {
-        const cardValue = getCardValue(item);
+        const cardValue = item.totalValue;
 
         let closingDate = item.closureDate > item.dueDate ? `${addLeadingZeros(item.closureDate, 2)}/${addLeadingZeros(month - 1, 2)}/${year}` : `${addLeadingZeros(item.closureDate, 2)}/${addLeadingZeros(month, 2)}/${year}`
 
@@ -145,6 +146,7 @@ export default function CardCredit() {
     })
 
     const handleChange = (e) => {
+        setPageNumber(1);
         setShowZeros(!showZeros)
     }
 
@@ -160,7 +162,9 @@ export default function CardCredit() {
             </header>
 
             <div className="creditCardsToolbar">
-                <span className="creditCardsCount">{filtered_list.length} {filtered_list.length === 1 ? "cartão" : "cartões"}</span>
+                <span className="creditCardsCount">
+                    {paginationData.totalItems || 0} {(paginationData.totalItems || 0) === 1 ? "cartão" : "cartões"}
+                </span>
                 <Form className="creditCardsFilter">
                     <Form.Check
                         type="switch"
@@ -187,6 +191,17 @@ export default function CardCredit() {
                         <span>Adicione um cartão ou habilite a exibição dos cartões sem fatura.</span>
                     </div>
                 )
+            )}
+            {paginationData.totalItems > 0 && (
+                <div className="creditCardsPagination">
+                    <PaginationComponent
+                        itemsCount={paginationData.totalItems}
+                        itemsPerPage={7}
+                        currentPage={pageNumber}
+                        setCurrentPage={setPageNumber}
+                        alwaysShown={false}
+                    />
+                </div>
             )}
         </main>)
 }

@@ -30,6 +30,11 @@ export class CardsEndpoints extends AbstractEndpoints {
     
   }
 
+  monthlySummary(pageNumber: number, pageSize: number, month: string, year: string, withNoDebts: boolean, isPaid?: boolean) {
+    const statusFilter = isPaid === undefined ? '' : `&IsPaid=${isPaid}`;
+    return `${this.getURL()}/MonthlySummary?PageNumber=${pageNumber}&PageSize=${pageSize}&Month=${month}&Year=${year}&WithNoDebts=${withNoDebts}${statusFilter}`;
+  }
+
   deleteById(cardId: string) {
     return `${this.getURL()}/DeleteCard?CardId=${cardId}`;
   }

@@ -114,6 +114,7 @@ export default function Financial() {
 
   const statusChange = event => {
     setPaidStatus(event.target.value);
+    setPageCardNumber(1);
   }
 
   function updateValues(change) {
@@ -128,26 +129,11 @@ export default function Financial() {
   }, [pageNumber, month, paidStatus, updateStatus])
 
   useEffect(() => {
-    axiosInstance.get(Endpoints.card.filterCards(pageCardNumber, 7, '', month, year, false))
+    const isPaid = paidStatus === "Paid" ? true : paidStatus === "NotPaid" ? false : undefined;
+    axiosInstance.get(Endpoints.card.monthlySummary(pageCardNumber, 7, month, year, false, isPaid))
       .then(res => {
-        let resultFiltered = []
-        for (const card in res.data.items) {
-          let debts = res.data.items[card]?.debts
-          for (const debt in debts) {
-            if (paidStatus !== "") {
-              if (debts[debt]?.installments[0]?.status === paidStatus) {
-                resultFiltered.push(res.data.items[card])
-                break
-              }
-            } else {
-              resultFiltered.push(res.data.items[card])
-              break
-            }
-
-          }
-        }
         setCardPaginationData(res.data)
-        setCards(resultFiltered)
+        setCards(res.data.items || [])
       })
   }, [pageCardNumber, month, paidStatus, updateStatus])
   
@@ -194,19 +180,6 @@ export default function Financial() {
   })
 
   const cardTableData = cards.map(item => {
-
-    let cardValue = 0.00
-    let cardStatus = undefined
-    let paymentDate = undefined
-
-    for (const debt in item?.debts) {
-      if (item?.debts[debt]?.installments[0]?.value != undefined) {
-        cardValue = cardValue + item?.debts[debt]?.installments[0]?.value
-        cardStatus = item?.debts[debt]?.installments[0]?.status
-        paymentDate = item?.debts[debt]?.installments[0]?.paymentDate
-      }
-    }
-
     return (
       <article className="card-financial financialCardEntry" key={item.id}>
           <div className="card-background" style={{ '--corFundo': item.color }}></div>
@@ -215,7 +188,7 @@ export default function Financial() {
             <div className="installment-text">Cartão de crédito</div>
             <div className="financialEntryDetails">
               <div className="debt-date">Vence {addLeadingZeros(item.dueDate, 2)}/{addLeadingZeros(month, 2)}/{year}</div>
-              <div className="debt-value">R$ {decimalAdjust(cardValue)}</div>
+              <div className="debt-value">R$ {decimalAdjust(item.totalValue)}</div>
             </div>
 
           </div>
@@ -230,9 +203,9 @@ export default function Financial() {
               isCard={true} 
               update={updateValues} 
               updateStatus={updateStatus} 
-              amount={cardValue} 
+              amount={item.totalValue}
               classname='btn btn-danger'
-              status={cardStatus}>
+              status={item.isPaid ? "Paid" : "NotPaid"}>
             </SetModalPaid>
         </article >
     )
