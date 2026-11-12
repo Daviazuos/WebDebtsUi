@@ -13,6 +13,7 @@ import { refreshPage } from "../../utils/utils";
 import PaginationComponent from "../../components/customPagination/paginationComponent";
 import ModalNextMonth from "../../components/Modals/ModalNextMonth";
 import { buildStyles, CircularProgressbar } from "react-circular-progressbar";
+import FinancialInstallmentModal from "./FinancialInstallmentModal";
 
 
 function SetStatus(id, status, date) {
@@ -161,20 +162,26 @@ export default function Financial() {
             <div className="progress-bar-fill" style={{ width: item.numberOfInstallments === 0 ? '0%' : `${(item.installmentNumber / item.numberOfInstallments) * 100}%` }}></div>
           </div>}
         </div>
-        <SetModalPaid
-          disabled={false}
-          name={item.debtName}
-          modalName="Pagar"
-          simbol=""
-          value={item.id}
-          month={month}
-          year={year}
-          isCard={false}
-          update={updateValues}
-          updateStatus={updateStatus}
-          amount={item.value}
-          status={item.status}>
-        </SetModalPaid>
+        <div className="financialEntryActions">
+          <FinancialInstallmentModal
+            installment={item}
+            onUpdated={() => setUpdateStatus(current => !current)}
+          />
+          <SetModalPaid
+            disabled={false}
+            name={item.debtName}
+            modalName="Pagar"
+            simbol=""
+            value={item.id}
+            month={month}
+            year={year}
+            isCard={false}
+            update={updateValues}
+            updateStatus={updateStatus}
+            amount={item.value}
+            status={item.status}>
+          </SetModalPaid>
+        </div>
       </article>
     )
   })
@@ -251,7 +258,7 @@ export default function Financial() {
               <PaginationComponent
                 itemsCount={financial.totalItems}
                 itemsPerPage={7}
-                currentPage={financial.currentPage}
+                currentPage={pageNumber}
                 setCurrentPage={setPageNumber}
                 alwaysShown={false}
               />
@@ -273,7 +280,7 @@ export default function Financial() {
               <PaginationComponent
                 itemsCount={cardPaginationData.totalItems}
                 itemsPerPage={7}
-                currentPage={cardPaginationData.currentPage}
+                currentPage={pageCardNumber}
                 setCurrentPage={setPageCardNumber}
                 alwaysShown={false}
               />

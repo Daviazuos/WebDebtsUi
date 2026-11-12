@@ -10,9 +10,10 @@ const PaginationComponent = ({
   alwaysShown = true
 }) => {
   const pagesCount = Math.ceil(itemsCount / itemsPerPage);
+  const lastPage = Math.max(pagesCount, 1);
   const isPaginationShown = alwaysShown ? true : pagesCount > 1;
-  const isCurrentPageFirst = currentPage === 1;
-  const isCurrentPageLast = currentPage === pagesCount;
+  const isCurrentPageFirst = currentPage <= 1;
+  const isCurrentPageLast = pagesCount === 0 || currentPage >= pagesCount;
 
   const changePage = number => {
     if (currentPage === number) return;
@@ -32,8 +33,10 @@ const PaginationComponent = ({
   };
 
   const setLastPageAsCurrent = () => {
-    if (currentPage > pagesCount) {
-      setCurrentPage(pagesCount);
+    if (currentPage < 1) {
+      setCurrentPage(1);
+    } else if (currentPage > lastPage) {
+      setCurrentPage(lastPage);
     }
   };
 
@@ -71,7 +74,7 @@ const PaginationComponent = ({
     return null;
   });
 
-  useEffect(setLastPageAsCurrent, [pagesCount]);
+  useEffect(setLastPageAsCurrent, [currentPage, lastPage, setCurrentPage]);
 
   return (
     <>

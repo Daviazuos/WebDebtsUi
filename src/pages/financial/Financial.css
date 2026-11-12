@@ -325,6 +325,64 @@
     outline-offset: -3px;
 }
 
+.financialEntryActions {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    border-left: 1px solid #f0d5d3;
+}
+
+.financialInstallmentDetailsTrigger {
+    display: inline-flex;
+    min-width: 0;
+    min-height: 0;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: #f5f3ff;
+    color: #5840d8;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.financialInstallmentDetailsTrigger:hover,
+.financialInstallmentDetailsTrigger:focus-visible {
+    background: #ebe7ff;
+    color: #3f28ad;
+}
+
+.financialInstallmentDetailsTrigger:focus-visible {
+    outline: 3px solid rgba(115, 92, 230, .2);
+    outline-offset: -3px;
+}
+
+.financialEntryActions .indicator {
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    border-top: 1px solid #f0d5d3;
+    border-left: 0;
+}
+
+.financialInstallmentFooter {
+    align-items: center;
+    gap: 8px;
+}
+
+.financialInstallmentTotal {
+    margin-right: auto;
+    color: var(--financial-muted);
+    font-size: 11px;
+}
+
+.financialInstallmentAlert {
+    margin: 14px 0 0;
+    font-size: 12px;
+}
+
 .financialPanelFooter {
     display: flex;
     min-height: 51px;
@@ -425,6 +483,14 @@
 
     .card-financial {
         grid-template-columns: minmax(0, 1fr) 40px;
+    }
+
+    .financialInstallmentFooter {
+        flex-wrap: wrap;
+    }
+
+    .financialInstallmentTotal {
+        width: 100%;
     }
 
     .indicator {
