@@ -178,7 +178,7 @@ export default function CardApexGraphicPie(props) {
             });
     }, [month, year, props.cardId]);
 
-    let categoryTable = (<Table striped borderless hover size="sm" responsive>
+    let categoryTable = (<Table borderless responsive hover className="appPurchaseTable appPurchaseTable--categorySummary">
           <thead>
             <tr>
               <th>Nome</th>
@@ -198,6 +198,7 @@ export default function CardApexGraphicPie(props) {
                 onHide={() => setModalShow(false)}
                 table={categoryTable} // Passa os dados para a modal
                 head={title}
+                modalIcon="fas fa-chart-pie"
             />
             <div ref={chartContainerRef} className="categoryChartContainer">
                 {graphic !== null ? (

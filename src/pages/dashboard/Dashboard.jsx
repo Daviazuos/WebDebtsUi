@@ -65,7 +65,7 @@ export default function Dashboard() {
           )
         })
         )
-        setFixedTable(<Table striped borderless hover size="sm" responsive>
+        setFixedTable(<Table borderless responsive hover className="appPurchaseTable appPurchaseTable--debtSummary">
           <thead>
             <tr>
               <th>Nome</th>
@@ -127,7 +127,7 @@ export default function Dashboard() {
           )
         })
         )
-        setSimpleTable(<Table striped borderless hover size="sm" responsive>
+        setSimpleTable(<Table borderless responsive hover className="appPurchaseTable appPurchaseTable--debtSummary">
           <thead>
             <tr>
               <th>Nome</th>
@@ -162,7 +162,7 @@ export default function Dashboard() {
 
         })
         )
-        setInstallmentTable(<Table striped borderless hover size="sm" responsive>
+        setInstallmentTable(<Table borderless responsive hover className="appPurchaseTable appPurchaseTable--debtSummary">
           <thead>
             <tr>
               <th>Nome</th>

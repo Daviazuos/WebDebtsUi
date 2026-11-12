@@ -22,6 +22,7 @@ export default (props) => {
         onHide={() => setModalShow(false)}
         table={props.table}
         head={props.title}
+        modalIcon={props.icon}
       /> : null}
     </div>
   );

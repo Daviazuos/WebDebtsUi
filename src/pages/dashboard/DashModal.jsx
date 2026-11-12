@@ -3,30 +3,33 @@ import { Modal } from "react-bootstrap";
 
 import "./DashModal.css"
 
-export default function DashModal(props) {
+export default function DashModal({ show, onHide, table, head, modalIcon, className }) {
     return (
         <div onClick={e => e.stopPropagation()}>
             <Modal
-                {...props}
+                show={show}
+                onHide={onHide}
                 size="lg"
                 centered
                 scrollable
-                dialogClassName="GlobalModal"
+                className={`appPurchaseModal ${className || ""}`}
+                aria-labelledby="dashboard-summary-title"
             >
                 <Modal.Header closeButton>
-                    <div className="dashboardModalHeading">
-                        {props.modalIcon && (
-                            <span className="dashboardModalIcon">
-                                <i className={props.modalIcon} aria-hidden="true"></i>
+                    <div className="appPurchaseHeading">
+                        {modalIcon && (
+                            <span className="appPurchaseHeadingIcon">
+                                <i className={modalIcon} aria-hidden="true"></i>
                             </span>
                         )}
-                        <Modal.Title id="contained-modal-title-vcenter">
-                            {props.head}
-                        </Modal.Title>
+                        <div>
+                            <span className="appPurchaseEyebrow">DETALHES DO PERÍODO</span>
+                            <Modal.Title id="dashboard-summary-title">{head}</Modal.Title>
+                        </div>
                     </div>
                 </Modal.Header>
                 <Modal.Body>
-                    {props.table}
+                    {table}
                 </Modal.Body>
             </Modal>
         </div>

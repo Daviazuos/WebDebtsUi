@@ -254,6 +254,14 @@
     display: contents;
 }
 
+.appPurchaseModal {
+    --dashboard-ink: #25282b;
+    --dashboard-muted: #777d85;
+    --dashboard-border: #e5e7eb;
+    --dashboard-violet: #5840d8;
+    --dashboard-violet-soft: #f0edff;
+}
+
 .appPurchaseModal .modal-content {
     overflow: hidden;
     border: 1px solid var(--dashboard-border);
@@ -335,6 +343,27 @@
 }
 
 .appPurchaseTable tbody td:nth-child(2) {
+    color: var(--dashboard-ink);
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.appPurchaseTable--debtSummary thead th:last-child,
+.appPurchaseTable--debtSummary tbody td:last-child,
+.appPurchaseTable--categorySummary thead th:last-child,
+.appPurchaseTable--categorySummary tbody td:last-child {
+    text-align: right;
+}
+
+.appPurchaseTable--debtSummary tbody td:nth-child(2),
+.appPurchaseTable--categorySummary tbody td:nth-child(2) {
+    color: #777d85;
+    font-weight: 500;
+    white-space: normal;
+}
+
+.appPurchaseTable--debtSummary tbody td:last-child,
+.appPurchaseTable--categorySummary tbody td:last-child {
     color: var(--dashboard-ink);
     font-weight: 700;
     white-space: nowrap;
