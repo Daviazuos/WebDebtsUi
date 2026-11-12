@@ -369,6 +369,11 @@
   font-weight: 600;
 }
 
+.plannerOriginalBudget {
+  color: var(--planner-muted);
+  font-weight: 400;
+}
+
 .plannerProgress {
   height: 6px;
   overflow: hidden;

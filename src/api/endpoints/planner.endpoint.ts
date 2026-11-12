@@ -28,6 +28,10 @@ export class Planner extends AbstractEndpoints {
     return `${this.getURL()}/category/${plannerCategoryId}/budget`;
   }
 
+  adjustCategoryBudget(plannerCategoryId: string) {
+    return `${this.getURL()}/category/${plannerCategoryId}/spent-budget`;
+  }
+
   deleteCategory(plannerCategoryId: string) {
     return `${this.getURL()}/category/${plannerCategoryId}`;
   }

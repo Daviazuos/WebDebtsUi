@@ -20,6 +20,11 @@ import dayjs from 'dayjs'; // Instale: npm install dayjs
 import { addMonthsToDate, addMonthsToDateNoChangeFormat, dateAdjust, dateFromDatetime, formatDate, formatDateBrazilian } from '../../utils/dateFormater';
 import './Planner.css';
 
+const getEffectiveBudget = (category) => Math.max(
+  Number(category.orcado) || 0,
+  Number(category.gasto) || 0
+);
+
 export default function Planner() {
   const [planejamento, setPlanejamento] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -76,6 +81,7 @@ export default function Planner() {
               categorias: freq.plannerCategories.map(cat => ({
                 nome: cat.debtCategoryName,
                 orcado: cat.budgetedValue,
+                orcadoOriginal: cat.originalBudgetedValue ?? cat.budgetedValue,
                 gasto: 0.00,
                 id: cat.id,
               }))
@@ -99,17 +105,48 @@ export default function Planner() {
       axiosInstance.get(Endpoints.debt.getDebtCategories(month, year, undefined, bloco.start, bloco.end))
         .then(res => {
           const lis = res.data.map(item => {
-            return ({ name: item.name, valueTotal: item.value })
+            return ({ name: item.name, valueTotal: Number(item.value) || 0 })
           })
 
-          planejamento.blocos.find(b => b.id === bloco.id).categorias.forEach(cat => {
+          Promise.all(bloco.categorias.map(async cat => {
             const catFound = lis.find(c => c.name === cat.nome);
-            if (catFound) {
-              cat.gasto = catFound.valueTotal;
+            if (!catFound) return cat;
+
+            const atualizado = { ...cat, gasto: catFound.valueTotal };
+            const orcadoOriginal = Number(cat.orcadoOriginal ?? cat.orcado) || 0;
+            const orcadoAtualizado = Math.max(orcadoOriginal, catFound.valueTotal);
+            if (atualizado.id && orcadoAtualizado !== Number(cat.orcado)) {
+              try {
+                const budgetResponse = await axiosInstance.put(
+                  Endpoints.planer.adjustCategoryBudget(cat.id),
+                  { spentValue: catFound.valueTotal }
+                );
+                atualizado.orcado = Number(budgetResponse.data.budgetedValue);
+                atualizado.orcadoOriginal = Number(
+                  budgetResponse.data.originalBudgetedValue ?? cat.orcadoOriginal ?? cat.orcado
+                );
+              } catch (err) {
+                console.error('Erro ao ajustar orçamento pelo gasto:', err);
+              }
             }
+            return atualizado;
+          })).then(categoriasAtualizadas => {
+            setPlanejamento(prev => {
+              if (!prev) return prev;
+              return {
+                ...prev,
+                blocos: prev.blocos.map(blocoAtual => (
+                  blocoAtual.id === bloco.id
+                    ? { ...blocoAtual, categorias: categoriasAtualizadas }
+                    : blocoAtual
+                ))
+              };
+            });
           });
-          setPlanejamento({ ...planejamento });
         })
+        .catch(err => {
+          console.error('Erro ao buscar gastos do período do planejamento:', err);
+        });
     })
 
     setUpdated(false);
@@ -198,6 +235,7 @@ export default function Planner() {
           categorias: freq.plannerCategories.map(cat => ({
             nome: cat.name,
             orcado: cat.budgetedAmount,
+            orcadoOriginal: cat.budgetedAmount,
             gasto: 0
           }))
         }))
@@ -265,6 +303,7 @@ export default function Planner() {
     };
     axiosInstance.put(Endpoints.planer.updateCategory(plannerFrequencyId), payload)
       .then(() => {
+        categoria.orcadoOriginal = Number(categoria.orcado);
         setPlanejamento(blocoAtualizado);
       })
       .catch(err => {
@@ -333,20 +372,23 @@ export default function Planner() {
       });
 
       try {
-        await Promise.all(promises);
-        const novaCat = {
-          nome: categoryName,
-          orcado: Number(novoValor),
-          gasto: 0
-        };
+        const responses = await Promise.all(promises);
 
         const atualizado = { ...planejamento };
-        atualizado.blocos = atualizado.blocos.map((bloco) => {
+        atualizado.blocos = atualizado.blocos.map((bloco, index) => {
           const jaExiste = bloco.categorias.some((cat) => cat.nome === categoryName);
           if (!jaExiste) {
+            const addedCategory = responses[index].data.plannerCategories
+              .find(cat => cat.debtCategoryId === novaCategoria);
             return {
               ...bloco,
-              categorias: [...bloco.categorias, { ...novaCat }],
+              categorias: [...bloco.categorias, {
+                id: addedCategory?.id,
+                nome: categoryName,
+                orcado: Number(novoValor),
+                orcadoOriginal: Number(novoValor),
+                gasto: 0
+              }],
             };
           }
           return bloco;
@@ -372,11 +414,15 @@ export default function Planner() {
       };
 
       try {
-        await axiosInstance.put(Endpoints.planer.AddCategory(plannerFrequencyId), payload);
+        const response = await axiosInstance.put(Endpoints.planer.AddCategory(plannerFrequencyId), payload);
+        const addedCategory = response.data.plannerCategories
+          .find(cat => cat.debtCategoryId === novaCategoria);
 
         const novaCat = {
+          id: addedCategory?.id,
           nome: categoryName,
           orcado: Number(novoValor),
+          orcadoOriginal: Number(novoValor),
           gasto: 0
         };
 
@@ -398,6 +444,7 @@ export default function Planner() {
         setNovaCategoria('');
         setNovoValor('');
         setBlocoSelecionado(undefined);
+        setUpdated(true);
       } catch (err) {
         console.error('Erro ao adicionar categoria:', err);
       }
@@ -504,10 +551,11 @@ export default function Planner() {
                   planejamento.blocos.forEach(bloco => {
                     bloco.categorias.forEach(cat => {
                       if (!resumo[cat.nome]) resumo[cat.nome] = { orcado: 0, gasto: 0 };
-                      resumo[cat.nome].orcado += Number(cat.orcado);
-                      resumo[cat.nome].gasto += Number(cat.gasto);
-                      totalOrcado += Number(cat.orcado);
-                      totalGasto += Number(cat.gasto);
+                      const orcadoEfetivo = getEffectiveBudget(cat);
+                      resumo[cat.nome].orcado += orcadoEfetivo;
+                      resumo[cat.nome].gasto += Number(cat.gasto) || 0;
+                      totalOrcado += orcadoEfetivo;
+                      totalGasto += Number(cat.gasto) || 0;
                     });
                   });
                   return (
@@ -607,7 +655,13 @@ export default function Planner() {
                             </>
                           ) : (
                             <>
-                              <Form.Label>{cat.nome} - R$ {decimalAdjust(cat.orcado)}</Form.Label>
+                              <Form.Label>
+                                {cat.nome} - R${' '}
+                                {Number(cat.gasto) > Number(cat.orcadoOriginal ?? cat.orcado) && (
+                                  <del className="plannerOriginalBudget">{decimalAdjust(cat.orcadoOriginal ?? cat.orcado)} </del>
+                                )}
+                                {decimalAdjust(getEffectiveBudget(cat))}
+                              </Form.Label>
                               <button type="button" className="plannerIconButton" aria-label={`Editar ${cat.nome}`} onClick={() => toggleEditMode(cat.id)}><i className="fas fa-pen" aria-hidden="true"></i></button>
                               <button type="button" className="plannerIconButton plannerIconButton--danger" aria-label={`Excluir ${cat.nome}`} onClick={() => handleDeletePlannerCategory(cat.id)}><i className="fas fa-trash" aria-hidden="true"></i></button>
                             </>
@@ -616,12 +670,12 @@ export default function Planner() {
                         </div>
 
                         <div style={{ fontSize: '0.6rem', marginBottom: '0.4rem', color: '#333' }}>
-                          R$ {cat.gasto} / R$ {decimalAdjust(cat.orcado)} - sobra R$ {decimalAdjust(cat.orcado - cat.gasto)}
+                          R$ {decimalAdjust(cat.gasto)} / R$ {decimalAdjust(getEffectiveBudget(cat))} - sobra R$ {decimalAdjust(getEffectiveBudget(cat) - (Number(cat.gasto) || 0))}
                         </div>
                         <ProgressBar
-                          now={cat.orcado > 0 ? Math.min((cat.gasto / cat.orcado) * 100, 100) : 0}
+                          now={getEffectiveBudget(cat) > 0 ? Math.min(((Number(cat.gasto) || 0) / getEffectiveBudget(cat)) * 100, 100) : 0}
                           className="plannerProgress"
-                          variant={cat.gasto > cat.orcado ? "danger" : "success"}
+                          variant={Number(cat.gasto) > Number(cat.orcadoOriginal ?? cat.orcado) ? "danger" : "success"}
                         />
                       </div>
                     ))
