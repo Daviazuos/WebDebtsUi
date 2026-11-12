@@ -27,4 +27,8 @@ export class WalletsEndpoinst extends AbstractEndpoints {
   putInstallment(id: string) {
     return `${this.getURL()}/UpdateWalletInstallment?Id=${id}`;
   }
+
+  getInstallments(walletId: string, pageNumber: number, pageSize: number) {
+    return `${this.getURL()}/GetWalletInstallments?WalletId=${walletId}&PageNumber=${pageNumber}&PageSize=${pageSize}`;
+  }
 }

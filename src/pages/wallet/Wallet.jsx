@@ -40,6 +40,7 @@ function SetModal(props) {
         show={modalShow}
         onHide={() => setModalShow(false)}
         head={props.name}
+        onUpdated={props.onUpdated}
       />
     </>
   );
@@ -135,7 +136,7 @@ export default function Wallet() {
     });
 
     return () => { isCurrent = false; };
-  }, [month, year]);
+  }, [month, year, status]);
 
   const walletEntries = wallets.flatMap(person =>
     (person.walletAppModels || []).map(wallet => ({ person, wallet, installment: wallet.walletInstallments?.[0] }))
@@ -260,7 +261,13 @@ export default function Wallet() {
                                   onChange={() => EditWalletStatus(!installment.receivedStatus, installment.id)}
                                 />
                                 <span className="walletActionButtons">
-                                  <SetModal value={wallet.id} name={wallet.name} modalName="" simbol="fas fa-pen" />
+                                  <SetModal
+                                    value={wallet.id}
+                                    name={wallet.name}
+                                    modalName=""
+                                    simbol="fas fa-pen"
+                                    onUpdated={() => setStatus(currentStatus => !currentStatus)}
+                                  />
                                   <SetModalDelete value={wallet} name={wallet.name} modalName="" simbol="fas fa-trash" />
                                 </span>
                               </td>
