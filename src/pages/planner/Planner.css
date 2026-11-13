@@ -166,6 +166,123 @@
   padding: 8px 16px 12px;
 }
 
+.plannerSummaryHeaderActions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 9px;
+}
+
+.plannerSummaryPeriod {
+  display: inline-flex;
+  min-height: 34px;
+  align-items: center;
+  gap: 7px;
+  padding: 0 10px;
+  border: 1px solid var(--planner-border);
+  border-radius: 8px;
+  background: #fafbfc;
+  color: var(--planner-muted);
+  font-size: 10px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.plannerSummaryMetrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.plannerSummaryMetric {
+  display: flex;
+  min-width: 0;
+  min-height: 76px;
+  align-items: flex-start;
+  gap: 9px;
+  padding: 12px;
+  border: 1px solid var(--planner-border);
+  border-radius: 10px;
+  background: #fff;
+}
+
+.plannerSummaryMetricIcon {
+  display: inline-flex;
+  width: 32px;
+  height: 32px;
+  flex: 0 0 32px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9px;
+  background: var(--planner-violet-soft);
+  color: var(--planner-violet);
+  font-size: 13px;
+}
+
+.plannerSummaryMetric > div {
+  display: grid;
+  min-width: 0;
+  gap: 3px;
+}
+
+.plannerSummaryMetric > div > span {
+  color: var(--planner-muted);
+  font-size: 10px;
+  line-height: 1.3;
+}
+
+.plannerSummaryMetric strong {
+  overflow-wrap: anywhere;
+  color: var(--planner-ink);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.plannerSummaryMetric small {
+  color: var(--planner-muted);
+  font-size: 9px;
+  line-height: 1.3;
+}
+
+.plannerSummaryMetric--spent .plannerSummaryMetricIcon {
+  background: #eef5ff;
+  color: #3970b8;
+}
+
+.plannerSummaryMetric--unplanned {
+  border-color: #f0dfc7;
+  background: #fffaf3;
+}
+
+.plannerSummaryMetric--unplanned .plannerSummaryMetricIcon {
+  background: #fff0dc;
+  color: #b66a12;
+}
+
+.plannerSummaryMetric--unplanned strong {
+  color: #a45b08;
+}
+
+.plannerSummaryMetric--clear {
+  border-color: #d5e9db;
+  background: #f8fcf8;
+}
+
+.plannerSummaryMetric--clear .plannerSummaryMetricIcon {
+  background: #e9f6ed;
+  color: #348c59;
+}
+
+.plannerSummaryMetric--clear strong {
+  color: #348c59;
+}
+
+.plannerSummaryMetric--balance .plannerSummaryMetricIcon {
+  background: #e9f6ed;
+  color: #348c59;
+}
+
 .plannerSummaryTable {
   margin: 0;
   color: var(--planner-ink);
@@ -200,6 +317,95 @@
 .plannerSummaryTable .plannerSummaryBalance td {
   color: #348c59;
   font-weight: 700;
+}
+
+.plannerUnplannedTop {
+  margin-bottom: 15px;
+  padding: 12px 14px;
+  border: 1px solid #f0dfc7;
+  border-radius: 10px;
+  background: #fffaf3;
+}
+
+.plannerUnplannedTopHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.plannerUnplannedTopHeader strong {
+  color: #8f5008;
+  font-size: 11px;
+}
+
+.plannerUnplannedTopHeader span {
+  color: var(--planner-muted);
+  font-size: 9px;
+}
+
+.plannerUnplannedTopList {
+  display: grid;
+  gap: 5px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.plannerUnplannedTopList li {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 9px;
+  padding: 6px 0;
+  border-top: 1px solid #f3e8d9;
+}
+
+.plannerUnplannedTopRank {
+  display: inline-flex;
+  width: 22px;
+  height: 22px;
+  flex: 0 0 22px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #fff0dc;
+  color: #a45b08;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.plannerUnplannedTopDescription {
+  display: grid;
+  min-width: 0;
+  flex: 1;
+  gap: 2px;
+}
+
+.plannerUnplannedTopDescription strong {
+  overflow: hidden;
+  color: var(--planner-ink);
+  font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.plannerUnplannedTopDescription small {
+  color: var(--planner-muted);
+  font-size: 9px;
+}
+
+.plannerUnplannedTopValue {
+  color: #a45b08;
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.plannerSummaryEmpty {
+  padding: 22px 10px !important;
+  color: var(--planner-muted);
+  text-align: center;
 }
 
 .plannerBlocksGrid {
@@ -532,8 +738,21 @@
     padding: 12px;
   }
 
+  .plannerSummaryHeaderActions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
   .plannerPanelHeader .plannerSecondaryButton {
     width: 100%;
+  }
+
+  .plannerSummaryHeaderActions .plannerSecondaryButton {
+    width: auto;
+  }
+
+  .plannerSummaryMetrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .plannerBlockHeader {
@@ -558,5 +777,784 @@
 @media (max-width: 380px) {
   .app main .plannerPageHeader {
     flex-direction: column;
+  }
+
+  .plannerSummaryMetrics {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.app main.plannerPage {
+  max-width: 1440px;
+  min-height: 100vh;
+  padding: 22px clamp(16px, 3vw, 30px) 40px;
+  background: #f2f3fa;
+}
+
+.app main .plannerPageHeader {
+  min-height: 44px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.app main .plannerPageHeader h1 {
+  margin-top: 4px;
+  font-size: 25px;
+}
+
+.plannerEyebrow {
+  font-size: 9px;
+}
+
+.plannerPageHeader p {
+  font-size: 10px;
+}
+
+.plannerHeaderActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.plannerHeaderActions .plannerSummaryPeriod {
+  min-height: 28px;
+  padding: 0 9px;
+  background: #fff;
+  color: #242637;
+  font-size: 10px;
+}
+
+.app main .plannerHeaderActions .plannerPrimaryButton {
+  min-height: 34px;
+  max-width: 190px;
+  padding: 0 12px;
+  font-size: 10px;
+}
+
+.plannerOverspendAlert {
+  display: flex;
+  min-height: 38px;
+  align-items: center;
+  gap: 9px;
+  margin: 0 0 12px;
+  padding: 8px 12px;
+  border: 1px solid #ffd1d5;
+  border-radius: 9px;
+  background: #fff0f1;
+  color: #a22d36;
+  font-size: 10px;
+}
+
+.plannerOverspendAlert > i {
+  color: #e3424e;
+}
+
+.plannerOverspendAlert > span {
+  flex: 1;
+}
+
+.plannerOverspendAlert button {
+  padding: 2px 4px;
+  border: 0;
+  background: transparent;
+  color: #8d2930;
+  font-size: 9px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.plannerSummaryMetrics {
+  gap: 9px;
+  margin-bottom: 12px;
+}
+
+.plannerSummaryMetric {
+  min-height: 88px;
+  gap: 8px;
+  padding: 11px;
+  border-radius: 10px;
+  box-shadow: 0 2px 7px rgba(37, 40, 43, .025);
+}
+
+.plannerSummaryMetricIcon {
+  width: 25px;
+  height: 25px;
+  flex-basis: 25px;
+  border-radius: 7px;
+  font-size: 10px;
+}
+
+.plannerSummaryMetric > div > span {
+  font-size: 9px;
+}
+
+.plannerSummaryMetric strong {
+  font-size: 16px;
+}
+
+.plannerSummaryMetric small {
+  font-size: 8px;
+}
+
+.plannerMetricProgress {
+  width: 100%;
+  height: 4px;
+  overflow: hidden;
+  margin: 1px 0;
+  border-radius: 999px;
+  background: #e9ebf2;
+}
+
+.plannerMetricProgress span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--planner-violet);
+}
+
+.plannerSummaryMetric--balance .plannerSummaryMetricIcon {
+  background: #fff0f1;
+  color: #d6424d;
+}
+
+.plannerSummaryMetric--negative strong,
+.plannerSummaryMetric--negative .plannerSummaryMetricIcon {
+  color: #d62e3a;
+}
+
+.plannerBalanceBadge {
+  width: fit-content;
+  padding: 2px 6px;
+  border: 1px solid #ffd1d5;
+  border-radius: 999px;
+  background: #fff0f1;
+  color: #a22d36 !important;
+}
+
+.plannerSummaryMetric:not(.plannerSummaryMetric--negative) .plannerBalanceBadge {
+  border-color: #d5e9db;
+  background: #f1faf3;
+  color: #348c59 !important;
+}
+
+.plannerMonthSummaryGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.72fr) minmax(250px, 1fr);
+  align-items: start;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.plannerMonthlyCategories,
+.plannerUnplannedTop {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid #e6e8ef;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 2px 7px rgba(37, 40, 43, .025);
+}
+
+.plannerSummarySectionHeader {
+  padding: 11px 12px 8px;
+  border-bottom: 1px solid #eff0f4;
+}
+
+.plannerSummarySectionHeader div,
+.plannerUnplannedTopHeader > div {
+  display: grid;
+  gap: 2px;
+}
+
+.plannerSummarySectionHeader strong,
+.plannerUnplannedTopHeader > div > strong {
+  color: #272a38;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.plannerSummarySectionHeader span,
+.plannerUnplannedTopHeader > div > span {
+  color: #7d8290;
+  font-size: 8px;
+}
+
+.plannerMonthlyCategoryList {
+  padding: 0 11px;
+}
+
+.plannerMonthlyCategory {
+  padding: 8px 0 7px;
+  border-bottom: 1px solid #eff0f4;
+}
+
+.plannerMonthlyCategory:last-child {
+  border-bottom: 0;
+}
+
+.plannerMonthlyCategoryHeading,
+.plannerMonthlyCategoryFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.plannerMonthlyCategoryHeading {
+  margin-bottom: 5px;
+  color: #45495a;
+  font-size: 9px;
+}
+
+.plannerMonthlyCategoryHeading > strong {
+  color: #282b38;
+  font-size: 9px;
+  font-weight: 600;
+}
+
+.plannerMonthlyCategoryHeading > span {
+  color: #6e7382;
+  white-space: nowrap;
+}
+
+.plannerMonthlyCategoryHeading b {
+  color: #25283a;
+  font-weight: 700;
+}
+
+.plannerMonthlyProgress {
+  height: 5px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #eaebf1;
+}
+
+.plannerMonthlyProgress span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--planner-violet);
+}
+
+.plannerMonthlyCategory--over .plannerMonthlyProgress span {
+  background: #e63d49;
+}
+
+.plannerMonthlyCategoryFooter {
+  margin-top: 5px;
+  color: #74798a;
+  font-size: 8px;
+}
+
+.plannerCategoryStatus {
+  width: fit-content;
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: #eeedff;
+  color: #5142bd;
+}
+
+.plannerCategoryStatus--done {
+  background: #e6f5eb;
+  color: #23804b;
+}
+
+.plannerCategoryStatus--over {
+  background: #fff0f1;
+  color: #c52d39;
+}
+
+.plannerMonthlyTotals {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0 10px 10px;
+  padding: 8px 9px;
+  border-radius: 8px;
+  background: #f5f6fb;
+}
+
+.plannerMonthlyTotals > div {
+  display: grid;
+  gap: 2px;
+}
+
+.plannerMonthlyTotals span {
+  color: #7c8190;
+  font-size: 8px;
+}
+
+.plannerMonthlyTotals strong {
+  color: #292c3a;
+  font-size: 9px;
+}
+
+.plannerMonthlyTotals .plannerMonthlyTotalsNegative strong {
+  color: #d62e3a;
+}
+
+.plannerUnplannedTop {
+  margin: 0;
+  padding: 0 10px 10px;
+  border-color: #f3d9ad;
+  background: #fff7e9;
+}
+
+.plannerUnplannedTopHeader {
+  min-height: 40px;
+  align-items: center;
+  margin: 0 -10px 4px;
+  padding: 8px 11px;
+  border-bottom: 1px solid #f5e6ca;
+}
+
+.plannerUnplannedTopHeader button {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 0 3px 6px;
+  border: 0;
+  background: transparent;
+  color: #875014;
+  font-size: 8px;
+  cursor: pointer;
+}
+
+.plannerUnplannedTopHeader button:focus-visible,
+.plannerUnplannedShowAll:focus-visible {
+  outline: 2px solid rgba(181, 111, 21, .35);
+  outline-offset: 2px;
+}
+
+.plannerUnplannedTopList {
+  gap: 0;
+}
+
+.plannerUnplannedTopList li {
+  gap: 7px;
+  padding: 6px 0;
+  border-color: #f3e5cb;
+}
+
+.plannerUnplannedTopRank {
+  width: 18px;
+  height: 18px;
+  flex-basis: 18px;
+  font-size: 8px;
+}
+
+.plannerUnplannedTopDescription {
+  gap: 4px;
+}
+
+.plannerUnplannedTopDescription strong {
+  color: #3a3020;
+  font-size: 8px;
+}
+
+.plannerUnplannedTopDescription > span {
+  display: block;
+  height: 3px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #f1dfba;
+}
+
+.plannerUnplannedTopDescription > span > i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: #e99a19;
+}
+
+.plannerUnplannedTopValue {
+  color: #4e3918;
+  font-size: 8px;
+}
+
+.plannerUnplannedTopList li > small {
+  width: 22px;
+  color: #81561a;
+  font-size: 8px;
+  text-align: right;
+}
+
+.plannerUnplannedShowAll {
+  width: 100%;
+  min-height: 29px;
+  margin-top: 6px;
+  border: 1px solid #f0d7aa;
+  border-radius: 7px;
+  background: #fffaf1;
+  color: #8b5814;
+  font-family: inherit;
+  font-size: 8px;
+  cursor: pointer;
+}
+
+.plannerUnplannedEmpty {
+  padding: 18px 5px;
+  color: #8a806f;
+  font-size: 9px;
+  text-align: center;
+}
+
+.plannerCycleSection {
+  margin-top: 12px;
+}
+
+.plannerCycleHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 9px;
+}
+
+.plannerCycleTitle h2 {
+  margin: 0;
+  color: #292c3b;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.plannerCycleTitle p {
+  margin: 2px 0 0;
+  color: #7a7f8e;
+  font-size: 9px;
+}
+
+.plannerCycleTools,
+.plannerCycleFilters {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.plannerCycleFilters button {
+  display: inline-flex;
+  min-height: 26px;
+  align-items: center;
+  gap: 5px;
+  padding: 0 8px;
+  border: 1px solid #e1e3eb;
+  border-radius: 999px;
+  background: #fff;
+  color: #535866;
+  font-family: inherit;
+  font-size: 8px;
+  cursor: pointer;
+}
+
+.plannerCycleFilters button span {
+  display: inline-flex;
+  min-width: 15px;
+  height: 15px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: #f0f1f5;
+  color: #656a78;
+  font-size: 7px;
+}
+
+.plannerCycleFilters button.is-active {
+  border-color: var(--planner-violet);
+  background: var(--planner-violet);
+  color: #fff;
+}
+
+.plannerCycleFilters button.is-active span {
+  background: rgba(255, 255, 255, .18);
+  color: #fff;
+}
+
+.plannerCurrentWeekLink {
+  padding: 3px 0;
+  border: 0;
+  background: transparent;
+  color: var(--planner-violet);
+  font-family: inherit;
+  font-size: 8px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.plannerBlocksGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: start;
+  gap: 10px;
+  margin: 0;
+}
+
+.plannerBlockCard {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid #e4e6ed;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 2px 7px rgba(37, 40, 43, .025);
+}
+
+.plannerBlockCard--current {
+  border-color: #7259ee;
+  box-shadow: 0 0 0 1px rgba(88, 64, 216, .12);
+}
+
+.plannerBlockCard--over {
+  border-color: #ffc8cc;
+}
+
+.plannerBlockHeader {
+  display: flex;
+  min-height: 44px;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 5px;
+  padding: 7px 9px;
+  border-bottom: 1px solid #eff0f4;
+}
+
+.plannerBlockHeading {
+  display: flex;
+  min-width: 0;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px;
+}
+
+.plannerBlockHeading > strong {
+  color: #2d3040;
+  font-size: 9px;
+}
+
+.plannerBlockStatus {
+  padding: 2px 5px;
+  border-radius: 999px;
+  background: #f0f1f6;
+  color: #686e7d;
+  font-size: 7px;
+  white-space: nowrap;
+}
+
+.plannerBlockStatus--current {
+  background: #efedff;
+  color: #5740d3;
+}
+
+.plannerBlockStatus--over {
+  border: 1px solid #ffd0d3;
+  background: #fff0f1;
+  color: #c52d39;
+}
+
+.plannerBlockActions {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 1px;
+}
+
+.plannerBlockActions .plannerIconButton {
+  width: 23px;
+  height: 23px;
+  flex-basis: 23px;
+  font-size: 9px;
+}
+
+.plannerBlockBody {
+  gap: 7px;
+  padding: 8px;
+}
+
+.plannerCategoryRow {
+  min-width: 0;
+  padding: 8px;
+  border: 1px solid #edf0f3;
+  border-radius: 8px;
+}
+
+.plannerCategoryRow--over {
+  border-color: #ffd0d3;
+  background: #fffafa;
+}
+
+.plannerCategoryHeader {
+  gap: 4px;
+  margin-bottom: 6px;
+}
+
+.plannerCategoryHeader > strong {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+  color: #303342;
+  font-size: 9px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.plannerCategoryBudget {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #303342;
+  font-size: 8px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.plannerCategoryBudget del {
+  color: #979baa;
+  font-weight: 400;
+}
+
+.plannerCategoryHeader .plannerIconButton {
+  width: 20px;
+  height: 20px;
+  flex-basis: 20px;
+  font-size: 8px;
+}
+
+.plannerCategoryAmounts {
+  flex-direction: row;
+  margin: 5px 0 0;
+  color: #7a7f8d;
+  font-size: 7px;
+}
+
+.plannerCategoryRow--over .plannerCategoryAmounts span:last-child {
+  color: #c52d39;
+}
+
+.plannerProgress {
+  height: 4px;
+}
+
+.app main .plannerBlockBody .plannerAddCategoryButton {
+  width: 100%;
+  min-height: 27px !important;
+  gap: 5px;
+  border: 1px dashed #c9c1ff;
+  background: #fbfaff;
+  color: var(--planner-violet);
+  font-size: 8px;
+  font-weight: 500;
+}
+
+.app main .plannerBlockBody .plannerAddCategoryButton:hover {
+  border-color: #8b79ee;
+  background: #f1efff;
+  color: #3f28ad;
+}
+
+.plannerEmptyState,
+.plannerFilteredEmpty {
+  display: grid;
+  min-height: 54px;
+  place-items: center;
+  margin: 0;
+  color: #7c8190;
+  font-size: 9px;
+  text-align: center;
+}
+
+@media (max-width: 1100px) {
+  .plannerBlocksGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .plannerMonthSummaryGrid {
+    grid-template-columns: minmax(0, 1.5fr) minmax(230px, 1fr);
+  }
+
+  .plannerBlocksGrid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 680px) {
+  .app main.plannerPage {
+    padding: 18px 13px 30px;
+  }
+
+  .app main .plannerPageHeader {
+    align-items: flex-start;
+  }
+
+  .plannerHeaderActions {
+    justify-content: flex-end;
+    flex-wrap: wrap;
+  }
+
+  .plannerMonthSummaryGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .plannerSummaryMetrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .plannerCycleHeader,
+  .plannerCycleTools {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .plannerCycleTools {
+    width: 100%;
+  }
+
+  .plannerCycleFilters {
+    width: 100%;
+  }
+
+  .plannerCycleFilters button {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .plannerBlocksGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  .app main .plannerPageHeader {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .plannerHeaderActions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .plannerSummaryMetric {
+    min-height: 80px;
+  }
+
+  .plannerMonthlyCategoryHeading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .plannerBlocksGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .plannerCycleFilters button {
+    padding: 0 6px;
+    font-size: 7px;
+  }
+
+  .plannerOverspendAlert {
+    align-items: flex-start;
   }
 }

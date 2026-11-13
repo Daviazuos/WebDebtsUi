@@ -1,15 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Button,
-  Card,
-  Container,
   Modal,
-  Row,
-  Col,
   Form,
-  ProgressBar,
-  InputGroup,
-  Table
+  ProgressBar
 } from 'react-bootstrap';
 import { Endpoints } from '../../api/endpoints';
 import { axiosInstance } from '../../api';
@@ -17,7 +10,7 @@ import MaskedFormControl from '../../utils/maskedInputs';
 import { decimalAdjust } from '../../utils/valuesFormater';
 import { translateFrequency } from '../../utils/utils';
 import dayjs from 'dayjs'; // Instale: npm install dayjs
-import { addMonthsToDate, addMonthsToDateNoChangeFormat, dateAdjust, dateFromDatetime, formatDate, formatDateBrazilian } from '../../utils/dateFormater';
+import { addMonthsToDate, addMonthsToDateNoChangeFormat, dateAdjust, dateFromDatetime, formatDate, formatDateBrazilian, monthByNumber } from '../../utils/dateFormater';
 import './Planner.css';
 
 const getEffectiveBudget = (category) => Math.max(
@@ -25,15 +18,25 @@ const getEffectiveBudget = (category) => Math.max(
   Number(category.gasto) || 0
 );
 
+const getCategoryKey = (name) => {
+  const normalizedName = typeof name === 'string' ? name.trim().toLowerCase() : '';
+  return normalizedName || '__uncategorized__';
+};
+
 export default function Planner() {
   const [planejamento, setPlanejamento] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [frequencia, setFrequencia] = useState('semanal');
   const [year, setYear] = useState(localStorage.getItem('year'));
   const [month, setMonth] = useState(localStorage.getItem('month'));
+  const [monthlyCategoryExpenses, setMonthlyCategoryExpenses] = useState(null);
+  const [monthlySummaryError, setMonthlySummaryError] = useState('');
   const [lastMonth, setLastMonth] = useState(month - 1);
   const [provisionedValue, setProvisionedValue] = useState(0.00);
   const [categoryName, setCategoryName] = useState('');
+  const [blockFilter, setBlockFilter] = useState('all');
+  const [showUnplannedCategories, setShowUnplannedCategories] = useState(true);
+  const [showAllUnplannedCategories, setShowAllUnplannedCategories] = useState(false);
 
   const [novaCategoria, setNovaCategoria] = useState('');
   const [novoValor, setNovoValor] = useState('');
@@ -65,6 +68,30 @@ export default function Planner() {
       setProvisionedValue(provision);
     }
   }, []);
+
+  useEffect(() => {
+    setMonthlyCategoryExpenses(null);
+    setMonthlySummaryError('');
+
+    axiosInstance.get(Endpoints.debt.getDebtCategories(month, year))
+      .then(res => {
+        setMonthlyCategoryExpenses(res.data.map(item => {
+          const simpleInstallments = (item.installmentsPerCategory || [])
+            .filter(installment => installment.isSimple);
+
+          return {
+            name: item.name,
+            value: Number(item.value) || 0,
+            simpleValue: simpleInstallments
+              .reduce((total, installment) => total + (Number(installment.value) || 0), 0)
+          };
+        }));
+      })
+      .catch(err => {
+        console.error('Erro ao buscar gastos do mês para o resumo:', err);
+        setMonthlySummaryError('Não foi possível carregar os gastos do mês.');
+      });
+  }, [month, year]);
 
   useEffect(() => {
     axiosInstance.get(Endpoints.planer.getByMonthYear(month, year))
@@ -109,7 +136,7 @@ export default function Planner() {
           })
 
           Promise.all(bloco.categorias.map(async cat => {
-            const catFound = lis.find(c => c.name === cat.nome);
+            const catFound = lis.find(c => getCategoryKey(c.name) === getCategoryKey(cat.nome));
             if (!catFound) return cat;
 
             const atualizado = { ...cat, gasto: catFound.valueTotal };
@@ -237,9 +264,10 @@ export default function Planner() {
             orcado: cat.budgetedAmount,
             orcadoOriginal: cat.budgetedAmount,
             gasto: 0
-          }))
+            }))
         }))
       });
+      setUpdated(true);
     }).catch(err => {
       console.error('Erro ao criar planejamento:', err);
     });
@@ -451,6 +479,105 @@ export default function Planner() {
     }
   };
 
+  const plannerBlocks = planejamento?.blocos || [];
+  const blockHasOverspend = (block) => block.categorias.some(category => (
+    Number(category.gasto) > Number(category.orcadoOriginal ?? category.orcado)
+  ));
+  const blockHasBalance = (block) => block.categorias.some(category => (
+    getEffectiveBudget(category) > (Number(category.gasto) || 0)
+  ));
+  const overspentCategories = plannerBlocks.flatMap(block => block.categorias
+    .filter(category => Number(category.gasto) > Number(category.orcadoOriginal ?? category.orcado))
+    .map(category => ({
+      block,
+      category,
+      exceeded: Number(category.gasto) - Number(category.orcadoOriginal ?? category.orcado)
+    })));
+  const overspendAlert = overspentCategories[0];
+  const currentDate = dayjs().startOf('day');
+  const currentBlock = plannerBlocks.find(block => (
+    !currentDate.isBefore(dayjs(block.start).startOf('day')) &&
+    !currentDate.isAfter(dayjs(block.end).startOf('day'))
+  ));
+  const nextBlock = plannerBlocks.find(block => dayjs(block.start).isAfter(currentDate));
+  const filteredPlannerBlocks = plannerBlocks.filter(block => {
+    if (blockFilter === 'overspent') return blockHasOverspend(block);
+    if (blockFilter === 'balance') return blockHasBalance(block);
+    return true;
+  });
+
+  let monthlySummary = null;
+  if (monthlyCategoryExpenses !== null) {
+    const categories = {};
+    const plannedCategoryKeys = new Set();
+    let totalOrcado = 0;
+    let totalGasto = 0;
+    let totalForaDoPlano = 0;
+
+    plannerBlocks.forEach(block => {
+      block.categorias.forEach(category => {
+        const key = getCategoryKey(category.nome);
+        plannedCategoryKeys.add(key);
+        if (!categories[key]) {
+          categories[key] = {
+            key,
+            name: category.nome || 'Sem categoria',
+            budget: 0,
+            originalBudget: 0,
+            spent: 0
+          };
+        }
+
+        const budget = getEffectiveBudget(category);
+        const originalBudget = Number(category.orcadoOriginal ?? category.orcado) || 0;
+        const spent = Number(category.gasto) || 0;
+        categories[key].budget += budget;
+        categories[key].originalBudget += originalBudget;
+        categories[key].spent += spent;
+        totalOrcado += budget;
+        totalGasto += spent;
+      });
+    });
+
+    const unplannedCategories = {};
+    monthlyCategoryExpenses.forEach(category => {
+      const key = getCategoryKey(category.name);
+      if (plannedCategoryKeys.has(key)) return;
+
+      const name = typeof category.name === 'string' && category.name.trim()
+        ? category.name.trim()
+        : 'Sem categoria';
+      const simpleValue = Number(category.simpleValue) || 0;
+      if (simpleValue <= 0) return;
+
+      totalForaDoPlano += simpleValue;
+      if (!unplannedCategories[key]) {
+        unplannedCategories[key] = { key, name, value: 0 };
+      }
+      unplannedCategories[key].value += simpleValue;
+    });
+
+    const allUnplannedCategories = Object.values(unplannedCategories)
+      .sort((first, second) => second.value - first.value);
+    monthlySummary = {
+      categories: Object.values(categories).sort((first, second) => second.spent - first.spent),
+      totalOrcado,
+      totalGasto,
+      totalForaDoPlano,
+      saldo: (Number(provisionedValue) || 0) - (totalOrcado - totalGasto),
+      totalSpentPercent: totalOrcado > 0 ? Math.min((totalGasto / totalOrcado) * 100, 100) : 0,
+      allUnplannedCategories,
+      topUnplannedCategories: allUnplannedCategories.slice(0, 5)
+    };
+  }
+
+  const scrollToBlock = (blockId) => {
+    const blockElement = document.getElementById(`planner-block-${blockId}`);
+    if (blockElement) {
+      blockElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  };
+
   return (
     <main className="plannerPage">
       <header className="plannerPageHeader">
@@ -459,12 +586,24 @@ export default function Planner() {
           <h1>Planejamento mensal</h1>
           <p>Distribua seu orçamento por período e acompanhe seus gastos.</p>
         </div>
-        {!planejamento && (
-          <button type="button" className="plannerPrimaryButton" onClick={() => setShowModal(true)}>
-            <i className="fas fa-plus" aria-hidden="true"></i>
-            Criar planejamento
-          </button>
-        )}
+        <div className="plannerHeaderActions">
+          {planejamento ? (
+            <>
+              <span className="plannerSummaryPeriod">
+                {monthByNumber(month) || 'Período selecionado'} {year}
+              </span>
+              <button type="button" className="plannerPrimaryButton" onClick={() => handleAbrirModalCategoria(null)}>
+                <i className="fas fa-plus" aria-hidden="true"></i>
+                Categoria em todas as semanas
+              </button>
+            </>
+          ) : (
+            <button type="button" className="plannerPrimaryButton" onClick={() => setShowModal(true)}>
+              <i className="fas fa-plus" aria-hidden="true"></i>
+              Criar planejamento
+            </button>
+          )}
+        </div>
       </header>
 
 
@@ -527,164 +666,319 @@ export default function Planner() {
         </Modal.Footer>
       </Modal>
 
-      <>
-        {/* Card de Resumo */}
-        <Row className="plannerSummaryRow">
-          <Col md={12}>
-            <Card className="plannerSummaryPanel">
-              <Card.Header className="plannerPanelHeader">
-                <div className="plannerSectionTitle">
-                  <span className="plannerPanelIcon"><i className="fas fa-chart-pie" aria-hidden="true"></i></span>
-                  <div><strong>Resumo do mês</strong><span>Orçamento e gastos agrupados por categoria</span></div>
+      {overspendAlert && (
+        <div className="plannerOverspendAlert" role="alert">
+          <i className="fas fa-exclamation-triangle" aria-hidden="true"></i>
+          <span>
+            <strong>{overspendAlert.category.nome}</strong> passou do planejado em R$ {decimalAdjust(overspendAlert.exceeded)}
+            {' '}na semana {formatDateBrazilian(overspendAlert.block.start)} - {formatDateBrazilian(overspendAlert.block.end)}.
+          </span>
+          <button type="button" onClick={() => scrollToBlock(overspendAlert.block.id)}>Ver semana</button>
+        </div>
+      )}
+
+      {planejamento && (
+        monthlySummaryError ? (
+          <div className="plannerSummaryMessage plannerSummaryMessage--error" role="alert">
+            {monthlySummaryError}
+          </div>
+        ) : monthlySummary === null ? (
+          <div className="plannerSummaryMessage">
+            <i className="fas fa-spinner fa-spin" aria-hidden="true"></i>
+            Carregando os gastos do mês...
+          </div>
+        ) : (
+          <>
+            <section className="plannerSummaryMetrics" aria-label="Indicadores financeiros do mês">
+              <article className="plannerSummaryMetric plannerSummaryMetric--budget">
+                <span className="plannerSummaryMetricIcon"><i className="fas fa-bullseye" aria-hidden="true"></i></span>
+                <div>
+                  <span>Orçamento planejado</span>
+                  <strong>R$ {decimalAdjust(monthlySummary.totalOrcado)}</strong>
+                  <small>Soma das categorias do mês</small>
                 </div>
-                <button type="button" className="plannerSecondaryButton" onClick={() => handleAbrirModalCategoria(null)}>
-                  <i className="fas fa-plus" aria-hidden="true"></i>
-                  Categoria em todos
-                </button>
-              </Card.Header>
-              <Card.Body className="plannerSummaryBody">
-                {!planejamento?.blocos ? '' : (() => {
-                  // Agrupa categorias e soma orçado/gasto
-                  const resumo = {};
-                  let totalOrcado = 0;
-                  let totalGasto = 0;
-                  planejamento.blocos.forEach(bloco => {
-                    bloco.categorias.forEach(cat => {
-                      if (!resumo[cat.nome]) resumo[cat.nome] = { orcado: 0, gasto: 0 };
-                      const orcadoEfetivo = getEffectiveBudget(cat);
-                      resumo[cat.nome].orcado += orcadoEfetivo;
-                      resumo[cat.nome].gasto += Number(cat.gasto) || 0;
-                      totalOrcado += orcadoEfetivo;
-                      totalGasto += Number(cat.gasto) || 0;
-                    });
-                  });
-                  return (
-                    <>
-                      <Table borderless responsive className="plannerSummaryTable" size="sm">
-                        <thead>
-                          <tr>
-                            <th>Categoria</th>
-                            <th>Orçado</th>
-                            <th>Gasto</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {Object.entries(resumo).map(([nome, val]) => (
-                            <tr key={nome}>
-                              <td>{nome}</td>
-                              <td>R$ {decimalAdjust(val.orcado)}</td>
-                              <td>R$ {decimalAdjust(val.gasto)}</td>
-                            </tr>
-                          ))}
-                          <tr className="plannerSummaryTotal">
-                            <td>Total</td>
-                            <td>R$ {decimalAdjust(totalOrcado)}</td>
-                            <td>R$ {decimalAdjust(totalGasto)}</td>
-                          </tr>
-                          <tr className="plannerSummaryBalance">
-                            <td>Balanço</td>
-                            <td colSpan={2}>
-                              R$ {decimalAdjust(Number(localStorage.getItem('provisionedValue')) - (totalOrcado - totalGasto))}
-                            </td>
-                          </tr>
-                        </tbody>
-                      </Table>
-                    </>
-                  );
-                })()}
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
-      </>
+              </article>
+              <article className="plannerSummaryMetric plannerSummaryMetric--spent">
+                <span className="plannerSummaryMetricIcon"><i className="fas fa-wallet" aria-hidden="true"></i></span>
+                <div>
+                  <span>Total gasto</span>
+                  <strong>R$ {decimalAdjust(monthlySummary.totalGasto)}</strong>
+                  <div className="plannerMetricProgress" aria-label={`${Math.round(monthlySummary.totalSpentPercent)}% do orçamento planejado`}>
+                    <span style={{ width: `${monthlySummary.totalSpentPercent}%` }}></span>
+                  </div>
+                  <small>{Math.round(monthlySummary.totalSpentPercent)}% do orçamento planejado</small>
+                </div>
+              </article>
+              <article className={`plannerSummaryMetric plannerSummaryMetric--unplanned ${monthlySummary.totalForaDoPlano > 0 ? '' : 'plannerSummaryMetric--clear'}`}>
+                <span className="plannerSummaryMetricIcon"><i className="fas fa-eye-slash" aria-hidden="true"></i></span>
+                <div>
+                  <span>Fora do plano</span>
+                  <strong>R$ {decimalAdjust(monthlySummary.totalForaDoPlano)}</strong>
+                  <small>Gastos fora das categorias previstas</small>
+                </div>
+              </article>
+              <article className={`plannerSummaryMetric plannerSummaryMetric--balance ${monthlySummary.saldo < 0 ? 'plannerSummaryMetric--negative' : ''}`}>
+                <span className="plannerSummaryMetricIcon"><i className="fas fa-balance-scale" aria-hidden="true"></i></span>
+                <div>
+                  <span>Balanço do mês</span>
+                  <strong>{monthlySummary.saldo < 0 ? '-' : ''}R$ {decimalAdjust(Math.abs(monthlySummary.saldo))}</strong>
+                  <small className="plannerBalanceBadge">
+                    {monthlySummary.saldo < 0 ? 'Saldo negativo' : 'Saldo positivo'}
+                  </small>
+                </div>
+              </article>
+            </section>
+
+            <div className="plannerMonthSummaryGrid">
+              <section className="plannerMonthlyCategories">
+                <header className="plannerSummarySectionHeader">
+                  <div>
+                    <strong>Por categoria</strong>
+                    <span>Quanto já foi gasto do que foi orçado no mês</span>
+                  </div>
+                </header>
+                <div className="plannerMonthlyCategoryList">
+                  {monthlySummary.categories.length === 0 ? (
+                    <div className="plannerSummaryEmpty">Nenhuma categoria planejada neste mês.</div>
+                  ) : monthlySummary.categories.map(category => {
+                    const progress = category.budget > 0
+                      ? Math.min((category.spent / category.budget) * 100, 100)
+                      : 0;
+                    const isOverBudget = category.spent > category.originalBudget;
+                    const remaining = category.budget - category.spent;
+                    const status = isOverBudget
+                      ? 'Acima do plano'
+                      : category.budget > 0 && category.spent >= category.budget
+                        ? 'Concluída'
+                        : category.spent > 0
+                          ? `Em andamento · ${Math.round(progress)}%`
+                          : 'Não iniciada';
+
+                    return (
+                      <div className={`plannerMonthlyCategory ${isOverBudget ? 'plannerMonthlyCategory--over' : ''}`} key={category.key}>
+                        <div className="plannerMonthlyCategoryHeading">
+                          <strong>{category.name}</strong>
+                          <span><b>R$ {decimalAdjust(category.spent)}</b> de R$ {decimalAdjust(category.budget)}</span>
+                        </div>
+                        <div className="plannerMonthlyProgress" role="progressbar" aria-valuenow={Math.round(progress)} aria-valuemin={0} aria-valuemax={100}>
+                          <span style={{ width: `${progress}%` }}></span>
+                        </div>
+                        <div className="plannerMonthlyCategoryFooter">
+                          <span className={`plannerCategoryStatus ${isOverBudget ? 'plannerCategoryStatus--over' : category.spent >= category.budget && category.budget > 0 ? 'plannerCategoryStatus--done' : ''}`}>
+                            {status}
+                          </span>
+                          <span>{remaining < 0 ? 'Acima' : 'Sobra'} R$ {decimalAdjust(Math.abs(remaining))}</span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+                <footer className="plannerMonthlyTotals">
+                  <div><span>Total orçado</span><strong>R$ {decimalAdjust(monthlySummary.totalOrcado)}</strong></div>
+                  <div><span>Total gasto</span><strong>R$ {decimalAdjust(monthlySummary.totalGasto)}</strong></div>
+                  <div className={monthlySummary.saldo < 0 ? 'plannerMonthlyTotalsNegative' : ''}>
+                    <span>Balanço</span>
+                    <strong>{monthlySummary.saldo < 0 ? '-' : ''}R$ {decimalAdjust(Math.abs(monthlySummary.saldo))}</strong>
+                  </div>
+                </footer>
+              </section>
+
+              <section className="plannerUnplannedTop">
+                <header className="plannerUnplannedTopHeader">
+                  <div>
+                    <strong>Maiores gastos fora do plano</strong>
+                    <span>Despesas simples; fixas e parceladas excluídas</span>
+                  </div>
+                  <button
+                    type="button"
+                    aria-expanded={showUnplannedCategories}
+                    onClick={() => setShowUnplannedCategories(value => !value)}
+                  >
+                    {showUnplannedCategories ? 'Ocultar' : 'Mostrar'}
+                    <i className={`fas fa-chevron-${showUnplannedCategories ? 'up' : 'down'}`} aria-hidden="true"></i>
+                  </button>
+                </header>
+                {showUnplannedCategories && (
+                  <>
+                    {monthlySummary.allUnplannedCategories.length === 0 ? (
+                      <div className="plannerUnplannedEmpty">Nenhum gasto fora do plano encontrado.</div>
+                    ) : (
+                      <ol className="plannerUnplannedTopList">
+                        {(showAllUnplannedCategories
+                          ? monthlySummary.allUnplannedCategories
+                          : monthlySummary.topUnplannedCategories
+                        ).map((category, index) => {
+                          const percentage = monthlySummary.totalForaDoPlano > 0
+                            ? Math.round((category.value / monthlySummary.totalForaDoPlano) * 100)
+                            : 0;
+                          return (
+                            <li key={category.key}>
+                              <span className="plannerUnplannedTopRank">{index + 1}</span>
+                              <div className="plannerUnplannedTopDescription">
+                                <strong>{category.name}</strong>
+                                <span><i style={{ width: `${percentage}%` }}></i></span>
+                              </div>
+                              <strong className="plannerUnplannedTopValue">R$ {decimalAdjust(category.value)}</strong>
+                              <small>{percentage}%</small>
+                            </li>
+                          );
+                        })}
+                      </ol>
+                    )}
+                    {monthlySummary.allUnplannedCategories.length > 5 && (
+                      <button
+                        type="button"
+                        className="plannerUnplannedShowAll"
+                        onClick={() => setShowAllUnplannedCategories(value => !value)}
+                      >
+                        {showAllUnplannedCategories ? 'Mostrar somente o Top 5' : 'Ver todas as categorias fora do plano'}
+                      </button>
+                    )}
+                  </>
+                )}
+              </section>
+            </div>
+          </>
+        )
+      )}
 
       {/* Exibição de Blocos */}
       {planejamento && (
-        <Row className="plannerBlocksGrid">
-          {planejamento.blocos.map((bloco) => (
-            <Col md={6} key={bloco.id} className="plannerBlockColumn">
-              <Card className="plannerBlockCard">
-                <Card.Header className="plannerBlockHeader">
-                  <span>
-                    {planejamento.frequencia === 'mensal' && 'Mês inteiro'}
-                    {planejamento.frequencia === 'semanal' && `Semana ${bloco.id}`}
-                    {planejamento.frequencia === 'quinzenal' && `Quinzena ${bloco.id}`}
-                    {planejamento.frequencia === 'diario' && `Dia ${bloco.id}`}
-                  </span>
-                  <span style={{ fontSize: '0.9em', color: '#888' }}></span>
-                  <>
-                    {editModeFrequency[bloco.id] ? (
-                      <>
-                        <Form.Control required="true" name='date' type="date" onChange={(e) => handleEditChangeFrequency(e, bloco.id, 'start')} defaultValue={dateFromDatetime(bloco.start)} />
-                        <Form.Control required="true" name='date' type="date" onChange={(e) => handleEditChangeFrequency(e, bloco.id, 'end')} defaultValue={dateFromDatetime(bloco.end)} />
-                        <button type="button" className="plannerIconButton" aria-label="Salvar período" onClick={() => handleSaveEditFrequency(bloco.id)}><i className="fas fa-check" aria-hidden="true"></i></button>
-                        <button type="button" className="plannerIconButton" aria-label="Cancelar edição do período" onClick={() => toggleEditModeFrequency(bloco.id)}><i className="fas fa-times" aria-hidden="true"></i></button>
-                      </>
-                    ) : (
-                      <>
-                        {formatDateBrazilian(bloco.start)} - {formatDateBrazilian(bloco.end)}
-                      </>
-                    )}
-                  </>
-                  <button type="button" className="plannerIconButton" aria-label="Editar frequência" onClick={() => toggleEditModeFrequency(bloco.id)}><i className="fas fa-pen" aria-hidden="true"></i></button>
-                  <button type="button" className="plannerIconButton plannerIconButton--danger" aria-label="Excluir frequência" onClick={() => handleDeletePlannerFrequency(bloco.id)}><i className="fas fa-trash" aria-hidden="true"></i></button>
-                  <button
-                    type="button"
-                    className="plannerAddCategoryButton"
-                    onClick={() => handleAbrirModalCategoria(bloco.id)}
+        <section className="plannerCycleSection">
+          <header className="plannerCycleHeader">
+            <div className="plannerCycleTitle">
+              <h2>{planejamento.frequencia === 'semanal' ? 'Semanas do ciclo' : 'Períodos do ciclo'}</h2>
+              <p>
+                {plannerBlocks.length > 0
+                  ? `De ${formatDateBrazilian(plannerBlocks[0].start)} a ${formatDateBrazilian(plannerBlocks[plannerBlocks.length - 1].end)}`
+                  : 'Nenhum período cadastrado'}
+                {' · '}a semana atual fica destacada
+              </p>
+            </div>
+            <div className="plannerCycleTools">
+              <div className="plannerCycleFilters" role="group" aria-label="Filtrar períodos">
+                <button type="button" className={blockFilter === 'all' ? 'is-active' : ''} aria-pressed={blockFilter === 'all'} onClick={() => setBlockFilter('all')}>
+                  Todas <span>{plannerBlocks.length}</span>
+                </button>
+                <button type="button" className={blockFilter === 'overspent' ? 'is-active' : ''} aria-pressed={blockFilter === 'overspent'} onClick={() => setBlockFilter('overspent')}>
+                  Estouradas <span>{plannerBlocks.filter(blockHasOverspend).length}</span>
+                </button>
+                <button type="button" className={blockFilter === 'balance' ? 'is-active' : ''} aria-pressed={blockFilter === 'balance'} onClick={() => setBlockFilter('balance')}>
+                  Com saldo <span>{plannerBlocks.filter(blockHasBalance).length}</span>
+                </button>
+              </div>
+              {(currentBlock || nextBlock || plannerBlocks[0]) && (
+                <button
+                  type="button"
+                  className="plannerCurrentWeekLink"
+                  onClick={() => scrollToBlock((currentBlock || nextBlock || plannerBlocks[0]).id)}
+                >
+                  Ir para a semana atual
+                </button>
+              )}
+            </div>
+          </header>
+
+          {filteredPlannerBlocks.length === 0 ? (
+            <div className="plannerFilteredEmpty">Nenhum período corresponde a este filtro.</div>
+          ) : (
+            <div className="plannerBlocksGrid">
+              {filteredPlannerBlocks.map(bloco => {
+                const isCurrentBlock = currentBlock?.id === bloco.id;
+                const isNextBlock = !currentBlock && nextBlock?.id === bloco.id;
+                const hasOverspend = blockHasOverspend(bloco);
+                return (
+                  <article
+                    id={`planner-block-${bloco.id}`}
+                    key={bloco.id}
+                    className={`plannerBlockCard ${isCurrentBlock ? 'plannerBlockCard--current' : ''} ${hasOverspend ? 'plannerBlockCard--over' : ''}`}
                   >
-                    + Categoria
-                  </button>
-                </Card.Header>
-                <Card.Body className="plannerBlockBody">
-                  {bloco.categorias.length === 0 ? (
-                    <p className="text-muted">Nenhuma categoria adicionada.</p>
-                  ) : (
-                    bloco.categorias.map((cat, catIdx) => (
-                      <div key={catIdx} className="plannerCategoryRow">
-                        <div style={{ display: 'flex', alignItems: 'baseline' }}>
-                          {editMode[cat.id] ? (
-                            <>
-                              <Form.Label>{cat.nome} - R$ </Form.Label>
-                              <input
-                                type="text"
-                                value={cat.orcado}
-                                onChange={(e) => handleEditChange(e, cat.id, 'value')}
-                              />
-                              <button type="button" className="plannerIconButton" aria-label="Salvar orçamento" onClick={() => handleSaveEdit(cat.id)}><i className="fas fa-check" aria-hidden="true"></i></button>
-                            </>
-                          ) : (
-                            <>
-                              <Form.Label>
-                                {cat.nome} - R${' '}
-                                {Number(cat.gasto) > Number(cat.orcadoOriginal ?? cat.orcado) && (
-                                  <del className="plannerOriginalBudget">{decimalAdjust(cat.orcadoOriginal ?? cat.orcado)} </del>
-                                )}
-                                {decimalAdjust(getEffectiveBudget(cat))}
-                              </Form.Label>
-                              <button type="button" className="plannerIconButton" aria-label={`Editar ${cat.nome}`} onClick={() => toggleEditMode(cat.id)}><i className="fas fa-pen" aria-hidden="true"></i></button>
-                              <button type="button" className="plannerIconButton plannerIconButton--danger" aria-label={`Excluir ${cat.nome}`} onClick={() => handleDeletePlannerCategory(cat.id)}><i className="fas fa-trash" aria-hidden="true"></i></button>
-                            </>
-                          )}
-
-                        </div>
-
-                        <div style={{ fontSize: '0.6rem', marginBottom: '0.4rem', color: '#333' }}>
-                          R$ {decimalAdjust(cat.gasto)} / R$ {decimalAdjust(getEffectiveBudget(cat))} - sobra R$ {decimalAdjust(getEffectiveBudget(cat) - (Number(cat.gasto) || 0))}
-                        </div>
-                        <ProgressBar
-                          now={getEffectiveBudget(cat) > 0 ? Math.min(((Number(cat.gasto) || 0) / getEffectiveBudget(cat)) * 100, 100) : 0}
-                          className="plannerProgress"
-                          variant={Number(cat.gasto) > Number(cat.orcadoOriginal ?? cat.orcado) ? "danger" : "success"}
-                        />
+                    <header className="plannerBlockHeader">
+                      <div className="plannerBlockHeading">
+                        {editModeFrequency[bloco.id] ? (
+                          <div className="plannerDateEditor">
+                            <Form.Control required name="start" type="date" onChange={(e) => handleEditChangeFrequency(e, bloco.id, 'start')} defaultValue={dateFromDatetime(bloco.start)} />
+                            <Form.Control required name="end" type="date" onChange={(e) => handleEditChangeFrequency(e, bloco.id, 'end')} defaultValue={dateFromDatetime(bloco.end)} />
+                            <button type="button" className="plannerIconButton" aria-label="Salvar período" onClick={() => handleSaveEditFrequency(bloco.id)}><i className="fas fa-check" aria-hidden="true"></i></button>
+                            <button type="button" className="plannerIconButton" aria-label="Cancelar edição do período" onClick={() => toggleEditModeFrequency(bloco.id)}><i className="fas fa-times" aria-hidden="true"></i></button>
+                          </div>
+                        ) : (
+                          <strong>{formatDateBrazilian(bloco.start)} - {formatDateBrazilian(bloco.end)}</strong>
+                        )}
+                        {isCurrentBlock && <span className="plannerBlockStatus plannerBlockStatus--current">Semana atual</span>}
+                        {isNextBlock && <span className="plannerBlockStatus">Próxima</span>}
+                        {hasOverspend && <span className="plannerBlockStatus plannerBlockStatus--over">Acima do plano</span>}
                       </div>
-                    ))
-                  )}
-                </Card.Body>
-              </Card>
-            </Col>
-          ))}
-        </Row>
+                      <div className="plannerBlockActions">
+                        <button type="button" className="plannerIconButton" aria-label="Editar período" onClick={() => toggleEditModeFrequency(bloco.id)}><i className="fas fa-pen" aria-hidden="true"></i></button>
+                        <button type="button" className="plannerIconButton plannerIconButton--danger" aria-label="Excluir período" onClick={() => handleDeletePlannerFrequency(bloco.id)}><i className="fas fa-trash" aria-hidden="true"></i></button>
+                      </div>
+                    </header>
+                    <div className="plannerBlockBody">
+                      {bloco.categorias.length === 0 ? (
+                        <p className="plannerEmptyState">Nenhuma categoria adicionada.</p>
+                      ) : (
+                        bloco.categorias.map((category, categoryIndex) => {
+                          const spent = Number(category.gasto) || 0;
+                          const budget = getEffectiveBudget(category);
+                          const originalBudget = Number(category.orcadoOriginal ?? category.orcado) || 0;
+                          const isOverBudget = spent > originalBudget;
+                          const remaining = budget - spent;
+                          const progress = budget > 0 ? Math.min((spent / budget) * 100, 100) : 0;
+                          return (
+                            <div key={category.id || categoryIndex} className={`plannerCategoryRow ${isOverBudget ? 'plannerCategoryRow--over' : ''}`}>
+                              <div className="plannerCategoryHeader">
+                                {editMode[category.id] ? (
+                                  <>
+                                    <strong>{category.nome}</strong>
+                                    <input
+                                      type="text"
+                                      aria-label={`Orçamento de ${category.nome}`}
+                                      value={category.orcado}
+                                      onChange={(e) => handleEditChange(e, category.id, 'value')}
+                                    />
+                                    <button type="button" className="plannerIconButton" aria-label="Salvar orçamento" onClick={() => handleSaveEdit(category.id)}><i className="fas fa-check" aria-hidden="true"></i></button>
+                                  </>
+                                ) : (
+                                  <>
+                                    <strong>{category.nome}</strong>
+                                    <span className="plannerCategoryBudget">
+                                      {isOverBudget && <del>{decimalAdjust(originalBudget)}</del>}
+                                      R$ {decimalAdjust(budget)}
+                                    </span>
+                                    <button type="button" className="plannerIconButton" aria-label={`Editar ${category.nome}`} onClick={() => toggleEditMode(category.id)}><i className="fas fa-pen" aria-hidden="true"></i></button>
+                                    <button type="button" className="plannerIconButton plannerIconButton--danger" aria-label={`Excluir ${category.nome}`} onClick={() => handleDeletePlannerCategory(category.id)}><i className="fas fa-trash" aria-hidden="true"></i></button>
+                                  </>
+                                )}
+                              </div>
+                              <ProgressBar
+                                now={progress}
+                                className="plannerProgress"
+                                variant={isOverBudget ? 'danger' : 'success'}
+                              />
+                              <div className="plannerCategoryAmounts">
+                                <span>Gasto R$ {decimalAdjust(spent)}</span>
+                                <span>{remaining < 0 ? `R$ ${decimalAdjust(Math.abs(remaining))} acima do planejado` : `Sobra R$ ${decimalAdjust(remaining)}`}</span>
+                              </div>
+                            </div>
+                          );
+                        })
+                      )}
+                      <button
+                        type="button"
+                        className="plannerAddCategoryButton"
+                        onClick={() => handleAbrirModalCategoria(bloco.id)}
+                      >
+                        <i className="fas fa-plus" aria-hidden="true"></i>
+                        Categoria
+                      </button>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+          )}
+        </section>
       )}
     </main>
   );
