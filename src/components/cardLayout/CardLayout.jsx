@@ -78,7 +78,10 @@ export default function CardLayout() {
         return prev + cur.value;
     }, 0).toFixed(2);
 
-    localStorage.setItem("provisionedValue", provisionedValue);
+    // Não grava NaN enquanto os dados ainda estão carregando
+    if (Number.isFinite(provisionedValue)) {
+        localStorage.setItem("provisionedValue", provisionedValue);
+    }
 
     let balanceColor = provisionedValue < 0 ? "fas fa-balance-scale red custom-icon" : "fas fa-balance-scale success custom-icon"
 

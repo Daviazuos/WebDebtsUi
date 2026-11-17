@@ -63,11 +63,35 @@ export default function Planner() {
   }, [])
 
   useEffect(() => {
-    let provision = localStorage.getItem('provisionedValue')
-    if (provision) {
-      setProvisionedValue(provision);
-    }
-  }, []);
+    // O saldo provisionado é calculado aqui, para o mês/ano selecionado, com a mesma
+    // regra da tela de debts. Antes ele era lido do localStorage, que só é atualizado
+    // quando a tela de debts é aberta e podia estar defasado, de outro mês ou "NaN".
+    let cancelled = false;
+
+    Promise.all([
+      axiosInstance.get(Endpoints.wallet.getEnable(month, year)),
+      axiosInstance.get(Endpoints.debt.filterInstallments(1, 9999, '', month, year, '', '', '', '', null))
+    ])
+      .then(([walletRes, installmentsRes]) => {
+        if (cancelled) return;
+
+        const walletTotal = (walletRes.data || [])
+          .filter(({ walletStatus }) => walletStatus !== 'Pending')
+          .reduce((total, wallet) => total + (Number(wallet.value) || 0), 0);
+
+        const installmentsTotal = (installmentsRes.data?.items || [])
+          .reduce((total, installment) => total + (Number(installment.value) || 0), 0);
+
+        setProvisionedValue(walletTotal - installmentsTotal);
+      })
+      .catch(err => {
+        console.error('Erro ao calcular o saldo provisionado:', err);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [month, year]);
 
   useEffect(() => {
     setMonthlyCategoryExpenses(null);
