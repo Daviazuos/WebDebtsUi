@@ -33,19 +33,46 @@ class AuthService {
   }
 
   getCurrentUser() {
-    const user = JSON.parse(localStorage.getItem('user'));
-    if (user) {
-      var decodedToken = jwt_decode(user['token']);
-      var dateNow = new Date();
-      var date_exp = new Date(decodedToken.exp * 1000);
+    // try/catch: um "user" corrompido ou um token inválido não pode lançar erro
+    // durante a renderização (isso derrubaria o app inteiro e deixaria a tela branca)
+    try {
+      const user = JSON.parse(localStorage.getItem('user'));
+      if (user) {
+        var decodedToken = jwt_decode(user['token']);
+        var dateNow = new Date();
+        var date_exp = new Date(decodedToken.exp * 1000);
 
-      if (dateNow > date_exp)
-        return null;
+        if (dateNow > date_exp)
+          return null;
+        else
+          return user
+      }
       else
-        return user
+        return null
+    } catch (err) {
+      return null;
     }
-    else
-      return null
+  }
+
+  // Momento (em ms desde 1970) em que o token da sessão atual expira, ou null.
+  getTokenExpiration() {
+    try {
+      const user = JSON.parse(localStorage.getItem('user'));
+      if (!user || !user['token']) return null;
+      const decodedToken = jwt_decode(user['token']);
+      return decodedToken.exp ? decodedToken.exp * 1000 : null;
+    } catch (err) {
+      return null;
+    }
+  }
+
+  // Encerra a sessão e leva a pessoa para o login. Chamado quando o token expira
+  // ou quando o backend responde 401.
+  expireSession() {
+    if (this.sessionExpiring) return;
+    this.sessionExpiring = true;
+    localStorage.removeItem("user");
+    window.location.assign("/sign-in");
   }
 }
 
